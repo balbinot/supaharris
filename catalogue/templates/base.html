@@ -1,0 +1,45 @@
+{% load static %}
+{% load staticfiles %}
+{% load bootstrap_themes %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+<head id="head">
+  <title>Surrey GC archive</title>
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+  <meta name="description" content=""/>
+  <meta name="keywords" content="" />
+  <meta name="robots" content="index, follow" />
+  {% bootstrap_styles theme='default' type='min.css' %}
+  {% bootstrap_script use_min=True %}
+  <link rel="stylesheet" type="text/css" href="{% static 'screen.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<!--<body class="container-fluid">-->
+<body>
+<div>
+  <div id="banner">
+    <div class="container-fluid">
+      {% if user.is_authenticated %}
+      <h1>Surrey Globular Cluster Archive </h1>
+      <h2>A web-based archive for the best objects in the Universe</h2>
+      <h3>Logged in as: {{ user.username }}!</h3>
+      {% else %}
+      <h1>Surrey Globular Cluster Archive </h1>
+      <h2>A web-based archive for the best objects in the Universe</h2>
+      {% endif %}
+    </div>
+  </div>
+
+<div class="container-fluid">
+<div id="navbar" id="navbarColor01">
+  <nav class="navbar navbar-inverse navbar-default">
+    <ul class="nav navbar-nav">
+        <li><a href="/catalogue/">Home</a></li>
+      </ul>
+  </nav>
+</div>
+{% block content %}{% endblock %}
+</body>
+</div>
+</html>

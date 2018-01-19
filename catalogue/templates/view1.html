@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% load staticfiles %}
+{% block content %}
+
+
+<div class="col1">
+  <!-- Column 1 start -->
+  <h2>Co-ordinate and Positional Data (Harris 1996 (2010 edition))</h2>
+  <br/>
+   <div id="table">{% render_table coordinates %}</div>
+  <!-- Column 1 end -->
+</div>
+<br/>
+<div id="footer">
+  <p>From left to right: (All distances in Kpc)
+<br/>
+<br/>
+Cluster identification name; <br/>
+Right ascension and declination in degrees; <br/>
+Galactic longitude and latitude in degrees;  <br/>
+Distance from Sun; <br/>
+Distance from Galactic center, assuming R_0=8.0; <br/>
+Galactic distance components X,Y,Z, in a Sun-centered coordinate system where X points toward Galactic center, Y in direction of Galactic rotation, Z toward North Galactic Pole.  </p>
+</div>
+
+{% endblock %}

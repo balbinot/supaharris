@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% load staticfiles %}
+{% block content %}
+
+<style>
+#table {
+  column-gap: 400px;
+  position:relative;
+  overflow:auto;
+}
+</style>
+
+<div class="col1">
+  <!-- Column 1 start -->
+  <h2>Observations (Harris 1996 (2010 edition))</h2>
+  <br/>
+  <div id="table" class='table'> {% render_table observations %} </div>
+  <!-- Column 1 end -->
+</div>
+<br/>
+{% endblock %}
+
