@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap_themes',
     'django_tables2',
+    'datatableview',
 ]
 
 MIDDLEWARE_CLASSES = [

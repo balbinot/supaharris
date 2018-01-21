@@ -5,10 +5,10 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.landing, name='landing'),
+    url(r'^home/$', views.index, name='index'),
     url(r'^admin/', admin.site.urls, name='admin'),
-
-#    url(r'^GCID(?P<cluster_id_id>[0-9]+)/$', views.detail, name='detail'),
+    url(r'^GCID(?P<cid>[0-9]+)/$', views.detail, name='detail'),
 #    url(r'^reference(?P<name_id>[0-9]+)/$', views.ref_detail, name='ref_detail'),
 #    url(r'^references/$', views.references, name='references'),
 #    url(r'^Coordinates_harris2010/$', views.Harris_2010_coordinates, name='Harris_2010_coordinates'),

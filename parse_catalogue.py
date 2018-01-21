@@ -2,6 +2,7 @@
 import sys
 from astropy.coordinates import SkyCoord
 from astropy import units as u
+import numpy as np
 
 class HourAngle(object):
     def __init__(self, hh=None, mm=None, ss=None):
@@ -31,25 +32,33 @@ class Cluster(object):
         # Coordinates
         self.ra                 = None         # Right ascension               (Epoch J2000)
         self.dec                = None         # Declination                   (Epoch J2000)
-        self.gallon             = None         # Galactic longitude            (Degrees)
-        self.gallat             = None         # Galactic latitude             (Degrees)
+        self.longitude          = None         # Galactic longitude            (Degrees)
+        self.latitude           = None         # Galactic latitude             (Degrees)
         self.dist_from_sun      = None         # Distance from sum             (kpc)
+        self.dist_from_gal_cen  = None         # Distance from galactic center (kpc)
+        self.gal_dist_comp      = [None]*3     # Galactic distance components  (kpc)
 
         # Metallicity
         self.metallicity        = None         # Metallicity [Fe/H]
         self.w_mean_met         = None         # Weight of mean metallicity
 
         # Photometry
+        self.eb_v               = None         # Foreground reddening, E(B-V)
+        self.v_hb               = None         # V magnitude level of the HB, V_HB
+        self.app_vd_mod         = None         # Apparent visual distance modulus, (m-M)V
+        self.v_t                = None         # Integrated V magnitude, V_t
         self.m_v_t              = None         # Cluster luminosity, M_V,t = V_t - (m-M)V
         self.ph_u_b             = None         # U-B
         self.ph_b_v             = None         # B-V
         self.ph_v_r             = None         # V-R
         self.ph_v_i             = None         # V-i
+        self.spt                = ''           # Spectral type
         self.ellipticity        = None         # Projected ellipticity of isophotes, e = 1-(b/a)
 
         # Velocities
         self.v_r                = None         # Heliocentric radial velocity (km/s)
         self.v_r_err            = None         # Observational uncertainty in radial velocity
+        self.c_LSR              = None         # Radial velocity relative to solar neighbourhood
         self.sig_v              = None         # Central velocity dispersion (km/s)
         self.sig_err            = None         # Observational uncertainty in velocity dispersion
 
@@ -59,50 +68,60 @@ class Cluster(object):
         self.sp_r_h             = None         # Half-light radius (arcmin)
         self.sp_mu_V            = None         # Central surface brightness (V magnitudes per arcsec^2)
         self.sp_rho_0           = None         # Central luminosity density, log_10(solar_lum/pc^3)
+        self.sp_lg_tc           = None         # Core relaxation time t(r_c) in log_10(yr)
+        self.sp_lg_th           = None         # Mean relaxation time t(r_h) in log_10(yr)
 
     def fill_in(self, do):
         if self.name:
             do.name = self.name
+
         if self.ra:
-            do.ra  =  self.ra
-            do.dec =  self.dec
-        if self.gallon:
-            do.gallon = self.gallon
-            do.gallat  = self.gallat
+            do.ra  = self.ra
+            do.dec = self.dec
+
+        if self.longitude:
+            do.gallon = self.longitude
+            do.gallat  = self.latitude
+
         if self.dist_from_sun:
             do.dfs = self.dist_from_sun
+        if self.dist_from_gal_cen:
+            do.dfgc = self.dist_from_gal_cen
+        if self.gal_dist_comp[0]:
+            do.x_helio = self.gal_dist_comp[0]
+            do.y_helio = self.gal_dist_comp[1]
+            do.z_helio = self.gal_dist_comp[2]
+
         if self.metallicity:
             do.metallicity = self.metallicity
-        if self.w_mean_met:
-            do.w_mean_met = self.w_mean_met
+
+        if self.eb_v:
+            do.ebv = self.eb_v
+        if self.v_t:
+            do.MVt = self.v_t
         if self.m_v_t:
-            do.m_v_t = self.m_v_t
-        if self.ph_u_b:
-            do.ph_u_b = self.ph_u_b
-        if self.ph_b_v:
-            do.ph_b_v = self.ph_b_v
-        if self.ph_v_r:
-            do.ph_v_r = self.ph_v_r
-        if self.ph_v_i:
-            do.ph_v_i = self.ph_v_i
+            do.L = self.m_v_t
         if self.ellipticity:
             do.ellipticity = self.ellipticity
+
         if self.v_r:
             do.v_r = self.v_r
-            do.v_r_err = self.v_r_err
+            do.ev_r = self.v_r_err
         if self.sig_v:
             do.sig_v = self.sig_v
-            do.sig_err = self.sig_err
+            do.esig_v = self.sig_err
+
+        print self.sp_c, self.sp_r_c
         if self.sp_c:
-            do.sp_c = self.sp_c
+            do.c = self.sp_c
         if self.sp_r_c:
-            do.sp_r_c = self.sp_r_c
+            do.r_c = self.sp_r_c
         if self.sp_r_h:
-            do.sp_r_h = self.sp_r_h
+            do.r_h = self.sp_r_h
         if self.sp_mu_V:
-            do.sp_mu_V = self.sp_mu_V
-        if self.sp_rho_0:
-            do.sp_rho_0 = self.sp_rho_0
+            do.muV = self.sp_mu_V
+
+
 
 cluster_list = {}
 
@@ -131,17 +150,19 @@ for line in f1:
     c.name              = read_str(line[12:25])
     ra_str              = read_str(line[25:38])
     dec_str             = read_str(line[38:50])
-    c.gallon         = read_float(line[50:58])
-    c.gallat          = read_float(line[58:66])
+    c.longitude         = read_float(line[50:58])
+    c.latitude          = read_float(line[58:66])
     c.dist_from_sun     = read_float(line[66:73])
-    #c.dist_from_gal_cen = read_float(line[73:79])
-    #c.gal_dist_comp[0]  = read_float(line[79:85])
-    #c.gal_dist_comp[1]  = read_float(line[85:91])
-    #c.gal_dist_comp[2]  = read_float(line[91:])
+    c.dist_from_gal_cen = read_float(line[73:79])
+    c.gal_dist_comp[0]  = read_float(line[79:85])
+    c.gal_dist_comp[1]  = read_float(line[85:91])
+    c.gal_dist_comp[2]  = read_float(line[91:])
+
 
     coo = SkyCoord(ra=ra_str, dec=dec_str, unit=(u.hourangle, u.degree))
-    c.ra = coo.ra.deg
-    c.dec = coo.dec.deg
+    c.ra = np.round(coo.ra.deg,4)
+    c.dec = np.round(coo.dec.deg,4)
+
     cluster_list[c.gid] = c
 
 f1.close()
@@ -158,16 +179,16 @@ for line in f2:
     c = cluster_list[gid]
     c.metallicity = read_float(line[13:18])
     c.w_mean_met  = read_float(line[18:21])
-    #c.eb_v        = read_float(line[21:28])
-    #c.v_hb        = read_float(line[28:34])
-    #c.app_vd_mod  = read_float(line[34:40])
-    #c.v_t         = read_float(line[40:46])
+    c.eb_v        = read_float(line[21:28])
+    c.v_hb        = read_float(line[28:34])
+    c.app_vd_mod  = read_float(line[34:40])
+    c.v_t         = read_float(line[40:46])
     c.m_v_t       = read_float(line[46:53])
     c.ph_u_b      = read_float(line[53:60])
     c.ph_b_v      = read_float(line[60:66])
     c.ph_v_r      = read_float(line[66:72])
     c.ph_v_i      = read_float(line[72:78])
-    #c.spt         = read_str(line[78:82])
+    c.spt         = read_str(line[78:82])
     c.ellipticity = read_float(line[82:])
 
 f2.close()
@@ -185,20 +206,19 @@ for line in f3:
 
     c.v_r       = read_float(line[12:19])
     c.v_r_err   = read_float(line[19:25])
-    #c.c_LSR     = read_float(line[25:33])
+    c.c_LSR     = read_float(line[25:33])
     c.sig_v     = read_float(line[33:41])
     c.sig_err   = read_float(line[41:47])
-    c.c         = read_float(line[47:54])
-    c.r_c       = read_float(line[54:64])
-    c.r_h       = read_float(line[64:70])
-    c.mu_V      = read_float(line[70:78])
+    c.sp_c         = read_float(line[47:54])
+    c.sp_r_c       = read_float(line[54:64])
+    c.sp_r_h       = read_float(line[64:70])
+    c.sp_mu_V      = read_float(line[70:78])
     c.rho_0     = read_float(line[78:85])
-    #c.lg_tc     = read_float(line[85:92])
-    #c.lg_th     = read_float(line[92:])
+    c.lg_tc     = read_float(line[85:92])
+    c.lg_th     = read_float(line[92:])
 f3.close()
 
-import django
-django.setup()
+
 from catalogue.models import *
 
 def insert_in_django():
@@ -219,7 +239,6 @@ def insert_in_django():
     print('Inserting into database :')
     # Now creating the observations for every cluster:
     for c in cluster_list.values():
-        print c
         dc = GlobularCluster(cluster_id = c.gid)
         print('  . {}'.format(c.gid))
         dc.save()

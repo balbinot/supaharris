@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% load staticfiles %}
+{% block content %}
+
+<style>
+#table {
+  column-gap: 400px;
+  position:relative;
+  overflow:auto;
+}
+</style>
+
+<div class="col1">
+      <!-- Column 1 start -->
+      <h2>{{ cluster }}</h2>
+      <br/>
+      <div id="table"> {% render_table observations %}</div>
+      <!-- Column 1 end -->
+</div>
+
+{% endblock %}
