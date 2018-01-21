@@ -4,20 +4,27 @@
 {% load staticfiles %}
 {% block content %}
 
-<style>
-#table {
-  column-gap: 400px;
-  position:relative;
-  overflow:auto;
-}
-</style>
-
-<div class="col1">
-      <!-- Column 1 start -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
       <h2>{{ cluster }}</h2>
-      <br/>
       <div id="table"> {% render_table observations %}</div>
-      <!-- Column 1 end -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col1">
+      <h3>Surfrace brightness profile</h3>
+      {{ figure|safe }}
+    </div>
+    <div class="col2">
+        <h3>Colour-magnitude diagram</h3>
+    </div>
+    <div class="col3">
+        <h3>Image? Velocity dispersion profile?</h3>
+    </div>
+  </div>
 </div>
+
+
 
 {% endblock %}

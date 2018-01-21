@@ -18,7 +18,7 @@ class RP():
             self._write_data()
 
     def list(self):
-        print ' '.join(np.unique(self.tbl['Name']))
+        return np.unique(self.tbl['Name'])
 
     def list_cols(self):
         print self.tbl.keys()
@@ -47,6 +47,19 @@ if __name__=='__main__':
     tbl = f.get_rp()
     logr = tbl['logr']
     muV = tbl['muV']
+    w = tbl['Weight']
+    dset = tbl['DataSet']
+
+    ['Name', 'logr', 'muV', 'muVf', 'Resid', 'Weight', 'DataSet']
+
+
+
+    import json
+    odict = {'log(r/arcmin)': logr.tolist(),
+             'mu_V': muV.tolist(),
+             'W': w.tolist(),
+             'label': dset.tolist(),}
+    print json.dumps(odict)
 
     p.plot(logr, muV, 'ko')
     p.ylim(p.ylim()[::-1])

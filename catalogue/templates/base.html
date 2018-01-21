@@ -13,35 +13,42 @@
   {% bootstrap_styles theme='default' type='min.css' %}
   {% bootstrap_script use_min=True %}
   <link rel="stylesheet" type="text/css" href="{% static 'screen.css' %}">
-
-
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
-<!--<body class="container-fluid">-->
+
 <body>
-<div>
-  <div id="banner">
-    <div class="container-fluid">
-      {% if user.is_authenticated %}
-      <h1>Surrey Globular Cluster Archive </h1>
-      <h2>A web-based archive for the best objects in the Universe</h2>
-      <h3>Logged in as: {{ user.username }}!</h3>
-      {% else %}
-      <h1>Surrey Globular Cluster Archive </h1>
-      <h2>A web-based archive for the best objects in the Universe</h2>
-      {% endif %}
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">SupaHarris</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+
+        <li><a href="/catalogue/">Home</a></li>
+        <li class="{% if request.resolver_match.url_name == "index" %}active{% endif %}">
+          <a href="{% url "index" %}">Catalogue</a>
+        </li>
+
+        <li class="{% if request.resolver_match.url_name == "references" %}active{% endif %}">
+          <a href="{% url "references" %}">References</a>
+        </li>
+
+        <li class="{% if request.resolver_match.url_name == "about" %}active{% endif %}">
+          <a href="{% url "about" %}">About</a>
+        </li>
+      </ul>
     </div>
   </div>
+</nav>
 
-<div class="container-fluid">
-<div id="navbar" id="navbarColor01">
-  <nav class="navbar navbar-inverse navbar-default">
-    <ul class="nav navbar-nav">
-        <li><a href="/catalogue/">Home</a></li>
-      </ul>
-  </nav>
-</div>
 {% block content %}{% endblock %}
 
 </body>

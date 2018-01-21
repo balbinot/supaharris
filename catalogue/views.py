@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 # Create your views here.
 
 from django.http import HttpResponse
-from catalogue.models import GlobularCluster, Observation, Reference
+from catalogue.models import GlobularCluster, Observation, Reference, Profile
 import django_tables2 as tables
 from django_tables2.utils import A
 
@@ -12,6 +12,28 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mpld3
 import json
+
+css = """
+table
+{
+  border-collapse: collapse;
+}
+th
+{
+  color: #ffffff;
+  background-color: #000000;
+}
+td
+{
+  background-color: #cccccc;
+}
+table, th, td
+{
+  font-family:Arial, Helvetica, sans-serif;
+  border: 1px solid black;
+  text-align: right;
+}
+"""
 
 class ClickInfo(mpld3.plugins.PluginBase):
     """mpld3 Plugin for getting info on click        """
@@ -63,6 +85,29 @@ class ObservationTable(tables.Table):
         model = Observation
         exclude = ('id', 'ref', 'comment', 'status')
 
+class ReferenceTable(tables.Table):
+    doi = tables.URLColumn()
+    ads = tables.URLColumn()
+    name = tables.LinkColumn('ref_detail', args=[A('pk')])
+    pub_date = tables.DateColumn()
+    class Meta:
+        model = Reference
+        exclude = ('id',)
+
+class GeneralTable(tables.Table):
+    class Meta:
+        model = Observation
+        exclude = ('id', 'ref')
+
+def references(request):
+    table = ReferenceTable(Reference.objects.all(), attrs=tblattr)
+    return render(request, 'references.html', {'references': table})
+
+def ref_detail(request, name_id):
+    reference = get_object_or_404(Reference, pk=name_id)
+    table = GeneralTable(Observation.objects.filter(ref=reference))
+    return render(request, 'ref_detail.html', {'references': table, 'reference' : reference})
+
 def index(request):
     reference =  get_object_or_404(Reference, name__startswith='Harri')
     obj = Observation.objects.filter(ref=reference)
@@ -84,15 +129,19 @@ def landing(request):
     fig = plt.figure(figsize=(16,8))
     ax = plt.subplot(111)
 
-    points = ax.scatter(l, b, c=dist, s=100, alpha=0.5, cmap=plt.cm.jet)
+    points = ax.scatter(l, b, c='r', s=100, alpha=0.5, cmap=plt.cm.jet)
     ax.grid(color='white', linestyle='solid')
     ax.set_title("Globular clusters", size=20)
     ax.set_xlabel('l [deg]', size=20)
     ax.set_ylabel('b [deg]', size=20)
 
+    #img = plt.imread('/home/eb0025/Desktop/mwpan2_Merc_2000x1200.jpg')
+    #ax.imshow(img, extent=[-180,180,-90,90], zorder=-99)
+
     mpld3.plugins.connect(fig, ClickInfo(points, urls))
 
-    tooltip = mpld3.plugins.PointLabelTooltip(points, labels=names)
+    labels = ['<table><tr>{}<td></tr></td>'.format(n) for n in names]
+    tooltip = mpld3.plugins.PointHTMLTooltip(points, labels=labels, css=css)
     mpld3.plugins.connect(fig, tooltip)
 
     #single_chart = dict()
@@ -106,9 +155,41 @@ def landing(request):
 def detail(request, cid):
     cluster = get_object_or_404(GlobularCluster, pk=cid)
     table = ObservationTable(Observation.objects.filter(cluster_id=cluster))
+    data = Profile.objects.filter(cluster_id=cluster)
+    odict = {}
+    odict['observations'] = table
+    odict['cluster'] = cluster
+    if len(data) > 0:
+        data = data[0]
+        data = json.loads(data.profile)
+        print data
 
+        fig = plt.figure(figsize=(7,7))
+        ax = plt.subplot(111)
 
-    return render(request, 'detail.html', {'observations': table, 'cluster' : cluster})
+        points = ax.scatter(data['log(r/arcmin)'], data['mu_V'], c='k', s=50,
+                            alpha=0.5, cmap=plt.cm.jet)
+        ax.grid(color='white', linestyle='solid')
+        ax.set_title("Surface brightness profile", size=20)
+        ax.set_xlabel('log(r/arcmin)', size=20)
+        ax.set_ylabel('muV', size=20)
+        ax.invert_yaxis()
+
+        tooltip = mpld3.plugins.PointLabelTooltip(points, labels=data['label'])
+        mpld3.plugins.connect(fig, tooltip)
+
+        #single_chart = dict()
+        #single_chart['id'] = "fig_01"
+        #single_chart['json'] = json.dumps(mpld3.fig_to_dict(fig))
+        #result= {'single_chart': single_chart}
+        odict['figure']  = mpld3.fig_to_html(fig)
+    else:
+        odict['figure']  = "No profile available"
+
+    return render(request, 'detail.html', odict)
+
+def about(request):
+    return render(request, 'about.html', {})
 
 
 #from django.template import RequestContext
