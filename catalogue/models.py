@@ -44,6 +44,8 @@ class Parameter(models.Model):
     desc    = models.TextField("Description", null=True, blank=True)
     unit    = models.CharField("Unit", max_length=256, null=False, blank=False,
                                help_text="Must comply with astropy.unit")
+    scale   = models.FloatField("Scale", max_length=256, null=False, blank=False,
+                               help_text="Scale by which parameters must be multiplied by")
 
     def __str__(self):
         return 'Parameter {} [{}]'.format(self.pname, self.unit)
@@ -72,11 +74,13 @@ class Auxiliary(models.Model):
         return s
 
 class ObsManager(models.Manager):
-    """ Assemble string with val +- sigma """
+    """ Maybe usefull...
+
+    Assemble string with val +- sigma
+    """
     def valsig(self):
         qs = super().get_queryset()
         vals = ['{} +- {}'.format(i.val, i.sigup) for i in qs]
-
         return vals
 
 class Observation(models.Model):
@@ -104,5 +108,7 @@ class Observation(models.Model):
 class Rank(models.Model):
     oid        = models.ForeignKey(Observation, on_delete=CASCADE)
     rank       = models.IntegerField()
+    comp       = models.CharField('Compilation name', max_lenght=64, null=True,
+                                  blank=True)
 
 

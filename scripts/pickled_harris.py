@@ -203,49 +203,53 @@ f3 = open('import_data/f3.dat')
 for line in f3:
     gid = line[:12].strip()
     c = cluster_list[gid]
-
     c.v_r       = read_float(line[12:19])
     c.v_r_err   = read_float(line[19:25])
     c.c_LSR     = read_float(line[25:33])
     c.sig_v     = read_float(line[33:41])
     c.sig_err   = read_float(line[41:47])
-    c.sp_c         = read_float(line[47:54])
-    c.sp_r_c       = read_float(line[54:64])
-    c.sp_r_h       = read_float(line[64:70])
-    c.sp_mu_V      = read_float(line[70:78])
+    c.sp_c      = read_float(line[47:54])
+    c.sp_r_c    = read_float(line[54:64])
+    c.sp_r_h    = read_float(line[64:70])
+    c.sp_mu_V   = read_float(line[70:78])
     c.rho_0     = read_float(line[78:85])
     c.lg_tc     = read_float(line[85:92])
     c.lg_th     = read_float(line[92:])
 f3.close()
 
+import cPickle as pkl
 
-from catalogue.models import *
+pkl.dump(cluster_list, open('harris_pickle.pkl','wb'))
 
-def insert_in_django():
-    # Emptying the tables
-    for c in GlobularCluster.objects.all():
-        c.delete()
+exit()
 
-    for o in Observation.objects.all():
-        o.delete()
+#from catalogue.models import GlobularCluster, Reference, Parameter, Observation, Rank
 
-    for r in Reference.objects.all():
-        r.delete()
-
-    # Inserting a reference for the Harris Catalogue
-    r = Reference(name='Harris catalogue', doi='10.1086/118116', ads='')
-    r.save()
-
-    print('Inserting into database :')
-    # Now creating the observations for every cluster:
-    for c in cluster_list.values():
-        dc = GlobularCluster(cluster_id = c.gid)
-        print('  . {}'.format(c.gid))
-        dc.save()
-
-        do = Observation()
-        do.cluster_id = dc
-        do.ref = r
-        c.fill_in(do)
-        do.save()
-
+#def insert_in_django():
+#    # Emptying the tables
+#    for c in GlobularCluster.objects.all():
+#        c.delete()
+#
+#    for o in Observation.objects.all():
+#        o.delete()
+#
+#    for r in Reference.objects.all():
+#        r.delete()
+#
+#    # Inserting a reference for the Harris Catalogue
+#    r = Reference(name='Harris catalogue', doi='10.1086/118116', ads='')
+#    r.save()
+#
+#    print('Inserting into database :')
+#    # Now creating the observations for every cluster:
+#    for c in cluster_list.values():
+#        dc = GlobularCluster(cluster_id = c.gid)
+#        print('  . {}'.format(c.gid))
+#        dc.save()
+#
+#        do = Observation()
+#        do.cluster_id = dc
+#        do.ref = r
+#        c.fill_in(do)
+#        do.save()
+#
