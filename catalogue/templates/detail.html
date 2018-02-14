@@ -4,6 +4,22 @@
 {% load staticfiles %}
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}"/>
+<script charset="utf8" type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function() {
+    $('#example').DataTable({
+      "pageLength": 50,
+      "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>', 
+      "order": [[ 2, "asc" ]],
+    } );
+} );
+
+</script>
+
+
 <div class="container-fluid">
   <div class="row">
     <div class="col">
@@ -12,19 +28,30 @@
     </div>
   </div>
   <div class="row">
-    <div class="col1">
-      <h3>Surfrace brightness profile</h3>
-      {{ figure|safe }}
+    <div class="col-md-4">
+     <div class="jumbotron">
+      <h3>Surface brightness profile</h3>
+      <p class="lead"> {{ figure|safe }} </p>
+      <p class="lead">
+        <a class="float-right btn btn-primary btn-sm" href="#" role="button">Download data</a>
+      </p>
     </div>
-    <div class="col2">
+    </div>
+
+    <div class="col-md-4">
         <h3>Colour-magnitude diagram</h3>
     </div>
-    <div class="col3">
+    <div class="col-md-4">
         <h3>Image? Velocity dispersion profile?</h3>
     </div>
   </div>
 </div>
 
+<script type="text/javascript">
+    // For demo to fit into DataTables site builder...
+    $('#example')
+        .addClass('display compact table-striped table-bordered');
+</script>
 
 
 {% endblock %}

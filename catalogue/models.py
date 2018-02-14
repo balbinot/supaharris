@@ -45,6 +45,10 @@ class Profile(models.Model):
     modpars    = JSONField('Model parameters')
     mtype      = models.CharField('Model flavour', max_length=256, null=True, blank=True)
 
+    def __str__(self):
+        s = '{} - Ref : {}'.format(str(self.cluster_id), str(self.ref))
+        return s
+
 class Observation(models.Model):
     ref        = models.ForeignKey(Reference, on_delete=models.CASCADE)
     cluster_id = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)

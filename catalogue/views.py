@@ -67,8 +67,7 @@ class ClickInfo(mpld3.plugins.PluginBase):
                       "urls": urls}
 
 
-
-tblattr = {'class':'display', 'id': 'example'}
+tblattr = {'class':'display compact', 'id': 'example', 'cellspacing':'0', 'width':"100%"}
 
 class ReferenceTable(tables.Table):
     doi = tables.URLColumn()
@@ -100,18 +99,18 @@ class GeneralTable(tables.Table):
         exclude = ('id', 'ref')
 
 def references(request):
-    table = ReferenceTable(Reference.objects.all(), attrs=tblattr)
+    table = ReferenceTable(Reference.objects.all(), attrs=tblattr, orderable=False)
     return render(request, 'references.html', {'references': table})
 
 def ref_detail(request, name_id):
     reference = get_object_or_404(Reference, pk=name_id)
-    table = GeneralTable(Observation.objects.filter(ref=reference))
+    table = GeneralTable(Observation.objects.filter(ref=reference), orderable=False, attrs=tblattr)
     return render(request, 'ref_detail.html', {'references': table, 'reference' : reference})
 
 def index(request):
     reference =  get_object_or_404(Reference, name__startswith='Harri')
     obj = Observation.objects.filter(ref=reference)
-    table = ObservationTable(obj, attrs=tblattr)
+    table = ObservationTable(obj, attrs=tblattr, orderable=False)
     return render(request, 'index.html', {'observations': table, 'reference': reference})
 
 def landing(request):
@@ -135,26 +134,19 @@ def landing(request):
     ax.set_xlabel('l [deg]', size=20)
     ax.set_ylabel('b [deg]', size=20)
 
-    #img = plt.imread('/home/eb0025/Desktop/mwpan2_Merc_2000x1200.jpg')
-    #ax.imshow(img, extent=[-180,180,-90,90], zorder=-99)
-
     mpld3.plugins.connect(fig, ClickInfo(points, urls))
 
     labels = ['<table><tr>{}<td></tr></td>'.format(n) for n in names]
     tooltip = mpld3.plugins.PointHTMLTooltip(points, labels=labels, css=css)
     mpld3.plugins.connect(fig, tooltip)
 
-    #single_chart = dict()
-    #single_chart['id'] = "fig_01"
-    #single_chart['json'] = json.dumps(mpld3.fig_to_dict(fig))
-    #result= {'single_chart': single_chart}
     result = mpld3.fig_to_html(fig)
 
     return render(request, 'landing.html', {'figure': result})
 
 def detail(request, cid):
     cluster = get_object_or_404(GlobularCluster, pk=cid)
-    table = ObservationTable(Observation.objects.filter(cluster_id=cluster))
+    table = ObservationTable(Observation.objects.filter(cluster_id=cluster), orderable=False, attrs=tblattr)
     data = Profile.objects.filter(cluster_id=cluster)
     odict = {}
     odict['observations'] = table
@@ -177,14 +169,10 @@ def detail(request, cid):
 
         tooltip = mpld3.plugins.PointLabelTooltip(points, labels=data['label'])
         mpld3.plugins.connect(fig, tooltip)
-
-        #single_chart = dict()
-        #single_chart['id'] = "fig_01"
-        #single_chart['json'] = json.dumps(mpld3.fig_to_dict(fig))
-        #result= {'single_chart': single_chart}
         odict['figure']  = mpld3.fig_to_html(fig)
+
     else:
-        odict['figure']  = "No profile available"
+        odict['figure']  = "<center><h3>No profile available</h3></center>"
 
     return render(request, 'detail.html', odict)
 

@@ -4,23 +4,20 @@
 {% load staticfiles %}
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}"/>
+<script charset="utf8" type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
 
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
-  <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
-<!--
-<script type="text/javascript" src="/static/js/datatables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/css/datatables.min.css"/>
-  --!>
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        $('#example').DataTable({
-          "pageLength": 50,
-          "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>', 
-          "order": [[ 2, "asc" ]],
-        });
-    } );
-</script>
 
+$(document).ready(function() {
+    $('#example').DataTable({
+      "pageLength": 50,
+      "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>', 
+      "order": [[ 2, "asc" ]],
+    } );
+} );
+
+</script>
 
 
 <div class="container-fluid">
@@ -35,8 +32,7 @@
 <script type="text/javascript">
     // For demo to fit into DataTables site builder...
     $('#example')
-        .removeClass( 'display' )
-        .addClass('table table-striped table-bordered');
+        .addClass('display table table-striped table-bordered');
 </script>
 
 
