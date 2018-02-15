@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^about/', views.about, name='about'),
     url(r'^reference(?P<name_id>[0-9]+)/$', views.ref_detail, name='ref_detail'),
     url(r'^GCID(?P<cid>[0-9]+)/$', views.detail, name='detail'),
-    url(r'^admin/', admin.site.urls, name='admin'),
+#    url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^freeze/', include('freeze.urls')),
 #    url(r'^Coordinates_harris2010/$', views.Harris_2010_coordinates, name='Harris_2010_coordinates'),
 #    url(r'^Metallicity_harris2010/$', views.Harris_2010_metallicity, name='Harris_2010_metallicity'),

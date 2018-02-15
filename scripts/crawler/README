@@ -1,0 +1,32 @@
+This is the data crawler. It goes through VIzier or PDF files to extract tables. 
+
+The goal is to build a pandas dataframe for each reference where the parameter
+name is standard. Here is a list of the parameters and a brief description
+(NOTE: each parameters has an assotiated uncertainty)
+
+RA      : Right Ascension J2000         [degree]
+Dec     : Declination J2000             [degree]
+L       : Galactic Longitude            [degree]
+B       : Galactic Latitude             [degree]
+R_Sun   : Distance to the Sun           [kpc]
+[Fe/H]  : Metallicity                   [dex]
+[Mg/Fe] : Magnesium abundance           [dex]
+[a/Fe]  : Alpha-element abundance       [dex]
+E(B-V)  : Redenning
+ellip   : Ellipticity
+V_r     : Radial velocity               [km/s]
+pmRA    : RA proper motion              [mas/yr]
+pmDec   : Dec proper motion             [mas/yr]
+sig_v   : Radial velocity dispersion    [km/s]
+c       : King concentration parameter
+r_c     : King core radius              [arcmin]
+r_h     : Half-light radius             [arcmin]
+mu_V    : Central surface brightness    [mag arcsec^-2]
+ecc     : Orbital eccentricity
+phase   : Orbital phase (1=apo; 0=peri)
+R_apo   : Apocentre radius              [kpc]
+R_peri  : Pericentre radius             [kpc]
+R_J     : Jacobii radius                [pc]
+Mass    : Present day mass              [10*5 M_sun]
+Mass_ini: Intial mass                   [10*5 M_sun]
+Age     : Age                           [Gyr]

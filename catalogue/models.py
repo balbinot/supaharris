@@ -24,7 +24,11 @@ class GlobularCluster(models.Model):
                                   blank=True)
 
     def __str__(self):
-        return self.cluster_id
+        if self.altname:
+           return '{} ({})'.format(self.cname, self.altname)
+        else:
+           return '{}'.format(self.cname)
+
 
 class Reference(models.Model):
     rname  = models.CharField("Reference", max_length=256, null=True,
@@ -47,8 +51,12 @@ class Parameter(models.Model):
     scale   = models.FloatField("Scale", max_length=256, null=False, blank=False,
                                help_text="Scale by which parameters must be multiplied by")
 
+
     def __str__(self):
-        return 'Parameter {} [{}]'.format(self.pname, self.unit)
+        if self.unit:
+           return '{} [{}]'.format(self.pname, self.unit)
+        else:
+           return '{}'.format(self.pname)
 
 
 class Profile(models.Model):
@@ -73,15 +81,6 @@ class Auxiliary(models.Model):
         s = '{} - Ref : {} {}'.format(str(self.cluster_id), str(self.ref))
         return s
 
-class ObsManager(models.Manager):
-    """ Maybe usefull...
-
-    Assemble string with val +- sigma
-    """
-    def valsig(self):
-        qs = super().get_queryset()
-        vals = ['{} +- {}'.format(i.val, i.sigup) for i in qs]
-        return vals
 
 class Observation(models.Model):
     rname   = models.ForeignKey(Reference, on_delete=CASCADE)
@@ -92,7 +91,10 @@ class Observation(models.Model):
     sigup   = models.FloatField("Sigma up", null=True, blank=True)
     sigdown = models.FloatField("Sigma down", null=True, blank=True)
 
-    dstr    = ObsManager()
+    # This is how to print uncertainties in the columns of django-tables2
+    @property
+    def render_unc(self):
+        pass
 
     ## FIXME: not sure how to call units from Parameter model to print here
     def __str__(self):
@@ -108,7 +110,5 @@ class Observation(models.Model):
 class Rank(models.Model):
     oid        = models.ForeignKey(Observation, on_delete=CASCADE)
     rank       = models.IntegerField()
-    comp       = models.CharField('Compilation name', max_lenght=64, null=True,
+    comp       = models.CharField('Compilation name', max_length=64, null=True,
                                   blank=True)
-
-

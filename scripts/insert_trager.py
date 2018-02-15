@@ -5,7 +5,6 @@ import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "supaharris.settings")
 
-
 import numpy as np
 import matplotlib.pyplot as p
 from astroquery.vizier import Vizier

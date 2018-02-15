@@ -143,7 +143,7 @@ def read_str(s):
 # NGC 104    47 Tuc       00 24 05.67  -72 04 52.6   305.89  -44.89    4.5   7.4   1.9  -2.6  -3.1
 
 # Parsing first file
-f1 = open('import_data/f1.dat')
+f1 = open('data/f1.dat')
 for line in f1:
     c = Cluster()
     c.gid               = line[:12].strip()
@@ -173,7 +173,7 @@ f1.close()
 # NGC 104     -0.72 10   0.04 14.06 13.37  3.95  -9.42   0.37  0.88  0.53  1.14  G4    0.09
 
 # Now parsing second file
-f2 = open('import_data/f2.dat')
+f2 = open('data/f2.dat')
 for line in f2:
     gid = line[:12].strip()
     c = cluster_list[gid]
@@ -199,57 +199,50 @@ f2.close()
 #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 # NGC 104      -18.0   0.1   -26.7    11.0   0.3   2.07      0.36  3.17   14.38   4.88   7.84  9.55
 
-f3 = open('import_data/f3.dat')
+f3 = open('data/f3.dat')
 for line in f3:
     gid = line[:12].strip()
     c = cluster_list[gid]
+
     c.v_r       = read_float(line[12:19])
     c.v_r_err   = read_float(line[19:25])
     c.c_LSR     = read_float(line[25:33])
     c.sig_v     = read_float(line[33:41])
     c.sig_err   = read_float(line[41:47])
-    c.sp_c      = read_float(line[47:54])
-    c.sp_r_c    = read_float(line[54:64])
-    c.sp_r_h    = read_float(line[64:70])
-    c.sp_mu_V   = read_float(line[70:78])
+    c.sp_c         = read_float(line[47:54])
+    c.sp_r_c       = read_float(line[54:64])
+    c.sp_r_h       = read_float(line[64:70])
+    c.sp_mu_V      = read_float(line[70:78])
     c.rho_0     = read_float(line[78:85])
     c.lg_tc     = read_float(line[85:92])
     c.lg_th     = read_float(line[92:])
 f3.close()
 
-import cPickle as pkl
+def insert_in_django():
+    # Emptying the tables
+    for c in GlobularCluster.objects.all():
+        c.delete()
 
-pkl.dump(cluster_list, open('harris_pickle.pkl','wb'))
+    for o in Observation.objects.all():
+        o.delete()
 
-exit()
+    for r in Reference.objects.all():
+        r.delete()
 
-#from catalogue.models import GlobularCluster, Reference, Parameter, Observation, Rank
+    # Inserting a reference for the Harris Catalogue
+    r = Reference(name='Harris catalogue', doi='10.1086/118116', ads='')
+    r.save()
 
-#def insert_in_django():
-#    # Emptying the tables
-#    for c in GlobularCluster.objects.all():
-#        c.delete()
-#
-#    for o in Observation.objects.all():
-#        o.delete()
-#
-#    for r in Reference.objects.all():
-#        r.delete()
-#
-#    # Inserting a reference for the Harris Catalogue
-#    r = Reference(name='Harris catalogue', doi='10.1086/118116', ads='')
-#    r.save()
-#
-#    print('Inserting into database :')
-#    # Now creating the observations for every cluster:
-#    for c in cluster_list.values():
-#        dc = GlobularCluster(cluster_id = c.gid)
-#        print('  . {}'.format(c.gid))
-#        dc.save()
-#
-#        do = Observation()
-#        do.cluster_id = dc
-#        do.ref = r
-#        c.fill_in(do)
-#        do.save()
-#
+    print('Inserting into database :')
+    # Now creating the observations for every cluster:
+    for c in cluster_list.values():
+        dc = GlobularCluster(cluster_id = c.gid)
+        print('  . {}'.format(c.gid))
+        dc.save()
+
+        do = Observation()
+        do.cluster_id = dc
+        do.ref = r
+        c.fill_in(do)
+        do.save()
+

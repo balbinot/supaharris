@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 
 # Create your views here.
-
+#
 from django.http import HttpResponse
 from catalogue.models import GlobularCluster, Observation, Reference, Profile
 import django_tables2 as tables
