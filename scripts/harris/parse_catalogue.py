@@ -3,6 +3,7 @@ import sys
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 import numpy as np
+import pandas as pd
 
 class HourAngle(object):
     def __init__(self, hh=None, mm=None, ss=None):
@@ -137,13 +138,22 @@ def read_str(s):
     return None if s == '' else s
 
 
+df = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun',
+                           'r_c', 'r_h', 'c', '[Fe/H]', 'E(B-V)', 'sig_v',
+                           'esig_v', 'ellip', 'mu_V', 'V_r', 'eV_r',
+                           'V_t'])
+
 # Ruler for f1
 #0         1         2         3         4         5         6         7         8         9         100
 #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 # NGC 104    47 Tuc       00 24 05.67  -72 04 52.6   305.89  -44.89    4.5   7.4   1.9  -2.6  -3.1
 
 # Parsing first file
-f1 = open('data/f1.dat')
+
+suf = '../../'
+f1 = open(suf+'data/f1.dat')
+df1 = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun'])
+
 for line in f1:
     c = Cluster()
     c.gid               = line[:12].strip()
@@ -158,14 +168,24 @@ for line in f1:
     c.gal_dist_comp[1]  = read_float(line[85:91])
     c.gal_dist_comp[2]  = read_float(line[91:])
 
-
     coo = SkyCoord(ra=ra_str, dec=dec_str, unit=(u.hourangle, u.degree))
     c.ra = np.round(coo.ra.deg,4)
     c.dec = np.round(coo.dec.deg,4)
 
+    df1.loc[c.gid] = pd.Series({'cname': c.gid,
+                               'altname': c.name,
+                               'RA': c.ra,
+                               'Dec': c.dec,
+                               'L': c.longitude,
+                               'B': c.latitude,
+                               'R_Sun': c.dist_from_sun,
+                               })
+
+
     cluster_list[c.gid] = c
 
 f1.close()
+
 
 # Ruler for f2
 #0         1         2         3         4         5         6         7         8         9         100
@@ -173,7 +193,8 @@ f1.close()
 # NGC 104     -0.72 10   0.04 14.06 13.37  3.95  -9.42   0.37  0.88  0.53  1.14  G4    0.09
 
 # Now parsing second file
-f2 = open('data/f2.dat')
+f2 = open(suf+'data/f2.dat')
+df2 = pd.DataFrame(columns=['[Fe/H]', 'E(B-V)', 'ellip', 'V_t'])
 for line in f2:
     gid = line[:12].strip()
     c = cluster_list[gid]
@@ -191,6 +212,11 @@ for line in f2:
     c.spt         = read_str(line[78:82])
     c.ellipticity = read_float(line[82:])
 
+    df2.loc[gid] = pd.Series({'[Fe/H]': c.metallicity,
+                             'E(B-V)': c.eb_v,
+                             'V_t': c.v_t,
+                             'ellip': c.ellipticity,
+                             })
 f2.close()
 
 
@@ -199,7 +225,8 @@ f2.close()
 #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 # NGC 104      -18.0   0.1   -26.7    11.0   0.3   2.07      0.36  3.17   14.38   4.88   7.84  9.55
 
-f3 = open('data/f3.dat')
+f3 = open(suf+'data/f3.dat')
+df3 = pd.DataFrame(columns=['r_c', 'r_h', 'c', 'sig_v', 'esig_v', 'mu_V', 'V_r', 'eV_r'])
 for line in f3:
     gid = line[:12].strip()
     c = cluster_list[gid]
@@ -216,7 +243,23 @@ for line in f3:
     c.rho_0     = read_float(line[78:85])
     c.lg_tc     = read_float(line[85:92])
     c.lg_th     = read_float(line[92:])
+
+    df3.loc[gid] = pd.Series({'V_r': c.v_r,
+                             'eV_r': c.v_r_err,
+                             'sig_v': c.sig_v,
+                             'esig_v': c.sig_err,
+                             'c': c.sp_c,
+                             'r_c': c.sp_r_c,
+                             'r_h': c.sp_r_h,
+                             'mu_V': c.sp_mu_V,
+                             })
 f3.close()
+
+df = pd.concat([df1, df2, df3], axis=1)
+writer = pd.ExcelWriter('output.xlsx')
+df.to_excel(writer, "Harris")
+writer.save()
+print df
 
 def insert_in_django():
     # Emptying the tables

@@ -96,7 +96,8 @@ class Observation(models.Model):
     def render_unc(self):
         pass
 
-    ## FIXME: not sure how to call units from Parameter model to print here
+    ## FIXME: not sure how to call units from Parameter model to print here;
+    ## maybe with FOO_set
     def __str__(self):
         s = '{}: {} = {:.3f} + {:.3f} - {:.3f} ({})'.format(self.cname,
                                                             self.pname,
@@ -110,5 +111,6 @@ class Observation(models.Model):
 class Rank(models.Model):
     oid        = models.ForeignKey(Observation, on_delete=CASCADE)
     rank       = models.IntegerField()
+    weight     = models.IntegerField()
     comp       = models.CharField('Compilation name', max_length=64, null=True,
                                   blank=True)
