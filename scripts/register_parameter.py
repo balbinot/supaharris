@@ -34,8 +34,8 @@ pars = { 'RA     ' : ['Right Ascension J2000        ', 'degree'      ],
         }
 
 
-for p,v in pars.iteritems():
-    print p, v
+for p, v in pars.items():
+    print(p, v)
     par = Parameter(pname=p, desc=v[0], unit=v[1], scale=1)
     par.save()
 

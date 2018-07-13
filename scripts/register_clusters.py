@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-from harris.parse_catalogue import cluster_list
+from .harris.parse_catalogue import cluster_list
 
 from catalogue.models import GlobularCluster
 

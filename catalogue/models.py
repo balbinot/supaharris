@@ -38,7 +38,7 @@ class Reference(models.Model):
     pub_date = models.DateField('Publication date', null=True)
 
     def __str__(self):
-        return self.refname
+        return self.rname
 
 
 
@@ -68,7 +68,7 @@ class Profile(models.Model):
     mtype      = models.CharField('Model flavour', max_length=256, null=True, blank=True)
 
     def __str__(self):
-        s = '{} - Ref : {}'.format(str(self.cluster_id), str(self.ref))
+        s = '{} - Ref : {}'.format(str(self.cname), str(self.rname))
         return s
 
 class Auxiliary(models.Model):

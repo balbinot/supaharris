@@ -21,7 +21,7 @@ class RP():
         return np.unique(self.tbl['Name'])
 
     def list_cols(self):
-        print self.tbl.keys()
+        print(self.tbl.keys())
 
     def get_rp(self, name='ngc2298'):
         j = (self.tbl['Name']==name)
@@ -59,7 +59,7 @@ if __name__=='__main__':
              'mu_V': muV.tolist(),
              'W': w.tolist(),
              'label': dset.tolist(),}
-    print json.dumps(odict)
+    print(json.dumps(odict))
 
     p.plot(logr, muV, 'ko')
     p.ylim(p.ylim()[::-1])

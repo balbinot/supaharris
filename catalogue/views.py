@@ -8,6 +8,7 @@ import django_tables2 as tables
 from django_tables2.utils import A
 
 import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import mpld3
@@ -154,7 +155,6 @@ def detail(request, cid):
     if len(data) > 0:
         data = data[0]
         data = json.loads(data.profile)
-        print data
 
         fig = plt.figure(figsize=(7,7))
         ax = plt.subplot(111)

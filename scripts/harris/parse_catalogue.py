@@ -5,6 +5,10 @@ from astropy import units as u
 import numpy as np
 import pandas as pd
 
+
+## Will only work when running from within manage.py
+from catalogue.models import *
+
 class HourAngle(object):
     def __init__(self, hh=None, mm=None, ss=None):
         self.hh = hh
@@ -112,7 +116,7 @@ class Cluster(object):
             do.sig_v = self.sig_v
             do.esig_v = self.sig_err
 
-        print self.sp_c, self.sp_r_c
+        print(self.sp_c, self.sp_r_c)
         if self.sp_c:
             do.c = self.sp_c
         if self.sp_r_c:
@@ -151,6 +155,7 @@ df = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun',
 # Parsing first file
 
 suf = '../../'
+suf = '/home/eb0025/supaharris/'
 f1 = open(suf+'data/f1.dat')
 df1 = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun'])
 
@@ -259,27 +264,26 @@ df = pd.concat([df1, df2, df3], axis=1)
 writer = pd.ExcelWriter('output.xlsx')
 df.to_excel(writer, "Harris")
 writer.save()
-print df
+print(df)
+
+# This  next function is obsolete since the standard is to produce a CSV file
+# and use an unified script for ingesting
 
 def insert_in_django():
-    # Emptying the tables
-    for c in GlobularCluster.objects.all():
-        c.delete()
 
-    for o in Observation.objects.all():
-        o.delete()
-
-    for r in Reference.objects.all():
-        r.delete()
-
-    # Inserting a reference for the Harris Catalogue
-    r = Reference(name='Harris catalogue', doi='10.1086/118116', ads='')
-    r.save()
+    try:
+        ## Create reference if does not exists
+        r = Reference(rname='Harris catalogue', doi='10.1086/118116', ads='')
+        r.save()
+    except:
+        ## reference already exists
+        r = Reference.objects.filter(rname='Harris catalogue')[0]
 
     print('Inserting into database :')
-    # Now creating the observations for every cluster:
     for c in cluster_list.values():
-        dc = GlobularCluster(cluster_id = c.gid)
+        # No need for fuzzy match here since register_clusters uses the exact
+        # same names
+        dc = GlobularCluster.objects.filter(cname = c.gid)[0]
         print('  . {}'.format(c.gid))
         dc.save()
 
