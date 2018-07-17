@@ -99,12 +99,16 @@ class Observation(models.Model):
     ## FIXME: not sure how to call units from Parameter model to print here;
     ## maybe with FOO_set
     def __str__(self):
-        s = '{}: {} = {:.3f} + {:.3f} - {:.3f} ({})'.format(self.cname,
-                                                            self.pname,
-                                                            self.val,
-                                                            self.sigup,
-                                                            self.sigdown,
-                                                            self.rname)
+        if self.sigup != None:
+            s = '{}: {} = {:.3f} + {:.3f} - {:.3f} ({})'.format(self.cname,
+                                                                self.pname,
+                                                                self.val,
+                                                                self.sigup,
+                                                                self.sigdown,
+                                                                self.rname)
+        else:
+            s = '{}: {} = {:.3f} ({})'.format(self.cname, self.pname, self.val,
+                                              self.rname)
         return s
 
 

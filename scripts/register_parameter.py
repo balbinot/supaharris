@@ -14,7 +14,7 @@ pars = { 'RA     ' : ['Right Ascension J2000        ', 'degree'      ],
          '[Mg/Fe]' : ['Magnesium abundance          ', 'dex'         ],
          '[a/Fe] ' : ['Alpha-element abundance      ', 'dex'         ],
          'E(B-V) ' : ['Redenning                    ', 'mag'         ],
-         'ellip  ' : ['Ellipticity                  ', 'mag'         ],
+         'ellip  ' : ['Ellipticity                  ', ''            ],
          'V_r    ' : ['Radial velocity              ', 'km/s'        ],
          'pmRA   ' : ['RA proper motion             ', 'mas/yr'      ],
          'pmDec  ' : ['Dec proper motion            ', 'mas/yr'      ],
@@ -36,7 +36,7 @@ pars = { 'RA     ' : ['Right Ascension J2000        ', 'degree'      ],
 
 for p, v in pars.items():
     print(p, v)
-    par = Parameter(pname=p, desc=v[0], unit=v[1], scale=1)
+    par = Parameter(pname=p.strip(), desc=v[0].strip(), unit=v[1], scale=1)
     par.save()
 
 

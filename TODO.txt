@@ -13,6 +13,9 @@
   * Generic ingest
     
     Include multiple choice based on fuzzy search rank
+    Add standard way of handling errors 
+      - Currently a e+columnname marks a symmetric error field
+      - Add assymetric error field (U+col and D+col?)
 
 
   * Other
@@ -21,4 +24,27 @@
     
 
 
+  * Templates
 
+    - Use netcdn bootstrap with datatables mega linke
+    - New pages:
+        - landing
+        - about 
+        - contribute
+        - disclaimer
+        - Cluster detail page
+
+    - Build tables from scratch using column definitions
+        - Add uncertainties
+        - Add units
+        - Add onmouseover behaviour to show other data
+        - Add rank
+
+    - Replace mpld3 by plotly. Main plots:
+        - Quantity behaviour with date
+        - Sky map
+        - Profile plot
+    
+    - Add ESASKY frame (on click so it remains lightweight)
+
+        
