@@ -19,5 +19,4 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^catalogue/', include('catalogue.urls')),
-    url(r'^freeze/', include('freeze.urls')),
 ]

@@ -16,17 +16,17 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-      <h2>References</h2>
-      <div id="table"> {% render_table references %}</div>
+      <div id="table"> {{ observations | safe }}</div>
     </div>
   </div>
 </div>
 
-<script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+
 <script type="text/javascript">
     // For demo to fit into DataTables site builder...
     $('#example')
         .removeClass( 'display' )
-        .addClass('table table-striped table-bordered');
+        .addClass('table compact table-striped table-bordered');
 </script>
+
 {% endblock %}

@@ -1,0 +1,9 @@
+Django==2.0.7
+numpy>=1.11
+matplotlib>=2.2.2
+django-tables2==1.21.2
+django-jsonfield==1.0.1
+django-freeze==0.6.4
+django-extensions==2.0.7
+mpld3
+jinja2
