@@ -93,6 +93,7 @@ def run(*args):
     pdict = get_pars(f)
 
     catnames = f.index
+    print(f.index)
     for catname in catnames:
         b = process.extractOne(catname, cnames)
         if b[-1] > 90: ## sucess theshold for fuzzy matching
@@ -100,15 +101,15 @@ def run(*args):
             for k in pdict.keys():
                 p = Parameter.objects.filter(pname=k)[0]
                 if len(pdict[k])==3:
-                    val = f.ix[b[0]][pdict[k][0]]
-                    sigup = f.ix[b[0]][pdict[k][1]]
-                    sigdown = f.ix[b[0]][pdict[k][2]]
+                    val = f.ix[catname][pdict[k][0]]
+                    sigup = f.ix[catname][pdict[k][1]]
+                    sigdown = f.ix[catname][pdict[k][2]]
                 elif len(pdict[k])==2:
-                    val = f.ix[b[0]][pdict[k][0]]
-                    sigup = f.ix[b[0]][pdict[k][1]]
+                    val = f.ix[catname][pdict[k][0]]
+                    sigup = f.ix[catname][pdict[k][1]]
                     sigdown = sigup
                 elif len(pdict[k])==1:
-                    val = f.ix[b[0]][pdict[k][0]]
+                    val = f.ix[catname][pdict[k][0]]
                     if val == np.nan:
                         val = None
                     sigup = None

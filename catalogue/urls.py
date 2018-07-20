@@ -4,17 +4,20 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
+from django.urls import path
+
 from . import views
 
 from django.contrib.sitemaps.views import sitemap
 
-#path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
-#     name='django.contrib.sitemaps.views.sitemap')
-
 urlpatterns = [
-    url(r'^$', views.landing, name='landing'),
+    path('test/', views.obsummary, name='test'),
+    path('cluster/<cname>', views.clsummary),
+    path('', views.landing, name='landing'),
+    path('references/', views.references, name='references'),
+
+
     url(r'^home/$', views.index, name='index'),
-    url(r'^references/$', views.references, name='references'),
     url(r'^about/', views.about, name='about'),
     url(r'^reference(?P<name_id>[0-9]+)/$', views.ref_detail, name='ref_detail'),
     url(r'^GCID(?P<cid>[0-9]+)/$', views.detail, name='detail'),

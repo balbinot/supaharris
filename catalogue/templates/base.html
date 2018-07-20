@@ -1,6 +1,5 @@
 {% load static %}
 {% load staticfiles %}
-{% load bootstrap_themes %}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
@@ -11,36 +10,29 @@
   <meta name="description" content=""/>
   <meta name="keywords" content="" />
   <meta name="robots" content="index, follow" />
-  <!-- Bootstrap core CSS -->
-  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 
-  <!-- Bootstrap core JavaScript
-  ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
-  <!-- <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js %}"><\/script>')</script> --!>
-  <script src="{% static 'js/tether.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.18/datatables.min.js"></script>
 
 
 
 </head>
 <body>
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">SuperHarris</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">SuperHarris</a>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
+
+      <div class="collapse navbar-collapse" id="navbarsExample02">
+        <ul class="navbar-nav mr-auto">
+
         <li class="nav-item"><a class="nav-link" href="/catalogue/">Home</a></li>
         <li class="nav-item {% if request.resolver_match.url_name == "index" %}active{% endif %}">
-          <a class="nav-link" href="{% url "index" %}">Catalogue</a>
+          <a class="nav-link" href="{% url "test" %}">Catalogue</a>
         </li>
 
         <li class="nav-item {% if request.resolver_match.url_name == "references" %}active{% endif %}">
@@ -52,14 +44,21 @@
         <li class="nav-item {% if request.resolver_match.url_name == "about" %}active{% endif %}">
           <a class="nav-link" href="{% url "about" %}">About</a>
         </li>
-      </ul>
+
+
+
+        </ul>
       </div>
     </nav>
 
+
+
     <div class="container">
     <div class="starter-template">
-     <h1>Surrey Globular Cluster Catalogue</h1>
-     <p class="lead">A dynamic high-level catalogue hosting the properties of Milky Way Globular Clusters</p>
+        <center>
+            <h1>Globular Cluster Catalogue</h1>
+            <p class="lead">A dynamic high-level catalogue hosting the properties of Milky Way Globular Clusters</p>
+        </center>
     </div>
 
     </div>

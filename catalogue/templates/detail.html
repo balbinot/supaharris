@@ -4,16 +4,15 @@
 {% load staticfiles %}
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}"/>
-<script charset="utf8" type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
-
 <script type="text/javascript" charset="utf-8">
 
 $(document).ready(function() {
     $('#example').DataTable({
       "pageLength": 50,
-      "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>', 
-      "order": [[ 2, "asc" ]],
+        "searching": false,
+        "paging": false,
+        "ordering": false,
+
     } );
 } );
 
@@ -39,7 +38,14 @@ $(document).ready(function() {
     </div>
 
     <div class="col-md-4">
-        <h3>Colour-magnitude diagram</h3>
+     <div class="jumbotron">
+        <h3>ESA Sky</h3>
+        
+      <p class="lead"> <iframe src="{{ esaurl|safe }}" width="640px" height="640px"></iframe> </p>
+      <p class="lead">
+        <a class="float-right btn btn-primary btn-sm" href="{{esaurl|safe}}" role="button">Go to ESASky</a>
+      </p>
+      </div>
     </div>
     <div class="col-md-4">
         <h3>Image? Velocity dispersion profile?</h3>
@@ -50,7 +56,7 @@ $(document).ready(function() {
 <script type="text/javascript">
     // For demo to fit into DataTables site builder...
     $('#example')
-        .addClass('display compact table-striped table-bordered');
+        .addClass('display table-striped table-bordered');
 </script>
 
 

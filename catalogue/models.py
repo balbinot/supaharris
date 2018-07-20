@@ -41,7 +41,6 @@ class Reference(models.Model):
         return self.rname
 
 
-
 class Parameter(models.Model):
     pname   = models.CharField("Parameter", max_length=64, unique=True,
                                primary_key=True)
@@ -93,13 +92,16 @@ class Observation(models.Model):
 
     # This is how to print uncertainties in the columns of django-tables2
     @property
-    def render_unc(self):
-        pass
+    def render_val(self):
+        if self.sigup is not None:
+            return u'{:.3f} ± {:.3f}'.format(self.val, self.sigup)
+        elif self.val is not None:
+            return u'{:.3f}'.format(self.val)
+        else:
+            return u'-'
 
-    ## FIXME: not sure how to call units from Parameter model to print here;
-    ## maybe with FOO_set
     def __str__(self):
-        if self.sigup != None:
+        if self.sigup is not None:
             s = '{}: {} = {:.3f} + {:.3f} - {:.3f} ({})'.format(self.cname,
                                                                 self.pname,
                                                                 self.val,

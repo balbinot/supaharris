@@ -14,41 +14,35 @@ import os.path
 from fuzzywuzzy import process
 import json
 
-from .parse_trager import RP
 from catalogue.models import *
 
-f = RP()
-tragernames = f.list()
-f.list_cols()
+from glob import glob
+
+tmp = glob('/home/eb0025/Dropbox/flames_proposal/GC_Gaia/*_numdens_profile')
+tnames = [a.split('/')[-1].split('_')[0] for a in tmp]
 
 dbnames = [o.cname for o in GlobularCluster.objects.all()]
 try:
     ## Create reference if does not exists
-    r = Reference(rname='Trager et al. 1995', doi='10.1086/118116', ads='add later')
+    r = Reference(rname='de Boer et al. 2018', doi='', ads='')
     r.save()
 except:
     ## reference already exists
-    r = Reference.objects.filter(rname='Trager et al.i 1995')[0]
+    r = Reference.objects.filter(rname='de Boer et al. 2018')[0]
 
 def insert_into_django():
-    # Emptying the tables
-    for c in Profile.objects.all():
-        c.delete()
-
     for query in dbnames:
-        b = process.extractOne(query, tragernames)
+        b = process.extractOne(query, tnames)
         if b[-1] > 90: ## sucess theshold for fuzzy matching
             print('{} matched to {}; producing json'.format(b[0], query))
-            tbl = f.get_rp(name=b[0])
-            logr = tbl['logr']
-            muV = tbl['muV']
-            w = tbl['Weight']
-            dset = tbl['DataSet']
 
-            odict = {'log(r/arcmin)': logr.tolist(),
-                     'mu_V': muV.tolist(),
-                     'W': w.tolist(),
-                     'label': dset.tolist(),}
+            f = '/home/eb0025/Dropbox/flames_proposal/GC_Gaia/{}_numdens_profile'.format(b[0])
+
+            r, dens, err = np.loadtxt(f, unpack=True)
+
+            odict = {'r [arcmin]': r.tolist(),
+                     'Density [/arcmin^2]': dens.tolist(),
+                     'Unc': err.tolist(), }
 
 
 
@@ -63,7 +57,7 @@ def insert_into_django():
             do.rname = r
             do.ptype = "Surface brightness profile"
             do.profile = json.dumps(odict)
-            do.save()
+            #do.save()
 
 
         #cluster_id = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)
