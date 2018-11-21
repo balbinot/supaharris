@@ -14,4 +14,10 @@
 - `python manage.py check`
 - `python manage.py migrate`
 - `python manage.py createsuperuser`
+
+### Add the initial data to the database
+- `python manage.py add_harris_data` 
+
+
+### Run the development server at http://localhost:8000
 - `python manage.py runserver` (and leave running)

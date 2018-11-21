@@ -82,11 +82,11 @@ class Auxiliary(models.Model):
 
 
 class Observation(models.Model):
-    rname   = models.ForeignKey(Reference, on_delete=CASCADE)
-    cname   = models.ForeignKey(GlobularCluster, on_delete=CASCADE)
-    pname   = models.ForeignKey(Parameter, on_delete=CASCADE)
+    rname   = models.ForeignKey(Reference, on_delete=CASCADE, null=True)
+    cname   = models.ForeignKey(GlobularCluster, on_delete=CASCADE, null=True)
+    pname   = models.ForeignKey(Parameter, on_delete=CASCADE, null=True)
 
-    val     = models.FloatField("Value")
+    val     = models.FloatField("Value", null=True, blank=True)
     sigup   = models.FloatField("Sigma up", null=True, blank=True)
     sigdown = models.FloatField("Sigma down", null=True, blank=True)
 
