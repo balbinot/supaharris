@@ -21,7 +21,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')iby(xl09u$43n!fd@nr67=-bwsfd$j(-41(f514dkdy(qhm*9'
+SECRET_KEY = 'secret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -129,3 +129,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = './'
+
+from .local import *

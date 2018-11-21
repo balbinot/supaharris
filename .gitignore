@@ -102,3 +102,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Exclude local settings /w passwords and such from the repo
+local.py
