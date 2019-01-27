@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "supaharris.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.base")
 
 from catalogue.models import Parameter
 
