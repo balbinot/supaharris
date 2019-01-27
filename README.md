@@ -1,6 +1,6 @@
 ## **Dependencies**
-- Python 3.6.3
-- Django 2.0.7
+- Python 3.7.2
+- Django 2.1.5
 - See and intall `requirements.txt` for full dependencies
 
 ## **Installation for development**
