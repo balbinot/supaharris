@@ -1,3 +1,13 @@
+import os
+from settings.base import *
+
 # Generate a secret key locally. For example, use 
 # `env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/random | head -c 50; echo`
 SECRET_KEY = "secret"
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
