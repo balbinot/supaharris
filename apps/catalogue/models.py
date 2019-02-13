@@ -168,20 +168,18 @@ class Reference(models.Model):
 
 
 class Parameter(models.Model):
-    pname   = models.CharField("Parameter", max_length=64, unique=True,
-                               primary_key=True)
-    desc    = models.TextField("Description", null=True, blank=True)
-    unit    = models.CharField("Unit", max_length=256, null=False, blank=False,
-                               help_text="Must comply with astropy.unit")
-    scale   = models.FloatField("Scale", max_length=256, null=False, blank=False,
-                               help_text="Scale by which parameters must be multiplied by")
-
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(max_length=256, null=True, blank=True)
+    unit = models.CharField(max_length=64, null=False, blank=False,
+        help_text="Must comply with astropy.unit")
+    scale = models.FloatField(null=False, blank=False,
+        help_text="Scale by which parameters must be multiplied by")
 
     def __str__(self):
         if self.unit:
-           return "{} [{}]".format(self.pname, self.unit)
+           return "{} [{}]".format(self.name, self.unit)
         else:
-           return "{}".format(self.pname)
+           return "{}".format(self.name)
 
 
 class Profile(models.Model):

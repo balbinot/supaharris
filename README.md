@@ -20,7 +20,13 @@
 - `python manage.py shell -c 'from django.contrib.sites.models import Site; Site.objects.all().delete(); Site.objects.create(id=1, name="localhost:8000", domain="localhost:8000")'`
 
 ### Add the initial data to the database
-- `python manage.py add_harris_data` 
+- `python manage.py add_data_from_harris1996ed2010` 
+
+### How to add additional databases?
+- Datbases can be parsed and inserted into the SupaHarris database by creating a new management command in `apps/catalogue/management/commands`. We provide boilerplate to get going.
+- `cp apps/catalogue/management/commands/add_data_from_boilerplate.py apps/catalogue/management/commands/add_data_from_AuthorYear.py`
+- Implement `apps/catalogue/management/commands/add_data_from_AuthorYear.py`
+- `python manage.py add_data_from_AuthorYear`
 
 
 ### Run the development server at http://localhost:8000
