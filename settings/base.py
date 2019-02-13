@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'catalogue',
 ]
 
-SITE_ID = 2
+SITE_ID = 1
 
 
 MIDDLEWARE = [
