@@ -1,5 +1,40 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load static %}
+
+{% block topscripts %}
+{% endblock topscripts %}
 
 {% block content %}
-TODO: implement reference_list
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h2>References</h2>
+      <div id="table"> {% render_table references %}</div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
+
+{% block bottomscripts %}
+    <script type="text/javascript" src="{% static 'catalogue/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'catalogue/js/datatables.min.js' %}"></script>
+
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#example').DataTable({
+              "pageLength": 50,
+              "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>', 
+              "order": [[ 2, "asc" ]],
+            });
+        } );
+    </script>
+
+    <script type="text/javascript">
+        // For demo to fit into DataTables site builder...
+        $('#example')
+            .removeClass( 'display' )
+            .addClass('table table-striped table-bordered');
+    </script>
+{% endblock bottomscripts %}

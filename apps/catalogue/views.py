@@ -106,15 +106,6 @@ class ObservationTable(tables.Table):
         sequence = ('pname', 'quantity') # fields to display
         exclude = ('name', 'val', 'sigup', 'sigdown', 'id', 'name')
 
-class ReferenceTable(tables.Table):
-    doi = tables.URLColumn()
-    ads = tables.URLColumn()
-    name = tables.LinkColumn('ref_detail', args=[A('pk')])
-    pub_date = tables.DateColumn()
-    class Meta:
-        model = Reference
-        exclude = ('id',)
-
 
 def obsummary(request):
     # Queryset should take some info from request to filter for reference and
@@ -183,34 +174,6 @@ def method(request, name):
 
     return render(request, 'detail.html', odict)
 
-def reference_list(request):
-    table = ReferenceTable(Reference.objects.all(), attrs=tblattr, orderable=False)
-    return render(request, 'references.html', {'references': table})
-
-
-class ReferenceTable(tables.Table):
-    doi = tables.URLColumn()
-    ads = tables.URLColumn()
-    name = tables.LinkColumn('ref_detail', args=[A('pk')])
-    pub_date = tables.DateColumn()
-    class Meta:
-        model = Reference
-        exclude = ('id',)
-
-class GeneralTable(tables.Table):
-    class Meta:
-        model = Observation
-        exclude = ('id', 'ref')
-
-def references(request):
-    table = ReferenceTable(Reference.objects.all(), attrs=tblattr, orderable=False)
-    return render(request, 'references.html', {'references': table})
-
-def ref_detail(request, name_id):
-    reference = get_object_or_404(Reference, pk=name_id)
-    table = GeneralTable(Observation.objects.filter(ref=reference), orderable=False, attrs=tblattr)
-    return render(request, 'ref_detail.html', {'references': table, 'reference' : reference})
-
 def index(request):
     reference =  get_object_or_404(Reference, name__startswith='Harri')
     obj = Observation.objects.filter(ref=reference)
@@ -250,10 +213,30 @@ def cluster_detail(request, name):
     return render(request, 'detail.html', odict)
 
 
+class ReferenceTable(tables.Table):
+    doi = tables.URLColumn()
+    ads_url = tables.URLColumn()
+    name = tables.LinkColumn('ref_detail', args=[A('pk')])
+    pub_date = tables.DateColumn()
+    class Meta:
+        model = Reference
+        exclude = ('id',)
+
+
 def reference_list(request):
-    all_references = Reference.objects.all()
-    return render(request, 'catalogue/reference_list.html',
-        {"all_references": all_references})
+    table = ReferenceTable(Reference.objects.all(), attrs=tblattr, orderable=False)
+    return render(request, 'catalogue/reference_list.html', {'references': table})
+
+
+class GeneralTable(tables.Table):
+    class Meta:
+        model = Observation
+        exclude = ('id', 'ref')
+
+def ref_detail(request, name_id):
+    reference = get_object_or_404(Reference, pk=name_id)
+    table = GeneralTable(Observation.objects.filter(ref=reference), orderable=False, attrs=tblattr)
+    return render(request, 'ref_detail.html', {'references': table, 'reference' : reference})
 
 
 def reference_detail(request, slug):
