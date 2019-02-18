@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
+
+{% block title %}Supaharris - Page Not Found{% endblock title %}
+
+{% block content %}
+<div class="main-content" role="main">
+    <h1 class="text-center">The requested page cannot be found.</h1>
+
+<p>
+The requested page could not be found. This can happen because of a bad link or an incorrectly typed web address. Our webpage administrator has automatically been notified in case of an incorrect link. <br>
+<br>
+
+Please try again via the menu or use the search bar in the upper right corner. If you need the missing information promptly and it's not on our webpages, you can ofcourse always <a href="mailto:{{ webmaster_email_address }}">email us</a>. 
+</p>
+
+</div>
+{% endblock content %}
