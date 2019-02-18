@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
+
 import os
 import sys
+from collections import OrderedDict
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -11,337 +13,130 @@ from catalogue.models import Parameter
 from catalogue.models import Observation
 from catalogue.models import GlobularCluster
 
-import numpy as np
-import pandas as pd
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-
-
-class HourAngle(object):
-    def __init__(self, hh=None, mm=None, ss=None):
-        self.hh = hh
-        self.mm = mm
-        self.ss = ss
-
-    def from_str(self, s):
-        s = s.strip()
-        ps = s.find(' ')
-        self.hh = int(s[:ps])
-        s = s[ps:].strip()
-        ps = s.find(' ')
-        self.mm = int(s[:ps])
-        s = s[ps:].strip()
-        self.ss = float(s)
-
-    def __str__(self):
-        return ' {: 03d}:{:02d}:{:05.2f}'.format(self.hh, self.mm, self.ss)
-
-def add_parameters():
-    pars = { 'RA     ' : ['Right Ascension J2000        ', 'degree'      ],
-             'Dec    ' : ['Declination J2000            ', 'degree'      ],
-             'L      ' : ['Galactic Longitude           ', 'degree'      ],
-             'B      ' : ['Galactic Latitude            ', 'degree'      ],
-             'R_Sun  ' : ['Distance to the Sun          ', 'kpc'         ],
-             '[Fe/H] ' : ['Metallicity                  ', 'dex'         ],
-             '[Mg/Fe]' : ['Magnesium abundance          ', 'dex'         ],
-             '[a/Fe] ' : ['Alpha-element abundance      ', 'dex'         ],
-             'E(B-V) ' : ['Redenning                    ', 'mag'         ],
-             'ellip  ' : ['Ellipticity                  ', ''            ],
-             'V_r    ' : ['Radial velocity              ', 'km/s'        ],
-             'pmRA   ' : ['RA proper motion             ', 'mas/yr'      ],
-             'pmDec  ' : ['Dec proper motion            ', 'mas/yr'      ],
-             'sig_v  ' : ['Radial velocity dispersion   ', 'km/s'        ],
-             'c      ' : ['King concentration parameter ', ''            ],
-             'r_c    ' : ['King core radius             ', 'arcmin'      ],
-             'r_h    ' : ['Half-light radius            ', 'arcmin'      ],
-             'mu_V   ' : ['Central surface brightness   ', 'mag/arcsec2' ],
-             'ecc    ' : ['Orbital eccentricity         ', ''            ],
-             'phase  ' : ['Orbital phase (1=apo; 0=peri)', ''            ],
-             'R_apo  ' : ['Apocentre radius             ', 'kpc'         ],
-             'R_peri ' : ['Pericentre radius            ', 'kpc'         ],
-             'R_J    ' : ['Jacobii radius               ', 'pc'          ],
-             'Mass   ' : ['Present day mass             ', 'Msun'        ],
-             'Mass_i'  : ['Intial mass                  ', 'Msun'        ],
-             'Age    ' : ['Age                          ', 'Gyr'         ]
-            }
-
-
-    for p, v in pars.items():
-        print(p, v)
-        par = Parameter(pname=p.strip(), desc=v[0].strip(), unit=v[1], scale=1)
-        par.save()
-
-
-class Cluster(object):
-    def __init__(self):
-        # General
-        self.gid  = ''                         # Cluster identification
-        self.name = None                       # Other commonly used cluster name
-
-        # Coordinates
-        self.ra                 = None         # Right ascension               (Epoch J2000)
-        self.dec                = None         # Declination                   (Epoch J2000)
-        self.longitude          = None         # Galactic longitude            (Degrees)
-        self.latitude           = None         # Galactic latitude             (Degrees)
-        self.dist_from_sun      = None         # Distance from sum             (kpc)
-        self.dist_from_gal_cen  = None         # Distance from galactic center (kpc)
-        self.gal_dist_comp      = [None]*3     # Galactic distance components  (kpc)
-
-        # Metallicity
-        self.metallicity        = None         # Metallicity [Fe/H]
-        self.w_mean_met         = None         # Weight of mean metallicity
-
-        # Photometry
-        self.eb_v               = None         # Foreground reddening, E(B-V)
-        self.v_hb               = None         # V magnitude level of the HB, V_HB
-        self.app_vd_mod         = None         # Apparent visual distance modulus, (m-M)V
-        self.v_t                = None         # Integrated V magnitude, V_t
-        self.m_v_t              = None         # Cluster luminosity, M_V,t = V_t - (m-M)V
-        self.ph_u_b             = None         # U-B
-        self.ph_b_v             = None         # B-V
-        self.ph_v_r             = None         # V-R
-        self.ph_v_i             = None         # V-i
-        self.spt                = ''           # Spectral type
-        self.ellipticity        = None         # Projected ellipticity of isophotes, e = 1-(b/a)
-
-        # Velocities
-        self.v_r                = None         # Heliocentric radial velocity (km/s)
-        self.v_r_err            = None         # Observational uncertainty in radial velocity
-        self.c_LSR              = None         # Radial velocity relative to solar neighbourhood
-        self.sig_v              = None         # Central velocity dispersion (km/s)
-        self.sig_err            = None         # Observational uncertainty in velocity dispersion
-
-        # Structural parameters
-        self.sp_c               = None         # King-model central concentration, c=log(r_t/r_c)
-        self.sp_r_c             = None         # Core radius (arcmin)
-        self.sp_r_h             = None         # Half-light radius (arcmin)
-        self.sp_mu_V            = None         # Central surface brightness (V magnitudes per arcsec^2)
-        self.sp_rho_0           = None         # Central luminosity density, log_10(solar_lum/pc^3)
-        self.sp_lg_tc           = None         # Core relaxation time t(r_c) in log_10(yr)
-        self.sp_lg_th           = None         # Mean relaxation time t(r_h) in log_10(yr)
-
-    def fill_in(self, do):
-        if self.name:
-            do.name = self.name
-
-        if self.ra:
-            do.ra  = self.ra
-            do.dec = self.dec
-
-        if self.longitude:
-            do.gallon = self.longitude
-            do.gallat  = self.latitude
-
-        if self.dist_from_sun:
-            do.dfs = self.dist_from_sun
-        if self.dist_from_gal_cen:
-            do.dfgc = self.dist_from_gal_cen
-        if self.gal_dist_comp[0]:
-            do.x_helio = self.gal_dist_comp[0]
-            do.y_helio = self.gal_dist_comp[1]
-            do.z_helio = self.gal_dist_comp[2]
-
-        if self.metallicity:
-            do.metallicity = self.metallicity
-
-        if self.eb_v:
-            do.ebv = self.eb_v
-        if self.v_t:
-            do.MVt = self.v_t
-        if self.m_v_t:
-            do.L = self.m_v_t
-        if self.ellipticity:
-            do.ellipticity = self.ellipticity
-
-        if self.v_r:
-            do.v_r = self.v_r
-            do.ev_r = self.v_r_err
-        if self.sig_v:
-            do.sig_v = self.sig_v
-            do.esig_v = self.sig_err
-
-        print(self.sp_c, self.sp_r_c)
-        if self.sp_c:
-            do.c = self.sp_c
-        if self.sp_r_c:
-            do.r_c = self.sp_r_c
-        if self.sp_r_h:
-            do.r_h = self.sp_r_h
-        if self.sp_mu_V:
-            do.muV = self.sp_mu_V
+from data.parse_harris1996ed2010 import parse_data
 
 
 class Command(BaseCommand):
     help = "Add Harris data to the database"
 
     def handle(self, *args, **options):
-        cluster_list = {}
 
-        def read_float(s):
-            try:
-                val = float(s.strip())
-            except:
-                val = None
-            return val
+        # Add the ADS url (in this particular format). When the Reference
+        # instance is saved it will automatically retrieve all relevent info!
+        ads_url = "http://adsabs.harvard.edu/abs/1996AJ....112.1487H"
+        harris1996ed2010, created = Reference.objects.get_or_create(ads_url=ads_url)
+        if not created:
+            print("Found the Reference: {0}".format(harris1996ed2010))
+        else:
+            print("Created the Reference: {0}".format(harris1996ed2010))
 
-        def read_str(s):
-            s = s.strip()
-            return None if s == '' else s
+        # Get the data. Note that save_as_xlsx requires openpyxl
+        cluster_list = parse_data(save_as_xlsx=False)
 
+        parameter_map = OrderedDict({
+            # Coordinates
+            "RA": "ra",                    # Right ascension               (Epoch J2000)
+            "Dec": "dec",                  # Declination                   (Epoch J2000)
+            "L": "longitude",              # Galactic longitude            (Degrees)
+            "B": "latitude",               # Galactic latitude             (Degrees)
+            "R_Sun": "dist_from_sun",      # Distance from the Sun         (kpc)
+            "R_Gal": "dist_from_gal_cen",  # Distance from Galactic Center (kpc)
+            "X": "X",                      # Galactic distance component X (kpc)
+            "Y": "Y",                      # Galactic distance component Y (kpc)
+            "Z": "Z",                      # Galactic distance component Z (kpc)
 
-        df = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun',
-                                   'r_c', 'r_h', 'c', '[Fe/H]', 'E(B-V)', 'sig_v',
-                                   'esig_v', 'ellip', 'mu_V', 'V_r', 'eV_r',
-                                   'V_t'])
+            # Orbital parameters
+            # "R_peri": "",                  # Pericentre radius             (kpc)
+            #   --> Not available in Harris 1996, 2010 ed.
+            # "R_apo": "",                   # Apocentre radius              (kpc)
+            #   --> Not available in Harris 1996, 2010 ed.
+            # "ecc": "",                     # Orbital eccentricity
+            #   --> Not available in Harris 1996, 2010 ed.
+            # "phase": "",                   # Orbital phase (1=apo; 0=peri)
+            #   --> Not available in Harris 1996, 2010 ed.
 
-        # Ruler for f1
-        #0         1         2         3         4         5         6         7         8         9         100
-        #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        # NGC 104    47 Tuc       00 24 05.67  -72 04 52.6   305.89  -44.89    4.5   7.4   1.9  -2.6  -3.1
+            # Metallicity
+            "[Fe/H]": "metallicity",      # Metallicity [Fe/H]
+            # "": "w_mean_met",           # Weight of mean metallicity
+            #   --> Don't know where to stick it in SupaHarris
+            # "[Mg/Fe]": "",              # Magnesium abundance
+            #   --> Not available in Harris 1996, 2010 ed.
+            # "[a/Fe]": "",              # Alpha-element abundance
+            #   --> Not available in Harris 1996, 2010 ed.
 
-        # Parsing first file
+            # Photometry
+            "E(B-V)": "eb_v",             # Foreground reddening, E(B-V)
+            "V_HB": "v_hb",               # V magnitude level of the HB, V_HB
+            "(m-M)V": "app_vd_mod",       # Apparent visual distance modulus, (m-M)V
+            "V_t": "v_t",                 # Integrated V magnitude, V_t
+            "M_V,t": "m_v_t",             # Cluster luminosity, M_V,t = V_t - (m-M)V
+            "U-B": "ph_u_b",              # U-B
+            "B-V": "ph_b_v",              # B-V
+            "V-R": "ph_v_r",              # V-R
+            "V-i": "ph_v_i",              # V-i
+            "spt": "spt",                 # Spectral Type
+            "ellip": "ellipticity",       # Projected ellipticity of isophotes, e = 1-(b/a)
 
-        suf = ''
-        f1 = open(suf+'data/f1.dat')
-        df1 = pd.DataFrame(columns=['cname', 'altname', 'RA', 'Dec', 'L', 'B', 'R_Sun'])
+            # Velocities
+            "v_r": "v_r",                 # Heliocentric radial velocity   (km/s)
+            "c_LSR": "c_LSR",             # Radial velocity relative to solar neighbourhood
+            # "pmRA": "",                   # RA proper motion
+            #   --> Not available in Harris 1996, 2010 ed.
+            # "pmDec": "",                  # Dec proper motion
+            #   --> Not available in Harris 1996, 2010 ed.
+            "sig_v_r": "sig_v",           # Central velocity dispersion (km/s)
 
-        for line in f1:
-            c = Cluster()
-            c.gid               = line[:12].strip()
-            c.name              = read_str(line[12:25])
-            ra_str              = read_str(line[25:38])
-            dec_str             = read_str(line[38:50])
-            c.longitude         = read_float(line[50:58])
-            c.latitude          = read_float(line[58:66])
-            c.dist_from_sun     = read_float(line[66:73])
-            c.dist_from_gal_cen = read_float(line[73:79])
-            c.gal_dist_comp[0]  = read_float(line[79:85])
-            c.gal_dist_comp[1]  = read_float(line[85:91])
-            c.gal_dist_comp[2]  = read_float(line[91:])
+            # Structural parameters
+            "sp_c"    : "sp_c",          # King concentration parameter
+            "sp_r_c"  : "sp_r_c",        # King core radius (arcmin)
+            "sp_r_h"  : "sp_r_h",        # Half-light radius (arcmin)
+            "sp_mu_V" : "sp_mu_V",       # Central surface brightness (V magnitudes per arcsec^2)
+            "sp_rho_0": "rho_0",         # Central luminosity density log10(solar_lum/pc^3)
+            "sp_lg_tc": "sp_lg_tc",      # Core relaxation time t(r_c) in log10(yr)
+            "sp_lg_th": "sp_lg_th",      # Mean relaxation time t(r_h) in log10(yr)
+            # "sp_R_J " : "",              # Jacobii radius
+            #   --> not available in Harris 1996, 2010 ed.
 
-            coo = SkyCoord(ra=ra_str, dec=dec_str, unit=(u.hourangle, u.degree))
-            c.ra = np.round(coo.ra.deg,4)
-            c.dec = np.round(coo.dec.deg,4)
+            # "Age": "",                     # Age(-estimate) of the GC       (Gyr)
+            #   --> not available in Harris 1996, 2010 ed.
+            # "Mass": "",                    # Present-day mass               (MSun)
+            #   --> not available in Harris 1996, 2010 ed.
+            # "Mass_i": "",                  # Initial mass                   (MSun)
+            #   --> not available in Harris 1996, 2010 ed.
+        })
 
-            df1.loc[c.gid] = pd.Series({'cname': c.gid,
-                                       'altname': c.name,
-                                       'RA': c.ra,
-                                       'Dec': c.dec,
-                                       'L': c.longitude,
-                                       'B': c.latitude,
-                                       'R_Sun': c.dist_from_sun,
-                                       })
+        print("\nInserting into database :")
+        nClusters = len(cluster_list)
+        for i, harris in enumerate(cluster_list.values()):
+            print("Inserting GlobularCluster {0} / {1}".format(i+1, nClusters))
 
+            cluster, created = GlobularCluster.objects.get_or_create(
+                name=harris.gid, altname=harris.name,
+            )
+            print("  {0}, created = {1}".format(cluster, created))
 
-            cluster_list[c.gid] = c
+            for k, v in parameter_map.items():
+                parameter = Parameter.objects.filter(name=k).first()
+                if not parameter:
+                    print("ERROR: Parameter instance unknown, please add or correct {0}".format(k))
+                    import sys; sys.exit(0)
 
-        f1.close()
+                print("  {0} (Harris) --> {1} (SupaHarris)".format(v, parameter.name))
+                value = getattr(harris, v)
+                if v in ["v_r", "sig_v"]:
+                    sigma_up = getattr(harris, v + "_err")
+                    sigma_down = getattr(harris, v + "_err")
+                else:
+                    sigma_up = None
+                    sigma_down = None
+                print("  value = {0}".format(value))
+                print("  sigma_up = {0}".format(sigma_up))
+                print("  sigma_down = {0}".format(sigma_down))
 
-
-        # Ruler for f2
-        #0         1         2         3         4         5         6         7         8         9         100
-        #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        # NGC 104     -0.72 10   0.04 14.06 13.37  3.95  -9.42   0.37  0.88  0.53  1.14  G4    0.09
-
-        # Now parsing second file
-        f2 = open(suf+'data/f2.dat')
-        df2 = pd.DataFrame(columns=['[Fe/H]', 'E(B-V)', 'ellip', 'V_t'])
-        for line in f2:
-            gid = line[:12].strip()
-            c = cluster_list[gid]
-            c.metallicity = read_float(line[13:18])
-            c.w_mean_met  = read_float(line[18:21])
-            c.eb_v        = read_float(line[21:28])
-            c.v_hb        = read_float(line[28:34])
-            c.app_vd_mod  = read_float(line[34:40])
-            c.v_t         = read_float(line[40:46])
-            c.m_v_t       = read_float(line[46:53])
-            c.ph_u_b      = read_float(line[53:60])
-            c.ph_b_v      = read_float(line[60:66])
-            c.ph_v_r      = read_float(line[66:72])
-            c.ph_v_i      = read_float(line[72:78])
-            c.spt         = read_str(line[78:82])
-            c.ellipticity = read_float(line[82:])
-
-            df2.loc[gid] = pd.Series({'[Fe/H]': c.metallicity,
-                                     'E(B-V)': c.eb_v,
-                                     'V_t': c.v_t,
-                                     'ellip': c.ellipticity,
-                                     })
-        f2.close()
-
-
-        # Ruler for f3
-        #0         1         2         3         4         5         6         7         8         9         100
-        #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        # NGC 104      -18.0   0.1   -26.7    11.0   0.3   2.07      0.36  3.17   14.38   4.88   7.84  9.55
-
-        f3 = open(suf+'data/f3.dat')
-        df3 = pd.DataFrame(columns=['r_c', 'r_h', 'c', 'sig_v', 'esig_v', 'mu_V', 'V_r', 'eV_r'])
-        for line in f3:
-            gid = line[:12].strip()
-            c = cluster_list[gid]
-
-            c.v_r       = read_float(line[12:19])
-            c.v_r_err   = read_float(line[19:25])
-            c.c_LSR     = read_float(line[25:33])
-            c.sig_v     = read_float(line[33:41])
-            c.sig_err   = read_float(line[41:47])
-            c.sp_c         = read_float(line[47:54])
-            c.sp_r_c       = read_float(line[54:64])
-            c.sp_r_h       = read_float(line[64:70])
-            c.sp_mu_V      = read_float(line[70:78])
-            c.rho_0     = read_float(line[78:85])
-            c.lg_tc     = read_float(line[85:92])
-            c.lg_th     = read_float(line[92:])
-
-            df3.loc[gid] = pd.Series({'V_r': c.v_r,
-                                     'eV_r': c.v_r_err,
-                                     'sig_v': c.sig_v,
-                                     'esig_v': c.sig_err,
-                                     'c': c.sp_c,
-                                     'r_c': c.sp_r_c,
-                                     'r_h': c.sp_r_h,
-                                     'mu_V': c.sp_mu_V,
-                                     })
-        f3.close()
-
-        df = pd.concat([df1, df2, df3], axis=1)
-        writer = pd.ExcelWriter('output.xlsx')
-        df.to_excel(writer, "Harris")
-        writer.save()
-        print(df)
-
-        # This  next function is obsolete since the standard is to produce a CSV file
-        # and use an unified script for ingesting
-
-        def insert_in_django():
-
-            try:
-                ## Create reference if does not exists
-                r = Reference(rname='Harris catalogue', doi='10.1086/118116', ads='')
-                r.save()
-            except:
-                ## reference already exists
-                r = Reference.objects.filter(rname='Harris catalogue')[0]
-
-            print('Inserting into database :')
-            for c in cluster_list.values():
-                # No need for fuzzy match here since register_clusters uses the exact
-                # same names
-                dc = GlobularCluster.objects.filter(cname = c.gid)[0]
-                print('  . {}'.format(c.gid))
-                dc.save()
-
-                do = Observation()
-                do.cluster_id = dc
-                do.ref = r
-                c.fill_in(do)
-                do.save()
-
-
-        add_parameters()
-        for c in cluster_list.values():
-            obj = GlobularCluster(cname=c.gid, altname=c.name)
-            obj.save()
-        insert_in_django()
+                observation, created = Observation.objects.get_or_create(
+                    cluster=cluster, reference=harris1996ed2010, parameter=parameter,
+                    value=value, sigma_up=sigma_up, sigma_down=sigma_down
+                )
+                print("  {0}, created = {1}\n".format(observation, created))
+                # do_continue = input()
+            print("")

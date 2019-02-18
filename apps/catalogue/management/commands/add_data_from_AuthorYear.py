@@ -12,19 +12,7 @@ from catalogue.models import Observation
 from catalogue.models import GlobularCluster
 from catalogue.utils import get_parameter_names_from_supaharris
 
-import numpy as np
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-
-
-def parse_database(fname="my_database.csv"):
-    # with open(fname) as f:
-    #     f.readlines()
-
-    # e.g. GCName, R_Sun
-    data = ["M4", 15]
-
-    return data
+from data.parse_AuthorYear.py import parse_data
 
 
 class Command(BaseCommand):
@@ -34,7 +22,7 @@ class Command(BaseCommand):
         # Add the ADS url (in this particular format). When the Reference
         # instance is saved it will automatically retrieve all relevent info!
         ads_url = "http://adsabs.harvard.edu/abs/1996AJ....112.1487H"
-        harris1996ed2010, created = Reference.object.get_or_create(ads_url=ads_url)
+        harris1996ed2010, created = Reference.objects.get_or_create(ads_url=ads_url)
         if not created:
             print("Found the Reference: {0}".format(harris1996ed2010))
         else:
@@ -61,7 +49,7 @@ class Command(BaseCommand):
                 scale=3.0  # must be a float. This is the scale by which parameters must be multiplied by.
             )
 
-        database = parse_database()
+        database = parse_data(save_to_xlsx=False)  # save_to_xlsx requires openpyxl
         for entry in database:
             gc_name = entry[0]
             gc_R_Sun = entry[1]

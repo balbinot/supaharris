@@ -1,17 +1,21 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
+from catalogue.models import Parameter
+from catalogue.models import Reference
 from catalogue.models import GlobularCluster
 from catalogue.models import Observation
-from catalogue.models import Reference
-from catalogue.models import Parameter
 from catalogue.models import Rank
 from catalogue.models import Auxiliary
 from catalogue.models import Profile
 
+@admin.register(Parameter)
+class ParameterAdmin(admin.ModelAdmin):
+    list_display = ( "name", "description", "unit", "scale", "slug" )
+    readonly_fields = ( "slug", )
+
 
 @admin.register(Reference)
-class Referencedmin(admin.ModelAdmin):
+class ReferenceAdmin(admin.ModelAdmin):
     list_display = (
         "title", "first_author", "year", "month", "journal",
         "doi", "volume", "pages"
@@ -20,10 +24,10 @@ class Referencedmin(admin.ModelAdmin):
     readonly_fields = ( "slug", )
     list_filter = ( "year", "journal" )
     fieldsets = [
-        (_("Required"), {
+        ("Required", {
             "fields": [ "ads_url", ]
         }),
-        (_("Automatically Retrieved!"), {
+        ("Automatically Retrieved!", {
             "fields": [
                 "first_author", "authors", "journal", "doi",
                 "year", "month", "volume", "pages",
@@ -32,10 +36,28 @@ class Referencedmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(GlobularCluster)
+class GlobularClusterAdmin(admin.ModelAdmin):
+    list_display = ( "name", "altname", )
+    search_fields = ( "name", "altname", )
+    readonly_fields = ( "slug", )
 
-admin.site.register(GlobularCluster)
-admin.site.register(Observation)
-admin.site.register(Parameter)
-admin.site.register(Rank)
-admin.site.register(Auxiliary)
-admin.site.register(Profile)
+
+@admin.register(Observation)
+class ObservationAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Rank)
+class RankAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Auxiliary)
+class AuxiliaryAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass

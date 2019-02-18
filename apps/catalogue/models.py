@@ -1,4 +1,3 @@
-#-*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -20,19 +19,22 @@ STATUS_CHOICES = (
 )
 
 
-class GlobularCluster(models.Model):
-    name = models.CharField("Name", max_length=64, unique=True)
+class Parameter(models.Model):
+    name = models.CharField(max_length=64, unique=True)
     slug = models.SlugField(max_length=64, unique=True, blank=True)
-    altname = models.CharField("Alternative Name",
-        max_length=64, null=True, blank=True)
+    description = models.TextField(max_length=256, null=True, blank=True)
+    unit = models.CharField(max_length=64, null=False, blank=True,
+        help_text="Must comply with astropy.unit")
+    scale = models.FloatField(null=False, blank=False,
+        help_text="Scale by which parameters must be multiplied by")
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(GlobularCluster, self).save(*args, **kwargs)
+        super(Parameter, self).save(*args, **kwargs)
 
     def __str__(self):
-        if self.altname:
-           return "{} ({})".format(self.name, self.altname)
+        if self.unit:
+           return "{} [{}]".format(self.name, self.unit)
         else:
            return "{}".format(self.name)
 
@@ -167,80 +169,130 @@ class Reference(models.Model):
             return self.slug
 
 
-class Parameter(models.Model):
-    name = models.CharField(max_length=64, unique=True)
-    description = models.TextField(max_length=256, null=True, blank=True)
-    unit = models.CharField(max_length=64, null=False, blank=False,
-        help_text="Must comply with astropy.unit")
-    scale = models.FloatField(null=False, blank=False,
-        help_text="Scale by which parameters must be multiplied by")
+class GlobularCluster(models.Model):
+    name = models.CharField("Name", max_length=64, unique=True)
+    slug = models.SlugField(max_length=64, unique=True, blank=True)
+    altname = models.CharField("Alternative Name",
+        max_length=64, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(GlobularCluster, self).save(*args, **kwargs)
 
     def __str__(self):
-        if self.unit:
-           return "{} [{}]".format(self.name, self.unit)
+        if self.altname:
+           return "{} ({})".format(self.name, self.altname)
         else:
            return "{}".format(self.name)
 
 
 class Profile(models.Model):
-    rname      = models.ForeignKey(Reference, on_delete=models.CASCADE)
-    cname      = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)
-    ptype      = models.CharField("Type of profile", max_length=256, null=True, blank=True)
-    profile    = JSONField("Profile")
-    modpars    = JSONField("Model parameters")
-    mtype      = models.CharField("Model flavour", max_length=256, null=True, blank=True)
+    reference = models.ForeignKey(
+        "catalogue.Reference",
+        on_delete=models.CASCADE
+    )
+
+    cluster = models.ForeignKey(
+        "catalogue.GlobularCluster",
+        on_delete=models.CASCADE
+    )
+
+    # TODO: restrict options of profile_type?
+    profile_type = models.CharField(max_length=256, null=True, blank=True)
+    profile = JSONField()
+    model_parameters = JSONField()
+    model_flavour = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
-        s = "{} - Ref : {}".format(str(self.cname), str(self.rname))
-        return s
+        return  "{} - Ref: {}".format(self.cluster.name, self.cluster.name)
+
 
 class Auxiliary(models.Model):
-    rname      = models.ForeignKey(Reference, on_delete=models.CASCADE)
-    cname      = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)
-    fpath      = models.FilePathField(path="/static", blank=True, null=True)
-    furl       = models.URLField(blank=True, null=True)
+    reference = models.ForeignKey(
+        "catalogue.Reference",
+        on_delete=models.CASCADE
+    )
+
+    cluster = models.ForeignKey(
+        "catalogue.GlobularCluster",
+        on_delete=models.CASCADE
+    )
+
+    path = models.FilePathField(path="/static", blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        s = "{} - Ref : {} {}".format(str(self.cluster_id), str(self.ref))
-        return s
+        return "{} - Ref: {}".format(cluster.name, str(reference))
 
 
 class Observation(models.Model):
-    rname   = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
-    cname   = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE, null=True)
-    pname   = models.ForeignKey(Parameter, on_delete=models.CASCADE, null=True)
+    reference = models.ForeignKey(
+        "catalogue.Reference",
+        on_delete=models.CASCADE,
+    )
 
-    val     = models.FloatField("Value", null=True, blank=True)
-    sigup   = models.FloatField("Sigma up", null=True, blank=True)
-    sigdown = models.FloatField("Sigma down", null=True, blank=True)
+    cluster = models.ForeignKey(
+        "catalogue.GlobularCluster",
+        on_delete=models.CASCADE,
+    )
+
+    parameter = models.ForeignKey(
+        "catalogue.Parameter",
+        on_delete=models.CASCADE
+    )
+
+    value = models.CharField("Value", max_length=128, null=True, blank=True)
+    sigma_up = models.CharField("Sigma up", max_length=128, null=True, blank=True)
+    sigma_down = models.CharField("Sigma down", max_length=128, null=True, blank=True)
 
     # This is how to print uncertainties in the columns of django-tables2
     @property
     def render_val(self):
-        if self.sigup is not None:
-            return u"{:.3f} ± {:.3f}".format(self.val, self.sigup)
-        elif self.val is not None:
-            return u"{:.3f}".format(self.val)
+        # TODO: take asymmetrical errors into account
+        if self.sigma_up:
+            return u"{:.3f} ± {:.3f}".format(self.value, self.sigma_up)
+        elif self.value:
+            return u"{:.3f}".format(self.value)
         else:
-            return u"-"
+            return u"N/A"
 
     def __str__(self):
-        if self.sigup is not None:
-            s = "{}: {} = {:.3f} + {:.3f} - {:.3f} ({})".format(self.cname,
-                                                                self.pname,
-                                                                self.val,
-                                                                self.sigup,
-                                                                self.sigdown,
-                                                                self.rname)
+        # TODO: take asymmetrical errors into account
+        if self.value and self.sigma_up and self.sigma_down:
+            try:
+                s = "{}: {} = {:.3f} + {:.3f} - {:.3f} ({})".format(
+                    self.cluster.name, self.parameter.name,
+                    float(self.value), float(self.sigma_up), float(self.sigma_down),
+                    str(self.reference))
+            except ValueError as e:
+                s = "{}: {} = {} + {} - {} ({})".format(
+                    self.cluster.name, self.parameter.name,
+                    self.value, self.sigma_up, self.sigma_down,
+                    str(self.reference))
+        elif self.value:
+            try:
+                s = "{}: {} = {:.3f} ({})".format(
+                    self.cluster.name, self.parameter.name,
+                    float(self.value), str(self.reference)
+                )
+            except ValueError as e:
+                s = "{}: {} = {} ({})".format(
+                    self.cluster.name, self.parameter.name,
+                    self.value, str(self.reference))
         else:
-            s = "{}: {} = {:.3f} ({})".format(self.cname, self.pname, self.val,
-                                              self.rname)
+            s = "{}: {} = N/A ({})".format(
+                self.cluster.name, self.parameter.name,
+                str(self.reference))
         return s
 
 
 class Rank(models.Model):
-    oid        = models.ForeignKey(Observation, on_delete=models.CASCADE)
-    rank       = models.IntegerField()
-    weight     = models.IntegerField()
-    comp       = models.CharField("Compilation name", max_length=64, null=True,
-                                  blank=True)
+    observation = models.ForeignKey(
+        "catalogue.Observation",
+        on_delete=models.CASCADE
+    )
+
+    rank = models.IntegerField()
+    weight = models.IntegerField()
+    compilation_name = models.CharField(
+        max_length=64, null=True, blank=True)

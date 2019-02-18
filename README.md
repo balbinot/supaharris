@@ -20,6 +20,8 @@
 - `python manage.py shell -c 'from django.contrib.sites.models import Site; Site.objects.all().delete(); Site.objects.create(id=1, name="localhost:8000", domain="localhost:8000")'`
 
 ### Add the initial data to the database
+- TODO: `python manage.py loaddata fixtures/parameters.json` 
+- `python manage.py add_parameters` 
 - `python manage.py add_data_from_harris1996ed2010` 
 
 ### How to add additional databases?
