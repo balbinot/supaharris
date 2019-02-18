@@ -107,3 +107,7 @@ ENV/
 local.py
 
 *.xlsx
+
+
+media
+static

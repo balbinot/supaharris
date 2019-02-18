@@ -1,22 +1,11 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
-
-# Create your views here.
-#
-from django.http import HttpResponse
-from catalogue.models import *
-import django_tables2 as tables
-from django_tables2.utils import A
-from django_pandas.io import read_frame
-from bs4 import BeautifulSoup
-from django.db.models import QuerySet
+import json
 
 import numpy as np
 import pandas as pd
-import json
-
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+
 import mpld3
 #mpld3 hack
 class NumpyEncoder(json.JSONEncoder):
@@ -27,6 +16,21 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 from mpld3 import _display
 _display.NumpyEncoder = NumpyEncoder
+from bs4 import BeautifulSoup
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render_to_response
+
+import django_tables2 as tables
+from django_tables2.utils import A
+from django_pandas.io import read_frame
+
+from catalogue.models import Reference
+from catalogue.models import Observation
+from catalogue.models import GlobularCluster
 
 
 css = """
@@ -100,7 +104,7 @@ class ObservationTable(tables.Table):
         attrs = {'class':'display', 'id': 'example', 'cellspacing':'0',
                  'width':"30%"}
         sequence = ('pname', 'quantity') # fields to display
-        exclude = ('rname', 'val', 'sigup', 'sigdown', 'id', 'cname')
+        exclude = ('name', 'val', 'sigup', 'sigdown', 'id', 'name')
 
 class ReferenceTable(tables.Table):
     doi = tables.URLColumn()
@@ -115,13 +119,13 @@ class ReferenceTable(tables.Table):
 def obsummary(request):
     # Queryset should take some info from request to filter for reference and
     # parameters.
-    r = Reference.objects.filter(rname='Harris')
-    obj = Observation.objects.values('cname', 'pname', 'val', 'sigup', 'sigdown').order_by()
+    r = Reference.objects.filter(name='Harris')
+    obj = Observation.objects.values('name', 'pname', 'val', 'sigup', 'sigdown').order_by()
     pd.options.display.max_rows = 300
     t = read_frame(obj)
-    vals = t.groupby(['cname', 'pname']).first().unstack()['val']
-    sup = t.groupby(['cname', 'pname']).first().unstack()['sigup']
-    sdown = t.groupby(['cname', 'pname']).first().unstack()['sigdown']
+    vals = t.groupby(['name', 'pname']).first().unstack()['val']
+    sup = t.groupby(['name', 'pname']).first().unstack()['sigup']
+    sdown = t.groupby(['name', 'pname']).first().unstack()['sigdown']
 
     # Table built column by column with model property as redering assessor.
     #table = ObservationTable(obj, attrs=tblattr, orderable=True)
@@ -135,14 +139,14 @@ def obsummary(request):
 
     return render(request, 'test.html', {'observations': soup})
 
-def clsummary(request, cname):
 
+def method(request, name):
     odict = {}
 
     ## Table with pars
-    cl = GlobularCluster.objects.filter(cname__contains=cname)[0]
-    query = Observation.objects.filter(cname=cl).query
-    query.group_by = ['rname']
+    cl = GlobularCluster.objects.filter(name__contains=name)[0]
+    query = Observation.objects.filter(name=cl).query
+    query.group_by = ['name']
     obs = QuerySet(query=query, model=Observation).order_by('pname')
 
     obj = ObservationTable(obs)
@@ -150,7 +154,7 @@ def clsummary(request, cname):
     odict['cluster'] = cl
 
     # Profile plot
-    data = Profile.objects.filter(cname=cl)
+    data = Profile.objects.filter(name=cl)
     if len(data) > 0:
         data = json.loads(data[0].profile)
         fig = plt.figure(1, figsize=(7,7))
@@ -179,49 +183,9 @@ def clsummary(request, cname):
 
     return render(request, 'detail.html', odict)
 
-def references(request):
+def reference_list(request):
     table = ReferenceTable(Reference.objects.all(), attrs=tblattr, orderable=False)
     return render(request, 'references.html', {'references': table})
-
-def landing(request):
-    reference =  get_object_or_404(Reference, rname__startswith='Harri')
-    obj = Observation.objects.filter(rname=reference)
-    cs = GlobularCluster.objects.all()
-    obj = [Observation.objects.filter(rname=reference, cname=c) for c in cs]
-    names = np.array([o.cname for o in cs]    )
-    ra =    np.array([o.filter(pname='RA')[0].val for o in obj]      )
-    dec =    np.array([o.filter(pname='Dec')[0].val for o in obj]      )
-    l =    np.array([o.filter(pname='L')[0].val for o in obj]      )
-    b =    np.array([o.filter(pname='B')[0].val for o in obj]      )
-    ra =    np.array([o.filter(pname='RA')[0].val for o in obj]      )
-    ra =    np.array([o.filter(pname='RA')[0].val for o in obj]      )
-    urls = ['cluster/'+o.cname for o in cs]
-    l[l>180] = l[l>180]-360.
-
-    fig = plt.figure(2, figsize=(16,8))
-    ax = plt.subplot(111)
-
-    points = ax.scatter(l, b, c='r', s=100, alpha=0.5, cmap=plt.cm.jet)
-    ax.grid(color='white', linestyle='solid')
-    ax.set_title("Globular clusters", size=20)
-    ax.set_xlabel('l [deg]', size=20)
-    ax.set_ylabel('b [deg]', size=20)
-
-    mpld3.plugins.connect(fig, ClickInfo(points, urls))
-
-    labels = ['<table><tr>{}<td></tr></td>'.format(n) for n in names]
-    tooltip = mpld3.plugins.PointHTMLTooltip(points, labels=labels, css=css)
-    mpld3.plugins.connect(fig, tooltip)
-
-    result = mpld3.fig_to_html(fig)
-
-    return render(request, 'landing.html', {'figure': result})
-
-def about(request):
-    return render(request, 'about.html', {})
-
-
-
 
 
 class ReferenceTable(tables.Table):
@@ -232,13 +196,6 @@ class ReferenceTable(tables.Table):
     class Meta:
         model = Reference
         exclude = ('id',)
-
-#class ObservationTable(tables.Table):
-#    cluster_id = tables.LinkColumn('detail',  args=[A('pk')])
-#    class Meta:
-#        model = Observation
-#        exclude = ('id', 'ref', 'comment', 'status')
-
 
 class GeneralTable(tables.Table):
     class Meta:
@@ -261,7 +218,7 @@ def index(request):
     return render(request, 'index.html', {'observations': table, 'reference': reference})
 
 
-def detail(request, cid):
+def cluster_detail(request, name):
     cluster = get_object_or_404(GlobularCluster, pk=cid)
     table = ObservationTable(Observation.objects.filter(cluster_id=cluster), orderable=False, attrs=tblattr)
     data = Profile.objects.filter(cluster_id=cluster)
@@ -293,12 +250,25 @@ def detail(request, cid):
     return render(request, 'detail.html', odict)
 
 
+def reference_list(request):
+    all_references = Reference.objects.all()
+    return render(request, 'catalogue/reference_list.html',
+        {"all_references": all_references})
 
-#from django.template import RequestContext
-#from django.http import HttpResponseRedirect, HttpResponse
-#from django.contrib.auth import authenticate, logout
-#from django.template.loader import get_template
-#
-#from catalogue.forms import *
-#from django.contrib.auth import login as auth_login
-#from django.contrib.auth.decorators import login_required
+
+def reference_detail(request, slug):
+    reference = get_object_or_404(Reference, slug=slug)
+    return render(request, 'catalogue/reference_detail.html',
+        {"reference": reference})
+
+
+def cluster_list(request):
+    all_clusters = GlobularCluster.objects.all()
+    return render(request, 'catalogue/cluster_list.html',
+        {"all_clusters": all_clusters})
+
+
+def cluster_detail(request, slug):
+    globular_cluster = get_object_or_404(GlobularCluster, slug=slug)
+    return render(request, 'catalogue/cluster_list.html',
+        {"globular_cluster": globular_cluster})
