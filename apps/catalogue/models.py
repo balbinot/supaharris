@@ -151,7 +151,10 @@ class Reference(models.Model):
             if "journal" in details.keys():
                 self.journal = details["journal"]
             if "doi" in details.keys():
-                self.doi = details["doi"][0:32]
+                doi = details["doi"][0:32]
+                if "doi.org" not in doi:
+                    doi = "https://doi.org/" + doi
+                self.doi = doi
             if "year" in details.keys():
                 self.year = details["year"][0:4]
             if "month" in details.keys():
