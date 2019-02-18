@@ -34,6 +34,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}"/>
 {% endblock stylesheets %}
 
 {% block topscripts %}
@@ -54,12 +55,12 @@
 
     <div class="container">
         <div class="starter-template">
-            {% block content %}
             <center>
                 <h1>Globular Cluster Catalogue</h1>
                 <p class="lead">A dynamic high-level catalogue hosting the properties of Milky Way Globular Clusters</p>
             </center>
 
+            {% block content %}
             {% endblock %}
         </div>
     </div>
