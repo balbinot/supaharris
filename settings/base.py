@@ -22,6 +22,7 @@ ALLOWED_HOSTS = [u"127.0.0.1", u"localhost" ]
 # Application definition
 
 INSTALLED_APPS = [
+    "filebrowser",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -29,8 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    # "django_forms_bootstrap",
-    # "crispy_forms",
+    "tinymce",
     "django_tables2",
     "django_extensions",
 
@@ -120,7 +120,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"),
 ]
 
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
 
-from .local import *
+from settings.tinymce import *
+from settings.local import *
+
+# Needs to be loaded after setting SECRET_KEY etc
+from settings.filebrowser import *
