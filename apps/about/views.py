@@ -40,3 +40,6 @@ def info(request):
 
 def privacy_policy(request):
     return render(request, "about/privacy_policy.html", {})
+
+def page_not_found(request):
+    return render(request, "404.html")

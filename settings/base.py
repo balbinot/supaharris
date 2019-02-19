@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django_extensions",
 
     "about",
-    # "accounts",
+    "accounts",
     "catalogue",
 ]
 
@@ -121,6 +121,15 @@ STATICFILES_DIRS = [
 ]
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
+
+# Use a custom model for account management, which makes it much easier to
+# extend the model later on.
+AUTH_USER_MODEL = 'accounts.UserModel'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:profile'
+ADMIN_BCC = []
+DEFAULT_FROM_EMAIL = "info@supaharris.com"
+
 
 from settings.tinymce import *
 from settings.local import *

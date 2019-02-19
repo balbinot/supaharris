@@ -1,8 +1,54 @@
+import xlwt
 import requests
 import numpy as np
 from bs4 import BeautifulSoup
 
 from django.conf import settings
+from django.utils import timezone
+from django.http import HttpResponse
+
+
+def export_to_xls(request, queryset):
+    """ Generic method to export QuerySet of any Model instance to xls """
+
+    model_fields= queryset[0]._meta.fields
+    model_name = queryset[0]._meta.verbose_name_plural.title()
+
+    xls = xlwt.Workbook(encoding='utf8')
+    sheet = xls.add_sheet(model_name)
+
+    # Define custom styles.
+    borders = xlwt.easyxf('borders: top thin, right thin, bottom  thin, left thin;')
+    boldborders = xlwt.easyxf('font: bold on; borders: top thin, right thin, bottom  thin, left thin;')
+
+    row = 0  # Create header.
+    for col, field in enumerate(model_fields):
+        sheet.write(row, col, field.name, style=boldborders)
+
+    for row, instance in enumerate(queryset):
+        for col, field in enumerate(model_fields):
+            try:
+                value = str(getattr(instance, field.name, "")).encode('ascii', 'ignore')
+            except UnicodeEncodeError:
+                value = "UnicodeEncodeError"
+
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
+            if type(value) is bytes:
+                value = value.decode('unicode_escape')
+
+            # Do some cleanups
+            if value == "None": value = ""
+
+            sheet.write(row+1, col, value, style=borders)
+
+    # # Return a response that allows to download the xls-file.
+    now = timezone.now().strftime("%Y%m%d")
+    filename = u'Export_{0}_{1}.xls'.format(model_name, now)
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
+    xls.save(response)
+    return response
 
 
 def requests_get(url, timeout=5, debug=settings.DEBUG):

@@ -2,17 +2,22 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.contrib import admin
+from django.conf.urls import handler404
 from django.conf.urls.static import static
 
 from filebrowser.sites import site
 
+handler404 = "about.views.page_not_found"
+handler500 = handler404
+
 
 urlpatterns = [
     path('admin/filebrowser/', site.urls),
-    path(r"admin/", admin.site.urls),
-    path(r'tinymce/', include('tinymce.urls')),
-    path(r"", include("about.urls")),
-    path(r"catalogue/", include("catalogue.urls")),
+    path("admin/", admin.site.urls),
+    path("tinymce/", include("tinymce.urls")),
+    path("", include("about.urls")),
+    path("account/", include("accounts.urls")),
+    path("catalogue/", include("catalogue.urls")),
 ]
 
 if settings.DEBUG:
