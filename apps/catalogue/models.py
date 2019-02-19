@@ -136,6 +136,8 @@ class Reference(models.Model):
 
     def save(self, *args, **kwargs):
         self.ads_url = self.ads_url.replace("https", "http")  # no https on ads
+        if "ui.adsabs" in self.ads_url:
+            self.ads_url = self.ads_url.replace("ui.adsabs", "adswww").replace("#abs", "abs")
         if "/abs/" in self.ads_url:
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
