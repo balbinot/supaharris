@@ -106,6 +106,7 @@ def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
 
     # Convert full name of the journal to journal abbreviation
     journals_r = { v: k for k, v in journals.items() }
+    if details["journal"] == "arXiv e-prints": details["journal"] = "arxiv"
     details["journal"] = journals_r.get(details["journal"], details["journal"])
 
     # Convert ADS-style month abbreviation to integers

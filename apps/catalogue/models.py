@@ -48,6 +48,7 @@ class Reference(models.Model):
         ("aj",       "Astronomical Journal"),
         ("actaa",    "Acta Astronomica"),
         ("araa",     "Annual Review of Astron and Astrophys"),
+        ("arxiv",    "arXiv e-prints"),
         ("apj",      "Astrophysical Journal"),
         ("apjl",     "Astrophysical Journal: Letters"),
         ("apjs",     "Astrophysical Journal: Supplement"),
