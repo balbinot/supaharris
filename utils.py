@@ -82,6 +82,11 @@ def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
         if debug: print("Get reference info from: {0}".format(bibtex_url))
     except KeyError as e:  # if ADS would have been updated
         return False
+    except IndexError as e:
+        if str(e) == "list index out of range":
+            return False
+        else:
+            raise
 
     r = requests_get(bibtex_url)
     if r is False: return False

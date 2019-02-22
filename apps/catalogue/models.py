@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib import messages
 from django.utils.text import slugify
 
 from jsonfield import JSONField
@@ -134,6 +135,12 @@ class Reference(models.Model):
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
 
+    def __init__(self, *args, **kwargs):
+        # We sneak in request parameter which allows us to pass the request
+        # to the model instance when the model is saved via the admin interface
+        self.request = None
+        super(Reference, self).__init__(*args, **kwargs)
+
     def save(self, *args, **kwargs):
         self.ads_url = self.ads_url.replace("https", "http")  # no https on ads
         if "ui.adsabs" in self.ads_url:
@@ -166,6 +173,17 @@ class Reference(models.Model):
                 self.volume = details["volume"][0:8]
             if "pages" in details.keys():
                 self.pages = details["pages"][0:16]
+        else:
+            # So we could not retrieve the data from ADS, bummer. Now, if the model
+            # save method was called from the admin we can inform the user that
+            # auto-retrieving data from ADS failed, but for this we need to
+            # pass a message to the request. So we sneak the request in via
+            # the admin form.
+            if self.request:
+                msg = "Wopsiedaysie, we could not auto-retrieve the reference "
+                msg += "data from the bibtex entry at ADS. Please enter the "
+                msg += "relevant information manually."
+                messages.error(self.request, msg)
         super(Reference, self).save(*args, **kwargs)
 
     def __str__(self):

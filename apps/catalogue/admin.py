@@ -8,6 +8,7 @@ from catalogue.models import Rank
 from catalogue.models import Auxiliary
 from catalogue.models import Profile
 
+
 @admin.register(Parameter)
 class ParameterAdmin(admin.ModelAdmin):
     list_display = ( "name", "description", "unit", "scale", "slug" )
@@ -34,6 +35,14 @@ class ReferenceAdmin(admin.ModelAdmin):
             ]
         }),
     ]
+
+    def save_model(self, request, obj, form, change):
+        # Here we sneak in the request when the model instance is changed.
+        # This way we can pass a message to the request in the save method
+        # of the model in case auto-retrieving data from the bibtex entry at
+        # ADS failed.
+        obj.request = request
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(GlobularCluster)
