@@ -24,14 +24,22 @@ class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ( "first_author", "authors", "title", )
     readonly_fields = ( "slug", "bib_code" )
     list_filter = ( "year", "journal" )
+    # autocomplete_fields = ( "clusters", )
+    filter_horizontal = ( "clusters", )
+
     fieldsets = [
         ("Required", {
             "fields": [ "ads_url", "bib_code" ]
         }),
         ("Automatically Retrieved!", {
             "fields": [
-                "first_author", "authors", "journal", "doi",
+                "title", "first_author", "authors", "journal", "doi",
                 "year", "month", "volume", "pages",
+            ]
+        }),
+        ("Relations", {
+            "fields": [
+                "clusters",
             ]
         }),
     ]

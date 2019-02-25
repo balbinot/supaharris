@@ -135,6 +135,7 @@ class Reference(models.Model):
         null=True, blank=True, choices=MONTHS)
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
+    clusters = models.ManyToManyField("catalogue.GlobularCluster", related_name="references")
 
     def __init__(self, *args, **kwargs):
         # We sneak in request parameter which allows us to pass the request
@@ -151,7 +152,7 @@ class Reference(models.Model):
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
 
-        if "adswww" in self.ads_url:
+        if "adswww" in self.ads_url or "adsabs" in self.ads_url:
             # TODO: perhaps do this in a pre-save signal instead :)
             details = scrape_reference_details_from_ads(self.ads_url, dict(self.JOURNALS))
 
