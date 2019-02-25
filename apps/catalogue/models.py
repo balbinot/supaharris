@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from jsonfield import JSONField
 
 from utils import scrape_reference_details_from_ads
+from utils import scrape_reference_details_from_arxiv
 
 
 VALIDATE = 1
@@ -110,12 +111,12 @@ class Reference(models.Model):
         (9, "September"), (10, "October"), (11, "November"), (12, "December"),
     )
 
-    help_text = "Please insert the ADS url. All other paramters will "
+    help_text = "Please insert the ADS/arXiv url. All other paramters will "
     help_text += "automatically be retrieved on save!. For example: '{0}'".format(
         "http://adsabs.harvard.edu/abs/1996AJ....112.1487H")
     ads_url = models.URLField("ADS url", max_length=256, unique=True,
         help_text=help_text)
-    bib_code = models.CharField("Bibliographic Code [ADS]",
+    bib_code = models.CharField("Bibliographic Code [ADS/arXiv]",
         max_length=24, null=True, blank=True)
 
     slug = models.SlugField(max_length=64, unique=True, blank=True)
@@ -142,15 +143,21 @@ class Reference(models.Model):
         super(Reference, self).__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        details = None
         self.ads_url = self.ads_url.replace("https", "http")  # no https on ads
         if "ui.adsabs" in self.ads_url:
             self.ads_url = self.ads_url.replace("ui.adsabs", "adswww").replace("#abs", "abs")
-        if "/abs/" in self.ads_url:
+        if "/abs/" in self.ads_url:  # this is true for ADS and arXiv urls
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
 
-        # TODO: perhaps do this in a pre-save signal instead :)
-        details = scrape_reference_details_from_ads(self.ads_url, dict(self.JOURNALS))
+        if "adswww" in self.ads_url:
+            # TODO: perhaps do this in a pre-save signal instead :)
+            details = scrape_reference_details_from_ads(self.ads_url, dict(self.JOURNALS))
+
+        if "arxiv" in self.ads_url:
+            details = scrape_reference_details_from_arxiv(self.ads_url, dict(self.JOURNALS))
+
         if details:
             if "first_author" in details.keys():
                 self.first_author = details["first_author"][0:128]
@@ -181,8 +188,8 @@ class Reference(models.Model):
             # the admin form.
             if self.request:
                 msg = "Wopsiedaysie, we could not auto-retrieve the reference "
-                msg += "data from the bibtex entry at ADS. Please enter the "
-                msg += "relevant information manually."
+                msg += "data from the bibtex entry at ADS, or from the arXiv. "
+                msg += "Please enter the relevant information manually."
                 messages.error(self.request, msg)
         super(Reference, self).save(*args, **kwargs)
 

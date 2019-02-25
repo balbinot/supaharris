@@ -7,6 +7,12 @@ from django.conf import settings
 from django.utils import timezone
 from django.http import HttpResponse
 
+# Convert ADS/arXiv-style month abbreviation to integers
+MONTH_DICT = {
+    "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+    "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12
+}
+
 
 def export_to_xls(request, queryset):
     """ Generic method to export QuerySet of any Model instance to xls """
@@ -66,6 +72,40 @@ def requests_get(url, timeout=5, debug=settings.DEBUG):
         return False
 
     return r
+
+
+def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
+    if debug: print("Retrieving: {0}".format(url))
+    r = requests_get(url, timeout=5)  # 5 seconds timeout
+    if r is False: return False
+    soup = BeautifulSoup(r.content, "lxml")
+
+    details = dict()
+    details["journal"] = "arxiv"
+    details["title"] = soup.find("h1", class_="title").text.replace("Title:", "")
+    details["authors"] = ", ".join([a.text for a in soup.find("div", class_="authors").find_all("a")])
+    details["first_author"] = details["authors"].split(",")[0]
+
+    # Example: "Submitted on DD MM YYYY"
+    date = soup.find("div", class_="dateline").text.replace("(", "").replace(")", "")
+    void, void, day, month, year = date.split(" ")
+    try:
+        details["month"] = MONTH_DICT[month.lower()]
+    except KeyError:
+        if debug:
+            print("ERROR: key {0} not found in MONTH_DICT {1}".format(
+                month.lower(), MONTH_DICT ))
+        return False
+    details["year"] = year
+
+    # Convert full name of the journal to journal abbreviation
+    journals_r = { v: k for k, v in journals.items() }
+    details["journal"] = journals_r.get(details["journal"], details["journal"])
+
+    if debug:
+        print("Success!")
+        [ print("  {0:<20s}: {1}".format(k, v)) for k,v in details.items() ]
+    return details
 
 
 def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):

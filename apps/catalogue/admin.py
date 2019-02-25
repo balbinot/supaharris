@@ -22,11 +22,11 @@ class ReferenceAdmin(admin.ModelAdmin):
         "doi", "volume", "pages"
     )
     search_fields = ( "first_author", "authors", "title", )
-    readonly_fields = ( "slug", )
+    readonly_fields = ( "slug", "bib_code" )
     list_filter = ( "year", "journal" )
     fieldsets = [
         ("Required", {
-            "fields": [ "ads_url", ]
+            "fields": [ "ads_url", "bib_code" ]
         }),
         ("Automatically Retrieved!", {
             "fields": [
