@@ -12,7 +12,7 @@ from accounts.managers import AccountManager
 class UserModel(AbstractBaseUser, PermissionsMixin):
 
     # Basic information
-    email = models.EmailField("Email Address", max_length=256, unique=True)
+    email = models.EmailField("Email Address", max_length=254, unique=True)
     first_name = models.CharField("First Name", max_length=42)
     last_name = models.CharField("Last Name", max_length=42)
 

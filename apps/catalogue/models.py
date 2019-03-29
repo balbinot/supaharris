@@ -114,7 +114,7 @@ class Reference(models.Model):
     help_text = "Please insert the ADS/arXiv url. All other paramters will "
     help_text += "automatically be retrieved on save!. For example: '{0}'".format(
         "http://adsabs.harvard.edu/abs/1996AJ....112.1487H")
-    ads_url = models.URLField("ADS url", max_length=256, unique=True,
+    ads_url = models.URLField("ADS url", max_length=254, unique=True,
         help_text=help_text)
     bib_code = models.CharField("Bibliographic Code [ADS/arXiv]",
         max_length=24, null=True, blank=True)
