@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+
     "tinymce",
+    "rest_framework",
 
     "about",
     "accounts",
@@ -130,6 +132,7 @@ DEFAULT_FROM_EMAIL = "info@supaharris.com"
 
 
 from settings.tinymce import *
+from settings.djangorestframework import *
 from settings.local import *
 
 # Needs to be loaded after setting SECRET_KEY etc

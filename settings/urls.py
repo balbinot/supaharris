@@ -6,17 +6,24 @@ from django.conf.urls import handler404
 from django.conf.urls.static import static
 
 from filebrowser.sites import site
+from rest_framework import routers
 
 from catalogue.views import index
+from catalogue import api_views as catalogue_api
+
 
 handler404 = "about.views.page_not_found"
 handler500 = handler404
 
+router = routers.DefaultRouter()
+router.register(r"gc", catalogue_api.GlobularClusterViewSet)
 
 urlpatterns = [
     path('admin/filebrowser/', site.urls),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
+    path("api/v1/auth/", include("rest_framework.urls")),
+    path("api/v1/", include(router.urls)),
 
     path("", index, name="index"),
     path("about/", include("about.urls")),
