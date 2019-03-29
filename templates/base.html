@@ -1,13 +1,14 @@
 {% load static %}
 {% load staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="Referrer" content="origin">
-    <meta name="robots" content="index, follow" /> 
-    <meta charset="utf8"/>
+    <meta name="robots" content="index, follow"/> 
 
     <meta name="author" content="Timo Halbesma, Eduardo Balbinot, David Hendriks"/>
     <meta name="copyright" content="Timo Halbesma, Eduardo Balbinot, David Hendriks" />
@@ -55,18 +56,21 @@
 
 <body>
     {% include 'header.html' %}
-
     <div class="container">
-        <div class="starter-template">
-            <center>
-                <h1>Globular Cluster Catalogue</h1>
-                <p class="lead">A dynamic high-level catalogue hosting the properties of Milky Way Globular Clusters</p>
-            </center>
-
+        <div class="row">
             {% block content %}
-            {% endblock %}
+            <div class="col-lg-12 text-center">
+                <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
+                <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
+                <ul class="list-unstyled">
+                    <li>Bootstrap 4.2.1</li>
+                    <li>jQuery 3.3.1</li>
+                </ul>
+            </div>
+            {% endblock content %}
         </div>
     </div>
+
 
     {% include 'footer.html' %}
 
@@ -80,7 +84,6 @@
     <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
     <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.0.4.min.js"></script>
     <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-api-1.0.4.min.js"></script>
-
     {% endblock bottomscripts %}
 
 </body>

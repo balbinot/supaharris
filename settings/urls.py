@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 
 from filebrowser.sites import site
 
+from catalogue.views import index
+
 handler404 = "about.views.page_not_found"
 handler500 = handler404
 
@@ -15,7 +17,9 @@ urlpatterns = [
     path('admin/filebrowser/', site.urls),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
-    path("", include("about.urls")),
+
+    path("", index, name="index"),
+    path("about/", include("about.urls")),
     path("account/", include("accounts.urls")),
     path("catalogue/", include("catalogue.urls")),
 ]
