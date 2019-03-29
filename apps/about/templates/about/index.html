@@ -7,9 +7,13 @@
 <div class="col1">
   <!-- Column 1 start -->
   <center>
-  {{ figure|safe }}
+      {{ fig_div | safe }}
   </center>
 
 </div>
 
 {% endblock %}
+
+{% block bottomscripts %} {{ block.super }}
+    {{ fig_script | safe }}
+{% endblock bottomscripts %}
