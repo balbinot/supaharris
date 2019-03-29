@@ -11,3 +11,21 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+if DEBUG:
+    PREPEND_WWW = False
+
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'django_extensions',
+    ]
+
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+
+    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'JQUERY_URL': '',
+    }

@@ -31,8 +31,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "tinymce",
-    "django_tables2",
-    "django_extensions",
 
     "about",
     "accounts",
