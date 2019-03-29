@@ -1,4 +1,4 @@
-import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 
 from django.shortcuts import render
@@ -13,30 +13,38 @@ def index(request):
     harris1996ed2010 = get_object_or_404(Reference, bib_code="1996AJ....112.1487H")
     # clusters = GlobularCluster.objects.filter(references=harris1996ed2010)
     clusters = GlobularCluster.objects.all()
-    names = np.array([o.name for o in clusters])
-    ra = np.array([c.observation_set.filter(parameter__name="RA") for c in clusters])
-    dec = np.array([c.observation_set.filter(parameter__name="Dec") for c in clusters])
-    l = np.array([c.observation_set.filter(parameter__name="L") for c in clusters])
-    b = np.array([c.observation_set.filter(parameter__name="B") for c in clusters])
+    names = pd.Series([o.name for o in clusters])
+    ra = pd.Series([c.observation_set.filter(parameter__name="RA") for c in clusters])
+    dec = pd.Series([c.observation_set.filter(parameter__name="Dec") for c in clusters])
+    # TODO: how to handle if GlobularCluster has no Observation of Parameter L?
+    l_lon = pd.Series([float(c.observation_set.get(parameter__name="L").value) for c in clusters])
+    b_lat = pd.Series([float(c.observation_set.get(parameter__name="B").value) for c in clusters])
     # urls = ["cluster/"+o.name for o in cs]
-    # l[l>180] = l[l>180] - 360.
+    l_lon[l_lon > 180] = l_lon[l_lon > 180] - 360.
 
-    from bokeh.plotting import figure, show, output_file
-    from bokeh.sampledata.iris import flowers
+    from bokeh.plotting import figure, ColumnDataSource
     from bokeh.embed import components
 
-    colormap = {'setosa': 'red', 'versicolor': 'green', 'virginica': 'blue'}
-    colors = [colormap[x] for x in flowers['species']]
+    source = ColumnDataSource(data=dict(
+        x=l_lon,
+        y=b_lat,
+        names=names,
+    ))
 
-    p = figure(title = "Iris Morphology")
-    p.xaxis.axis_label = 'Petal Length'
-    p.yaxis.axis_label = 'Petal Width'
-    p.circle(flowers["petal_length"], flowers["petal_width"],
-             color=colors, fill_alpha=0.2, size=10)
+    TOOLTIPS = [
+        ("Cluster", "@names"),
+        ("lon", "$x"),
+        ("lat", "$y"),
+    ]
+    p = figure(title="Globular Clusters", tooltips=TOOLTIPS)
+    p.xaxis.axis_label = "Galactic Longitude [deg]"
+    p.yaxis.axis_label = "Galactic Latitude [deg]"
+    p.circle("x", "y", source=source, color="red", fill_alpha=0.2, size=10)
     fig_script, fig_div = components(p)
 
     return render(request, "about/index.html", {
-        "fig_script": fig_script, "fig_div": fig_div})
+        "fig_script": fig_script, "fig_div": fig_div
+    })
 
 
 def info(request):
