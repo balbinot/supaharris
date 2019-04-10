@@ -47,4 +47,7 @@
     
     - Add ESASKY frame (on click so it remains lightweight)
 
-        
+       
+
+  * misc:
+    - take a look at http://www.messier.seds.org/xtra/supp/mw_gc.html 
