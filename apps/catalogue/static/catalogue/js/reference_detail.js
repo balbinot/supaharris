@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var table = $('#clusters').DataTable({
+    var table = $('#reference').DataTable({
         "serverSide": true,
         "ajax": "/api/v1/catalogue/globularcluster?format=datatables",
         "columns": [
@@ -17,3 +17,4 @@ $(document).ready(function() {
         ]
     });
 });
+

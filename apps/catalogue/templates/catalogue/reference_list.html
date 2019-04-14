@@ -4,33 +4,45 @@
 {% block stylesheets %} {{ block.super }}
 {% endblock stylesheets %}
 
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">References</li>
+  </ol>
+{% endblock breadcrumbs %}
+
 {% block content %}
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-table"></i>
-            References</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="references" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>bib_code</th>
-                    <th>ads_url</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th>bib_code</th>
-                    <th>ads_url</th>
-                  </tr>
-                </tfoot>
-                <tbody id="globularClusterRow">
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-book-open"></i>
+    References</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="references" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>bib_code</th>
+            <th>slug</th>
+            <th>ads_url</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>bib_code</th>
+            <th>slug</th>
+            <th>ads_url</th>
+          </tr>
+        </tfoot>
+        <tbody id="globularClusterRow">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
 {% endblock %}
 
 {% block bottomscripts %} {{ block.super }}

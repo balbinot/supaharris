@@ -4,33 +4,43 @@
 {% block stylesheets %} {{ block.super }}
 {% endblock stylesheets %}
 
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Globular Clusters</li>
+  </ol>
+{% endblock breadcrumbs %}
+
 {% block content %}
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-table"></i>
-            Globular Clusters</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="clusters" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>name</th>
-                    <th>slug</th>
-                    <th>altname</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th>name</th>
-                    <th>slug</th>
-                    <th>altname</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-star"></i>
+    Globular Clusters</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="clusters" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>slug</th>
+            <th>altname</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>name</th>
+            <th>slug</th>
+            <th>altname</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
 {% endblock %}
 
 {% block bottomscripts %} {{ block.super }}
