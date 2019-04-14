@@ -8,5 +8,8 @@ def privacy_policy(request):
     return render(request, "about/privacy_policy.html", {})
 
 
-def page_not_found(request):
+def handler404(request):
     return render(request, "404.html")
+
+def handler500(request):
+    return render(request, "500.html")

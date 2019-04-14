@@ -2,7 +2,6 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.contrib import admin
-from django.conf.urls import handler404
 from django.conf.urls.static import static
 
 from filebrowser.sites import site
@@ -12,8 +11,8 @@ from catalogue.views import index
 from catalogue import api_views as catalogue_api
 
 
-handler404 = "about.views.page_not_found"
-handler500 = handler404
+handler404 = "about.views.handler404"
+handler500 = "about.views.handler500"
 
 router = routers.DefaultRouter()
 router.register(r"gc", catalogue_api.GlobularClusterViewSet)
@@ -27,7 +26,7 @@ urlpatterns = [
 
     path("", index, name="index"),
     path("about/", include("about.urls")),
-    path("account/", include("accounts.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("catalogue/", include("catalogue.urls")),
 ]
 
