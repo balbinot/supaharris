@@ -1,7 +1,7 @@
 astropy==3.1.2
 beautifulsoup4==4.7.1
 bokeh==1.0.4
-Django==2.1.7
+Django==2.2
 django-debug-toolbar==1.11
 django-environ==0.4.5
 django-extensions==2.1.4

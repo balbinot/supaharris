@@ -3,6 +3,7 @@ from django.urls import include
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 from filebrowser.sites import site
 from rest_framework import routers
@@ -21,6 +22,10 @@ router.register(r"catalogue/globularcluster", catalogue_api.GlobularClusterViewS
 urlpatterns = [
     path('admin/filebrowser/', site.urls),
     path("admin/", admin.site.urls),
+    path("admin/password_reset/", auth_views.PasswordResetView.as_view(),
+        name="admin_password_reset",),
+    path(r"admin/", include("django.contrib.auth.urls")),
+
     path("tinymce/", include("tinymce.urls")),
     path("api/v1/auth/", include("rest_framework.urls")),
     path("api/v1/", include(router.urls)),
