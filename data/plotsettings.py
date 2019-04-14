@@ -1,0 +1,26 @@
+import matplotlib
+matplotlib.rcParams.update({
+    "figure.figsize": "12,9",
+    "figure.facecolor": "white",
+    "font.size": "22",
+    "xtick.major.size": "8",
+    "xtick.minor.size": "4",
+    "ytick.major.size": "8",
+    "ytick.minor.size": "4",
+    "xtick.major.width": "2",
+    "xtick.minor.width": "2",
+    "ytick.major.width": "2",
+    "ytick.minor.width": "2",
+    "xtick.major.pad": "8",
+    "xtick.minor.pad": "8",
+    "ytick.major.pad": "8",
+    "ytick.minor.pad": "8",
+    "xtick.direction": "in",
+    "ytick.direction": "in",
+    "ytick.right": "True",
+    "xtick.top": "True",
+    "lines.linewidth": "1",
+    "lines.markersize": "2",
+    "axes.linewidth": "1",
+    "legend.loc": "best"
+})

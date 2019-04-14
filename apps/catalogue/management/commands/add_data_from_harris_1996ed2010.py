@@ -13,7 +13,7 @@ from catalogue.models import Parameter
 from catalogue.models import Observation
 from catalogue.models import GlobularCluster
 
-from data.parse_harris1996ed2010 import parse_data
+from data.parse_harris_1996ed2010 import parse_data
 
 
 class Command(BaseCommand):

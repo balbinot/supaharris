@@ -3,6 +3,8 @@ def parse_data(fname="my_database.csv"):
     #     f.readlines()
 
     # e.g. GCName, R_Sun
-    data = ["M4", 15]
+    data = [
+        ["Terzan 5", 6.900],
+    ]
 
     return data

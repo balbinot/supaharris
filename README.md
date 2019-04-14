@@ -22,13 +22,13 @@
 ### Add the initial data to the database
 - TODO: `python manage.py loaddata fixtures/parameters.json` 
 - `python manage.py add_parameters` 
-- `python manage.py add_data_from_harris1996ed2010` 
+- `python manage.py add_data_from_harris_1996ed2010` 
 
 ### How to add additional databases?
 - Datbases can be parsed and inserted into the SupaHarris database by creating a new management command in `apps/catalogue/management/commands`. We provide boilerplate to get going.
-- `cp apps/catalogue/management/commands/add_data_from_boilerplate.py apps/catalogue/management/commands/add_data_from_AuthorYear.py`
-- Implement `apps/catalogue/management/commands/add_data_from_AuthorYear.py`
-- `python manage.py add_data_from_AuthorYear`
+- `cp apps/catalogue/management/commands/add_data_from_boilerplate.py apps/catalogue/management/commands/add_data_from_author_year.py`
+- Implement `apps/catalogue/management/commands/add_data_from_author_year.py`
+- `python manage.py add_data_from_author_year`
 
 
 ### Run the development server at http://localhost:8000

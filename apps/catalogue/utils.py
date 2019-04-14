@@ -1,4 +1,4 @@
-from catalogue.models import parameter
+from catalogue.models import Parameter
 
 
 def get_parameter_names_from_supaharris():
@@ -9,8 +9,8 @@ def get_parameter_names_from_supaharris():
 
     available_parameters = Parameter.objects.all()
 
-    print("\n{0:<10s}{1:<30s}{2:<12s}{3:<8s}".format(
+    print("\n{0:<10s}{1:<50s}{2:<12s}{3:<8s}".format(
         "name", "description", "unit", "scale"))
     for p in available_parameters:
-        print("{0:<10s}{1:<30s}{2:<12s}{3<8.2f}".format(
+        print("{0:<10s}{1:<50s}{2:<12s}{3:<8.2f}".format(
             p.name, p.description, p.unit, p.scale))
