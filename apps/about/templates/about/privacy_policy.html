@@ -1,5 +1,26 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Privacy Policy</li>
+  </ol>
+{% endblock breadcrumbs %}
 
 {% block content %}
-TODO: implement privacy policy
-{% endblock content %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-user-secret"></i>
+    Privacy Policy</div>
+  <div class="card-body">
+     {% autoescape off %}
+     {{ policy.content }}
+     {% endautoescape %}
+  </div>
+  <div class="card-footer small text-muted">Updated {{ policy.date }}</div>
+</div>
+{% endblock %}

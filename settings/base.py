@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-env("DEBUG", default=False)
+DEBUG = env("DEBUG", default=False)
 
 DATABASES = {
     "default": env.db('DATABASE_URL'),

@@ -1,14 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Profile</a>
+    </li>
+    <li class="breadcrumb-item active">Profile</li>
+  </ol>
+{% endblock breadcrumbs %}
+
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="jumbotron">
-      <h2>Profile</h2>
-      </div>
-    </div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-user"></i>
+    {{ request.user }}</div>
+  <div class="card-body">
+      So.. what here?
   </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
 </div>
 {% endblock %}

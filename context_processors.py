@@ -31,4 +31,3 @@ def set_meta_tags(request):
     twitter_title = page_title
     twitter_description = page_description
     twitter_image = page_image
-
