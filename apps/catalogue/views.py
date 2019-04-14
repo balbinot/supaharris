@@ -4,23 +4,33 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
 from catalogue.models import Reference
+from catalogue.models import Parameter
 from catalogue.models import Observation
 from catalogue.models import GlobularCluster
 
 
 def index(request):
-    harris1996ed2010 = get_object_or_404(Reference, bib_code="1996AJ....112.1487H")
-    # clusters = GlobularCluster.objects.filter(references=harris1996ed2010)
-    clusters = GlobularCluster.objects.all()
+
+    # Get the parameters we want to plot
+    ra = Parameter.objects.get(name="RA")
+    dec = Parameter.objects.get(name="Dec")
+    l = Parameter.objects.get(name="L")
+    b = Parameter.objects.get(name="B")
+
+    # Get clusters that have observations of these parameters
+    gcs_with_relevant_observations = Observation.objects.filter(
+        parameter__in=[l, b, ra, dec]
+    ).values('cluster').distinct()
+    clusters = GlobularCluster.objects.filter(id__in=gcs_with_relevant_observations)
+
     names = pd.Series([o.name for o in clusters])
     ra = pd.Series([c.observation_set.filter(parameter__name="RA") for c in clusters])
     dec = pd.Series([c.observation_set.filter(parameter__name="Dec") for c in clusters])
-    # TODO: how to handle if GlobularCluster has no Observation of Parameter L?
     l_lon = pd.Series([float(c.observation_set.get(parameter__name="L").value) for c in clusters])
     b_lat = pd.Series([float(c.observation_set.get(parameter__name="B").value) for c in clusters])
-    # urls = ["cluster/"+o.name for o in cs]
     l_lon[l_lon > 180] = l_lon[l_lon > 180] - 360.
 
+    # Plot the values we retrieved
     from bokeh.plotting import figure, ColumnDataSource
     from bokeh.embed import components
 
