@@ -110,5 +110,5 @@ local.py
 .DS_Store
 
 
-media
-static
+./media
+./static
