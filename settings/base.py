@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "tinymce",
+    "django_extensions",
     "rest_framework",
     "rest_framework_datatables",
 
