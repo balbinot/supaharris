@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import render
 
