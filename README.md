@@ -33,3 +33,11 @@
 
 ### Run the development server at http://localhost:8000
 - `python manage.py runserver` (and leave running)
+
+
+## **Running with Docker**
+- Build the image: `docker build -t supaharris .`
+- Run the server: `docker run --rm -it -v "$(pwd)":/usr/src/app -p 1337:1337 --name runserver supaharris bash -c "python manage.py runserver 0.0.0.0:1337"`
+- In a new terminal, one can attach to the container in an interactive session: `docker exec -it runserver bash`
+
+
