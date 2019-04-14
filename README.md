@@ -8,8 +8,8 @@
 - Activate virtualenv: `source venv/bin/activate`
 
 - Install required packages: `pip install -r requirements.txt`
-- Setup local settings: `cp settings/local.example settings/local.py`
-- Edit `settings/local.py` to tailor to your machine.
+- Setup local settings: `cp settings/.env.example settings/.env`
+- Edit `settings/.env` to tailor to your machine.
 
 - `python manage.py check`
 - `python manage.py migrate`

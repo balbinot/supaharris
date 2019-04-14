@@ -1,5 +1,11 @@
 import os
 import sys
+import environ
+
+env = environ.Env()
+env.read_env(
+    str((environ.Path(__file__) - 1).path(".env"))
+)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -10,13 +16,17 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "secret"
+# `env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/random | head -c 50; echo`
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
+env("DEBUG", default=False)
 
-ALLOWED_HOSTS = [u"127.0.0.1", u"localhost" ]
+DATABASES = {
+    "default": env.db('DATABASE_URL'),
+}
+
+ALLOWED_HOSTS = [u"127.0.0.1", u"localhost", env("ALLOWED_HOST")]
 
 
 # Application definition
@@ -130,12 +140,23 @@ AUTH_USER_MODEL = 'accounts.UserModel'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:profile'
 ADMIN_BCC = []
-DEFAULT_FROM_EMAIL = "info@supaharris.com"
 
+EMAIL_CONFIG = env.email_url('EMAIL_URL')
+vars().update(EMAIL_CONFIG)
+DEFAULT_FROM_EMAIL = "info@supaharris.com"
+SERVER_EMAIL = "info@supaharris.com"
+
+# Sentry for error reporting
+SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+sentry_sdk.init(
+    dsn=SENTRY_DSN_API,
+    integrations=[DjangoIntegration()],
+)
 
 from settings.tinymce import *
 from settings.djangorestframework import *
-from settings.local import *
 
 # Needs to be loaded after setting SECRET_KEY etc
 from settings.filebrowser import *
