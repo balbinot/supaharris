@@ -105,3 +105,10 @@ ENV/
 
 # Exclude local settings /w passwords and such from the repo
 local.py
+
+*.xlsx
+.DS_Store
+
+
+./media
+./static

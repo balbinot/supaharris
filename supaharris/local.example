@@ -1,3 +1,0 @@
-# Generate a secret key locally. For example, use 
-# `env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/random | head -c 50; echo`
-SECRET_KEY = "secret"

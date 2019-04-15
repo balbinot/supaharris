@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">About</li>
+  </ol>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-info"></i>
+    About</div>
+  <div class="card-body">
+      Some information
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+{% endblock %}

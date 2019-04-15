@@ -3,7 +3,7 @@
 import os
 import sys
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "supaharris.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.base")
 
 import numpy as np
 import matplotlib.pyplot as p
