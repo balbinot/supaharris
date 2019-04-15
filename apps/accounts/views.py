@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 
 from accounts.models import UserModel
@@ -22,6 +23,17 @@ class RegisterView(generic.CreateView):
             login(self.request, user)
             return valid
         # No else on purpose. We'll see what breaks so we can fix it :-) ..
+
+
+class PasswordResetView(auth_views.PasswordResetView):
+    def form_valid(self, form):
+        valid = super().form_valid(form)
+        # TODO: Passing email via extra_context to auth_views.PasswordResetView
+        # in accounts.urls breaks, so we drop the email in the session storage ..
+        # but we'd like to avoid that...
+        email = form.cleaned_data.get('email')
+        self.request.session['password_reset_email'] = email
+        return valid
 
 
 @login_required
