@@ -10,7 +10,7 @@
     <li class="breadcrumb-item">
       <a href="{% url 'catalogue:cluster_list' %}">Globular Clusters</a>
     </li>
-    <li class="breadcrumb-item active">{{ cluster.slug }}</li>
+    <li class="breadcrumb-item active">{{ cluster.name }}</li>
   </ol>
 {% endblock breadcrumbs %}
 
@@ -18,24 +18,10 @@
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-star"></i>
-    {{ cluster.slug }}</div>
+    {{ cluster.name }}</div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="clusters" width="100%" cellspacing="0">
-        <thead>
-          <tr>
-            <th>name</th>
-            <th>slug</th>
-            <th>altname</th>
-          </tr>
-        </thead>
-        <tfoot>
-          <tr>
-            <th>name</th>
-            <th>slug</th>
-            <th>altname</th>
-          </tr>
-        </tfoot>
+      <table class="table table-bordered" id="cluster" width="100%" cellspacing="0">
       </table>
     </div>
   </div>
@@ -45,4 +31,9 @@
 
 {% block bottomscripts %} {{ block.super }}
     <script type="text/javascript" src="{% static 'catalogue/js/cluster_detail.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            retrieve_cluster( {{ cluster.pk }} );
+        });
+    </script>
 {% endblock bottomscripts %}

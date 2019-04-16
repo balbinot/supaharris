@@ -9,7 +9,10 @@ class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Reference
-        fields = ("id", "slug", "bib_code", "ads_url" )
+        fields = (
+            "id", "slug", "ads_url", "first_author", "authors", "title",
+            "journal", "doi", "year", "month", "volume", "pages"
+        )
         datatables_always_serialize = ("id",)
 
 
