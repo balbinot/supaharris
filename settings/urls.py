@@ -17,7 +17,7 @@ handler500 = "about.views.handler500"
 
 router = routers.DefaultRouter()
 router.register(r"catalogue/reference", catalogue_api.ReferenceViewSet)
-router.register(r"catalogue/globularcluster", catalogue_api.GlobularClusterViewSet)
+router.register(r"catalogue/cluster", catalogue_api.GlobularClusterViewSet)
 
 urlpatterns = [
     path('admin/filebrowser/', site.urls),

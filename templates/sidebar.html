@@ -13,14 +13,19 @@
         </div>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{% url 'catalogue:reference_list' %}">
+          <i class="fas fa-fw fa-book-open"></i>
+          <span>References</span></a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{% url 'catalogue:cluster_list' %}">
           <i class="fas fa-fw fa-star"></i>
           <span>Globular Clusters</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'catalogue:reference_list' %}">
-          <i class="fas fa-fw fa-book-open"></i>
-          <span>References</span></a>
+        <a class="nav-link" href="{% url 'catalogue:observation_list' %}">
+          <i class="fas fa-fw fa-binoculars"></i>
+          <span>Observations</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'about:info' %}">

@@ -79,3 +79,14 @@ def cluster_detail(request, slug):
     cluster = get_object_or_404(GlobularCluster, slug=slug)
     return render(request, 'catalogue/cluster_detail.html',
         {"cluster": cluster})
+
+def observation_list(request):
+    observations = Observation.objects.all()
+    return render(request, 'catalogue/observation_list.html',
+        {"observations": observations})
+
+
+def observation_detail(request, slug):
+    observation = get_object_or_404(Observation, pk=pk)
+    return render(request, 'catalogue/observation_detail.html',
+        {"observation": observation})

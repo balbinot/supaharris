@@ -7,7 +7,7 @@ $(document).ready(function() {
                 'data': { slug: 'slug', first_author: 'first_author', year: 'year' },
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
-                        data = '<a href="' + row.slug + '">' + row.first_author + ' (' + row.year + ')' + '</a>';
+                        data = '<a href="/catalogue/reference/' + row.slug + '">' + row.first_author + ' (' + row.year + ')' + '</a>';
                     }
                     return data;
                 }

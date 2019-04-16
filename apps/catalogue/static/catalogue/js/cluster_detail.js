@@ -1,7 +1,7 @@
 function retrieve_cluster(pk) {
     $.ajax({ 
         type: 'GET', 
-        url: '/api/v1/catalogue/globularcluster/' + pk + '?format=datatables', 
+        url: '/api/v1/catalogue/cluster/' +pk + '?format=datatables', 
         dataType: 'json',
         success: function(cluster) {
             var r = new Array(), n = -1;
