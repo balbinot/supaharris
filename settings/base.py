@@ -26,7 +26,7 @@ DATABASES = {
     "default": env.db('DATABASE_URL'),
 }
 
-ALLOWED_HOSTS = [u"127.0.0.1", u"localhost", env("ALLOWED_HOST")]
+ALLOWED_HOSTS = [u"127.0.0.1", u"localhost", env("ALLOWED_HOST1"), env("ALLOWED_HOST2")]
 
 
 # Application definition
