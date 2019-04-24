@@ -27,6 +27,56 @@
   </div>
   <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
 </div>
+
+{% comment %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-star"></i>
+    Clusters
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="clusters{{ reference.id }}" width="100%" cellspacing="0">
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+{% endcomment %}
+
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-binoculars"></i>
+    Observations
+ </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="observations{{ reference.pk }}" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Cluster</th>
+            <th>Alias</th>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Sigma Up</th>
+            <th>Sigma Down</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Cluster</th>
+            <th>Alias</th>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Sigma Up</th>
+            <th>Sigma Down</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
 {% endblock content %}
 
 {% block bottomscripts %} {{ block.super }}
@@ -34,6 +84,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             retrieve_reference( {{ reference.pk }} );
+            retrieve_reference_observations( {{ reference.pk }} );
         });
     </script>
 {% endblock bottomscripts %}

@@ -34,6 +34,7 @@
 {% block stylesheets %}
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css">
@@ -197,6 +198,7 @@
 
     <!-- Core plugin JavaScript-->
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.js' %}"></script>
 
     <!-- Page level plugin JavaScript-->
     <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
@@ -205,10 +207,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
-
-    <!-- Demo scripts for this page-->
-    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
-    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'catalogue/js/search.js' %}"></script>
 
     <!-- Cookie consent pop-up -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>

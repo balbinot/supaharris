@@ -56,6 +56,9 @@ def index(request):
     })
 
 
+def search(request):
+    return render(request, 'catalogue/search.html', {})
+
 
 def reference_list(request):
     references = Reference.objects.all()
@@ -80,6 +83,16 @@ def cluster_detail(request, slug):
     return render(request, 'catalogue/cluster_detail.html',
         {"cluster": cluster})
 
+def parameter_list(request):
+    parameters = Parameter.objects.all()
+    return render(request, 'catalogue/parameter_list.html',
+        {"parameters": parameters})
+
+def parameter_detail(request, slug):
+    parameter = get_object_or_404(Parameter, slug=slug)
+    return render(request, 'catalogue/parameter_detail.html',
+        {"parameter": parameter})
+
 def observation_list(request):
     observations = Observation.objects.all()
     return render(request, 'catalogue/observation_list.html',
@@ -87,6 +100,6 @@ def observation_list(request):
 
 
 def observation_detail(request, slug):
-    observation = get_object_or_404(Observation, pk=pk)
+    observation = get_object_or_404(Observation, slug=slug)
     return render(request, 'catalogue/observation_detail.html',
         {"observation": observation})

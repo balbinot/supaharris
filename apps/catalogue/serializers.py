@@ -2,24 +2,61 @@ from rest_framework import serializers
 
 from catalogue.models import Reference
 from catalogue.models import GlobularCluster
+from catalogue.models import Parameter
+from catalogue.models import Observation
 
 
 class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    frontend_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Reference
         fields = (
             "id", "slug", "ads_url", "first_author", "authors", "title",
-            "journal", "doi", "year", "month", "volume", "pages"
+            "journal", "doi", "year", "month", "volume", "pages", "url", "frontend_url",
         )
         datatables_always_serialize = ("id",)
+
+    def get_frontend_url(self, obj):
+        return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
 
 
 class GlobularClusterSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    frontend_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = GlobularCluster
-        fields = ("id", "name", "slug", "altname",)
+        fields = ("id", "name", "slug", "altname", "url", "frontend_url")
         datatables_always_serialize = ("id",)
+
+    def get_frontend_url(self, obj):
+        return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
+
+
+class ParameterSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    frontend_url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Parameter
+        fields = (
+            "id", "name", "slug", "description", "unit", "scale", "url", "frontend_url",
+        )
+        datatables_always_serialize = ("id",)
+
+    def get_frontend_url(self, obj):
+        return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
+
+
+class ObservationSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Observation
+        fields = (
+            "cluster", "id", "parameter", "value", "sigma_up", "sigma_down", "reference", "url",
+        )
+        datatables_always_serialize = ("id",)
+        depth = 1

@@ -4,14 +4,15 @@ $(document).ready(function() {
         'ajax': '/api/v1/catalogue/reference/?format=datatables',
         'columns': [
             {
-                'data': { slug: 'slug', first_author: 'first_author', year: 'year' },
+                'data': 'first_author',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
-                        data = '<a href="/catalogue/reference/' + row.slug + '">' + row.first_author + ' (' + row.year + ')' + '</a>';
+                        data = '<a href="/catalogue/reference/' + row.slug + '">' + row.first_author + '</a>';
                     }
                     return data;
                 }
             },
+            {'data': 'year'},
             {'data': 'title'},
             {
                 'data': 'ads_url',

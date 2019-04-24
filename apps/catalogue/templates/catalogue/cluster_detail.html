@@ -10,7 +10,7 @@
     <li class="breadcrumb-item">
       <a href="{% url 'catalogue:cluster_list' %}">Globular Clusters</a>
     </li>
-    <li class="breadcrumb-item active">{{ cluster.name }}</li>
+    <li class="breadcrumb-item active">{{ cluster.name }} {% if cluster.altname %} ({{ cluster.altname }}) {% endif %}</li>
   </ol>
 {% endblock breadcrumbs %}
 
@@ -18,13 +18,34 @@
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-star"></i>
-    {{ cluster.name }}</div>
+    {{ cluster.name }} {% if cluster.altname %} ({{ cluster.altname }}) {% endif %}
+  </div>
+
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="cluster" width="100%" cellspacing="0">
+      <table class="table table-bordered" id="observations{{ cluster.id }}" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>sigma_up</th>
+            <th>sigma_down</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>sigma_up</th>
+            <th>sigma_down</th>
+            <th>Reference</th>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
+
   <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
 </div>
 {% endblock content %}
@@ -33,7 +54,7 @@
     <script type="text/javascript" src="{% static 'catalogue/js/cluster_detail.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            retrieve_cluster( {{ cluster.pk }} );
+            retrieve_cluster_observations( {{ cluster.pk }} );
         });
     </script>
 {% endblock bottomscripts %}

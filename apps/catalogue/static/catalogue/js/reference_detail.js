@@ -28,3 +28,48 @@ function retrieve_reference(pk) {
         }
     });
 }
+
+function retrieve_reference_observations(pk) {
+    var table = $('#observations' + pk).DataTable({
+        'serverSide': true,
+        'processing': true,
+        'language': {
+            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
+        },
+        'ordering': false,
+        'searching': false,
+        'ajax': '/api/v1/catalogue/observation/?reference=' + pk + '&format=datatables',
+        'columns': [
+            {
+                'data': 'cluster.name',
+                'render': function(data, type, row, meta){
+                    if(type === 'display'){
+                        var altname = '';
+                        if(row.cluster.altname) {
+                            altname = ' (' + row.cluster.altname + ') ';
+                        }
+                        console.log(altname);
+                        data = '<a href="/catalogue/cluster/' + row.cluster.slug
+                            + '">' + row.cluster.name + altname + '</a>';
+                    }
+                    return data;
+                }
+            },
+            { 'data': 'cluster.altname' },
+            {
+                'data': 'parameter.name',
+                'render': function(data, type, row, meta){
+                    if(type === 'display'){
+                        data = '<a href="/catalogue/parameter/' + row.parameter.slug
+                            + '" data-toggle="tooltip" data-placement="right" title="'
+                            + row.parameter.description + '">' + row.parameter.name + '</a>';
+                    }
+                    return data;
+                }
+            },
+            { 'data': 'value' },
+            { 'data': 'sigma_up' },
+            { 'data': 'sigma_down' }
+        ]
+    });
+};

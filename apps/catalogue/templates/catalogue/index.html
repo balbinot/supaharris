@@ -9,4 +9,7 @@
 
 {% block bottomscripts %} {{ block.super }}
     {{ fig_script | safe }}
+    <!-- Demo scripts for this page-->
+    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
 {% endblock bottomscripts %}

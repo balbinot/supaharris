@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.urls import reverse
 from django.contrib import messages
 from django.utils.text import slugify
 
@@ -33,6 +34,9 @@ class Parameter(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Parameter, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("catalogue:parameter_detail", args=[self.slug])
 
     def __str__(self):
         if self.unit:
@@ -194,6 +198,9 @@ class Reference(models.Model):
                 messages.error(self.request, msg)
         super(Reference, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse("catalogue:reference_detail", args=[self.slug])
+
     def __str__(self):
         if self.first_author and self.year:
             return "{0} ({1})".format(self.first_author, self.year)
@@ -210,6 +217,9 @@ class GlobularCluster(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(GlobularCluster, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("catalogue:cluster_detail", args=[self.slug])
 
     def __str__(self):
         if self.altname:

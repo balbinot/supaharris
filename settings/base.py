@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     "tinymce",
     "django_extensions",
+    "django_filters",
     "rest_framework",
     "rest_framework_datatables",
 
