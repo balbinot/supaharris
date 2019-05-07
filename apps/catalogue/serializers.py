@@ -22,17 +22,30 @@ class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
         return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
 
 
+class ObservationSerializerForGlobularCluster(serializers.ModelSerializer):
+    parameter = serializers.CharField(source="parameter.name")
+
+    class Meta:
+        model = Observation
+        fields = ("parameter", "value", "sigma_up", "sigma_down")
+
+
 class GlobularClusterSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
     frontend_url = serializers.SerializerMethodField(read_only=True)
+    observations = ObservationSerializerForGlobularCluster(source="observation_set", many=True)
 
     class Meta:
         model = GlobularCluster
-        fields = ("id", "name", "slug", "altname", "url", "frontend_url")
+        fields = (
+            "id", "name", "slug", "altname", "url", "frontend_url", "observations",
+        )
         datatables_always_serialize = ("id",)
 
     def get_frontend_url(self, obj):
         return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
+
+
 
 
 class ParameterSerializer(serializers.HyperlinkedModelSerializer):
