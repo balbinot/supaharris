@@ -31,8 +31,8 @@ def index(request):
     l_lon[l_lon > 180] = l_lon[l_lon > 180] - 360.
 
     # Plot the values we retrieved
-    from bokeh.plotting import figure, ColumnDataSource
     from bokeh.embed import components
+    from bokeh.plotting import figure, ColumnDataSource
 
     source = ColumnDataSource(data=dict(
         x=l_lon,
@@ -45,10 +45,19 @@ def index(request):
         ("lon", "$x"),
         ("lat", "$y"),
     ]
-    p = figure(title="Globular Clusters", tooltips=TOOLTIPS)
-    p.xaxis.axis_label = "Galactic Longitude [deg]"
-    p.yaxis.axis_label = "Galactic Latitude [deg]"
+    p = figure(width=600, height=300, sizing_mode="scale_width",
+        tooltips=TOOLTIPS)
+
     p.circle("x", "y", source=source, color="red", fill_alpha=0.2, size=10)
+
+    p.xaxis.axis_label = "Galactic Longitude [deg]"
+    p.xaxis.axis_label_text_font_size = "18pt"
+    p.xaxis.major_label_text_font_size = "14pt"
+
+    p.yaxis.axis_label = "Galactic Latitude [deg]"
+    p.yaxis.axis_label_text_font_size = "18pt"
+    p.yaxis.major_label_text_font_size = "14pt"
+
     fig_script, fig_div = components(p)
 
     return render(request, "catalogue/index.html", {
