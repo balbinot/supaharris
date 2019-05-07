@@ -1,5 +1,3 @@
-import pandas as pd
-
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
@@ -23,12 +21,12 @@ def index(request):
     ).values('cluster').distinct()
     clusters = GlobularCluster.objects.filter(id__in=gcs_with_relevant_observations)
 
-    names = pd.Series([o.name for o in clusters])
-    ra = pd.Series([c.observation_set.filter(parameter__name="RA") for c in clusters])
-    dec = pd.Series([c.observation_set.filter(parameter__name="Dec") for c in clusters])
-    l_lon = pd.Series([float(c.observation_set.get(parameter__name="L").value) for c in clusters])
-    b_lat = pd.Series([float(c.observation_set.get(parameter__name="B").value) for c in clusters])
-    l_lon[l_lon > 180] = l_lon[l_lon > 180] - 360.
+    names = [o.name for o in clusters]
+    ra = [c.observation_set.filter(parameter__name="RA") for c in clusters]
+    dec = [c.observation_set.filter(parameter__name="Dec") for c in clusters]
+    l_lon = [float(c.observation_set.get(parameter__name="L").value) for c in clusters]
+    l_lon = [l if l < 180 else l - 360. for l in l_lon]
+    b_lat = [float(c.observation_set.get(parameter__name="B").value) for c in clusters]
 
     # Plot the values we retrieved
     from bokeh.embed import components
