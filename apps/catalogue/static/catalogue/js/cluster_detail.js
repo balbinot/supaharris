@@ -1,6 +1,7 @@
 function retrieve_cluster_observations(pk) {
     var table = $('#observations' + pk).DataTable({
-        'serverSide': true,
+        'serverSide': false,
+        'pageLength': 50,
         'ajax': '/api/v1/catalogue/observation/?cluster=' + pk + '&format=datatables',
         'columns': [
             {

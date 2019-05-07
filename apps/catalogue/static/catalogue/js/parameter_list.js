@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var table = $('#parameters').DataTable({
-        'serverSide': true,
+        'serverSide': false,
         'pageLength': 50,
         'ajax': '/api/v1/catalogue/parameter/?format=datatables',
         'columns': [
