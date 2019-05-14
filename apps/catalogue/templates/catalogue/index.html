@@ -2,11 +2,19 @@
 {% load static %}
 
 {% block content %} {{ block.super }}
-<div class="mx-auto">
-    {{ fig_div | safe }}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-chart-area"></i>
+    Spatial Distribution</div>
+  <div class="card-body">
+        {{ fig_div | safe }}
+  </div>
 </div>
 {% endblock %}
 
 {% block bottomscripts %} {{ block.super }}
     {{ fig_script | safe }}
+    <!-- Demo scripts for this page-->
+    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
 {% endblock bottomscripts %}

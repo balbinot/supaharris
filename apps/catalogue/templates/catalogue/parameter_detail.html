@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block breadcrumbs %}
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{% url 'catalogue:parameter_list' %}">Parameters</a>
+    </li>
+    <li class="breadcrumb-item active">{{ parameter.name }} </li>
+  </ol>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-fw fa-gem"></i>
+    {{ parameter.name }} </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="parameter" width="100%" cellspacing="0">
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+{% endblock content %}
+
+{% block bottomscripts %} {{ block.super }}
+    <script type="text/javascript" src="{% static 'catalogue/js/parameter_detail.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            retrieve_parameter( {{ parameter.pk }} );
+        });
+    </script>
+{% endblock bottomscripts %}

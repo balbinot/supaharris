@@ -2,7 +2,7 @@
   "_args": [
     [
       "@fortawesome/fontawesome-free@5.7.0",
-      "/Users/DANGER_DAVID/Sites/startbootstrap-templates/startbootstrap-sb-admin"
+      "/Users/timohalbesma/Code/supaharris/staticfiles"
     ]
   ],
   "_from": "@fortawesome/fontawesome-free@5.7.0",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.7.0.tgz",
   "_spec": "5.7.0",
-  "_where": "/Users/DANGER_DAVID/Sites/startbootstrap-templates/startbootstrap-sb-admin",
+  "_where": "/Users/timohalbesma/Code/supaharris/staticfiles",
   "author": {
     "name": "Dave Gandy",
     "email": "dave@fontawesome.com",

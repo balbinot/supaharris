@@ -67,6 +67,12 @@ gulp.task('vendor', function(cb) {
     ])
     .pipe(gulp.dest('./vendor/jquery-easing'))
 
+  // jQuery Typeahead
+  gulp.src([
+      './node_modules/jquery-typeahead/dist/*'
+    ])
+    .pipe(gulp.dest('./vendor/jquery-typeahead'))
+
   cb();
 
 });

@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.urls import reverse
 from django.contrib import messages
 from django.utils.text import slugify
 
@@ -30,9 +31,15 @@ class Parameter(models.Model):
     scale = models.FloatField(null=False, blank=False,
         help_text="Scale by which parameters must be multiplied by")
 
+    class Meta:
+        ordering = ["-id"]
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Parameter, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("catalogue:parameter_detail", args=[self.slug])
 
     def __str__(self):
         if self.unit:
@@ -137,6 +144,9 @@ class Reference(models.Model):
     pages = models.CharField(max_length=16, null=True, blank=True)
     clusters = models.ManyToManyField("catalogue.GlobularCluster", related_name="references")
 
+    class Meta:
+        ordering = ["-id"]
+
     def __init__(self, *args, **kwargs):
         # We sneak in request parameter which allows us to pass the request
         # to the model instance when the model is saved via the admin interface
@@ -194,6 +204,9 @@ class Reference(models.Model):
                 messages.error(self.request, msg)
         super(Reference, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse("catalogue:reference_detail", args=[self.slug])
+
     def __str__(self):
         if self.first_author and self.year:
             return "{0} ({1})".format(self.first_author, self.year)
@@ -207,9 +220,15 @@ class GlobularCluster(models.Model):
     altname = models.CharField("Alternative Name",
         max_length=64, null=True, blank=True)
 
+    class Meta:
+        ordering = ["-id"]
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(GlobularCluster, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("catalogue:cluster_detail", args=[self.slug])
 
     def __str__(self):
         if self.altname:
@@ -235,6 +254,9 @@ class Profile(models.Model):
     model_parameters = JSONField()
     model_flavour = models.CharField(max_length=256, null=True, blank=True)
 
+    class Meta:
+        ordering = ["-id"]
+
     def __str__(self):
         return  "{} - Ref: {}".format(self.cluster.name, self.cluster.name)
 
@@ -252,6 +274,9 @@ class Auxiliary(models.Model):
 
     path = models.FilePathField(path="/static", blank=True, null=True)
     url = models.URLField(blank=True, null=True)
+
+    class Meta:
+        ordering = ["-id"]
 
     def __str__(self):
         return "{} - Ref: {}".format(cluster.name, str(reference))
@@ -276,6 +301,9 @@ class Observation(models.Model):
     value = models.CharField("Value", max_length=128, null=True, blank=True)
     sigma_up = models.CharField("Sigma up", max_length=128, null=True, blank=True)
     sigma_down = models.CharField("Sigma down", max_length=128, null=True, blank=True)
+
+    class Meta:
+        ordering = ["-id"]
 
     # This is how to print uncertainties in the columns of django-tables2
     @property
@@ -328,3 +356,6 @@ class Rank(models.Model):
     weight = models.IntegerField()
     compilation_name = models.CharField(
         max_length=64, null=True, blank=True)
+
+    class Meta:
+        ordering = ["-id"]

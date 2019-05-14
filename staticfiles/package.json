@@ -32,11 +32,12 @@
         "bootstrap": "4.2.1",
         "chart.js": "2.7.3",
         "datatables.net-bs4": "1.10.19",
-        "jquery": "3.3.1",
+        "jquery": "^3.4.0",
+        "jquery-typeahead": "^2.10.6",
         "jquery.easing": "^1.4.1"
     },
     "devDependencies": {
-        "browser-sync": "2.26.3",
+        "browser-sync": "^2.26.4",
         "gulp": "^4.0.0",
         "gulp-autoprefixer": "^6.0.0",
         "gulp-clean-css": "4.0.0",

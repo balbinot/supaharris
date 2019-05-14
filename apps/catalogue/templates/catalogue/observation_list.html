@@ -10,36 +10,34 @@
     <li class="breadcrumb-item">
       <a href="{% url 'index' %}">Home</a>
     </li>
-    <li class="breadcrumb-item active">References</li>
+    <li class="breadcrumb-item active">Observations</li>
   </ol>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="card mb-3">
   <div class="card-header">
-    <i class="fas fa-fw fa-book-open"></i>
-    References</div>
+    <i class="fas fa-fw fa-binoculars"></i>
+    Observations</div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="references" width="100%" cellspacing="0">
+      <table class="table table-bordered" id="observations" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>First Author</th>
-            <th>Year</th>
-            <th>Title</th>
-            <th>External URL</th>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Sigma Up</th>
+            <th>Sigma Down</th>
           </tr>
         </thead>
         <tfoot>
           <tr>
-            <th>First Author</th>
-            <th>Year</th>
-            <th>Title</th>
-            <th>External URL</th>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Sigma Up</th>
+            <th>Sigma Down</th>
           </tr>
         </tfoot>
-        <tbody id="globularClusterRow">
-        </tbody>
       </table>
     </div>
   </div>
@@ -48,6 +46,5 @@
 {% endblock %}
 
 {% block bottomscripts %} {{ block.super }}
-    <script type="text/javascript" src="{% static 'catalogue/js/reference_list.js' %}"></script>
+    <script type="text/javascript" src="{% static 'catalogue/js/observation_list.js' %}"></script>
 {% endblock bottomscripts %}
-
