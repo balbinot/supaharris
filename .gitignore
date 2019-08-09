@@ -103,13 +103,17 @@ ENV/
 # mypy
 .mypy_cache/
 
-# Exclude local settings /w passwords and such from the repo
-local.py
-
 *.xlsx
 .DS_Store
 
+### Auto-generated items in $HOME
+.ipython/profile_default
+.bash_history
+.cache
+.viminfo
 
+
+/storage
 /media
 /static
 node_modules

@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # `env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/random | head -c 50; echo`
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="secret")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
@@ -26,7 +26,7 @@ DATABASES = {
     "default": env.db('DATABASE_URL'),
 }
 
-ALLOWED_HOSTS = [u"127.0.0.1", u"localhost", env("ALLOWED_HOST1"), env("ALLOWED_HOST2")]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "tinymce",
-    "django_extensions",
     "django_filters",
     "rest_framework",
     "rest_framework_datatables",
@@ -147,6 +146,20 @@ vars().update(EMAIL_CONFIG)
 DEFAULT_FROM_EMAIL = "info@supaharris.com"
 SERVER_EMAIL = "info@supaharris.com"
 
+
+# http://django-filebrowser.readthedocs.io/en/latest/settings.html
+# FILEBROWSER_DIRECTORY = "/media/uploads"
+FILEBROWSER_DEFAULT_PERMISSIONS = 0o644
+FILEBROWSER_OVERWRITE_EXISTING = True
+FILEBROWSER_EXTENSIONS = {
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Document': [], # ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
+    'Video': [], # ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
+    'Audio': [], # ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+}
+FILEBROWSER_ADMIN_VERSIONS = ['big']  # 'thumbnail', 'small', 'medium', 'large'
+
+
 # Sentry for error reporting
 SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
 import sentry_sdk
@@ -159,5 +172,19 @@ sentry_sdk.init(
 from settings.tinymce import *
 from settings.djangorestframework import *
 
-# Needs to be loaded after setting SECRET_KEY etc
-from settings.filebrowser import *
+
+if DEBUG:
+    PREPEND_WWW = False
+
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'django_extensions',
+    ]
+
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+
+    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'JQUERY_URL': '',
+    }
