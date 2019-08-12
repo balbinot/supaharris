@@ -8,18 +8,25 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
-from catalogue.models import Reference
-from catalogue.models import Parameter
-from catalogue.models import Observation
-from catalogue.models import GlobularCluster
+from catalogue.models import (
+    Reference,
+    Parameter,
+    Observation,
+    AstroObject,
+    AstroObjectClassification,
+)
+from catalogue.management.commands.add_data_from_author_year import (
+    PrepareSupaHarrisDatabaseMixin)
 
-from data.parse_vandenberg_2013 import parse_data
+from data.parse_vandenberg_2013 import read_vandenberg2013_data
 
 
-class Command(BaseCommand):
+class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add VandenBerg (2013) data to the database"
 
     def handle(self, *args, **options):
+        super().handle(*args, **options)  # to inherit the parent modifications
+        return
 
         # Add the ADS url (in this particular format). When the Reference
         # instance is saved it will automatically retrieve all relevent info!
@@ -30,9 +37,7 @@ class Command(BaseCommand):
         else:
             print("Created the Reference: {0}".format(vandenberg_2013))
 
-        cluster_list = parse_data()
-
-        vandenberg_2013
+        cluster_list = read_vandenberg2013_data()
 
         parameter_map = OrderedDict({
             "NGC": "",
@@ -53,9 +58,9 @@ class Command(BaseCommand):
         print("\nInserting into database :")
         nClusters = len(cluster_list)
         for i, harris in enumerate(cluster_list.values()):
-            print("Inserting GlobularCluster {0} / {1}".format(i+1, nClusters))
+            print("Inserting AstroObject {0} / {1}".format(i+1, nClusters))
 
-            cluster, created = GlobularCluster.objects.get_or_create(
+            cluster, created = AstroObject.objects.get_or_create(
                 name=harris.gid, altname=harris.name,
             )
             print("  {0}, created = {1}".format(cluster, created))

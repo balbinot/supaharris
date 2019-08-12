@@ -3,7 +3,7 @@ import numpy
 import matplotlib
 from matplotlib import pyplot
 
-from plotsettings import *
+from data.plotsettings import *
 
 
 def read_vandenberg2013_data(fname="MW_GCS_VandenBerg2013/table2.txt"):

@@ -6,3 +6,20 @@ SEPARATELY LICENSED COMPONENTS AND LIBRARIES
     Name:  A free, open source, Bootstrap admin theme created by Start Bootstrap
     Link:  https://github.com/BlackrockDigital/startbootstrap-sb-admin
     License: MIT
+
+
+Data
+
+    Name:  Harris 1996, 2010 edition
+    Data:  http://physwww.mcmaster.ca/~harris/mwgc.dat
+    Paper: https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract
+
+    Name:  Hilker+ 2019
+    Data:  https://people.smp.uq.edu.au/HolgerBaumgardt/globular/
+           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
+           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
+           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    Paper: https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract
+           https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B/abstract
+           https://ui.adsabs.harvard.edu/abs/2017MNRAS.464.2174B/abstract
+           https://ui.adsabs.harvard.edu/abs/2017MNRAS.471.3668S/abstract
