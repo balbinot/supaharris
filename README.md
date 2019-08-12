@@ -1,7 +1,7 @@
 ## **Dependencies**
 - Python 3.7.4
 - Django 2.2.4
-- See and intall `requirements.txt` for full dependencies
+- See and install `requirements.txt` for full dependencies
 
 ## How to add additional databases?
 
