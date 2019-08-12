@@ -41,21 +41,21 @@ function retrieve_reference_observations(pk) {
         'ajax': '/api/v1/catalogue/observation/?reference=' + pk + '&format=datatables',
         'columns': [
             {
-                'data': 'cluster.name',
+                'data': 'astro_object.name',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
                         var altname = '';
-                        if(row.cluster.altname) {
-                            altname = ' (' + row.cluster.altname + ') ';
+                        if(row.astro_object.altname) {
+                            altname = ' (' + row.astro_object.altname + ') ';
                         }
                         console.log(altname);
-                        data = '<a href="/catalogue/cluster/' + row.cluster.slug
-                            + '">' + row.cluster.name + altname + '</a>';
+                        data = '<a href="/catalogue/astro_object/' + row.astro_object.slug
+                            + '">' + row.astro_object.name + altname + '</a>';
                     }
                     return data;
                 }
             },
-            { 'data': 'cluster.altname' },
+            { 'data': 'astro_object.altname' },
             {
                 'data': 'parameter.name',
                 'render': function(data, type, row, meta){

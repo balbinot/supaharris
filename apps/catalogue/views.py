@@ -15,18 +15,18 @@ def index(request):
     l = Parameter.objects.get(name="L")
     b = Parameter.objects.get(name="B")
 
-    # Get clusters that have observations of these parameters
+    # Get astro_objects that have observations of these parameters
     gcs_with_relevant_observations = Observation.objects.filter(
         parameter__in=[l, b, ra, dec]
-    ).values('cluster').distinct()
-    clusters = AstroObject.objects.filter(id__in=gcs_with_relevant_observations)
+    ).values('astro_object').distinct()
+    astro_objects = AstroObject.objects.filter(id__in=gcs_with_relevant_observations)
 
-    names = [o.name for o in clusters]
-    ra = [c.observation_set.filter(parameter__name="RA") for c in clusters]
-    dec = [c.observation_set.filter(parameter__name="Dec") for c in clusters]
-    l_lon = [float(c.observation_set.get(parameter__name="L").value) for c in clusters]
+    names = [o.name for o in astro_objects]
+    ra = [c.observation_set.filter(parameter__name="RA") for c in astro_objects]
+    dec = [c.observation_set.filter(parameter__name="Dec") for c in astro_objects]
+    l_lon = [float(c.observation_set.get(parameter__name="L").value) for c in astro_objects]
     l_lon = [l if l < 180 else l - 360. for l in l_lon]
-    b_lat = [float(c.observation_set.get(parameter__name="B").value) for c in clusters]
+    b_lat = [float(c.observation_set.get(parameter__name="B").value) for c in astro_objects]
 
     # Plot the values we retrieved
     from bokeh.embed import components
@@ -39,7 +39,7 @@ def index(request):
     ))
 
     TOOLTIPS = [
-        ("Cluster", "@names"),
+        ("astro_object", "@names"),
         ("lon", "$x"),
         ("lat", "$y"),
     ]
@@ -79,16 +79,16 @@ def reference_detail(request, slug):
         {"reference": reference})
 
 
-def cluster_list(request):
-    clusters = AstroObject.objects.filter(type="GC")
-    return render(request, 'catalogue/cluster_list.html',
-        {"clusters": clusters})
+def astro_object_list(request):
+    astro_objects = AstroObject.objects.all()
+    return render(request, 'catalogue/astro_object_list.html',
+        {"astro_objects": astro_objects})
 
 
-def cluster_detail(request, slug):
-    cluster = get_object_or_404(AstroObject, slug=slug)
-    return render(request, 'catalogue/cluster_detail.html',
-        {"cluster": cluster})
+def astro_object_detail(request, slug):
+    astro_object = get_object_or_404(AstroObject, slug=slug)
+    return render(request, 'catalogue/astro_object_detail.html',
+        {"astro_object": astro_object})
 
 def parameter_list(request):
     parameters = Parameter.objects.all()

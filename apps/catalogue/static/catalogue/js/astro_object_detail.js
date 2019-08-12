@@ -1,8 +1,8 @@
-function retrieve_cluster_observations(pk) {
+function retrieve_astro_object_observations(pk) {
     var table = $('#observations' + pk).DataTable({
         'serverSide': false,
         'pageLength': 50,
-        'ajax': '/api/v1/catalogue/observation/?cluster=' + pk + '&format=datatables',
+        'ajax': '/api/v1/catalogue/observation/?astro_object=' + pk + '&format=datatables',
         'columns': [
             {
                 'data': 'parameter.name',

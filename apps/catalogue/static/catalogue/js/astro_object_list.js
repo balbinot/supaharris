@@ -1,13 +1,13 @@
 $(document).ready(function() {
-    var table = $('#clusters').DataTable({
+    var table = $('#astro_objects').DataTable({
         'serverSide': true,
-        'ajax': '/api/v1/catalogue/cluster/?format=datatables',
+        'ajax': '/api/v1/catalogue/astro_object/?format=datatables',
         'columns': [
             {
                 'data': 'name',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
-                        data = '<a href="/catalogue/cluster/' + row.slug+ '">' + row.name + '</a>';
+                        data = '<a href="/catalogue/astro_object/' + row.slug+ '">' + row.name + '</a>';
                     }
                     return data;
                 }

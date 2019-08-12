@@ -66,9 +66,10 @@ class AstroObjectClassificationAdmin(admin.ModelAdmin):
 @admin.register(AstroObject)
 class AstroObjectAdmin(admin.ModelAdmin):
     list_display = ( "name", "altname", )
+    list_filter = ("classifications",)
     search_fields = ( "name", "altname", )
     readonly_fields = ( "slug", )
-    filter_horizontal = ( "classification",)
+    filter_horizontal = ( "classifications",)
 
 
 @admin.register(Observation)

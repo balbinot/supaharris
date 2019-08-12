@@ -1,9 +1,12 @@
 from rest_framework import serializers
 
-from catalogue.models import Reference
-from catalogue.models import AstroObject
-from catalogue.models import Parameter
-from catalogue.models import Observation
+from catalogue.models import (
+    Reference,
+    AstroObject,
+    AstroObjectClassification,
+    Parameter,
+    Observation,
+)
 
 
 class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
@@ -30,17 +33,28 @@ class ObservationSerializerForAstroObject(serializers.ModelSerializer):
         fields = ("parameter", "value", "sigma_up", "sigma_down")
 
 
+class AstroObjectClassificationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = AstroObjectClassification
+        fields = (
+            "id", "name", "slug",
+        )
+        datatables_always_serialize = ("id",)
+
+
 class AstroObjectSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
     frontend_url = serializers.SerializerMethodField(read_only=True)
     observations = ObservationSerializerForAstroObject(source="observation_set", many=True)
-    classification = serializers.StringRelatedField(many=True)
+    classifications = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = AstroObject
         fields = (
             "id", "name", "slug", "altname", "url", "frontend_url",
-            "observations", "classification",
+            "observations", "classifications",
         )
         datatables_always_serialize = ("id",)
 
@@ -71,7 +85,7 @@ class ObservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Observation
         fields = (
-            "cluster", "id", "parameter", "value", "sigma_up", "sigma_down", "reference", "url",
+            "astro_object", "id", "parameter", "value", "sigma_up", "sigma_down", "reference", "url",
         )
         datatables_always_serialize = ("id",)
         depth = 1

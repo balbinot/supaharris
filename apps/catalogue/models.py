@@ -232,7 +232,7 @@ class AstroObject(models.Model):
     altname = models.CharField("Alternative Name",
         max_length=64, null=True, blank=True)
 
-    classification = models.ManyToManyField("catalogue.AstroObjectClassification",
+    classifications = models.ManyToManyField("catalogue.AstroObjectClassification",
         verbose_name="classification", related_name="astro_objects", blank=True)
 
     class Meta:
@@ -243,7 +243,7 @@ class AstroObject(models.Model):
         super(AstroObject, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("catalogue:cluster_detail", args=[self.slug])
+        return reverse("catalogue:astro_object_detail", args=[self.slug])
 
     def __str__(self):
         if self.altname:
@@ -258,7 +258,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE
     )
 
-    cluster = models.ForeignKey(
+    astro_object = models.ForeignKey(
         "catalogue.AstroObject",
         on_delete=models.CASCADE
     )
@@ -273,7 +273,7 @@ class Profile(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return  "{} - Ref: {}".format(self.cluster.name, self.cluster.name)
+        return  "{} - Ref: {}".format(self.astro_object.name, self.astro_object.name)
 
 
 class Auxiliary(models.Model):
@@ -282,7 +282,7 @@ class Auxiliary(models.Model):
         on_delete=models.CASCADE
     )
 
-    cluster = models.ForeignKey(
+    astro_object = models.ForeignKey(
         "catalogue.AstroObject",
         on_delete=models.CASCADE
     )
@@ -294,7 +294,7 @@ class Auxiliary(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return "{} - Ref: {}".format(cluster.name, str(reference))
+        return "{} - Ref: {}".format(astro_object.name, str(reference))
 
 
 class Observation(models.Model):
@@ -303,7 +303,7 @@ class Observation(models.Model):
         on_delete=models.CASCADE,
     )
 
-    cluster = models.ForeignKey(
+    astro_object = models.ForeignKey(
         "catalogue.AstroObject",
         on_delete=models.CASCADE,
     )
@@ -336,27 +336,27 @@ class Observation(models.Model):
         if self.value and self.sigma_up and self.sigma_down:
             try:
                 s = "{}: {} = {:.3f} + {:.3f} - {:.3f} ({})".format(
-                    self.cluster.name, self.parameter.name,
+                    self.astro_object.name, self.parameter.name,
                     float(self.value), float(self.sigma_up), float(self.sigma_down),
                     str(self.reference))
             except ValueError as e:
                 s = "{}: {} = {} + {} - {} ({})".format(
-                    self.cluster.name, self.parameter.name,
+                    self.astro_object.name, self.parameter.name,
                     self.value, self.sigma_up, self.sigma_down,
                     str(self.reference))
         elif self.value:
             try:
                 s = "{}: {} = {:.3f} ({})".format(
-                    self.cluster.name, self.parameter.name,
+                    self.astro_object.name, self.parameter.name,
                     float(self.value), str(self.reference)
                 )
             except ValueError as e:
                 s = "{}: {} = {} ({})".format(
-                    self.cluster.name, self.parameter.name,
+                    self.astro_object.name, self.parameter.name,
                     self.value, str(self.reference))
         else:
             s = "{}: {} = N/A ({})".format(
-                self.cluster.name, self.parameter.name,
+                self.astro_object.name, self.parameter.name,
                 str(self.reference))
         return s
 
