@@ -81,7 +81,8 @@
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it supaharris-django bash`
 - Now add the initial data (run this command in the container!)
-  - `python manage.py add_parameters` 
+  - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
+  - `python manage.py loaddata fixtures/catalogue_Parameter.json` 
   - `python manage.py add_data_from_harris_1996ed2010` 
 - Create a superuser (run this command in the container)
   - `python manage.py createsuperuser`
