@@ -58,8 +58,6 @@ services:
       - ${SUPAHARRIS_STORAGE-./storage/}django/media:/supaharris/media:rw
       - ${SUPAHARRIS_STORAGE-./storage/}django/static:/supaharris/static:rw
     restart: unless-stopped
-    ports:
-      - "1337:1337"
     command: ['uwsgi', '--ini', 'uwsgi/supaharris.ini']
 
 
