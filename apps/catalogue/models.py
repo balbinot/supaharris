@@ -142,7 +142,8 @@ class Reference(models.Model):
         null=True, blank=True, choices=MONTHS)
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
-    astro_objects = models.ManyToManyField("catalogue.AstroObject", related_name="references")
+    astro_objects = models.ManyToManyField("catalogue.AstroObject", 
+        related_name="references", blank=True)
 
     class Meta:
         ordering = ["-id"]
