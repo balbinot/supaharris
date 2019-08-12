@@ -24,18 +24,24 @@
    domain="localhost:8000")'`
 
 ### Add the initial data to the database
-- TODO: `python manage.py loaddata fixtures/parameters.json` 
-- `python manage.py add_parameters` 
+- `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
+- `python manage.py loaddata fixtures/catalogue_Parameter.json` 
 - `python manage.py add_data_from_harris_1996ed2010` 
+- `python manage.py add_data_from_vandenberg_2013` 
 
 ### How to add additional databases?
-- Datbases can be parsed and inserted into the SupaHarris database by creating 
-  a new management command in `apps/catalogue/management/commands`. 
-  We provide boilerplate to get going.
-- `cp apps/catalogue/management/commands/add_data_from_boilerplate.py 
-   apps/catalogue/management/commands/add_data_from_author_year.py`
-- Implement `apps/catalogue/management/commands/add_data_from_author_year.py`
-- `python manage.py add_data_from_author_year`
+- Add the data you want to add in a subfolder of `data`, e.g. `data/MW_GCS_Harris1996e2010`
+- Add a parser in the `data` folder, e.g. `data/parse_harris_1996ed2010.py`
+- You could stop here and add, commit and push the data + parsers, and we'll handle
+  inserting it into the database 
+- Parsed data can be inserted into the SupaHarris database by creating 
+  a new management command (= a new python file) in the folder 
+  `apps/catalogue/management/commands`. We provide boilerplate to get going! :-)
+- `cp apps/catalogue/management/commands/add_data_from_author_year.py 
+   apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`,
+   e.g. naming the file `add_data_from_harris_1996ed2010.py`
+- Implement `apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`
+- `python manage.py add_data_from_changemeauthor_changemeyear`
 
 
 ### Run the development server at http://localhost:8000

@@ -6,39 +6,38 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
-from catalogue.models import Reference
-from catalogue.models import Parameter
-from catalogue.models import Observation
-from catalogue.models import GlobularCluster
-from catalogue.utils import get_parameter_names_from_supaharris
-
+from catalogue.models import (
+    Reference,
+    Parameter,
+    Observation,
+    AstroObject,
+    AstroObjectClassification,
+)
+from catalogue.utils import PrepareSupaHarrisDatabaseMixin
 from data.parse_author_year import parse_data
 
 
-class Command(BaseCommand):
+class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add ReplaceMe data to the database"
 
     def handle(self, *args, **options):
+        super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
+        return
+
         cmd = __file__.split("/")[-1].replace(".py", "")
         print("\n\nRunning the management command '{0}'\n".format(cmd))
-
 
         # Add the ADS url (in this particular format). When the Reference
         # instance is saved it will automatically retrieve all relevent info!
         ads_url = "http://adsabs.harvard.edu/abs/1996AJ....112.1487H"
-        harris1996ed2010, created = Reference.objects.get_or_create(ads_url=ads_url)
+        reference, created = Reference.objects.get_or_create(ads_url=ads_url)
         if not created:
-            print("Found the Reference: {0}\n".format(harris1996ed2010))
+            print("Found the Reference: {0}\n".format(reference))
         else:
-            print("Created the Reference: {0}\n".format(harris1996ed2010))
-
-        # Make sure that you convert the parameters available in your database
-        # to the parameters available in the SupaHarris database. This function
-        # below will print all parameters for you.
-        get_parameter_names_from_supaharris()
+            print("Created the Reference: {0}\n".format(reference))
 
         # Here we get one particular parameter as an example to help you
-        # See https://docs.djangoproject.com/en/2.1/topics/db/queries/
+        # See https://docs.djangoproject.com/en/2.2/topics/db/queries/
         # for an explanation of how to retrieve/create items from/in the database.
         R_Sun = Parameter.objects.filter(name="R_Sun").first()
         if R_Sun:
@@ -50,7 +49,7 @@ class Command(BaseCommand):
                 name="R_Sun",  # must be a string, max 64 characters
                 description="Distance to the Sun",  # must be a string, max. 256 characters
                 unit="kpc",  # must be a string, max 63 characters. Note that the unit must comply with astropy.unit.
-                scale=3.0  # must be a float. This is the scale by which parameters must be multiplied by.
+                scale=1.0  # must be a float. This is the scale by which parameters must be multiplied by.
             )
 
         database = parse_data()
@@ -63,13 +62,26 @@ class Command(BaseCommand):
 
             # The Globular Cluster for which you would like to add new data could
             # very well already be known in the database. In that case you should
-            # retrieve the GlobularCluster, and add an Observation
+            # retrieve the AstroObject, and add an Observation
             # to add may
-            gc, created = GlobularCluster.objects.get_or_create(name=gc_name)
+            gc, created = AstroObject.objects.get_or_create(name=gc_name)
             if not created:
-                print("Found the GlobularCluster: {0}".format(gc))
+                print("Found the AstroObject: {0}".format(gc))
             else:
-                print("Created the GlobularCluster: {0}".format(gc))
+                print("Created the AstroObject: {0}".format(gc))
 
-            # gc.save()
+            # self.GC is set in PrepareSupaHarrisDatabaseMixin. If another
+            # classification, or multiple classifications apply, use e.g.
+            # YMC = AstroObjectClassification.objects.get(name="Young Massive Cluster")
+            # gc.classifications.add(YMC)
+            gc.classifications.add(self.GC)
+            gc.save()
+
+            observation = Observation.objects.create(
+                reference=reference,
+                astro_object=gc,
+                parameter=R_Sun,
+                value=gc_R_Sun,
+            )
+            print("Created the Observation: {0}".format(observation))
 

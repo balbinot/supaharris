@@ -11,19 +11,21 @@ class PrepareSupaHarrisDatabaseMixin(object):
 
         try:
             self.GC = AstroObjectClassification.objects.get(name="Globular Cluster")
-        except AstroObjectClassiciation.DoesNotExist:
-            print("Wops, you forgot to load the AstroObjectClassification fixtures first!")
+        except AstroObjectClassification.DoesNotExist:
+            print("\nWops, you forgot to load the AstroObjectClassification fixtures first!")
             print("But don't worry, we'll do this for you right now!")
             from django.core.management import call_command
             call_command("loaddata", "fixtures/catalogue_AstroObjectClassification")
+            print("\nAll set.")
 
         try:
             Parameter.objects.get(name="RA")
         except Parameter.DoesNotExist:
-            print("Wops, you forgot to load the Parameter fixtures first!")
+            print("\nWops, you forgot to load the Parameter fixtures first!")
             print("But don't worry, we'll do this for you right now!")
             from django.core.management import call_command
             call_command("loaddata", "fixtures/catalogue_Parameter")
+            print("\nAll set.")
 
         if print_info:
             print_parameters()

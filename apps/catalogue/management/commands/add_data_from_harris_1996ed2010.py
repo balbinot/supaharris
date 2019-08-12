@@ -8,18 +8,22 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
-from catalogue.models import Reference
-from catalogue.models import Parameter
-from catalogue.models import Observation
-from catalogue.models import GlobularCluster
-
+from catalogue.models import (
+    Reference,
+    Parameter,
+    Observation,
+    AstroObject,
+    AstroObjectClassification,
+)
+from catalogue.utils import PrepareSupaHarrisDatabaseMixin
 from data.parse_harris_1996ed2010 import parse_data
 
 
-class Command(BaseCommand):
+class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add Harris data to the database"
 
     def handle(self, *args, **options):
+        super().handle(*args, **options)  # to inherit the parent modifications
 
         # Add the ADS url (in this particular format). When the Reference
         # instance is saved it will automatically retrieve all relevent info!
@@ -108,9 +112,9 @@ class Command(BaseCommand):
         print("\nInserting into database :")
         nClusters = len(cluster_list)
         for i, harris in enumerate(cluster_list.values()):
-            print("Inserting GlobularCluster {0} / {1}".format(i+1, nClusters))
+            print("Inserting AstroObject {0} / {1}".format(i+1, nClusters))
 
-            cluster, created = GlobularCluster.objects.get_or_create(
+            cluster, created = AstroObject.objects.get_or_create(
                 name=harris.gid, altname=harris.name,
             )
             print("  {0}, created = {1}".format(cluster, created))
@@ -134,7 +138,7 @@ class Command(BaseCommand):
                 print("  sigma_down = {0}".format(sigma_down))
 
                 observation, created = Observation.objects.get_or_create(
-                    cluster=cluster, reference=harris1996ed2010, parameter=parameter,
+                    astro_object=cluster, reference=harris1996ed2010, parameter=parameter,
                     value=value, sigma_up=sigma_up, sigma_down=sigma_down
                 )
                 print("  {0}, created = {1}\n".format(observation, created))
