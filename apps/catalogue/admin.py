@@ -1,12 +1,15 @@
 from django.contrib import admin
 
-from catalogue.models import Parameter
-from catalogue.models import Reference
-from catalogue.models import GlobularCluster
-from catalogue.models import Observation
-from catalogue.models import Rank
-from catalogue.models import Auxiliary
-from catalogue.models import Profile
+from catalogue.models import (
+    Parameter,
+    Reference,
+    AstroObject,
+    AstroObjectClassification,
+    Observation,
+    Rank,
+    Auxiliary,
+    Profile,
+)
 
 
 @admin.register(Parameter)
@@ -24,8 +27,8 @@ class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ( "first_author", "authors", "title", )
     readonly_fields = ( "slug", "bib_code" )
     list_filter = ( "year", "journal" )
-    # autocomplete_fields = ( "clusters", )
-    filter_horizontal = ( "clusters", )
+    # autocomplete_fields = ( "astro_objects", )
+    filter_horizontal = ( "astro_objects", )
 
     fieldsets = [
         ("Required", {
@@ -39,7 +42,7 @@ class ReferenceAdmin(admin.ModelAdmin):
         }),
         ("Relations", {
             "fields": [
-                "clusters",
+                "astro_objects",
             ]
         }),
     ]
@@ -53,11 +56,19 @@ class ReferenceAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-@admin.register(GlobularCluster)
-class GlobularClusterAdmin(admin.ModelAdmin):
+@admin.register(AstroObjectClassification)
+class AstroObjectClassificationAdmin(admin.ModelAdmin):
+    list_display = ( "name", )
+    search_fields = ( "name", )
+    readonly_fields = ( "slug", )
+
+
+@admin.register(AstroObject)
+class AstroObjectAdmin(admin.ModelAdmin):
     list_display = ( "name", "altname", )
     search_fields = ( "name", "altname", )
     readonly_fields = ( "slug", )
+    filter_horizontal = ( "classification",)
 
 
 @admin.register(Observation)

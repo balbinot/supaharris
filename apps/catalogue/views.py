@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from catalogue.models import Reference
 from catalogue.models import Parameter
 from catalogue.models import Observation
-from catalogue.models import GlobularCluster
+from catalogue.models import AstroObject
 
 
 def index(request):
@@ -19,7 +19,7 @@ def index(request):
     gcs_with_relevant_observations = Observation.objects.filter(
         parameter__in=[l, b, ra, dec]
     ).values('cluster').distinct()
-    clusters = GlobularCluster.objects.filter(id__in=gcs_with_relevant_observations)
+    clusters = AstroObject.objects.filter(id__in=gcs_with_relevant_observations)
 
     names = [o.name for o in clusters]
     ra = [c.observation_set.filter(parameter__name="RA") for c in clusters]
@@ -80,13 +80,13 @@ def reference_detail(request, slug):
 
 
 def cluster_list(request):
-    clusters = GlobularCluster.objects.all()
+    clusters = AstroObject.objects.filter(type="GC")
     return render(request, 'catalogue/cluster_list.html',
         {"clusters": clusters})
 
 
 def cluster_detail(request, slug):
-    cluster = get_object_or_404(GlobularCluster, slug=slug)
+    cluster = get_object_or_404(AstroObject, slug=slug)
     return render(request, 'catalogue/cluster_detail.html',
         {"cluster": cluster})
 

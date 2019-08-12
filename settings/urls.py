@@ -17,7 +17,7 @@ handler500 = "about.views.handler500"
 
 router = routers.DefaultRouter()
 router.register(r"catalogue/reference", catalogue_api.ReferenceViewSet)
-router.register(r"catalogue/cluster", catalogue_api.GlobularClusterViewSet)
+router.register(r"catalogue/objects", catalogue_api.AstroObjectViewSet)
 router.register(r"catalogue/parameter", catalogue_api.ParameterViewSet)
 router.register(r"catalogue/observation", catalogue_api.ObservationViewSet)
 

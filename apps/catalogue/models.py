@@ -142,7 +142,7 @@ class Reference(models.Model):
         null=True, blank=True, choices=MONTHS)
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
-    clusters = models.ManyToManyField("catalogue.GlobularCluster", related_name="references")
+    astro_objects = models.ManyToManyField("catalogue.AstroObject", related_name="references")
 
     class Meta:
         ordering = ["-id"]
@@ -214,18 +214,33 @@ class Reference(models.Model):
             return self.slug
 
 
-class GlobularCluster(models.Model):
+class AstroObjectClassification(models.Model):
+    name = models.CharField("Name", max_length=64, unique=True)
+    slug = models.SlugField(max_length=64, unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class AstroObject(models.Model):
     name = models.CharField("Name", max_length=64, unique=True)
     slug = models.SlugField(max_length=64, unique=True, blank=True)
     altname = models.CharField("Alternative Name",
         max_length=64, null=True, blank=True)
+
+    classification = models.ManyToManyField("catalogue.AstroObjectClassification",
+        verbose_name="classification", related_name="astro_objects", blank=True)
 
     class Meta:
         ordering = ["-id"]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(GlobularCluster, self).save(*args, **kwargs)
+        super(AstroObject, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("catalogue:cluster_detail", args=[self.slug])
@@ -244,7 +259,7 @@ class Profile(models.Model):
     )
 
     cluster = models.ForeignKey(
-        "catalogue.GlobularCluster",
+        "catalogue.AstroObject",
         on_delete=models.CASCADE
     )
 
@@ -268,7 +283,7 @@ class Auxiliary(models.Model):
     )
 
     cluster = models.ForeignKey(
-        "catalogue.GlobularCluster",
+        "catalogue.AstroObject",
         on_delete=models.CASCADE
     )
 
@@ -289,7 +304,7 @@ class Observation(models.Model):
     )
 
     cluster = models.ForeignKey(
-        "catalogue.GlobularCluster",
+        "catalogue.AstroObject",
         on_delete=models.CASCADE,
     )
 

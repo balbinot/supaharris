@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from catalogue.models import Reference
-from catalogue.models import GlobularCluster
+from catalogue.models import AstroObject
 from catalogue.models import Parameter
 from catalogue.models import Observation
 
@@ -22,7 +22,7 @@ class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
         return self.context["request"].scheme + "://" + self.context["request"].get_host() + obj.get_absolute_url()
 
 
-class ObservationSerializerForGlobularCluster(serializers.ModelSerializer):
+class ObservationSerializerForAstroObject(serializers.ModelSerializer):
     parameter = serializers.CharField(source="parameter.name")
 
     class Meta:
@@ -30,15 +30,17 @@ class ObservationSerializerForGlobularCluster(serializers.ModelSerializer):
         fields = ("parameter", "value", "sigma_up", "sigma_down")
 
 
-class GlobularClusterSerializer(serializers.HyperlinkedModelSerializer):
+class AstroObjectSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
     frontend_url = serializers.SerializerMethodField(read_only=True)
-    observations = ObservationSerializerForGlobularCluster(source="observation_set", many=True)
+    observations = ObservationSerializerForAstroObject(source="observation_set", many=True)
+    classification = serializers.StringRelatedField(many=True)
 
     class Meta:
-        model = GlobularCluster
+        model = AstroObject
         fields = (
-            "id", "name", "slug", "altname", "url", "frontend_url", "observations",
+            "id", "name", "slug", "altname", "url", "frontend_url",
+            "observations", "classification",
         )
         datatables_always_serialize = ("id",)
 
