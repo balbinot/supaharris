@@ -3,7 +3,33 @@
 - Django 2.2.4
 - See and intall `requirements.txt` for full dependencies
 
-## **Installation for development**
+## How to add additional databases?
+
+### Add data and parser
+- Add the data you want to add in a subfolder of `data`, e.g. `data/MW_GCS_Harris1996e2010`
+- Add a parser in the `data` folder, e.g. `data/parse_harris_1996ed2010.py`
+- You could stop here and add, commit and push the data + parsers, and we'll handle
+  inserting it into the database.
+  - If you do stop here, it would be very helpful if you could provide a mapping 
+    (dictionary) that converts the name/identifier (e.g. NGC, Messier) in the dataset
+    you want to add to the [name that we use in the SupaHarris database](https://www.supaharris.com/catalogue/astro_object/list/)
+  - See above, but mapping the parameter names in your database to the 
+  [parameters we use in the SupaHarris database](https://www.supaharris.com/catalogue/parameter/list/)
+
+### Add Django script to insert the parsed data into the database
+- For this step it would be useful to have the development server running locally.
+  Below you'll find three options to achieve this (in order of complexity).
+- Parsed data can be inserted into the SupaHarris database by creating 
+  a new management command (= a new python file) in the folder 
+  `apps/catalogue/management/commands`. We provide boilerplate to get going! :-)
+- `cp apps/catalogue/management/commands/add_data_from_author_year.py 
+   apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`,
+   e.g. naming the file `add_data_from_harris_1996ed2010.py`
+- Implement `apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`
+- `python manage.py add_data_from_changemeauthor_changemeyear`
+
+
+## **Installation for development (Option 1)**
 - Create virtualenvironment: `virtualenv venv`
 - Activate virtualenv: `source venv/bin/activate`
 
@@ -29,38 +55,24 @@
 - `python manage.py add_data_from_harris_1996ed2010` 
 - `python manage.py add_data_from_vandenberg_2013` 
 
-### How to add additional databases?
-- Add the data you want to add in a subfolder of `data`, e.g. `data/MW_GCS_Harris1996e2010`
-- Add a parser in the `data` folder, e.g. `data/parse_harris_1996ed2010.py`
-- You could stop here and add, commit and push the data + parsers, and we'll handle
-  inserting it into the database 
-- Parsed data can be inserted into the SupaHarris database by creating 
-  a new management command (= a new python file) in the folder 
-  `apps/catalogue/management/commands`. We provide boilerplate to get going! :-)
-- `cp apps/catalogue/management/commands/add_data_from_author_year.py 
-   apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`,
-   e.g. naming the file `add_data_from_harris_1996ed2010.py`
-- Implement `apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`
-- `python manage.py add_data_from_changemeauthor_changemeyear`
-
-
 ### Run the development server at http://localhost:8000
 - `python manage.py runserver` (and leave running)
 
 
-## **Running with Docker**
+## **Alternatively, run with Docker (Option 2)**
 - Make sure Docker Engine and docker-compose are installed (see Docker docs)
 
-### **Running with Django's built-in development server w/ sqlite3 database**
+### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
 - Build the image: `docker build -t supaharris .`
-- Run the server: `docker run --rm -it -v "$(pwd)":/supaharris -p 1337:1337 
+- Run the server: `docker run --rm -it -v "$(pwd)/settings/.env:/supaharris/settings/.env" -v "$(pwd)":/supaharris -p 1337:1337 
   --name runserver supaharris bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
+- In a new terminal, one can execute commands in the running container. Load the fixtures:
+  - `docker exec runserver bash -c "python manage.py loaddata fixtures/catalogue_Parameter.json"`
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it runserver bash`
 
-
-### **Running the full stack: nginx + uwsgi w/ mariadb (mysql) database**
+### **Running the full stack: nginx + uwsgi w/ mariadb (mysql) database (Option 2b)**
 - `./utils/generate_sslcert.sh`
 - `docker-compose up -d mariadb`
   - On first launch, the database and user will be created (you don't have to do anything)
