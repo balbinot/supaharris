@@ -107,12 +107,21 @@ ENV/
 .DS_Store
 
 ### Auto-generated items in $HOME
+.astropy/
 .ipython/profile_default
 .bash_history
 .cache
 .viminfo
+.mysql_history
+
+# Ignore $HOME files
+.bash_aliases
+.bash_functions
+.bashrc
 
 
+# Project-specific folders
+/settings/*.env
 /storage
 /media
 /static
