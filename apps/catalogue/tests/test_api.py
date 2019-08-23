@@ -34,8 +34,8 @@ class ReferenceViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         super().setUp()
 
         # Set the detail for this specific test
-        self.list_uri = "catalogue_api:reference-list"
-        self.detail_uri = "catalogue_api:reference-detail"
+        self.list_uri = "reference-list"
+        self.detail_uri = "reference-detail"
         self.detail_pk = Reference.objects.last().pk
         self.count = Reference.objects.count()
         self.data_orm = Reference.objects.order_by("id").first()
@@ -55,8 +55,8 @@ class AstroObjectClassificationViewSetTestCase(AnonReadOnlyAPITestCase, APITestC
         super().setUp()
 
         # Set the detail for this specific test
-        self.list_uri = "catalogue_api:astroobjectclassification-list"
-        self.detail_uri = "catalogue_api:astroobjectclassification-detail"
+        self.list_uri = "astroobjectclassification-list"
+        self.detail_uri = "astroobjectclassification-detail"
         self.detail_pk = AstroObjectClassification.objects.last().pk
         self.count = AstroObjectClassification.objects.count()
         self.data_orm = AstroObjectClassification.objects.order_by("id").first()
@@ -77,8 +77,8 @@ class AstroObjectViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         super().setUp()
 
         # Set the detail for this specific test
-        self.list_uri = "catalogue_api:astroobject-list"
-        self.detail_uri = "catalogue_api:astroobject-detail"
+        self.list_uri = "astroobject-list"
+        self.detail_uri = "astroobject-detail"
         self.detail_pk = AstroObject.objects.last().pk
         self.count = AstroObject.objects.count()
         self.data_orm = AstroObject.objects.order_by("id").first()
@@ -98,8 +98,8 @@ class ParameterViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         super().setUp()
 
         # Set the detail for this specific test
-        self.list_uri = "catalogue_api:parameter-list"
-        self.detail_uri = "catalogue_api:parameter-detail"
+        self.list_uri = "parameter-list"
+        self.detail_uri = "parameter-detail"
         self.detail_pk = Parameter.objects.last().pk
         self.count = Parameter.objects.count()
         self.data_orm = Parameter.objects.order_by("id").first()
@@ -120,8 +120,8 @@ class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         super().setUp()
 
         # Set the detail for this specific test
-        self.list_uri = "catalogue_api:observation-list"
-        self.detail_uri = "catalogue_api:observation-detail"
+        self.list_uri = "observation-list"
+        self.detail_uri = "observation-detail"
         self.detail_pk = Observation.objects.last().pk
         self.count = Observation.objects.count()
         self.data_orm = Observation.objects.order_by("id").first()

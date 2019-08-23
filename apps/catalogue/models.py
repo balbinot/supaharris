@@ -7,7 +7,8 @@ from django.utils.text import slugify
 
 from jsonfield import JSONField
 
-from utils import scrape_reference_details_from_ads
+from utils import scrape_reference_details_from_old_ads
+from utils import scrape_reference_details_from_new_ads
 from utils import scrape_reference_details_from_arxiv
 
 
@@ -40,6 +41,10 @@ class Parameter(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalogue:parameter_detail", args=[self.slug])
+
+    @property
+    def api_url(self):
+        return reverse("parameter-detail", args=[self.slug])
 
     def __str__(self):
         if self.unit:
@@ -163,9 +168,11 @@ class Reference(models.Model):
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
 
-        if "adswww" in self.ads_url or "adsabs" in self.ads_url:
+        if "ui.adswww" in self.ads_url or "ui.adsabs" in self.ads_url:
+            details = scrape_reference_details_from_new_ads(self.ads_url, dict(self.JOURNALS))
+        elif "adswww" in self.ads_url or "adsabs" in self.ads_url:
             # TODO: perhaps do this in a pre-save signal instead :)
-            details = scrape_reference_details_from_ads(self.ads_url, dict(self.JOURNALS))
+            details = scrape_reference_details_from_old_ads(self.ads_url, dict(self.JOURNALS))
 
         if "arxiv" in self.ads_url:
             details = scrape_reference_details_from_arxiv(self.ads_url, dict(self.JOURNALS))
@@ -208,6 +215,10 @@ class Reference(models.Model):
     def get_absolute_url(self):
         return reverse("catalogue:reference_detail", args=[self.slug])
 
+    @property
+    def api_url(self):
+        return reverse("reference-detail", args=[self.slug])
+
     def __str__(self):
         if self.first_author and self.year:
             return "{0} ({1})".format(self.first_author, self.year)
@@ -246,6 +257,10 @@ class AstroObject(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalogue:astro_object_detail", args=[self.slug])
+
+    @property
+    def api_url(self):
+        return reverse("astroobject-detail", args=[self.slug])
 
     def __str__(self):
         if self.altname:
@@ -321,6 +336,13 @@ class Observation(models.Model):
 
     class Meta:
         ordering = ["-id"]
+
+    def get_absolute_url(self):
+        return reverse("catalogue:observation_detail", args=[self.slug])
+
+    @property
+    def api_url(self):
+        return reverse("observation-detail", args=[self.slug])
 
     # This is how to print uncertainties in the columns of django-tables2
     @property

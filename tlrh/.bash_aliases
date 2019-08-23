@@ -12,3 +12,6 @@ alias javac='javac -Xlint'
 alias make='make -j8'
 alias refresh="touch uwsgi/*.ini"
 alias manage="python manage.py"
+alias check="python manage.py check"
+alias shell="python manage.py shell"
+alias dbshell="python manage.py dbshell"

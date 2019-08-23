@@ -36,13 +36,13 @@ class AnonReadOnlyAPITestCase(object):
     def test_login_of_admin_200(self):
         login_status = self.client.login(email=self.admin.email, password=self.admin_password)
         self.assertTrue(login_status)
-        response = self.client.get(reverse("catalogue_api:api-root"))
+        response = self.client.get(reverse("api-root"))
         self.assertEqual(response.status_code, 200)
 
     def test_login_of_user_200(self):
         login_status = self.client.login(email=self.user.email, password=self.user_password)
         self.assertTrue(login_status)
-        response = self.client.get(reverse("catalogue_api:api-root"))
+        response = self.client.get(reverse("api-root"))
         self.assertEqual(response.status_code, 200)
 
     ### HEAD requests --> allowed for anon, user and admin

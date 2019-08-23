@@ -60,7 +60,7 @@ def export_to_xls(request, queryset):
 def requests_get(url, timeout=5, debug=settings.DEBUG):
     try:
         r = requests.get(url, timeout=timeout)
-    except requests.exceptions.TimeOut:
+    except requests.exceptions.Timeout:
         if debug:
             print("ERROR: could not retrieve '{0}'".format(url) +
                 " b/c requests.get timed out after {0} seconds".format(timeout))
@@ -109,7 +109,7 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     return details
 
 
-def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
+def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
     """ Here we obtain information for a Reference from ADS' Bibtex entry """
 
     if debug: print("Retrieving: {0}".format(url))
@@ -172,3 +172,7 @@ def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
         print("Success!")
         [ print("  {0:<20s}: {1}".format(k, v)) for k,v in details.items() ]
     return details
+
+
+def scrape_reference_details_from_new_ads(url, journals, debug=settings.DEBUG):
+    return

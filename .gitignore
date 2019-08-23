@@ -115,10 +115,11 @@ ENV/
 .mysql_history
 
 # Ignore $HOME files
+.ipython/profile_default/ipython_config.py
 .bash_aliases
 .bash_functions
 .bashrc
-
+.vimrc
 
 # Project-specific folders
 /settings/*.env
