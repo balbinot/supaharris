@@ -17,6 +17,18 @@ class ParameterAdmin(admin.ModelAdmin):
     list_display = ( "name", "description", "unit", "scale", "slug" )
     readonly_fields = ( "slug", )
 
+    fieldsets = (
+        (None, {"fields": ( "id", )}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Reference)
 class ReferenceAdmin(admin.ModelAdmin):
@@ -27,8 +39,6 @@ class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ( "first_author", "authors", "title", )
     readonly_fields = ( "slug", "bib_code" )
     list_filter = ( "year", "journal" )
-    # autocomplete_fields = ( "astro_objects", )
-    filter_horizontal = ( "astro_objects", )
 
     fieldsets = [
         ("Required", {
@@ -40,10 +50,9 @@ class ReferenceAdmin(admin.ModelAdmin):
                 "year", "month", "volume", "pages",
             ]
         }),
-        ("Relations", {
-            "fields": [
-                "astro_objects",
-            ]
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
         }),
     ]
 
@@ -53,6 +62,9 @@ class ReferenceAdmin(admin.ModelAdmin):
         # of the model in case auto-retrieving data from the bibtex entry at
         # ADS failed.
         obj.request = request
+
+        # And update the user who last updated the model instance
+        obj.last_updated_by = request.user
         super().save_model(request, obj, form, change)
 
 
@@ -61,6 +73,18 @@ class AstroObjectClassificationAdmin(admin.ModelAdmin):
     list_display = ( "name", "abbreviation" )
     search_fields = ( "name", )
     readonly_fields = ( "slug", )
+
+    fieldsets = (
+        (None, {"fields": ("name", "abbreviation")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(AstroObject)
@@ -71,22 +95,78 @@ class AstroObjectAdmin(admin.ModelAdmin):
     readonly_fields = ( "slug", )
     filter_horizontal = ( "classifications",)
 
+    fieldsets = (
+        (None, {"fields": ("name", "info")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Observation)
 class ObservationAdmin(admin.ModelAdmin):
-    pass
+
+    fieldsets = (
+        (None, {"fields": ("name", "info")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Rank)
 class RankAdmin(admin.ModelAdmin):
-    pass
+
+    fieldsets = (
+        (None, {"fields": ("name", "info")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Auxiliary)
 class AuxiliaryAdmin(admin.ModelAdmin):
-    pass
+
+    fieldsets = (
+        (None, {"fields": ("name", "info")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+
+    fieldsets = (
+        (None, {"fields": ("name", "info")}),
+        ("Meta", {
+            "classes": ("collapse",),
+            "fields": ( "date_created", "date_updated", "last_updated_by" )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        super().save_model(request, obj, form, change)

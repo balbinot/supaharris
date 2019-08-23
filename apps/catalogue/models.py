@@ -7,9 +7,13 @@ from django.utils.text import slugify
 
 from jsonfield import JSONField
 
-from utils import scrape_reference_details_from_old_ads
-from utils import scrape_reference_details_from_new_ads
-from utils import scrape_reference_details_from_arxiv
+from accounts.models import UserModel
+from utils import (
+    scrape_reference_details_from_old_ads,
+    scrape_reference_details_from_new_ads,
+    scrape_reference_details_from_arxiv,
+)
+
 
 
 VALIDATE = 1
@@ -31,6 +35,14 @@ class Parameter(models.Model):
         help_text="Must comply with astropy.unit")
     scale = models.FloatField(null=False, blank=False,
         help_text="Scale by which parameters must be multiplied by")
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_parameters"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -147,8 +159,14 @@ class Reference(models.Model):
         null=True, blank=True, choices=MONTHS)
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
-    astro_objects = models.ManyToManyField("catalogue.AstroObject",
-        related_name="references", blank=True)
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_references"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -231,6 +249,14 @@ class AstroObjectClassification(models.Model):
     abbreviation = models.CharField("Abbreviation", max_length=16, null=True, blank=True)
     slug = models.SlugField(max_length=64, unique=True, blank=True)
 
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_astro_object_classifications"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
@@ -245,8 +271,17 @@ class AstroObject(models.Model):
     altname = models.CharField("Alternative Name",
         max_length=64, null=True, blank=True)
 
-    classifications = models.ManyToManyField("catalogue.AstroObjectClassification",
-        verbose_name="classification", related_name="astro_objects", blank=True)
+    classifications = models.ManyToManyField(AstroObjectClassification,
+        verbose_name="classification", related_name="astro_objects", blank=True
+    )
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_astro_objects"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -271,13 +306,11 @@ class AstroObject(models.Model):
 
 class Profile(models.Model):
     reference = models.ForeignKey(
-        "catalogue.Reference",
-        on_delete=models.CASCADE
+        Reference, related_name="profiles", on_delete=models.CASCADE
     )
 
     astro_object = models.ForeignKey(
-        "catalogue.AstroObject",
-        on_delete=models.CASCADE
+        AstroObject, related_name="profiles", on_delete=models.CASCADE
     )
 
     # TODO: restrict options of profile_type?
@@ -285,6 +318,14 @@ class Profile(models.Model):
     profile = JSONField()
     model_parameters = JSONField()
     model_flavour = models.CharField(max_length=256, null=True, blank=True)
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_profiles"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -295,17 +336,23 @@ class Profile(models.Model):
 
 class Auxiliary(models.Model):
     reference = models.ForeignKey(
-        "catalogue.Reference",
-        on_delete=models.CASCADE
+        Reference, related_name="auxiliaries", on_delete=models.CASCADE
     )
 
     astro_object = models.ForeignKey(
-        "catalogue.AstroObject",
-        on_delete=models.CASCADE
+        AstroObject, related_name="auxiliaries", on_delete=models.CASCADE
     )
 
     path = models.FilePathField(path="/static", blank=True, null=True)
     url = models.URLField(blank=True, null=True)
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_auxiliaries"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -316,23 +363,28 @@ class Auxiliary(models.Model):
 
 class Observation(models.Model):
     reference = models.ForeignKey(
-        "catalogue.Reference",
-        on_delete=models.CASCADE,
+        Reference, related_name="observations", on_delete=models.CASCADE,
     )
 
     astro_object = models.ForeignKey(
-        "catalogue.AstroObject",
-        on_delete=models.CASCADE,
+        AstroObject, related_name="observations", on_delete=models.CASCADE,
     )
 
     parameter = models.ForeignKey(
-        "catalogue.Parameter",
-        on_delete=models.CASCADE
+        Parameter, related_name="observations", on_delete=models.CASCADE
     )
 
     value = models.CharField("Value", max_length=128, null=True, blank=True)
     sigma_up = models.CharField("Sigma up", max_length=128, null=True, blank=True)
     sigma_down = models.CharField("Sigma down", max_length=128, null=True, blank=True)
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_observations"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
@@ -387,14 +439,21 @@ class Observation(models.Model):
 
 class Rank(models.Model):
     observation = models.ForeignKey(
-        "catalogue.Observation",
-        on_delete=models.CASCADE
+        Observation, related_name="ranks", on_delete=models.CASCADE
     )
 
     rank = models.IntegerField()
     weight = models.IntegerField()
     compilation_name = models.CharField(
         max_length=64, null=True, blank=True)
+
+    # Time stamps, and logging of who changed user info
+    last_updated_by = models.ForeignKey(UserModel,
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name="has_changed_ranks"
+    )
+    date_created = models.DateTimeField("Date Created", auto_now_add=True)
+    date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
     class Meta:
         ordering = ["-id"]
