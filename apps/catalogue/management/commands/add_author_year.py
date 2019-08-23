@@ -14,7 +14,7 @@ from catalogue.models import (
     AstroObjectClassification,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_author_year import parse_data
+from data.parse_author_year import parse_author_year_data
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -52,7 +52,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
                 scale=1.0  # must be a float. This is the scale by which parameters must be multiplied by.
             )
 
-        database = parse_data()
+        database = parse_author_year_data()
         for entry in database:
             gc_name = entry[0]
             gc_R_Sun = entry[1]

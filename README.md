@@ -1,8 +1,8 @@
 | Reference | Folder | Parser | Status | Management command | Status |
 |-----------|--------|--------|--------|--------------------|--------|
-| [Harris 1996, 2010 ed.](https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract) | [`data/MW_GCS_Harris1996e2010/`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Harris1996e2010) | [`data/parse_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_harris_1996ed2010.py) | Done | [`add_data_from_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_data_from_harris_1996ed2010.py) | Done
-| [Bica+ 2019](TODO) | [`data/MW_StarClusters_Bica2019/`](https://github.com/tlrh314/supaharris/tree/master/data/MW_StarClusters_Bica2019) | [`parse_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_bica_2019.py) | Started | [`add_data_from_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_data_from_bica_2019.py) | Boilerplate
-| [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`data/MW_GCS_Hilker2019/`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Hilker2019) | [`parse_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_hilker_2019.py) | Started | [`add_data_from_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_data_from_hilker_2019.py) | Boilerplate
+| [Harris 1996, 2010 ed.](https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract) | [`MW_GCS_Harris1996e2010`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Harris1996e2010) | [`parse_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_harris_1996ed2010.py) | Done | [`add_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_harris_1996ed2010.py) | Done
+| [Bica+ 2019](TODO) | [`MW_StarClusters_Bica2019`](https://github.com/tlrh314/supaharris/tree/master/data/MW_StarClusters_Bica2019) | [`parse_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
+| [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`MW_GCS_Hilker2019/`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Hilker2019) | [`parse_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
 
 
 
@@ -30,11 +30,11 @@
 - Parsed data can be inserted into the SupaHarris database by creating 
   a new management command (= a new python file) in the folder 
   `apps/catalogue/management/commands`. We provide boilerplate to get going! :-)
-- `cp apps/catalogue/management/commands/add_data_from_author_year.py 
-   apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`,
-   e.g. naming the file `add_data_from_harris_1996ed2010.py`
-- Implement `apps/catalogue/management/commands/add_data_from_changemeauthor_changemeyear.py`
-- `python manage.py add_data_from_changemeauthor_changemeyear`
+- `cp apps/catalogue/management/commands/add_author_year.py 
+   apps/catalogue/management/commands/add_changemeauthor_changemeyear.py`,
+   e.g. naming the file `add_harris_1996ed2010.py`
+- Implement `apps/catalogue/management/commands/add_changemeauthor_changemeyear.py`
+- `python manage.py add_changemeauthor_changemeyear`
 
 
 ## **Installation for development (Option 1)**
@@ -60,8 +60,8 @@
 ### Add the initial data to the database
 - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
 - `python manage.py loaddata fixtures/catalogue_Parameter.json` 
-- `python manage.py add_data_from_harris_1996ed2010` 
-- `python manage.py add_data_from_vandenberg_2013` 
+- `python manage.py add_harris_1996ed2010` 
+- `python manage.py add_vandenberg_2013` 
 
 ### Run the development server at http://localhost:8000
 - `python manage.py runserver` (and leave running)
@@ -91,7 +91,7 @@
 - Now add the initial data (run this command in the container!)
   - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
   - `python manage.py loaddata fixtures/catalogue_Parameter.json` 
-  - `python manage.py add_data_from_harris_1996ed2010` 
+  - `python manage.py add_harris_1996ed2010` 
 - Create a superuser (run this command in the container)
   - `python manage.py createsuperuser`
 - Visit the website at https://localhost (and accept the self-signed 
