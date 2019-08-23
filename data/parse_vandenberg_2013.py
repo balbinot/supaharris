@@ -6,9 +6,10 @@ from matplotlib import pyplot
 from data.plotsettings import *
 
 
-def read_vandenberg2013_data(fname="MW_GCS_VandenBerg2013/table2.txt"):
+def read_vandenberg2013_data(fname="data/MW_GCS_VandenBerg2013/table2.txt"):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         print("ERROR: file not found: {0}".format(fname))
+        return
 
     dtype = [
         "int", "S10", "float", "float", "float", "S1", "S5", "S12",

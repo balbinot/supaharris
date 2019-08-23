@@ -87,7 +87,8 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     details["first_author"] = details["authors"].split(",")[0]
 
     # Example: "Submitted on DD MM YYYY"
-    date = soup.find("div", class_="dateline").text.replace("(", "").replace(")", "")
+    date = soup.find("div", class_="dateline").text.strip().replace("(", "").replace(")", "")
+    if debug: print("  date: {0}".format(date))
     void, void, day, month, year = date.split(" ")
     try:
         details["month"] = MONTH_DICT[month.lower()]
