@@ -15,7 +15,9 @@ from catalogue.models import (
 @admin.register(Parameter)
 class ParameterAdmin(admin.ModelAdmin):
     list_display = ( "name", "description", "unit", "scale", "slug" )
-    readonly_fields = ( "slug", )
+    readonly_fields = (
+        "slug", "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
         (None, {"fields": ( "id", )}),
@@ -37,7 +39,9 @@ class ReferenceAdmin(admin.ModelAdmin):
         "doi", "volume", "pages"
     )
     search_fields = ( "first_author", "authors", "title", )
-    readonly_fields = ( "slug", "bib_code" )
+    readonly_fields = (
+        "slug", "bib_code", "date_created", "date_updated", "last_updated_by",
+    )
     list_filter = ( "year", "journal" )
 
     fieldsets = [
@@ -72,10 +76,12 @@ class ReferenceAdmin(admin.ModelAdmin):
 class AstroObjectClassificationAdmin(admin.ModelAdmin):
     list_display = ( "name", "abbreviation" )
     search_fields = ( "name", )
-    readonly_fields = ( "slug", )
+    readonly_fields = (
+        "slug", "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
-        (None, {"fields": ("name", "abbreviation")}),
+        (None, {"fields": ( "name", "abbreviation" )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -92,11 +98,13 @@ class AstroObjectAdmin(admin.ModelAdmin):
     list_display = ( "name", "altname", )
     list_filter = ("classifications",)
     search_fields = ( "name", "altname", )
-    readonly_fields = ( "slug", )
+    readonly_fields = (
+        "slug", "date_created", "date_updated", "last_updated_by",
+    )
     filter_horizontal = ( "classifications",)
 
     fieldsets = (
-        (None, {"fields": ("name", "info")}),
+        (None, {"fields": ( "id", )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -110,9 +118,12 @@ class AstroObjectAdmin(admin.ModelAdmin):
 
 @admin.register(Observation)
 class ObservationAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
-        (None, {"fields": ("name", "info")}),
+        (None, {"fields": ( "id" )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -126,9 +137,12 @@ class ObservationAdmin(admin.ModelAdmin):
 
 @admin.register(Rank)
 class RankAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
-        (None, {"fields": ("name", "info")}),
+        (None, {"fields": ( "id", )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -142,9 +156,12 @@ class RankAdmin(admin.ModelAdmin):
 
 @admin.register(Auxiliary)
 class AuxiliaryAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
-        (None, {"fields": ("name", "info")}),
+        (None, {"fields": ( "id", )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -158,9 +175,12 @@ class AuxiliaryAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "date_created", "date_updated", "last_updated_by",
+    )
 
     fieldsets = (
-        (None, {"fields": ("name", "info")}),
+        (None, {"fields": ( "id", )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )

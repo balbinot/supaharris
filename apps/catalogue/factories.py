@@ -93,7 +93,6 @@ class AstroObjectFactory(factory.DjangoModelFactory):
 class ProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
-        django_get_or_create = ("name",)
 
     profile_type = factory.LazyAttribute(lambda _: faker.name())
     # reference
