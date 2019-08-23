@@ -32,7 +32,7 @@ echo "\nGenerating migrations, then migrating my default database"
 python manage.py migrate
 
 echo "\nCollect static"
-python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput -i node_modules -i gulpfile.js -i package.json -i package-lock.json
 
 echo "\nStarting the webserver"
 exec "$@"
