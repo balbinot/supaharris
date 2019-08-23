@@ -20,27 +20,27 @@ from catalogue.serializers import (
 
 
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Reference.objects.all()
+    queryset = Reference.objects.order_by("id")
     serializer_class = ReferenceSerializer
 
 
 class AstroObjectClassificationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AstroObjectClassification.objects.all()
+    queryset = AstroObjectClassification.objects.order_by("id")
     serializer_class = AstroObjectClassificationSerializer
 
 
 class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AstroObject.objects.all()
+    queryset = AstroObject.objects.order_by("id")
     serializer_class = AstroObjectSerializer
 
 
 class ParameterViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Parameter.objects.all()
+    queryset = Parameter.objects.order_by("id")
     serializer_class = ParameterSerializer
 
 
 class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Observation.objects.all()
+    queryset = Observation.objects.order_by("id")
     serializer_class = ObservationSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("astro_object", "parameter", "reference")
