@@ -21,6 +21,8 @@ RUN set -ex \
         htop \
         # ... for Django translations (runtime)
         gettext \
+        # ... for 'graph_models' (django-extensions) cmd to visualise db schema (runtime)
+        graphviz graphviz-dev \
         # ... for internal routing of uWSGI (runtime)
         libpcre3 libpcre3-dev \
         # ... for communication with the database (runtime)
@@ -35,7 +37,11 @@ COPY requirements.txt /supaharris/requirements.txt
 RUN set -ex && \
     pip install --upgrade pip \
     && pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r /supaharris/requirements.txt
+    && pip install --no-cache-dir -r /supaharris/requirements.txt \
+\
+    # Because pygraphviz has to be installed with additional flags
+    && pip install --install-option="--include-path=/usr/local/include/" \
+        --install-option="--library-path=/usr/local/lib/" pygraphviz
 
 # NB, we link the repo at runtime (which 'overwrites' files copied in on build)
 # But production (when we run from image without linking the repo in) does use
