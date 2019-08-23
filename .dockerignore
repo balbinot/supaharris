@@ -15,6 +15,7 @@ fixtures
 coveragerc
 docker-compose*
 nginx/
+data/
 
 # Development storage location, and do not want to copy secrets into the image
 db.sqlite3
