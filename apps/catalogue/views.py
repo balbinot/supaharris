@@ -1,3 +1,5 @@
+import numpy
+
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
@@ -9,24 +11,37 @@ from catalogue.models import AstroObject
 
 def index(request):
 
-    # Get the parameters we want to plot
-    ra = Parameter.objects.get(name="RA")
-    dec = Parameter.objects.get(name="Dec")
-    l = Parameter.objects.get(name="L")
-    b = Parameter.objects.get(name="B")
+    # Get the parameters we want to plot --> 4 queries
+    p_ra = Parameter.objects.get(name="RA")
+    p_dec = Parameter.objects.get(name="Dec")
+    p_l = Parameter.objects.get(name="L")
+    p_b = Parameter.objects.get(name="B")
 
     # Get astro_objects that have observations of these parameters
-    gcs_with_relevant_observations = Observation.objects.filter(
-        parameter__in=[l, b, ra, dec]
-    ).values('astro_object').distinct()
-    astro_objects = AstroObject.objects.filter(id__in=gcs_with_relevant_observations)
+    gcs_with_relevant_observations = Observation.objects.select_related(
+        "parameter",  # 1 query w join
+    ).filter(
+        parameter__in=[p_l, p_b, p_ra, p_dec]
+    ).values("astro_object").distinct()  # 1 query
 
-    names = [o.name for o in astro_objects]
-    ra = [c.observation_set.filter(parameter__name="RA") for c in astro_objects]
-    dec = [c.observation_set.filter(parameter__name="Dec") for c in astro_objects]
-    l_lon = [float(c.observation_set.get(parameter__name="L").value) for c in astro_objects]
+    astro_objects = AstroObject.objects.prefetch_related(
+        "classifications", "observations", "observations__parameter",  # 3 queries
+    ).filter(
+        id__in=gcs_with_relevant_observations
+    )  # 1 query
+
+    N = astro_objects.count()  # 1 query
+    names = numpy.zeros(N, dtype="S64")
+    ra, dec = numpy.zeros(N), numpy.zeros(N)
+    l_lon, b_lat = numpy.zeros(N), numpy.zeros(N)
+    for i, o in enumerate(astro_objects.iterator()):
+        names[i] = str(o.name)
+        ra[i] = o.observations.get(parameter=p_ra).value
+        dec[i] = o.observations.get(parameter=p_dec).value
+        l_lon[i] = float(o.observations.get(parameter=p_l).value)
+        b_lat[i] = float(o.observations.get(parameter=p_b).value)
+
     l_lon = [l if l < 180 else l - 360. for l in l_lon]
-    b_lat = [float(c.observation_set.get(parameter__name="B").value) for c in astro_objects]
 
     # Plot the values we retrieved
     from bokeh.embed import components
@@ -35,7 +50,7 @@ def index(request):
     source = ColumnDataSource(data=dict(
         x=l_lon,
         y=b_lat,
-        names=names,
+        names=[n.decode("utf-8") for n in names],
     ))
 
     TOOLTIPS = [
@@ -64,49 +79,49 @@ def index(request):
 
 
 def search(request):
-    return render(request, 'catalogue/search.html', {})
+    return render(request, "catalogue/search.html", {})
 
 
 def reference_list(request):
     references = Reference.objects.all()
-    return render(request, 'catalogue/reference_list.html',
-        {'references': references})
+    return render(request, "catalogue/reference_list.html",
+        {"references": references})
 
 
 def reference_detail(request, slug):
     reference = get_object_or_404(Reference, slug=slug)
-    return render(request, 'catalogue/reference_detail.html',
+    return render(request, "catalogue/reference_detail.html",
         {"reference": reference})
 
 
 def astro_object_list(request):
     astro_objects = AstroObject.objects.all()
-    return render(request, 'catalogue/astro_object_list.html',
+    return render(request, "catalogue/astro_object_list.html",
         {"astro_objects": astro_objects})
 
 
 def astro_object_detail(request, slug):
     astro_object = get_object_or_404(AstroObject, slug=slug)
-    return render(request, 'catalogue/astro_object_detail.html',
+    return render(request, "catalogue/astro_object_detail.html",
         {"astro_object": astro_object})
 
 def parameter_list(request):
     parameters = Parameter.objects.all()
-    return render(request, 'catalogue/parameter_list.html',
+    return render(request, "catalogue/parameter_list.html",
         {"parameters": parameters})
 
 def parameter_detail(request, slug):
     parameter = get_object_or_404(Parameter, slug=slug)
-    return render(request, 'catalogue/parameter_detail.html',
+    return render(request, "catalogue/parameter_detail.html",
         {"parameter": parameter})
 
 def observation_list(request):
     observations = Observation.objects.all()
-    return render(request, 'catalogue/observation_list.html',
+    return render(request, "catalogue/observation_list.html",
         {"observations": observations})
 
 
 def observation_detail(request, slug):
     observation = get_object_or_404(Observation, slug=slug)
-    return render(request, 'catalogue/observation_detail.html',
+    return render(request, "catalogue/observation_detail.html",
         {"observation": observation})

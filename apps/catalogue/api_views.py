@@ -30,7 +30,11 @@ class AstroObjectClassificationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AstroObject.objects.order_by("id")
+    queryset = AstroObject.objects.prefetch_related(
+        "classifications",
+        "observations", "observations__parameter", "observations__reference",
+        "profiles", "auxiliaries",
+    ).order_by("id")
     serializer_class = AstroObjectSerializer
 
 
@@ -40,7 +44,11 @@ class ParameterViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Observation.objects.order_by("id")
+    queryset = Observation.objects.select_related(
+        "parameter", "reference", "astro_object",
+    ).prefetch_related(
+        "astro_object__classifications",
+    ).order_by("id")
     serializer_class = ObservationSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("astro_object", "parameter", "reference")

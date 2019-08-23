@@ -47,7 +47,7 @@ class AstroObjectClassificationSerializer(serializers.ModelSerializer):
 class AstroObjectSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
     frontend_url = serializers.SerializerMethodField(read_only=True)
-    observations = ObservationSerializerForAstroObject(source="observation_set", many=True)
+    observations = ObservationSerializerForAstroObject(many=True)
     classifications = serializers.StringRelatedField(many=True)
 
     class Meta:
