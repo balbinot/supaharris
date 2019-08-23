@@ -10,16 +10,30 @@ SEPARATELY LICENSED COMPONENTS AND LIBRARIES
 
 Data
 
-    Name:  Harris 1996, 2010 edition
-    Data:  http://physwww.mcmaster.ca/~harris/mwgc.dat
-    Paper: https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract
+    Name:   Harris 1996, 2010 edition
+    Paper:  https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract
+    Data:   http://physwww.mcmaster.ca/~harris/mwgc.dat
+    Folder: data/MW_GCS_Hilker2019
 
-    Name:  Hilker+ 2019
-    Data:  https://people.smp.uq.edu.au/HolgerBaumgardt/globular/
-           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
-           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
-           https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
-    Paper: https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract
-           https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B/abstract
-           https://ui.adsabs.harvard.edu/abs/2017MNRAS.464.2174B/abstract
-           https://ui.adsabs.harvard.edu/abs/2017MNRAS.471.3668S/abstract
+    Name:   Bica+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract
+    Data:   https://ui.adsabs.harvard.edu/abs/2019yCat..51570012B/abstract
+            http://cdsarc.u-strasbg.fr/viz-bin/cat/J/AJ/157/12
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/ReadMe
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/refs.dat
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/table2.dat
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/table3.dat.gz
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/table4.dat
+            http://cdsarc.u-strasbg.fr/ftp/J/AJ/157/12/table5.dat
+    Folder: data/MW_GCS_Bica2019
+
+    Name:   Hilker+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract
+            https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B/abstract
+            https://ui.adsabs.harvard.edu/abs/2017MNRAS.464.2174B/abstract
+            https://ui.adsabs.harvard.edu/abs/2017MNRAS.471.3668S/abstract
+    Data:   https://people.smp.uq.edu.au/HolgerBaumgardt/globular/
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    Folder: data/MW_GCS_Hilker2019

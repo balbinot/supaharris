@@ -1,0 +1,792 @@
+OC,Assoc      1173 various,OCL         REF239
+EC               1 Herbig 1            REF103 
+KGr              2 epsi Indi,61 Cyg    REF1743
+KGr              1 Gamma Leo           REF1737
+KGr              1 Groombr. 1830       REF1738
+EC               1 Manova 1            REF3044
+Assoc            4 various             REF508 
+EC               1 NGC 2467            REF295 
+Assoc           14 R                   REF927 
+OC               5 AL                  REF213 
+EC               1 Lindoff             REF286 
+OC,Assoc      1173 various,OCL         REF239 
+KGr              1 Arcturus Group      REF1739
+KGr              4 various             REF1740
+EC               1 Miller              REF240 
+EC               1 Miller              REF241 
+EC,OC,EGr       45 Loden               REF238 
+OC,Ast         149 NGC                 REF226 
+Assoc            1 Nor I               REF204 
+Assoc,EC         3 Assocs in Pup       REF285 
+MHC              1 Reticulum           REF3096
+Assoc            3 Nor II,III,IV       REF205 
+DGAL             1 Fornax Dwarf 6 GCs  REF3011
+Assoc           20 R                   REF928 
+EC               3 Bochum              REF244 
+OC             255 BH                  REF233 
+EC,OC            7 Bochum              REF242 
+OC               2 Bochum              REF246 
+OC,lPOCR         6 Basel               REF228 
+Assoc            1 VelaR2              REF923 
+EC               1 Bochum              REF247 
+Assoc            1 MonR2               REF924 
+Assoc            1 CMaR1               REF925 
+EC               1 BD+61d411           REF260 
+EC               1 Turner 8            REF258 
+EC               1 WLF                 REF994 
+OC               4 Pfleiderer          REF207 
+EC               1 NGC 5367            REF108 
+EC               1 Basel               REF229 
+EC               1 NGC3324             REF305 
+Ast              1 Latyshev 2          REF955 
+EC               2 Basel               REF230 
+EGr,EC,ECC       3 MF1,Pis21,Moffat 2  REF232 
+EC,Assoc         4 Muzzio 1 & others   REF215 
+EC               1 Waterloo 6          REF236 
+OC               1 PM 1                REF277 
+OC,EC            5 Loden               REF280 
+OC,EC,ECC       11 Loden               REF279 
+EC,OCC           2 IC 4996,ADS         REF952 
+EC,ECC,Ast       8 NGC6334 I to VI,E   REF128 
+Assoc            3 various             REF227 
+EC               3 Waterloo 1,2,3      REF235 
+OC               1 AM 2                REF248 
+Assoc            1 Turner-Sct OB       REF256 
+EC,OC,ECC        4 TJ                  REF320 
+OC,EC,ECC       10 Loden               REF281 
+OC,Ast           2 Waterloo 7,8        REF237 
+OC               1 Johansson 1         REF265 
+EC,OCC           2 Loden               REF283 
+EC               1 Ho-H 1,2,3          REF035 
+OC               1 Loden 2326          REF201 
+OC               1 UKS 2               REF249 
+EC,OC            2 Loden 28,Loden 915  REF282 
+OC               1 HM 1                REF211 
+lPOCR,OCC,ECC    3 Ru77A,Ru78A,Bas 20  REF231 
+EC               3 DIL 1,Manova 1      REF064 
+EC               1 G333.6-0.2          REF070 
+OC               1 Turner 7            REF269 
+OC,GC          785 ESO,NGC,IC,OCL,GCL  REF234 
+EC               2 Danks               REF251 
+EC               2 W33,Teutsch 10      REF036 
+EC,EGr           3 rho Oph,ECS,Group   REF416 
+EC               1 Lupus Cluster       REF902 
+EC               1 M17                 REF019 
+EC               1 Turner 2            REF266 
+Assoc            1 CasOB14             REF3048
+EC               1 Turner 10           REF272 
+EC               1 Turner 8            REF270 
+EC               1 Turner 1            REF210 
+EC               1 Collinder 68        REF261 
+OC,EC            4 Frolov 1,others     REF206 
+EC               1 RCW 108 Cluster     REF034 
+EC               2 Bochum 10, 11       REF245 
+cPOCR            1 AM0430-392          REF262 
+Assoc            3 AraOB1A,B           REF218 
+Assoc            1 VelaOB4             REF220 
+MHC              1 OHSC 37             REF3093
+EC               1 Sh2-140             REF077 
+EGr              1 LDN 1501            REF062 
+EC               1 Quintuplet          REF899 
+EC               1 Stephenson 2        REF068 
+EC               2 Quintuplet,DBSB120  REF094 
+Ast              1 Brosch 1            REF101 
+EC               4 M78,N2071;N2024,3   REF054 
+EC               1 Galactic Nucl. Cl.  REF025 
+EC               1 Sh2-106             REF050 
+EC               1 W75N                REF038 
+EC               6 Cha I N,S,others    REF065 
+EC               1 GGD 7               REF005 
+KGr              2 Magellan Bridg,SMC  REF3341
+OC               1 Bochum 2            REF243 
+EC               1 BGD 1               REF011 
+EC,EGr,Assoc    11 various             REF061 
+EC               2 NGC 2264 N,S        REF284 
+EC               1 Arches              REF095 
+EC               8 SSM1-8(in LDN1641)  REF056 
+OC               1 Harvard 5           REF278 
+EGr,EC          10 PTB 1 to 10         REF058 
+EC               4 Turner 2,4,6,13     REF267 
+EGr,EC,Assoc     7 LDN,TMC,others      REF063 
+EC              20 CSS,others          REF001 
+EC,Assoc         4 Turner 8,Vela T1,2  REF921 
+EC               1 NGC 3576            REF012 
+OC               6 Saurer 1-6          REF208 
+EC               1 Platais             REF212 
+EC              53 Hodapp              REF008 
+EC               2 NGC1579,AB 1        REF006 
+ECC,OCC          1 B                   REF316 
+KGr              1 Sgr Stream          REF1720
+EC               1 Trapezium           REF029 
+EC               1 LDN1641 243         REF076 
+EC               1 Dolidze 6           REF014 
+EC               7 CSS,various         REF052 
+OC               4 Cz 15,Mel 72,Tom 1  REF302 
+DGAL             3 BS I,II,III         REF6000
+EC               1 AY                  REF922 
+ECC,PN+blg*s     3 B 1,TJ 23,TJ 5      REF317 
+EC               1 Arches              REF910 
+DGAL             1 Sagittarius Dwf     REF1203
+EC               1 OMC 2               REF028 
+OC            1151 various             REF2000
+EGr,Assoc       71 ME,various          REF216 
+EC               5 STO 1-5 in BRC=SFO  REF049 
+EC,EGr           9 IC 348,IC 348a,i    REF026 
+EC               2 NGC 6857,K3 50B     REF037 
+EC               2 NGC 1333NE,SW       REF027 
+EC               1 NGC6334 I           REF977 
+Assoc            1 Cha III             REF744 
+EC               1 W3 IRS5             REF018 
+EC               2 Hodapp 12,SHD 1     REF053 
+EC               1 NGC 2282            REF111 
+EC               8 PL                  REF002 
+EC               4 TPB1,2,3,Hodapp 15  REF040 
+EC,OCC           2 Tokovonin,ADS       REF953 
+EC               1 AFGL 4029           REF915 
+EC               3 CTG 1,2,3           REF833 
+EC               1 OMC 3               REF046 
+EC               1 Turner 9            REF271 
+OC               1 Kharchenko 1        REF276 
+EC               3 Sh2-235A,B,C        REF3357
+Ast              1 Upgren 1            REF308 
+Assoc,OC,EGr    20 Platais,various     REF203 
+OC,lPOCR,Ast     3 Turner 11,Rup 173   REF273 
+Ast              1 Mandushev           REF315 
+EC               1 M 17                REF020 
+EC               3 W3 OH,TMW 1,2       REF023 
+EC              23 TPN                 REF100 
+EC               1 AB 1                REF933 
+EC               1 RCW 38              REF033 
+OCC,Ast          5 Chupina             REF1033
+EC               1 Serpens SV4         REF042 
+KGr              1 HR 1614             REF1075
+EC               1 LDN 1495E           REF059 
+EC               1 AB 1                REF007 
+EC               1 FSH 1               REF017 
+OC,EC,Ast        8 various             REF310 
+KGr,Ast          3 Chereul 1,2,3       REF274 
+DGAL             3 BS I,II,III         REF6001
+KGr              1 Helmi Stream        REF1759
+KGr              9 Subgroup A,B,C,D    REF1952
+KGr              3 Subgroup B1,2,3,4   REF1951
+EGr              1 Turner 8,Vela T1,2  REF921 
+EC               2 Arches,Quintuplet   REF096 
+EC               1 SGR 1806-20         REF105 
+EC               1 Sh2-138             REF051 
+EC               1 W 43                REF912 
+KAs              1 TWA                 REF287 
+EC               1 TPN 22              REF078 
+EC               2 Shorlin             REF275 
+EC               1 Serpens A           REF043 
+EC               1 AFGL 5157           REF003 
+EC               1 DR 18               REF057 
+EC               1 Hodapp 11           REF030 
+EC               1 AG 1                REF004 
+Assoc            8 various             REF224 
+OC               1 eta Chamaleontis    REF263 
+Ast              1 M73                 REF292 
+EC               1 SGR 1900+14         REF104 
+EC,EGr           5 Serp A,C,D,SVS2,4   REF045 
+KAs              1 HD 199143 Assoc     REF1715
+EC               1 SYC 1,SYC 2         REF031 
+Ast              1 M 73                REF293 
+EC               2 PCS 1,PCS 2         REF136 
+EC              12 MLG (cls. in Vela)  REF074 
+EC              14 Carpent 1-3,others  REF032 
+EC              19 CHS 1-12,others     REF066 
+EC               1 W 42                REF013 
+EC              58 DB 1 to DB 58       REF098 
+KAs              1 Horologium Assoc    REF288 
+KAs              1 TucA                REF304 
+KAs              1 Corona Austr Assoc  REF501 
+KAs              1 GAYA                REF500 
+OC               1 eta Chamaleontis    REF264 
+Assoc            1 ScoOB8              REF072 
+cPOCR,KAs        3 beta Tuc Gr,TucA    REF980 
+EC               1 W 31                REF914 
+lPOCR,Ast,OC    32 various             REF289 
+Ast,EC           2 Ru140,Pis 21        REF252 
+lPOCR            2 NGC 1901,NGC 1252   REF290 
+OC,OCC,Ast       5 Ru 146,103,166,129  REF300 
+DGAL             1 Mayall II           REF5009
+OC               1 Carraro 1           REF956 
+EC               1 OMC 3               REF047 
+Assoc            1 MBM 12A             REF200 
+Ast              1 Mackie 1            REF307 
+EC               1 Stephenson 2        REF069 
+EC               5 Ser A,C,D,SVS2,4    REF044 
+KAs              1 Pisces Assoc        REF259 
+EC              10 CT = ECX clusters   REF097 
+KGr              1 beta Pic Mov. Gr.   REF6779
+EC               1 Lupus III           REF498 
+EC,OC,ECC       44 DB 59 to DB 100     REF099 
+EC               1 Gal. Nucl. Cluster  REF093 
+EC               3 W 49,W 49A,W 49SW   REF106 
+EC               3 KBD 1,2,3           REF135 
+OC               1 Turner 5            REF268 
+EC              10 Ivanov 1-10         REF110 
+Ast              1 M73                 REF311 
+GC               1 Whiting 1           REF402 
+EC,OC            2 Stephenson 2,Pis23  REF071 
+lPOCR,Ast        2 NGC 7036,NGC 7772   REF294 
+EC               1 WWH 1               REF073 
+OC,EC         2167 DAML02 database     REF209 
+EC               1 SW 1                REF107 
+EC               1 MAO 1               REF3373
+KGr              1 Monoceros Ring      REF1762
+EC               2 SB 1,STO 1          REF048 
+EC               1 TWMM 1              REF995 
+EC,OC           15 LK 1 to LK 15       REF109 
+EC               2 W 40,Gum 25 Clusts  REF041 
+EC,EGr           9 CBJ 1-2,3a,b,4-8    REF102 
+EC               1 DB 49               REF127 
+DGAL             3 WLM,IC10,Sextans A  REF5003
+EC               1 RAL 1               REF116 
+EC               2 vdB 92,TPB 3        REF121 
+Assoc            1 GemOB4              REF3051
+KGr              1 Monoc Ring          REF1783
+cPOCR            1 Ruprecht 3          REF291 
+EC,OC            7 Magakian clusters   REF328 
+OC               1 epsilon Cha         REF324 
+EC               1 Nurnberger 1        REF741 
+EC,OC            3 Bica 1,2,BBD 3      REF112 
+OC               2 NGC 1582,NGC 1663   REF314 
+EC,EGr           7 MLG 13,14,17,18     REF075 
+OC               1 IC 2395             REF330 
+EC,EGr,OC      381 EC+EGr catalog      REF009 
+EC               2 DZS 1,DZS 22        REF114 
+EC               5 Ivanov 1,11,13-15   REF015 
+EC,EGr,ECC     167 BDSB 1 to 167       REF010 
+EC,EGr,ECC     179 DBSB 1 to 179       REF113 
+OC,Ast,EC       43 various             REF296 
+EC,OCC,Ast      60 DB objects          REF126 
+EC               1 NGC 7538            REF908 
+OC,EC            3 Bica 3,4,Dias 6     REF297 
+OC              14 Berk and Biur Cl.   REF1043
+EC               1 RA 3                REF974 
+EC               1 RA 2                REF973 
+DGAL             1 Canis Major: GCs?   REF1223
+KGr              1 Tri-And             REF1782
+EC               1 Treasure Chest      REF117 
+EC,EGr           4 RBB 1,2,Cr 232      REF118 
+EC               1 NGC 1807            REF309 
+EC               3 TWM 1,2,3 in SFO11  REF3378
+Ast              3 NGC5885,2664,Cr 21  REF313 
+DGAL             1 Canis Major Dwarf   REF1204
+OC               1 NGC 2180            REF303 
+EC,OC            5 de Wit 1,2,3,4,5    REF888 
+EC               1 IRS 13E             REF932 
+EC               5 KKD 1,2,3,4,6       REF129 
+EC               1 Collinder 223       REF623 
+NGAL             1 NGC 55 GCs          REF3344
+EGr              1 IRS 13N             REF935 
+EGr              1 IRS 16SW            REF934 
+EC               1 AVG 1               REF3369
+KGr              1 Hercules Stream     REF2717
+Ast,OC          11 ESO objs & others   REF312 
+KGr              1 Monocer Ring        REF1763
+EC               6 SB 2,3,N6595,DB94   REF122 
+OC               8 DC 1 to DC 8        REF322 
+NGAL             1 Milky Way           REF1221
+EC               1 FBD 1               REF132 
+EC               1 TF 1                REF325 
+KAs              1 YSSA                REF1719
+OC               5 various             REF792 
+EC,ECC,OC,GC    92 GLIMPSE(or Mercer)  REF131 
+GC               1 Whiting 1           REF404 
+MHC              1 Bologna A           REF3097
+Ast,OC           3 N5120,N5155,Ru 166  REF299 
+EC               1 Briceno             REF321 
+OC              43 NGC objs & others   REF985 
+OC             109 ASCC                REF306 
+EC               3 rho Oph,ECS,ECN     REF742 
+GC               1 GLIMPSE-C01         REF401 
+DGAL             1 Willman 1           REF403 
+EC,ECC           2 SGR 1806-20,LBV     REF3422
+EC,OC            3 Ivanov 4,8,13       REF120 
+EC               2 STO 4,AFGL 4029     REF901 
+EC,ECC,OCC      18 DB,DBSB objects     REF016 
+OC               8 Cz37,Ki25,Ly9,AL1   REF883 
+DGAL            11 Boo III,SEGUE 1,2   REF1210
+DGAL             1 Ursa Major II       REF1202
+KGr              1 Car-Near Assoc      REF1718
+DGAL             1 And VIII            REF1211
+DGAL             1 Canes Venatici I    REF1200
+OC               1 NGC 2301            REF2009
+OC               1 NGC 2129            REF884 
+EC               2 DBSB 172,BDSB 164   REF916 
+OC               2 NGC 2425,NGC 2635   REF885 
+OC,OCC          76 various             REF327 
+OC               6 Be 5,36,44,52       REF881 
+OC               1 Wray 1              REF990 
+OC               1 Teutsch 51          REF529 
+GC             153 GCs in the MW       REF405 
+GC               1 AL 3                REF406 
+DGAL             1 NGC 205: 6 GCs      REF3350
+DGAL             1 CVn II              REF407 
+KGr              1 Virgo Stream        REF1761
+KGr              1 NGC 5466 Tails      REF1758
+KGr              1 Pal 5 Tidal Tail    REF1745
+KGr              1 GD-1 Stream         REF1746
+KGr              1 AntiCenter Stream   REF1757
+KGr              1 Orphan Stream       REF6778
+EC               1 Dutra 1             REF514 
+EC               1 LDL 1               REF504 
+EC              54 KKC 1-54            REF133 
+EC               1 YTL 1               REF502 
+EC               1 Hodapp 11           REF503 
+OC,Ast           7 Ly3,Tr23,AL4,AL 5   REF882 
+KGr              3 Group 1,2,3         REF1755
+EC               1 DBM 1,ESO392-11     REF511 
+OC               1 Mamajek 2           REF971 
+EC               1 VOG 1               REF3371
+KGr              1 beta Pic Moving Gr  REF696 
+EC               1 YF 1                REF999 
+OC,EC            4 Ly 2,12,Ki 20,BH63  REF795 
+EC               1 RA 4                REF976 
+Stream           1 AF 06 Stream        REF1751
+EC               1 RA 1                REF975 
+KAs              1 Cha-Near Assoc      REF1717
+GC             153 GCs in the MW       REF3374
+OC               1 Auner 1             REF886 
+EC               1 SPO 1               REF3380
+OC               5 Cr74,Haf8,BH4,Be27  REF887 
+lPOCR,EC,Ast    18 Bica 5,Ly8,ESO cls  REF124 
+GC               1 FSR 1735            REF509 
+DGAL             1 SEGUE 1             REF513 
+EC               1 BHB 1               REF506 
+DGAL             1 Mayall II           REF5008
+KGr              2 Tri-And, Tri-And 2  REF3786
+OC               1 GLIMPSE 30          REF490 
+EC               1 AB 1                REF505 
+OC,OCC        1021 FSR objects         REF507 
+EC               1 Roman-Lopes 3       REF979 
+OC               6 various             REF797 
+EC               1 BW 1                REF510 
+EC               1 DBSB 36             REF978 
+OC,EC            3 FSR 31,89,1744      REF523 
+EC,GCC           1 FSR 584             REF524 
+GC               1 FSR 1767            REF525 
+EC               1 YLT 1               REF527 
+OC              42 various             REF733 
+GC               2 Koposov 1,2         REF516 
+EC               2 Stephen 2,Dutra 1   REF998 
+DGAL             1 Coma                REF946 
+Assoc            1 Cha II              REF743 
+OC,EC            2 Be 44,BDSB 61       REF332 
+DGAL             1 Bootes II           REF942 
+EGr              1 Briceno 1           REF3060
+OC,GCC           2 FSR 190,FSR 88      REF988 
+EC               1 FSR 223             REF3377
+OC              36 various             REF1037
+EC               1 Serpens south       REF997 
+EC               2 BDSB 95,SPO 1       REF958 
+OC,EC           15 Koposov clusters    REF528 
+OC,OCC          20 FSR clusters        REF970 
+EC               1 Ivanov 14           REF1021
+OC               1 Bica 6              REF331 
+EC               8 KST 1,2,others      REF931 
+EGr              1 CB 1                REF937 
+EC              10 CAH 1-10            REF938 
+EC,EGr           7 various             REF939 
+MHC             19 Magel. Halo Clusts  REF3094
+MHC              1 BS 196              REF3095
+Ast              1 ESO 442-4           REF747 
+OC,GC            2 Cz 23,FSR 1716      REF793 
+OC,EC,OCC       28 FSR cls & others    REF941 
+KGr              5 various Streams     REF1753
+OC               1 ESO92-5             REF344 
+EC,OC            4 BBD 7,8,9,Bochum 1  REF957 
+Ast              1 Collinder 399       REF1048
+DGAL             1 Bootes II           REF945 
+EC               3 QZM 1,2,3           REF948 
+Ast,DGAL         3 SDSS overdensities  REF785 
+EC               3 YKT 1,2,3           REF954 
+EC               1 ZLM 1               REF964 
+EC               1 Escorial 25         REF965 
+OC,EC            2 Ru 101,FSR 1755     REF969 
+EC               1 BDSB 152            REF1056
+OC,OCC,EC       25 various             REF625 
+OC               6 various             REF736 
+DGAL             1 Leo I               REF1216
+OC,EC            8 various             REF738 
+KGr             17 AFF Kin Grs,others  REF1723
+EC               1 NGC 5367            REF3057
+OC               1 NGC 2112            REF601 
+GC               1 GLIMPSE C02         REF986 
+EC               1 VGO 1               REF3056
+EC               1 DBSB 179            REF917 
+DGAL             1 Leo V               REF787 
+OC               1 FSR 1415            REF779 
+GC               1 GLIMPSE C02         REF987 
+OC               1 Ruprecht 1          REF737 
+OC              14 FSR clusters        REF989 
+GCC,Ast          5 SDSS overdensities  REF784 
+OC,EC           24 Berkeley clusters   REF626 
+Ast              2 Harring 9,Poskus 1  REF1990
+OC,Ast           1 TPK 1               REF781 
+EC               3 REFL 8,9,10         REF992 
+EC               2 NGC 2244,NGC2239    REF799 
+OC               1 Messineo 1          REF383 
+EC               7 various(w Spitzer)  REF993 
+OC               1 Tombaugh 2          REF739 
+NGAL,DGAL        2 LMC,SMC             REF1205
+OC               1 Pismis 3            REF624 
+Ast,DGAL         4 SDSS overdensities  REF996 
+EC               2 DBSB 48,Tr 14       REF794 
+cPOCR            1 HD 4798 Group       REF951 
+KAs              1 HD 141569 Assoc     REF1716
+OC               1 Alicante 1          REF889 
+OC            1200 WEBDA database      REF8000
+KGr              1 Magellanic Bridge   REF3340
+KAs,KGr,Assoc    9 various             REF697 
+OC               1 Messineo            REF495 
+OC               1 ESO 211-8           REF890 
+OC               1 NGC 2236            REF750 
+KGr              1 Polaris             REF1741
+OC               4 FSR 1521,L K1, 10   REF798 
+OC               1 Berkeley 53         REF735 
+EC               2 GMR 1,2 (in CMaR1)  REF753 
+OC,OC           14 FSR101,162,1430     REF791 
+OC               1 NGC 2489            REF3414
+OC               2 Dutra 1,Stephen. 2  REF491 
+OC               1 RSGC 3              REF492 
+OC              14 Quartet Cl.,others  REF493 
+OC               1 RSGC 3              REF496 
+EC               4 Cr68,vdB80,BDBS96   REF821 
+EC               1 SHD 1 (in NGC2264)  REF494 
+OC               1 Shorlin 1           REF606 
+OC               1 NGC 2489            REF748 
+EC               8 RMC X (X-ray cls)   REF497 
+EC               1 YEP 1               REF966 
+GC               1 FSR 1767            REF796 
+OC               1 NGC 2236            REF3413
+OC              12 Dias 3,4,7 &others  REF627 
+DGAL             1 Pisces I            REF5005
+DGAL,OVD         1 Pis Ovrd=Pis I,EPO  REF5006
+EC               1 MHL 1               REF746 
+EC              10 NGC6334 X(Xray cl)  REF943 
+GC               1 Pfleiderer 2        REF982 
+OC               3 Cz 26,30,Haff 11    REF766 
+EC               2 PHN 2,3             REF443 
+EC              48 CTG 1,2,3,others    REF444 
+DGAL             1 SEGUE 2             REF445 
+OC,EC            4 Danks1,2,DBSB130,1  REF604 
+EC               1 DBSB 122            REF1022
+EC               1 SGR 1900+14         REF384 
+KGr              4 various Streams     REF1744
+OC               1 NGC 2587            REF3412
+Ast              1 Thompson 1          REF868 
+Ast              1 Alessi 2340         REF869 
+KGr             22 ZZC 1-22 (Streams)  REF1722
+Assoc,EC        97 various             REF1071
+OC               2 Berk 29,Saurer 1    REF605 
+EC               8 GRS                 REF4019
+Assoc            1 ABP 1               REF1016
+OC              10 Be9,43,45,47,othrs  REF607 
+GC               1 SEGUE 3             REF786 
+EC               2 vdB 92,Cr 197       REF790 
+EC               1 DBSB 127            REF960 
+OC               2 Rup 135,Berk 10     REF1017
+OC               2 Teutsch 145,146     REF780 
+OC,GC          256 FSR & NGC clusters  REF1020
+Ast              1 NGC 6863            REF609 
+Ast              1 Chesire Cat         REF333 
+Ast              1 Inchworm            REF751 
+KGr             16 A 1 to A 16         REF3338
+OC               9 Tr13,Tr20,Ly4,Hog9  REF610 
+OC,EC          153 SAI clusters        REF778 
+OC,EC,Ast       60 Kronb & DoDz objs   REF628 
+KGr              1 Cetus Polar Stream  REF1764
+DGAL             1 NGC 3109: Assocs    REF3355
+DGAL             1 And XVI             REF1219
+DGAL             1 Bootes III          REF1201
+Assoc,EC,ECC    40 RM far assocs       REF1066
+Ast              3 Leiter 4,13 Sge Gr  REF707 
+OC               1 BH 67               REF608 
+OC,Ast           5 N2383,4,Ru72,Ru158  REF477 
+OC               3 Ru 135,Be 89,Be 10  REF622 
+GC,EC,OC         7 GLIC02,Merc5,GLI30  REF919 
+OC,OC           50 FSR clusters        REF802 
+OC,OCC,EC       49 various             REF1042
+EC,OC            5 SBB 1,2,3,4,Teu127  REF991 
+NGAL             1 NGC 300: GCs        REF3343
+KGr,KAs          3 Castr,Oct,Oct-Near  REF1713
+OC               3 Be 6,77,Turner 13   REF803 
+OC              15 Ruprecht clusters   REF782 
+DGAL             2 LMC,SMC:cls&Assocs  REF1206
+OC               1 NGC 3519            REF776 
+KGr              1 Sagittarius Stream  REF1734
+OC               1 Trumpler 3          REF734 
+EC               1 Teutsch 42          REF918 
+EC,EGr          16 SPW1-15(SpitzrCar)  REF379 
+OC               5 Biu 12,Cz 27,BH 37  REF731 
+OC               1 NGC 2587            REF732 
+OC               1 NGC 2398            REF730 
+OC               2 NGC 3590, Hogg 12   REF729 
+OC               6 Cz 1,38,BH 54,Tr 6  REF728 
+DGAL             1 IC 1613: Assocs     REF3356
+GC             157 GCs in the MW       REF400 
+EC               1 Collinder 419       REF893 
+OC               1 Alicante 8          REF387 
+EC,OC            9 Do 9,10,11,21,27    REF845 
+OC,EC,OCC        4 Teu 125,144,Ju 11   REF930 
+EC               1 TRB 1               REF3055
+KGr              1 Pal 14 Tidal Tail   REF3204
+OC,EC            5 eta Cha,M47,IC2391  REF1733
+EC,OC            3 eta,eps Cha,Mamk 3  REF1730
+KGr              1 Aquarius Stream     REF1749
+GC               1 VVV CL0001          REF909 
+EC               1 Collinder 419       REF1029
+EC               1 Tr 37               REF1028
+OC,EC           96 VVV CL clusters     REF903 
+EC,Assoc         3 Ali7,9,RSGC3 Assc.  REF388 
+OC,Ast         132 NGC objects         REF667 
+OC              34 Teutsch clusters    REF783 
+EC               2 IR 13E,S-Star Cl.   REF1025
+EC               2 CBB 1,CBB 2         REF752 
+EC               1 NGC 2353            REF1012
+OC,EC           15 Pi 13,Do 39,BH 79   REF920 
+KGr              1 Monoceros Ring      REF3203
+EC               7 Sh2-252A,C,E,othrs  REF557 
+EC              27 MDF emb. clusters   REF1054
+EC               1 MDF 10              REF1053
+lPOCR,OC,Ast     6 DoDz6,NGC 272,2180  REF558 
+EC               3 W 31,BDSB 131,139   REF950 
+GC,OC            3 VVV CL2,3,4         REF837 
+OCC              1 MKN 1               REF3400
+OC,GCC           1 GLIMPSE C01         REF367 
+GC               1 Mercer 5            REF368 
+OC,EC           15 Teu,Ale,Kronb cls   REF389 
+OC               1 Ruprecht 15         REF386 
+OC               3 Ruprecht 13,14,24   REF385 
+EC               1 WZW 1               REF381 
+EC               1 GLIMPSE 14          REF1019
+EC,EGr          55 CCL 1-20,CGR 1-31   REF380 
+Assoc            1 IC 1795 Assoc       REF378 
+cPOCR            1 Lassell 1           REF375 
+Assoc            1 RMM 29              REF1068
+OC               6 Hog 3,4,Haf 3,5,25  REF1013
+EC               1 NGC 1624            REF1027
+OC               5 Pfl3,Be84,Alessi53  REF1014
+KGr              1 Pisces Stel Stream  REF5950
+OC             131 various open cls    REF1015
+EC,EGr           5 SBB 5,6,7,8         REF376 
+OC               1 Masgomas 1          REF1136
+GC               8 Pal1,13,Kop1,2,AM4  REF1011
+Ast              1 Elosser 1           REF634 
+EC,EC,EGr       11 various clusters    REF1026
+DGAL,NGAL       94 Local Group Gals.   REF1220
+EC               1 CepOB3b             REF1072
+EC               1 BDSB 96             REF3360
+EC               1 LMR 23              REF3361
+KGr              1 Triangulum Stream   REF1774
+EC               1 Alicante 6          REF3054
+EC              18 UCEC clusters       REF1073
+OC               1 Alicante 10         REF1137
+EC             167 SUH clusters        REF1065
+Assoc,ECC      280 LMR:far MW assocs   REF1061
+OC               4 VVV CL103,105       REF1024
+EC               6 CBB 3-9,FSR Cls     REF377 
+GC               1 Munoz               REF1009
+EC               4 Danks1,2,DBSB 132   REF1034
+OC,EC,Assoc      6 FNY 1,2,others      REF1045
+GC               1 Kronberger 49       REF3320
+Ast              2 Lovro 2,Small Fish  REF1031
+KGr              2 Arct.,AF 06 Stream  REF1750
+Assoc            3 X-Ray Clump         REF1787
+OC,EC,Assoc      3 Turner 13a,14       REF1038
+OC,GC,Assoc   3784 MWSC Database       REF9000
+EC             229 Majaess clusters    REF1040
+DGAL             1 Pandas 48           REF5007
+GC               1 Balbinot 1          REF1041
+EC              22 RMM objects         REF1064
+EC,OC           28 CBB 10-21,FSR cls   REF1039
+Ast              1 Teutsch 1906        REF1080
+EC               6 VVV CL clusters     REF1170
+Ast              1 Vir Z               REF1007
+Ast              1 Webb 1              REF1081
+OC             775 FSR Cls & others    REF3033
+GC               1 SEGUE 3             REF1030
+EC               1 TEB 1               REF3053
+DGAL             1 Cassiopeia II       REF5011
+EC               1 The Brick Emb. Cl.  REF1059
+EC               2 DO 1,GLI 2: in N14  REF3362
+Ast              2 ADS 16795,Airplane  REF1060
+DGAL             2 NGC147,NGC185: GCs  REF3348
+DGAL             1 Per I               REF5012
+DGAL             2 Lac I,Cas III       REF5013
+KGr              1 DG 1 Stream         REF1747
+EC               2 CMF 1,CMF 2,others  REF1621
+EC,GCC          63 VVV CL clusters     REF1000
+NGAL             1 M33: 671 clusters   REF3354
+OC,EC          298 FSR clusters        REF3032
+KGr,KAs          7 Moving Groups       REF1712
+EC,ECC          10 LBB1-3,Pis24,othes  REF1010
+EC              75 MWM clusters        REF1089
+KGr              1 ATLAS Stream        REF5970
+GC               1 Laevens 1           REF3005
+DGAL             1 KK 258              REF3347
+DGAL             1 Crater 2            REF3006
+EC               3 BRCC 1,2,3          REF4056
+EC,OC            7 VVL CL164-7,others  REF1035
+EC               1 SFO 5,SFO 7,SFO 39  REF3381
+EGr              2 SGM 1,GMR 1(CMaR1)  REF754 
+Ast              1 Wenzel 1            REF1101
+DGAL             1 NGC 6822 GCs        REF3342
+KGr              1 PAndAS MW Stream    REF5600
+KGr              1 Arctur.,V 3 Stream  REF1752
+EC              84 SHU clusters        REF1088
+OC,OCC,GCC      10 VVV CL clusters     REF3002
+OC             139 MWSC high lat. OCs  REF1098
+EC,EGr         437 Cmg clusters        REF160 
+EC               2 Cmg 438,9(halo)     REF4000
+KGr              1 Her-Aql Overdens.   REF1778
+OCC              1 DMH 1               REF3401
+Ast              2 Alessi 1849,N2264   REF2008
+Ast              1 Triple Trapezoid    REF2010
+KGr             12 Galact. Overdens.   REF1700
+EC               1 Subgr in BDSB 112   REF3041
+GC               1 Kim 1               REF5001
+GC               1 Kim 2               REF5002
+KGr              1 Ophiuchus Stream    REF1748
+DGAL             8 Ultra F dwarf gals  REF5020
+DGAL             9 Ultra F dwarf gals  REF5004
+DGAL             1 Pegasus III         REF5014
+EC,EGr          19 MGC1-19:NGC6357cls  REF1800
+EC               7 Cmg 440 to 446      REF4001
+GC               1 Laevens 1           REF3021
+DGAL             3 Pis II,Hya II       REF3022
+DGAL             1 IC10: 66 clusters   REF3358
+DGAL             1 Triangulum II       REF3047
+DGAL             1 Hydra II            REF3023
+DGAL,GC          3 SgrII,DraII,Laev 3  REF3024
+DGAL             1 Antlia B            REF3346
+NGAL             1 M33: GCs            REF3351
+DGAL             8 Ultra F dwarf gals  REF3025
+DGAL             1 Horologium II       REF3026
+EC               1 Sh2-138             REF3042
+KGr              1 Orphan Stream       REF1760
+DGAL             1 Tria;ngulum II      REF3027
+EC               1 8 Lac Gr,Manova 1   REF3012
+OC               7 BH clusters         REF3415
+EC               1 SOJ 1               REF3384
+DGAL             1 Leo P               REF3345
+DGAL             1 BS I: clusters      REF6002
+OC              63 MWSC clusters       REF3031
+EC               4 YED 1,2,3,4         REF1629
+EGr              1 Melotte 31          REF534 
+EC               8 SPB 1,2,DBSB 19,59  REF3385
+EC             493 LS Clusters         REF3050
+OC              63 MWSC clusters       REF3031
+GC               1 M31: 361 GCs        REF3352
+EC              22 MGM 1-22(in Ori A)  REF3383
+GC               1 DES 1               REF1036
+DGAL             1 Crater 2            REF3007
+EC,OC,ECC      652 Cmg clusters        REF1620
+DGAL             2 Grus 1,Tuc 2        REF3019
+EC,ECC           5 NBB 1 to NBB 5      REF1032
+KGr             26 streams & overden.  REF1600
+EC               3 Alicante 11,12      REF2026
+KGr              1 Hermus-Phoenix      REF1802
+KGr              1 LAMOST 1            REF3207
+EC               7 Cmg 1099-1101       REF838 
+DGAL             1 Hydra I             REF5800
+OC               1 LS 94               REF2444
+KGr              1 EriPhe              REF1771
+cPOCR            1 beta Tuc Group      REF1732
+KGr              1 Phoenix Stream      REF3785
+GC               1 Kim 3               REF3789
+GC               1 FSR 1735            REF3202
+KAs,KGr,OC      11 various             REF1731
+GC              43 Bulge GCs & others  REF6666
+Ast              1 Levy                REF894 
+EC,ECC           4 DBO 1-DB0 4         REF3363
+NGAL             1 M31:1249 Young Cls  REF3353
+DGAL             1 Fornax: 5 GCs       REF3349
+EC               1 BDO 1,Alicante 6    REF3368
+EC               1 DOZ 2,LMR 23        REF3367
+DGAL             1 Aquarius 2          REF1735
+GC               1 SMASH 1             REF3408
+Assoc,EC        33 NGC6334-57 nebulae  REF3333
+Streams          5 PS1-A to PSI-E      REF1756
+DGAL             1 Virgo I             REF1736
+DGAL             1 Pictor II           REF6006
+lPOCR            1 NGC 7193            REF5089
+GC               1 FSR 1716            REF3376
+KGr              1 SMCNOD              REF3339
+GC               2 DES 0111,DES 0225   REF2446
+EC               2 DOB 1,DOB 2         REF3364
+Ast              8 various             REF1809
+OC               9 VVV CC168-176       REF5000
+OC,GCC           2 Gaia 1,Gaia 2       REF6010
+DGAL,GC          2 Eri II & GC         REF6030
+DGAL,GC          1 Tuc III             REF3410
+GC,DGAL          2 Eri II & GC         REF6031
+OC,EC            9 TRSG                REF7999
+Ast              9 various             REF6025
+KGr              1 NGC 7492 Tail       REF3334
+DGAL             1 Bootes I            REF3336
+OCC              1 French 4            REF3390
+DGAL             1 Peg dIrr:Centr. GC  REF3359
+KGr              1 A 13                REF3337
+EC,ECC         119 Froebrich Emb. Cls  REF5500
+OC               1 Haffner 9           REF3416
+KGr              1 NGC 5897 Tails      REF3462
+KGr              1 MEB 1               REF5749
+KGr              1 halo:MEB-S,-C       REF5750
+KGr              6 halo:MEB-S,-C       REF5751
+KGr              2 Eri,Pal 15 Tail     REF3335
+EC               2 Bica 501,502        REF3233
+EC               1 Dewangan 1          REF3365
+EC               1 DOZ 1               REF3366
+GC               1 FSR 1716            REF3399
+EC              15 LLA1-15(Ori Assoc)  REF3382
+GC,GCC          22 Minniti 1-22        REF3403
+OC               1 Gaia 1              REF6017
+GC               2 DES 3, Eri III      REF6016
+EC,ECC,OC       15 Oliveira 1-15       REF2540
+OC,Ast           7 several names       REF3417
+OC,Ast          15 several names       REF3418
+Streams          4 WG1, WG2, WG3, WG4  REF1789
+Streams          4 Kwando, Orinoco...  REF1791
+Streams          2 Sangarius,Scamand.  REF1784
+KGr              1 Jetstream           REF3409
+OC               1 Gaia 1              REF3419
+KGr              1 NGC288 tails        REF3451
+KGr             11 several names       REF3411
+GC,DGAL          3 EriIII,Des 1,Tuc V  REF3407
+GC,GCC          39 Minniti 22-60       REF3404
+GCC             24 Minniti 61-84       REF3405
+KGr             14 streams             REF1500
+OC               7 ESO,NGC,Rup clust.  REF3454
+EC               7 Masgomas 1-6a,6b    REF4506
+DGAL             1 Hydrus 1            REF4507
+DGAL             2 Car II,Car III      REF4508
+GC,GCC          22 Minni 1 to 22       REF3450
+GC,OC            2 Cmg 1102,Bica 7     REF3049
+DGAL             2 Car II, Car III     REF3092
+REF3421          8 SMC halo Clusters   REF3421
+GCC             22 Minni 1 to 22       REF7990
+GC,GCC           5 Camargo 1002-1006   REF3440
+OC,MC clusts     9 To,Gaia,DES,PS      REF3091
+GC               2 RLGC 1,RLGC 2       REF8004
+EC,OC            4 BBJ 1 to BBJ 6      REF8001
+lPOCR,Ast        5 NGC1901,6994 &more  REF8002
+OC              23 UBC 1 to UBC32      REF8003
+OC,EC          923 Ryu 1 to Ryu 923    REF805 
+EC,ECC,OC        7 Cezar 1-7           REF2550
+OCC,ECC,OC     655 Bica 7 to 661       REF250 
+EC              18 various             REF039 
+EC,ECC,GCC      27 various             REF1622
+EC,OC,OCC      196 various             REF298 
+Ast,OC         466 various             REF913 
+EC,ECC,EGr      52 Dolidze 1-57        REF947 
+EC               1 BHR 71              REF949 
+lPOCR            1 Covino 1            REF526 
+OC,OCC,Ast     177 Alessi Objects      REF891 
+Ast,OC,OCC      26 NGC,IC Objects      REF1051
+Ast,OC,EC     1070 various             REF1070
+Ast            142 various             REF963 
+EC               4 Wray 1,2,C 1354     REF1023
+Ast,OC          53 Ferrero             REF7000
