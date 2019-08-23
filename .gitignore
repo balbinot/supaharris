@@ -125,4 +125,5 @@ ENV/
 /storage
 /media
 /static
+/profiles
 node_modules

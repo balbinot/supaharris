@@ -32,7 +32,7 @@ urlpatterns = [
 
     path("tinymce/", include("tinymce.urls")),
     path("api/v1/auth/", include("rest_framework.urls")),
-    path("api/v1/", include(router.urls)),
+    path("api/v1/", include((router.urls, "catalogue"), namespace="catalogue_api")),
 
     path("", index, name="index"),
     path("about/", include("about.urls")),
