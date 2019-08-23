@@ -27,7 +27,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("admin/password_reset/", auth_views.PasswordResetView.as_view(),
         name="admin_password_reset",),
-    path(r"admin/", include("django.contrib.auth.urls")),
+    path("admin/", include("django.contrib.auth.urls")),
+    path("admin/silk/", include("silk.urls", namespace="silk")),
 
     path("tinymce/", include("tinymce.urls")),
     path("api/v1/auth/", include("rest_framework.urls")),

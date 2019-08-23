@@ -8,6 +8,7 @@ django-extensions==2.2.1
 django-filebrowser-no-grappelli==3.7.8
 django-filter==2.2.0
 django-jsonfield==1.2.0
+django-silk==3.0.2
 django-tinymce4-lite==1.7.5
 djangorestframework==3.10.2
 djangorestframework-datatables

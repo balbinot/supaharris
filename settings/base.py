@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework",
     "rest_framework_datatables",
+    "silk",
 
     "about",
     "accounts",
@@ -172,6 +173,18 @@ sentry_sdk.init(
 from settings.tinymce import *
 from settings.djangorestframework import *
 
+# Silky for profiling / monitoring the api response times
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True   # default is_staff=True; overwrite below
+SILKY_PERMISSIONS = lambda user: user.is_superuser
+SILKY_PYTHON_PROFILER = False
+SILKY_PYTHON_PROFILER_BINARY = False
+# SILKY_MAX_REQUEST_BODY_SIZE = -1     # Silk takes anything <0 as no limit
+# SILKY_MAX_RESPONSE_BODY_SIZE = 1024  # If response body>1024 bytes, ignore
+# SILKY_INTERCEPT_PERCENT = 50 # log only 50% of requests
+# SILKY_MAX_RECORDED_REQUESTS = 10**4  # garbage collection of old data
+# SILKY_MAX_RECORDED_REQUESTS_CHECK_PERCENT = 10
+SILKY_META = True  # to check the effect Silk itself has on response time
 
 if DEBUG:
     PREPEND_WWW = False
