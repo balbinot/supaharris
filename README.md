@@ -1,8 +1,8 @@
-| Reference | Folder | Parser | Status | Management command | Status |
-|-----------|--------|--------|--------|--------------------|--------|
-| [Harris 1996, 2010 ed.](https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract) | [`MW_GCS_Harris1996e2010`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Harris1996e2010) | [`parse_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_harris_1996ed2010.py) | Done | [`add_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_harris_1996ed2010.py) | Done
-| [Bica+ 2019](TODO) | [`MW_StarClusters_Bica2019`](https://github.com/tlrh314/supaharris/tree/master/data/MW_StarClusters_Bica2019) | [`parse_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
-| [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`MW_GCS_Hilker2019/`](https://github.com/tlrh314/supaharris/tree/master/data/MW_GCS_Hilker2019) | [`parse_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
+| Reference | Parser | Status | Management command | Status |
+|-----------|--------|--------|--------------------|--------|
+| [Harris 1996, 2010 ed.](https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract) | [`parse_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_harris_1996ed2010.py) | Done | [`add_harris_1996ed2010.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_harris_1996ed2010.py) | Done
+| [Bica+ 2019](TODO) | [`parse_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
+| [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`parse_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](https://github.com/tlrh314/supaharris/blob/master/apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
 
 
 
