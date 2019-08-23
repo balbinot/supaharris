@@ -6,7 +6,7 @@ from matplotlib import pyplot
 # from .plotsettings import *
 
 
-def parse_orbits(fname="MW_GCS_Hilker2019/orbits_table.txt", debug=True):
+def parse_hilker_2019_orbits(fname="./MW_GCS_Hilker2019/orbits_table.txt", debug=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         print("ERROR: file not found: {0}".format(fname))
         return
@@ -68,5 +68,20 @@ def parse_orbits(fname="MW_GCS_Hilker2019/orbits_table.txt", debug=True):
     return data
 
 
+def parse_hilker_2019_combined(fname="./MW_GCS_Hilker2019/combined_table.txt", debug=False):
+    if not os.path.isfile(fname) or not os.path.exists(fname):
+        print("ERROR: file not found: {0}".format(fname))
+        return
+
+
+
+def parse_hilker_2019_radial_velocities(fname="./MW_GCS_Hilker2019/rv.dat", debug=False):
+    if not os.path.isfile(fname) or not os.path.exists(fname):
+        print("ERROR: file not found: {0}".format(fname))
+        return
+
+
 if __name__ == "__main__":
-    orbit_data = parse_orbits()
+    orbit_data = parse_hilker_2019_orbits(debug=True)
+    radial_velocity_data = parse_hilker_2019_combined(debug=True)
+    radial_velocity_data = parse_hilker_2019_radial_velocities(debug=True)

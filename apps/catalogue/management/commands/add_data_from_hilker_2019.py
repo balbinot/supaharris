@@ -14,11 +14,15 @@ from catalogue.models import (
     AstroObjectClassification,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_author_year import parse_data
+from data.parse_hilker_2019 import (
+    parse_hilker_2019_orbits,
+    parse_hilker_2019_combined,
+    parse_hilker_2019_radial_velocities,
+)
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
-    help = "Add ReplaceMe data to the database"
+    help = "Add Hilker+ 2019 data to the SupaHarris database"
 
     def handle(self, *args, **options):
         super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
@@ -36,6 +40,10 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             print("Created the Reference: {0}\n".format(reference))
 
+
+
+        return
+
         # Here we get one particular parameter as an example to help you
         # See https://docs.djangoproject.com/en/2.2/topics/db/queries/
         # for an explanation of how to retrieve/create items from/in the database.
@@ -52,7 +60,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
                 scale=1.0  # must be a float. This is the scale by which parameters must be multiplied by.
             )
 
-        database = parse_data()
+        hilker_2019_orbits = parse_hilker_2019_orbits()
         for entry in database:
             gc_name = entry[0]
             gc_R_Sun = entry[1]
