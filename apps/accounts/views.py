@@ -12,12 +12,12 @@ from accounts.forms import UserModelCreationForm
 
 class RegisterView(generic.CreateView):
     form_class = UserModelCreationForm
-    template_name = 'accounts/register.html'
-    success_url = reverse_lazy('accounts:profile')
+    template_name = "accounts/register.html"
+    success_url = reverse_lazy("accounts:profile")
 
     def form_valid(self, form):
         valid = super(RegisterView, self).form_valid(form)
-        email, password = form.cleaned_data.get('email'), form.cleaned_data.get('password1')
+        email, password = form.cleaned_data.get("email"), form.cleaned_data.get("password1")
         user = authenticate(email=email, password=password)
         if user is not None:
             login(self.request, user)
@@ -31,11 +31,11 @@ class PasswordResetView(auth_views.PasswordResetView):
         # TODO: Passing email via extra_context to auth_views.PasswordResetView
         # in accounts.urls breaks, so we drop the email in the session storage ..
         # but we'd like to avoid that...
-        email = form.cleaned_data.get('email')
-        self.request.session['password_reset_email'] = email
+        email = form.cleaned_data.get("email")
+        self.request.session["password_reset_email"] = email
         return valid
 
 
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html')
+    return render(request, "accounts/profile.html")

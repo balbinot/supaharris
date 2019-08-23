@@ -58,7 +58,7 @@ class ReferenceAdmin(admin.ModelAdmin):
 
 @admin.register(AstroObjectClassification)
 class AstroObjectClassificationAdmin(admin.ModelAdmin):
-    list_display = ( "name", )
+    list_display = ( "name", "abbreviation" )
     search_fields = ( "name", )
     readonly_fields = ( "slug", )
 

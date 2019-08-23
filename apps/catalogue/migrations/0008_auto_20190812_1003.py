@@ -4,6 +4,10 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    # Renaming table while in a transaction is not supported on SQLite < 3.26
+    # because it would break referential integrity. Try adding atomic = False
+    # to the migration class... OK Django, cheers TLRH 20190823
+    atomic = False
 
     dependencies = [
         ('catalogue', '0007_auto_20190507_1106'),

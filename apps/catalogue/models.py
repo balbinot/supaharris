@@ -142,7 +142,7 @@ class Reference(models.Model):
         null=True, blank=True, choices=MONTHS)
     volume = models.CharField(max_length=8, null=True, blank=True)
     pages = models.CharField(max_length=16, null=True, blank=True)
-    astro_objects = models.ManyToManyField("catalogue.AstroObject", 
+    astro_objects = models.ManyToManyField("catalogue.AstroObject",
         related_name="references", blank=True)
 
     class Meta:
@@ -217,6 +217,7 @@ class Reference(models.Model):
 
 class AstroObjectClassification(models.Model):
     name = models.CharField("Name", max_length=64, unique=True)
+    abbreviation = models.CharField("Abbreviation", max_length=16, null=True, blank=True)
     slug = models.SlugField(max_length=64, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
