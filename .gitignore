@@ -128,3 +128,4 @@ ENV/
 /static
 /profiles
 node_modules
+dbschema.dot
