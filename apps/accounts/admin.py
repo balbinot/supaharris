@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordResetForm
 
 from accounts.models import UserModel
 from utils import export_to_xls
@@ -10,7 +13,9 @@ from utils import export_to_xls
 @admin.register(UserModel)
 class UserModelAdmin(UserAdmin):
     list_display = (
-        "email", "first_name", "last_name", "is_active", "date_created",
+        "email", "first_name", "last_name",
+        "is_active", "is_staff", "is_superuser",
+        "date_created",
     )
     list_filter = ("is_active", "is_staff", "is_superuser",)
     search_fields = ("email", "first_name", "last_name")
@@ -36,7 +41,7 @@ class UserModelAdmin(UserAdmin):
         for user in queryset:
             try:
                 validate_email( user.email )
-                form = PasswordResetForm(data={"email": user.email})
+                form = PasswordResetForm(data={ "email": user.email })
                 form.is_valid()
 
                 form.save(email_template_name="accounts/password_forced_reset_email.html",
