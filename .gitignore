@@ -120,6 +120,7 @@ ENV/
 .bash_functions
 .bashrc
 .vimrc
+.config
 
 # Project-specific folders
 /settings/*.env

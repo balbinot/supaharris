@@ -14,16 +14,17 @@ from catalogue.models import (
 
 @admin.register(Parameter)
 class ParameterAdmin(admin.ModelAdmin):
-    list_display = ( "name", "description", "unit", "scale", "slug" )
+    list_display = ( "name", "description", "unit", "scale" )
+    search_fields = ( "name", "description", )
     readonly_fields = (
         "slug", "date_created", "date_updated", "last_updated_by",
     )
 
     fieldsets = (
-        (None, {"fields": ( "id", )}),
+        (None, {"fields": ( "name", "description", "unit", "scale", )}),
         ("Meta", {
             "classes": ("collapse",),
-            "fields": ( "date_created", "date_updated", "last_updated_by" )
+            "fields": ( "slug", "date_created", "date_updated", "last_updated_by" )
         }),
     )
 
@@ -48,7 +49,7 @@ class ReferenceAdmin(admin.ModelAdmin):
         ("Required", {
             "fields": [ "ads_url", "bib_code" ]
         }),
-        ("Automatically Retrieved!", {
+        ("Automatically retrieved!", {
             "fields": [
                 "title", "first_author", "authors", "journal", "doi",
                 "year", "month", "volume", "pages",
@@ -56,7 +57,7 @@ class ReferenceAdmin(admin.ModelAdmin):
         }),
         ("Meta", {
             "classes": ("collapse",),
-            "fields": ( "date_created", "date_updated", "last_updated_by" )
+            "fields": ( "slug", "date_created", "date_updated", "last_updated_by" )
         }),
     ]
 
@@ -84,7 +85,7 @@ class AstroObjectClassificationAdmin(admin.ModelAdmin):
         (None, {"fields": ( "name", "abbreviation" )}),
         ("Meta", {
             "classes": ("collapse",),
-            "fields": ( "date_created", "date_updated", "last_updated_by" )
+            "fields": ( "slug", "date_created", "date_updated", "last_updated_by" )
         }),
     )
 
@@ -104,10 +105,10 @@ class AstroObjectAdmin(admin.ModelAdmin):
     filter_horizontal = ( "classifications",)
 
     fieldsets = (
-        (None, {"fields": ( "id", )}),
+        (None, {"fields": ( "name", "altname", "classifications", )}),
         ("Meta", {
             "classes": ("collapse",),
-            "fields": ( "date_created", "date_updated", "last_updated_by" )
+            "fields": ( "slug", "date_created", "date_updated", "last_updated_by" )
         }),
     )
 
@@ -118,17 +119,29 @@ class AstroObjectAdmin(admin.ModelAdmin):
 
 @admin.register(Observation)
 class ObservationAdmin(admin.ModelAdmin):
+    autocomplete_fields = ( "astro_object", "parameter", "reference", )
+    search_fields = ( "astro_object", "parameter", "reference", )
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
     )
 
     fieldsets = (
-        (None, {"fields": ( "id" )}),
+        (None, {"fields": (
+            "astro_object", "parameter",
+            "value", "sigma_up", "sigma_down",
+            "reference",
+            )
+        }),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
         }),
     )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            "reference", "astro_object", "parameter",
+        )
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user
@@ -137,17 +150,24 @@ class ObservationAdmin(admin.ModelAdmin):
 
 @admin.register(Rank)
 class RankAdmin(admin.ModelAdmin):
+    autocomplete_fields = ( "observation", )
+    search_fields = ( "observation", )
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
     )
 
     fieldsets = (
-        (None, {"fields": ( "id", )}),
+        (None, {"fields": ( "observation", "rank", "weight", "compilation_name" )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
         }),
     )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            "observation",
+        )
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user
@@ -156,12 +176,14 @@ class RankAdmin(admin.ModelAdmin):
 
 @admin.register(Auxiliary)
 class AuxiliaryAdmin(admin.ModelAdmin):
+    autocomplete_fields = ( "astro_object", "reference", )
+    search_fields = ( "astro_object", "reference", )
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
     )
 
     fieldsets = (
-        (None, {"fields": ( "id", )}),
+        (None, {"fields": ( "astro_object", "path", "url", "reference", )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
@@ -175,17 +197,29 @@ class AuxiliaryAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    autocomplete_fields = ( "astro_object", "reference", )
+    search_fields = ( "astro_object", "reference", )
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
     )
 
     fieldsets = (
-        (None, {"fields": ( "id", )}),
+        (None, {"fields": (
+            "astro_object",
+            "profile_type", "profile", "model_parameters", "model_flavour",
+            "reference",
+            )
+        }),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
         }),
     )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            "reference", "astro_object",
+        )
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user

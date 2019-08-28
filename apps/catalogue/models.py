@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from django.contrib import messages
 from django.utils.text import slugify
 
@@ -343,7 +344,7 @@ class Auxiliary(models.Model):
         AstroObject, related_name="auxiliaries", on_delete=models.CASCADE
     )
 
-    path = models.FilePathField(path="/static", blank=True, null=True)
+    path = models.FilePathField(path="{0}".format(settings.STATIC_ROOT), blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
     # Time stamps, and logging of who changed user info
