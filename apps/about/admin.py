@@ -8,6 +8,8 @@ from tinymce.widgets import TinyMCE
 
 from about.models import ContactInfo
 from about.models import PrivacyPolicy
+from about.forms import FixTinyMCEHasTooWideUIForm
+
 
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
@@ -20,7 +22,4 @@ class ContactInfoAdmin(admin.ModelAdmin):
 
 @admin.register(PrivacyPolicy)
 class PrivacyPolicyAdmin(admin.ModelAdmin):
-    # look = copy.copy(settings.TINYMCE_MINIMAL_CONFIG)
-    # look['width'] = 'calc(100% - 170px)'
-    # look['height'] = '200'
-    content = forms.CharField(widget=TinyMCE(mce_attrs=settings.TINYMCE_MINIMAL_CONFIG))
+    form = FixTinyMCEHasTooWideUIForm
