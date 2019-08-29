@@ -153,7 +153,7 @@ class Reference(models.Model):
     # Alternatively, one could make this a ForeignKey relation....
     journal = models.CharField(max_length=8, null=True, blank=True,
         choices=JOURNALS)
-    doi = models.CharField("DOI", max_length=32, null=True, blank=True)
+    doi = models.CharField("DOI", max_length=64, null=True, blank=True)
     year = models.PositiveSmallIntegerField("Year of publication",
         null=True, blank=True)
     month = models.PositiveSmallIntegerField("Month of publication",
