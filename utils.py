@@ -1,3 +1,5 @@
+import ads
+import json
 import xlwt
 import requests
 import numpy as np
@@ -57,9 +59,9 @@ def export_to_xls(request, queryset):
     return response
 
 
-def requests_get(url, timeout=5, debug=settings.DEBUG):
+def requests_get(url, timeout=5, debug=settings.DEBUG, headers={}):
     try:
-        r = requests.get(url, timeout=timeout)
+        r = requests.get(url, timeout=timeout, headers=headers)
     except requests.exceptions.Timeout:
         if debug:
             print("ERROR: could not retrieve '{0}'".format(url) +
@@ -109,30 +111,7 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     return details
 
 
-def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
-    """ Here we obtain information for a Reference from ADS' Bibtex entry """
-
-    if debug: print("Retrieving: {0}".format(url))
-    r = requests_get(url, timeout=5)  # 5 seconds timeout
-    if r is False: return False
-    soup = BeautifulSoup(r.content, "lxml")
-
-    try:
-        bibtex_url = [a["href"] for a in soup.find_all("a")
-            if "Bibtex entry for this abstract" in a.text][0]
-        if debug: print("Get reference info from: {0}".format(bibtex_url))
-    except KeyError as e:  # if ADS would have been updated
-        return False
-    except IndexError as e:
-        if str(e) == "list index out of range":
-            return False
-        else:
-            raise
-
-    r = requests_get(bibtex_url)
-    if r is False: return False
-    soup = BeautifulSoup(r.content, "lxml")
-    relevant = [ split for split in soup.text.split("\n") if "=" in split ]
+def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
     details = { line.split("=")[0].strip(): line.split("=")[1].strip(",").strip()
         for line in relevant }
 
@@ -144,9 +123,13 @@ def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
     # Remove {" bla "}
     details["title"] = details["title"][2:-2]
 
+    # Clean up differences between new-style and old-style bibtex entry
+    details["month"] = details["month"].lower().replace('"', '')
+    details["year"] = details["year"].replace('"', '')
+
     # Remove all {, }, and \\
     keys_available = list(details.keys())
-    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages"]
+    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages", "volume"]
     for key in list(set(keys_available).intersection(to_clean)):
         details[key] = details[key].strip().strip("{").strip("}").strip("\\")
 
@@ -171,8 +154,57 @@ def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
     if debug:
         print("Success!")
         [ print("  {0:<20s}: {1}".format(k, v)) for k,v in details.items() ]
+
     return details
 
 
+def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
+    """ Here we obtain information for a Reference from old-style ADS' Bibtex entry """
+
+    if debug: print("Retrieving: {0}".format(url))
+    r = requests_get(url, timeout=5)  # 5 seconds timeout
+    if r is False: return False
+    soup = BeautifulSoup(r.content, "lxml")
+
+    try:
+        bibtex_url = [a["href"] for a in soup.find_all("a")
+            if "Bibtex entry for this abstract" in a.text][0]
+        if debug: print("Get reference info from: {0}".format(bibtex_url))
+    except KeyError as e:  # if ADS would have been updated
+        return False
+    except IndexError as e:
+        if str(e) == "list index out of range":
+            return False
+        else:
+            raise
+
+    r = requests_get(bibtex_url)
+    if r is False: return False
+    soup = BeautifulSoup(r.content, "lxml")
+    relevant = [ split for split in soup.text.split("\n") if "=" in split ]
+    return parse_bibtex_and_create_reference(relevant, journals, debug=debug)
+
+
 def scrape_reference_details_from_new_ads(url, journals, debug=settings.DEBUG):
-    return
+    """ Here we obtain information for a Reference from new-style ADS' Bibtex entry """
+
+    payload = {"bibcode": [ url.split("abs/")[-1].split("/")[0] ]}
+    if debug: print("Retrieving: {0}\n  payload: {1}".format(url, payload))
+
+    headers = {
+        "Authorization": "Bearer {0}".format(settings.ADS_API_TOKEN),
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "user-agent": "Supaharris Bot v1.3.3.7"
+    }
+    r = requests.post(
+        "https://api.adsabs.harvard.edu/v1/export/bibtex",
+        params={"q":"*:*", "fl": "bibcode,title", "rows": 2000},
+        data=json.dumps(payload), headers=headers
+    )
+    data = json.loads(r.content)
+
+    if r is False or r.status_code != 200 or "export" not in data: return False
+
+    relevant = [ split for split in data["export"].split("\n") if "=" in split ]
+    return parse_bibtex_and_create_reference(relevant, journals, debug=debug)

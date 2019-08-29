@@ -138,7 +138,7 @@ class Reference(models.Model):
 
     help_text = "Please insert the ADS/arXiv url. All other paramters will "
     help_text += "automatically be retrieved on save!. For example: '{0}'".format(
-        "http://adsabs.harvard.edu/abs/1996AJ....112.1487H")
+        "https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H")
     ads_url = models.URLField("ADS url", max_length=254, unique=True,
         help_text=help_text)
     bib_code = models.CharField("Bibliographic Code [ADS/arXiv]",
@@ -180,18 +180,16 @@ class Reference(models.Model):
 
     def save(self, *args, **kwargs):
         details = None
-        self.ads_url = self.ads_url.replace("https", "http")  # no https on ads
-        if "ui.adsabs" in self.ads_url:
-            self.ads_url = self.ads_url.replace("ui.adsabs", "adswww").replace("#abs", "abs")
+        self.ads_url = self.ads_url.replace("http://", "https://")
+        self.ads_url = self.ads_url.replace("/adswww", "/ui.adsabs")
+        self.ads_url = self.ads_url.replace("ui.adswww", "ui.adsabs")
+        self.ads_url = self.ads_url.replace("/adsabs", "/ui.adsabs")
         if "/abs/" in self.ads_url:  # this is true for ADS and arXiv urls
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
 
-        if "ui.adswww" in self.ads_url or "ui.adsabs" in self.ads_url:
+        if "ui.adsabs" in self.ads_url:
             details = scrape_reference_details_from_new_ads(self.ads_url, dict(self.JOURNALS))
-        elif "adswww" in self.ads_url or "adsabs" in self.ads_url:
-            # TODO: perhaps do this in a pre-save signal instead :)
-            details = scrape_reference_details_from_old_ads(self.ads_url, dict(self.JOURNALS))
 
         if "arxiv" in self.ads_url:
             details = scrape_reference_details_from_arxiv(self.ads_url, dict(self.JOURNALS))
@@ -211,9 +209,9 @@ class Reference(models.Model):
                     doi = "https://doi.org/" + doi
                 self.doi = doi
             if "year" in details.keys():
-                self.year = details["year"][0:4]
+                self.year = int(details["year"][0:4])
             if "month" in details.keys():
-                self.month = details["month"]
+                self.month = int(details["month"])
             if "volume" in details.keys():
                 self.volume = details["volume"][0:8]
             if "pages" in details.keys():

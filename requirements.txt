@@ -1,3 +1,4 @@
+ads==0.12.3
 astropy==3.1.2
 beautifulsoup4==4.7.1
 bokeh==1.0.4

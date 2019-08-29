@@ -171,6 +171,9 @@ sentry_sdk.init(
     integrations=[DjangoIntegration()],
 )
 
+# To retrieve data from ADS api
+ADS_API_TOKEN = env("ADS_API_TOKEN", default="")
+
 from settings.tinymce import *
 from settings.djangorestframework import *
 

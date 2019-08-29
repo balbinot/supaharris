@@ -35,7 +35,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
 
         # Add the ADS url (in this particular format). When the Reference
         # instance is saved it will automatically retrieve all relevent info!
-        ads_url = "http://adsabs.harvard.edu/abs/2019AJ....157...12B"
+        ads_url = "https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B"
         reference, created = Reference.objects.get_or_create(ads_url=ads_url)
         if not created:
             print("Found the Reference: {0}\n".format(reference))

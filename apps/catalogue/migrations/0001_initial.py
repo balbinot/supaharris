@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
             name='Reference',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ads_url', models.URLField(help_text="Please insert the ADS url. All other paramters will automatically be retrieved on save!. For example: 'http://adsabs.harvard.edu/abs/1996AJ....112.1487H'", max_length=256, unique=True, verbose_name='ADS url')),
+                ('ads_url', models.URLField(help_text="Please insert the ADS url. All other paramters will automatically be retrieved on save!. For example: 'https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H'", max_length=256, unique=True, verbose_name='ADS url')),
                 ('bib_code', models.CharField(blank=True, max_length=24, null=True, verbose_name='Bibliographic Code [ADS]')),
                 ('slug', models.SlugField(blank=True, max_length=64, unique=True)),
                 ('first_author', models.CharField(blank=True, max_length=128, null=True)),
