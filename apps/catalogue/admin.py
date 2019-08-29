@@ -40,7 +40,7 @@ class ReferenceAdmin(admin.ModelAdmin):
         "title", "first_author", "year", "month", "journal",
         "doi", "volume", "pages"
     )
-    search_fields = ( "first_author", "authors", "title", )
+    search_fields = ( "first_author", "authors", "title", "bib_code", "ads_url", )
     readonly_fields = (
         "slug", "bib_code", "date_created", "date_updated", "last_updated_by",
     )

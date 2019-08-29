@@ -89,7 +89,7 @@ class Reference(models.Model):
         ("aapr",     "Astronomy and Astrophysics Reviews"),
         ("aaps",     "Astronomy and Astrophysics), Supplement"),
         ("azh",      "Astronomicheskii Zhurnal"),
-        ("baas",     "Bulletin of the AAS"),
+        ("baaa",     "Boletin de la Asociacion Argentina de Astronomia La Plata Argentina"),
         ("baas",     "Bulletin of the American Astronomical Society"),
         ("balta",    "Baltic Astronomy"),
         ("basi",     "Bulletin of the Astronomical Society of India"),
@@ -98,6 +98,7 @@ class Reference(models.Model):
         ("icarus",   "Icarus"),
         ("iraj",     "Irish Astronomical Journal"),
         ("jcap",     "Journal of Cosmology and Astroparticle Physics"),
+        ("jkas",     "Journal of Korean Astronomical Society"),
         ("jrasc",    "Journal of the RAS of Canada"),
         ("memras",   "Memoirs of the RAS"),
         ("mnras",    "Monthly Notices of the RAS"),
@@ -114,7 +115,10 @@ class Reference(models.Model):
         ("pasa",     "Publications of the Astron. Soc. of Australia"),
         ("pasp",     "Publications of the ASP"),
         ("pasj",     "Publications of the ASJ"),
+        ("raa",      "Research in Astronomy and Astrophysics"),
         ("rmxaa",    "Revista Mexicana de Astronomia y Astrofisica"),
+        ("rnaas",    "Research Notes of the American Astronomical Society"),
+        ("rvmp",     "Reviews of Modern Physics"),
         ("qjras",    "Quarterly Journal of the RAS"),
         ("skytel",   "Sky and Telescope"),
         ("solphys",  "Solar Physics"),
@@ -200,6 +204,8 @@ class Reference(models.Model):
         if "/abs/" in self.ads_url:  # this is true for ADS and arXiv urls
             self.bib_code = self.ads_url.split("/abs/")[1]
             self.slug = slugify(self.bib_code.replace(".", "-"))
+        else:
+            self.slug = slugify(self.bib_code.split("/")[-1])
 
         if "ui.adsabs" in self.ads_url:
             details = scrape_reference_details_from_new_ads(self.ads_url, dict(self.JOURNALS))
@@ -213,7 +219,7 @@ class Reference(models.Model):
             if "authors" in details.keys():
                 self.authors = details["authors"][0:1024]
             if "title" in details.keys():
-                self.title = details["title"][0:256]
+                self.title = details["title"][0:256].encode("ascii", "ignore").decode()
             if "journal" in details.keys():
                 self.journal = details["journal"]
             if "doi" in details.keys():

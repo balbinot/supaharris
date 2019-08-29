@@ -36,11 +36,19 @@ def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), debug=False):
             logger.debug("  bib_code: {0}".format(bib_code))
             logger.debug("  cat: {0}".format(cat))
 
-            if bib_code == "-------------------": continue
+            if bib_code == "-------------------":
+                reference, created = Reference.objects.get_or_create(
+                    ads_url="https://example.com/{0}".format(ref_code),
+                    bib_code=ref_code,
+                )
+                reference.title = ref; reference.save()
+                setattr(Reference, ref_code, reference)
+                references.append(ref_code)
+            else:
+                reference, created = Reference.objects.get_or_create(ads_url=ads_url)
+                setattr(Reference, ref_code, reference)
+                references.append(ref_code)
 
-            reference, created = Reference.objects.get_or_create(ads_url=ads_url)
-            setattr(Reference, ref_code, reference)
-            references.append(ref_code)
             if not created:
                 logger.info("Found the Reference: {0}\n".format(ref_code))
             else:
