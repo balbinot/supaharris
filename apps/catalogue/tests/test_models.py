@@ -16,6 +16,8 @@ class AutoRetrieveReferenceDetailsTestCase(TestCase):
                 "http://ui.adswww.harvard.edu/abs/1996AJ....112.1487H",  # https only, should be rewritten
                 "https://ui.adswww.harvard.edu/abs/1996AJ....112.1487H",  # adsabs only, should be rewritten
                 "https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H",  # totally valid
+                # Has booktitle --> \baas instead of journal
+                "https://ui.adsabs.harvard.edu/abs/1973BAAS....5..326M",
         ]:
             r = Reference.objects.create(
                 ads_url=ads_url

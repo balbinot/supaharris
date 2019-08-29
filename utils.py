@@ -9,6 +9,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.http import HttpResponse
 
+
 # Convert ADS/arXiv-style month abbreviation to integers
 MONTH_DICT = {
     "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
@@ -124,14 +125,26 @@ def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
     details["title"] = details["title"][2:-2]
 
     # Clean up differences between new-style and old-style bibtex entry
-    details["month"] = details["month"].lower().replace('"', '')
-    details["year"] = details["year"].replace('"', '')
+    if "month" in details.keys():
+        details["month"] = details["month"].lower().replace('"', '')
+    if "year" in details.keys():
+        details["year"] = int(details["year"].replace('"', ''))
 
     # Remove all {, }, and \\
     keys_available = list(details.keys())
-    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages", "volume"]
+    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages", "volume", "booktitle"]
     for key in list(set(keys_available).intersection(to_clean)):
         details[key] = details[key].strip().strip("{").strip("}").strip("\\")
+
+    if "journal" not in details.keys():
+        if "booktitle" in details.keys():
+            # e.g. 1973BAAS....5..326M
+            if details["booktitle"] in journals.keys():
+                details["journal"] = details["booktitle"]
+            else:
+                details["journal"] = None
+        else:
+            details["journal"] = None
 
     # Convert full name of the journal to journal abbreviation
     journals_r = { v: k for k, v in journals.items() }
@@ -143,13 +156,9 @@ def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
         "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
         "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12
     }
-    try:
-        details["month"] = month_dict[details["month"]]
-    except KeyError:
-        if debug:
-            print("ERROR: key {0} not found in month_dict {1}".format(
-                details["month"], month_dict))
-        return False
+    details["month"] = month_dict.get(details.get("month", None), None)
+    if details["month"]:
+        details["month"] = int(details["month"])
 
     if debug:
         print("Success!")

@@ -80,13 +80,19 @@ class Reference(models.Model):
         ("apj",      "Astrophysical Journal"),
         ("apjl",     "Astrophysical Journal: Letters"),
         ("apjs",     "Astrophysical Journal: Supplement"),
+        ("an",       "Astronomische Nachrichten"),
         ("ao",       "Applied Optics"),
         ("apss",     "Astrophysics and Space Science"),
+        ("astl",     "Astronomy Letters"),
+        ("atsir",    "Astronomicheskij Tsirkulyar"),
         ("aap",      "Astronomy and Astrophysics"),
         ("aapr",     "Astronomy and Astrophysics Reviews"),
         ("aaps",     "Astronomy and Astrophysics), Supplement"),
         ("azh",      "Astronomicheskii Zhurnal"),
         ("baas",     "Bulletin of the AAS"),
+        ("baas",     "Bulletin of the American Astronomical Society"),
+        ("balta",    "Baltic Astronomy"),
+        ("basi",     "Bulletin of the Astronomical Society of India"),
         ("caa",      "Chinese Astronomy and Astrophysics"),
         ("cjaa",     "Chinese Journal of Astronomy and Astrophysics"),
         ("icarus",   "Icarus"),
@@ -95,6 +101,7 @@ class Reference(models.Model):
         ("jrasc",    "Journal of the RAS of Canada"),
         ("memras",   "Memoirs of the RAS"),
         ("mnras",    "Monthly Notices of the RAS"),
+        ("msngr",    "The Messenger"),
         ("na",       "New Astronomy"),
         ("nar",      "New Astronomy Review"),
         ("obs",      "The Observatory"),
@@ -122,15 +129,18 @@ class Reference(models.Model):
         ("fcp",      "Fundamental Cosmic Physics"),
         ("gca",      "Geochimica Cosmochimica Acta"),
         ("grl",      "Geophysics Research Letters"),
+        ("ibvs",     "Information Bulletin on Variable Stars"),
         ("jcp",      "Journal of Chemical Physics"),
         ("jgr",      "Journal of Geophysics Research"),
         ("jqsrt",    "Journal of Quantitiative Spectroscopy and Radiative Transfer"),
         ("memsai",   "Mem. Societa Astronomica Italiana"),
         ("nphysa",   "Nuclear Physics A"),
+        ("pasau",    "Proceedings of the Astronomical Society of Australia"),
         ("physrep",  "Physics Reports"),
         ("physscr",  "Physica Scripta"),
         ("planss",   "Planetary Space Science"),
         ("procspie", "Proceedings of the SPIE"),
+        ("vizier",   "VizieR Online Data Catalog"),
     )
 
     MONTHS = (
@@ -212,9 +222,9 @@ class Reference(models.Model):
                     doi = "https://doi.org/" + doi
                 self.doi = doi
             if "year" in details.keys():
-                self.year = int(details["year"][0:4])
+                self.year = details["year"]
             if "month" in details.keys():
-                self.month = int(details["month"])
+                self.month = details["month"]
             if "volume" in details.keys():
                 self.volume = details["volume"][0:8]
             if "pages" in details.keys():
