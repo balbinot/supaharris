@@ -87,7 +87,7 @@
 - `docker-compose build django nginx`
 - `docker-compose up --build`
 - In a new terminal, one can attach to the container in an interactive session:
-  - `docker exec -it supaharris-django bash`
+  - `docker exec -it supaharris_django_1 bash`
 - Now add the initial data (run this command in the container!)
   - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
   - `python manage.py loaddata fixtures/catalogue_Parameter.json` 

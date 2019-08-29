@@ -121,6 +121,8 @@ ENV/
 .bashrc
 .vimrc
 .config
+.local
+.pki
 
 # Project-specific folders
 /settings/*.env
