@@ -10,6 +10,7 @@ from catalogue.models import (
     Auxiliary,
     Profile,
 )
+from catalogue.filters import DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter
 
 
 @admin.register(Parameter)
@@ -43,7 +44,10 @@ class ReferenceAdmin(admin.ModelAdmin):
     readonly_fields = (
         "slug", "bib_code", "date_created", "date_updated", "last_updated_by",
     )
-    list_filter = ( "year", "journal" )
+    list_filter = (
+        ("year", DropdownFilter),
+        ("journal", ChoiceDropdownFilter),
+    )
 
     fieldsets = [
         ("Required", {
@@ -97,7 +101,9 @@ class AstroObjectClassificationAdmin(admin.ModelAdmin):
 @admin.register(AstroObject)
 class AstroObjectAdmin(admin.ModelAdmin):
     list_display = ( "name", "altname", )
-    list_filter = ("classifications",)
+    list_filter = (
+        ("classifications", RelatedDropdownFilter),
+    )
     search_fields = ( "name", "altname", )
     readonly_fields = (
         "slug", "date_created", "date_updated", "last_updated_by",
