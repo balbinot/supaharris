@@ -214,6 +214,7 @@ def scrape_reference_details_from_new_ads(url, journals, debug=settings.DEBUG):
     data = json.loads(r.content)
 
     if r is False or r.status_code != 200 or "export" not in data: return False
+    # TODO: handle 429 with incremental back-off and max attempts
 
     relevant = [ split for split in data["export"].split("\n") if "=" in split ]
     return parse_bibtex_and_create_reference(relevant, journals, debug=debug)

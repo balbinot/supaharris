@@ -23,6 +23,38 @@ from data.parse_bica_2019 import (
 )
 
 
+def create_references_for_bica_references():
+    references = list()
+    bica_references = parse_bica_2019_refs()
+    nrefs = len(bica_references)
+    for i, (ref_code, [ref, bib_code, cat]) in enumerate(bica_references.items()):
+        print("Entry {0}/{1}".format(i+1, nrefs))
+        print("  ref_code: {0}".format(ref_code))
+        print("  ref: {0}".format(ref))
+        print("  bib_code: {0}".format(bib_code))
+        print("  cat: {0}".format(cat))
+
+        ads_url = "https://ui.adsabs.harvard.edu/abs/{0}".format(bib_code)
+        if bib_code == "-------------------":
+            reference, created = Reference.objects.get_or_create(
+                ads_url="https://example.com/{0}".format(ref_code),
+                bib_code=ref_code,
+            )
+            reference.title = ref; reference.save()
+            setattr(Reference, ref_code, reference)
+            references.append(ref_code)
+        else:
+            reference, created = Reference.objects.get_or_create(ads_url=ads_url)
+            setattr(Reference, ref_code, reference)
+            references.append(ref_code)
+
+        if not created:
+            print("Found the Reference: {0}\n".format(ref_code))
+        else:
+            print("Created the Reference: {0}\n".format(ref_code))
+    return references
+
+
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add Bica+ 2019 data to the database"
 
@@ -32,33 +64,25 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         cmd = __file__.split("/")[-1].replace(".py", "")
         print("\n\nRunning the management command '{0}'\n".format(cmd))
 
-        # Add the ADS url (in this particular format). When the Reference
-        # instance is saved it will automatically retrieve all relevent info!
-        for ref_code, ads_url in zip(
-        [
-            "bica2019", "REF103", "REF1743", "REF1737", "REF1738",
-            "REF3044", "REF508", "REF295", "REF927", "REF213",
-        ],
-        [
-            "https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B",  # primary
-            # ... and all additional (nested) references
-            "https://ui.adsabs.harvard.edu/abs/1958ApJ...128..259H",  # REF103
-            "https://ui.adsabs.harvard.edu/abs/1958MNRAS.118..154E",  # REF1743
-            "https://ui.adsabs.harvard.edu/abs/1959Obs....79...88E",  # REF1737
-            "https://ui.adsabs.harvard.edu/abs/1959MNRAS.119..278S",  # REF1738
-            "https://ui.adsabs.harvard.edu/abs/1959SvA.....3..188M",  # REF3044
-            "https://ui.adsabs.harvard.edu/abs/1964ARA&A...2..213B",  # REF508
-            "https://ui.adsabs.harvard.edu/abs/1966ArA.....4...65L",  # REF295
-            "https://ui.adsabs.harvard.edu/abs/1966AJ.....71..990V",  # REF927
-            "https://ui.adsabs.harvard.edu/abs/1967IrAJ....8..126A",  # REF213
-        ]):
-            reference, created = Reference.objects.get_or_create(ads_url=ads_url)
-            setattr(Reference, ref_code, reference)
-            if not created:
-                print("Found the Reference: {0}\n".format(ref_code))
-            else:
-                print("Created the Reference: {0}\n".format(ref_code))
 
+        # Get or create a Reference instance for the Bica+ 2019 paper itself
+        ads_url = "https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B"
+        bica2019, created = Reference.objects.get_or_create(ads_url=ads_url)
+        if not created:
+            print("Found the Reference: {0}\n".format(bica2019))
+        else:
+            print("Created the Reference: {0}\n".format(bica2019))
+
+
+        # Parse and get or create Reference instances for refs.dat
+        references = create_references_for_bica_references()
+
+
+        # TODO: match the four Bica+ 2019 tables, add AstroObject and Observation instances
+        t2 = parse_bica_2019_table2()
+        t3 = parse_bica_2019_table3()
+        t4 = parse_bica_2019_table4()
+        t5 = parse_bica_2019_table5()
         return
 
         # Here we get one particular parameter as an example to help you
