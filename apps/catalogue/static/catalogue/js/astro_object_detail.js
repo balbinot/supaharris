@@ -1,6 +1,7 @@
 function retrieve_astro_object_observations(pk) {
     var table = $('#observations' + pk).DataTable({
-        'serverside': false,
+        'serverSide': false,
+        'processing': true,
         'pageLength': 50,
         'ajax': '/api/v1/catalogue/observation/?astro_object=' + pk + '&format=datatables',
         'columns': [

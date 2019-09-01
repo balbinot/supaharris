@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var table = $('#astro_objects').DataTable({
-        'serverside': true,
+        'serverSide': false,
+        'processing': true,
         'ajax': '/api/v1/catalogue/astro_object/?format=datatables',
         'columns': [
             {

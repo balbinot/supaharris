@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var table = $('#references').DataTable({
-        'serverside': true,
+        'serverSide': false,
+        'processing': true,
         'ajax': '/api/v1/catalogue/reference/?format=datatables',
         'columns': [
             {
