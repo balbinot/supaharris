@@ -11,7 +11,7 @@ $(document).ready(function() {
                     console.log(data);
                     console.log(row);
                     if(type === 'display'){
-                        data = '<a href="/catalogue/parameter/' + row.slug + '">' + row.name + '</a>';
+                        data = '<a href="' + row.frontend_url + '">' + row.name + '</a>';
                     }
                     return data;
                 }
