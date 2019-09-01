@@ -3,14 +3,15 @@ import numpy
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
-from catalogue.models import Reference
-from catalogue.models import Parameter
-from catalogue.models import Observation
-from catalogue.models import AstroObject
+from catalogue.models import (
+    Reference,
+    Parameter,
+    Observation,
+    AstroObject,
+)
 
 
 def index(request):
-
     # Get the parameters we want to plot --> 4 queries
     p_ra = Parameter.objects.get(name="RA")
     p_dec = Parameter.objects.get(name="Dec")

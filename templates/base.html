@@ -36,9 +36,9 @@
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="http://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css">
-    <link rel="stylesheet" type="text/css" href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css">
-    <link rel="stylesheet" type="text/css" href="http://cdn.pydata.org/bokeh/release/bokeh-tables-1.0.4.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bokeh-1.0.4.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bokeh-widgets-1.0.4.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bokeh-tables-1.0.4.min.css' %}">
 {% endblock stylesheets %}
 
 {% block topscripts %}
@@ -131,13 +131,13 @@
     <script src="{% static 'catalogue/js/search.js' %}"></script>
 
     <!-- Cookie consent pop-up -->
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/cookieconsent.min.js' %}"></script>
 
     <!-- Bokeh -->
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js""></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.0.4.min.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-api-1.0.4.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/bokeh-1.0.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bokeh-widgets-1.0.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bokeh-tables-1.0.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bokeh-api-1.0.4.min.js' %}"></script>
     {% endblock bottomscripts %}
 
 </body>
