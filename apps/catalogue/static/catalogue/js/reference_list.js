@@ -3,6 +3,7 @@ $(document).ready(function() {
         'serverSide': false,
         'processing': true,
         'ajax': '/api/v1/catalogue/reference/?format=datatables',
+        'order': [[ 1, "desc" ]],
         'columns': [
             {
                 'data': 'first_author',

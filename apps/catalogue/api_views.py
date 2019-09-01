@@ -24,7 +24,7 @@ from catalogue.serializers import (
 
 
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Reference.objects.order_by("-year")
+    queryset = Reference.objects.order_by("id")
     filter_backends = [
         filters.SearchFilter,
     ]
