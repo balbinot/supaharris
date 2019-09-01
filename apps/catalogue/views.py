@@ -12,6 +12,10 @@ from catalogue.models import (
 
 
 def index(request):
+    # For now: Harris-only
+    ads_url = "https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H"
+    harris1996ed2010, created = Reference.objects.get_or_create(ads_url=ads_url)
+
     # Get the parameters we want to plot --> 4 queries
     p_ra = Parameter.objects.get(name="RA")
     p_dec = Parameter.objects.get(name="Dec")
@@ -19,29 +23,41 @@ def index(request):
     p_b = Parameter.objects.get(name="B")
 
     # Get astro_objects that have observations of these parameters
-    gcs_with_relevant_observations = Observation.objects.select_related(
-        "parameter",  # 1 query w join
-    ).filter(
+    relevant_astro_object_ids = list(set(Observation.objects.filter(
         parameter__in=[p_l, p_b, p_ra, p_dec]
-    ).values("astro_object").distinct()  # 1 query
-
-    astro_objects = AstroObject.objects.prefetch_related(
-        "classifications", "observations", "observations__parameter",  # 3 queries
     ).filter(
-        id__in=gcs_with_relevant_observations
-    )  # 1 query
+        reference=harris1996ed2010
+    ).order_by("id").values_list("astro_object", flat=True)))
+    astro_objects = AstroObject.objects.filter(
+        id__in=relevant_astro_object_ids
+    ).order_by("id")
 
-    N = astro_objects.count()  # 1 query
-    names = numpy.zeros(N, dtype="S64")
-    ra, dec = numpy.zeros(N), numpy.zeros(N)
-    l_lon, b_lat = numpy.zeros(N), numpy.zeros(N)
-    for i, o in enumerate(astro_objects.iterator()):
-        names[i] = str(o.name)
-        ra[i] = o.observations.get(parameter=p_ra).value
-        dec[i] = o.observations.get(parameter=p_dec).value
-        l_lon[i] = float(o.observations.get(parameter=p_l).value)
-        b_lat[i] = float(o.observations.get(parameter=p_b).value)
+    # Get relevant observations
+    relevant_observations = numpy.array(
+        Observation.objects.filter(
+            parameter__in=[p_l, p_b, p_ra, p_dec], astro_object__in=astro_objects,
+            reference=harris1996ed2010
+        ).values_list(
+            "astro_object__name", "parameter__name", "value", "sigma_up", "sigma_down",
+        ).order_by("id"),
+        dtype=[
+            ("names", "S16"), ("parameter_names", "S16"), ("values", "float"),
+            ("sigma_ups", "float"), ("sigma_downs", "float")
+        ]
+    )  # --> 5 columns, len(astro_objects) * 4 rows: ra, dec, l, b
 
+    # Sanity check
+    parameter_names = relevant_observations["parameter_names"][0:4]
+    if (parameter_names[0].decode("ascii") != "RA" or
+            parameter_names[1].decode("ascii") != "Dec" or
+            parameter_names[2].decode("ascii") != "L" or
+            parameter_names[3].decode("ascii") != "B"):
+        print("ERROR: incorrect indices")
+        return
+
+    names = relevant_observations["names"][::4]  # column /w astro_object__name
+    ra, dec = relevant_observations["values"][0::4], relevant_observations["values"][1::4]
+    l_lon, b_lat = relevant_observations["values"][2::4], relevant_observations["values"][3::4]
     l_lon = [l if l < 180 else l - 360. for l in l_lon]
 
     # Plot the values we retrieved
