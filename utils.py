@@ -194,7 +194,7 @@ def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
     return parse_bibtex_and_create_reference(relevant, journals, debug=debug)
 
 
-def scrape_reference_details_from_new_ads(url, journals, debug=settings.DEBUG):
+def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=settings.DEBUG):
     """ Here we obtain information for a Reference from new-style ADS' Bibtex entry """
 
     payload = {"bibcode": [ url.split("abs/")[-1].split("/")[0] ]}
@@ -206,11 +206,17 @@ def scrape_reference_details_from_new_ads(url, journals, debug=settings.DEBUG):
         "Content-Type": "application/json",
         "user-agent": "Supaharris Bot v1.3.3.7"
     }
-    r = requests.post(
-        "https://api.adsabs.harvard.edu/v1/export/bibtex",
-        params={"q":"*:*", "fl": "bibcode,title", "rows": 2000},
-        data=json.dumps(payload), headers=headers
-    )
+    try:
+        r = requests.post(
+            "https://api.adsabs.harvard.edu/v1/export/bibtex",
+            params={"q":"*:*", "fl": "bibcode,title", "rows": 2000},
+            data=json.dumps(payload), headers=headers, timeout=timeout,
+        )
+    except requests.exceptions.Timeout:
+        if debug:
+            print("ERROR: could not retrieve '{0}'".format(url) +
+                " b/c requests.get timed out after {0} seconds".format(timeout))
+        return False
     data = json.loads(r.content)
 
     if r is False or r.status_code != 200 or "export" not in data: return False

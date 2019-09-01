@@ -7,9 +7,11 @@
     </button>
 
     <!-- Navbar Search -->
-    <form class="d-none d-md-inline-block form-inline ml-auto mr-auto">
-      <div class="input-group">
-        <input id="globalSearch" type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-auto" autocomplete="off">
+      <div class="input-group" class="autocomplete">
+        <input id="globalSearch" type="text" class="form-control"
+               placeholder="Search for..." aria-label="Search"
+               aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-primary" type="button">
             <i class="fas fa-search"></i>
@@ -21,7 +23,8 @@
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
       <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span>Account</span>
           <i class="fas fa-fw fa-user"></i>
         </a>
