@@ -9,7 +9,7 @@ function retrieve_reference(pk) {
             } else if (reference.data.ads_url.toLowerCase().includes('ads')) {
                 var ads_or_arxiv = 'ADS';
             } else {
-                var ads_or_arxiv = 'URL';
+                var ads_or_arxiv = null;
             }
             var r = new Array(), n = -1;
             r[++n] = '<tbody>';
@@ -22,7 +22,11 @@ function retrieve_reference(pk) {
             r[++n] = '<tr><th>Volume</th><td>' + reference.data.volume + '</td></tr>';
             r[++n] = '<tr><th>Pages</th><td>' + reference.data.pages + '</td></tr>';
             r[++n] = '<tr><th>DOI</th><td><a target="_blank" href="' + reference.data.doi + '">' + reference.data.doi + '</a></td></tr>';
-            r[++n] = '<tr><th>External URL</th><td><a target="_blank" href="' + reference.data.ads_url + '">' + ads_or_arxiv + '</a>'  + '</td></tr>';
+            if (ads_or_arxiv != null) {
+                r[++n] = '<tr><th>External URL</th><td><a target="_blank" href="' + reference.data.ads_url + '">' + ads_or_arxiv + '</a>'  + '</td></tr>';
+            } else {
+                r[++n] = '<tr><th>External URL</th><td>---</td></tr>';
+            }
             r[++n] = '</tbody>';
             $('#reference').html(r.join('')); 
         }
@@ -31,7 +35,7 @@ function retrieve_reference(pk) {
 
 function retrieve_reference_observations(pk) {
     var table = $('#observations' + pk).DataTable({
-        'serverSide': true,
+        'serverside': true,
         'processing': true,
         'language': {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'

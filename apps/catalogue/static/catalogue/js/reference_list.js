@@ -7,7 +7,7 @@ $(document).ready(function() {
                 'data': 'first_author',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
-                        data = '<a href="/catalogue/reference/' + row.slug + '">' + row.first_author + '</a>';
+                        data = '<a href="' + row.frontend_url + '">' + row.first_author + '</a>';
                     }
                     return data;
                 }
@@ -22,7 +22,7 @@ $(document).ready(function() {
                     } else if (row.ads_url.toLowerCase().includes('ads')) {
                         var ads_or_arxiv = 'ADS';
                     } else {
-                        var ads_or_arxiv = 'URL';
+                        return '---';
                     }
                     
                     if(type === 'display'){

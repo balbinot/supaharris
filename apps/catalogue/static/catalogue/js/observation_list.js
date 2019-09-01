@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var table = $('#observations').DataTable({
-        'serverSide': true,
+        'serverside': true,
         'processing': true,
         'language': {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'

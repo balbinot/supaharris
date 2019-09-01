@@ -34,6 +34,10 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             print("Created the Reference: {0}".format(harris1996ed2010))
 
+
+        # Add classification(s)
+        GC = AstroObjectClassification.objects.get(name="Globular Cluster")
+
         # Get the data. Note that save_as_xlsx requires openpyxl
         cluster_list = parse_data(save_as_xlsx=False)
 
@@ -117,6 +121,8 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             cluster, created = AstroObject.objects.get_or_create(
                 name=harris.gid, altname=harris.name,
             )
+            cluster.classifications.add(GC)
+            cluster.save()
             print("  {0}, created = {1}".format(cluster, created))
 
             for k, v in parameter_map.items():

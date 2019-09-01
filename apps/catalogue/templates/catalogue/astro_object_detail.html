@@ -26,11 +26,11 @@
       <table class="table table-bordered" id="observations{{ astro_object.id }}" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>Parameter</th>
-            <th>Value</th>
-            <th>sigma_up</th>
-            <th>sigma_down</th>
-            <th>Reference</th>
+            <th><i class="fas fa-fw fa-search"></i>Parameter</th>
+            <th><i class="fas fa-fw fa-search"></i>Value</th>
+            <th><i class="fas fa-fw fa-search"></i>sigma_up</th>
+            <th><i class="fas fa-fw fa-search"></i>sigma_down</th>
+            <th><i class="fas fa-fw fa-times"></i>Reference</th>
           </tr>
         </thead>
         <tfoot>
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+  <div class="card-footer small text-muted">Updated {{ astro_object.date_updated }}</div>
 </div>
 {% endblock content %}
 

@@ -1,6 +1,6 @@
 function retrieve_astro_object_observations(pk) {
     var table = $('#observations' + pk).DataTable({
-        'serverSide': false,
+        'serverside': false,
         'pageLength': 50,
         'ajax': '/api/v1/catalogue/observation/?astro_object=' + pk + '&format=datatables',
         'columns': [
@@ -8,7 +8,7 @@ function retrieve_astro_object_observations(pk) {
                 'data': 'parameter.name',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
-                        data = '<a href="/catalogue/parameter/' + row.parameter.slug
+                        data = '<a href="' + row.frontend_url
                             + '" data-toggle="tooltip" data-placement="right" title="'
                             + row.parameter.description + '">' + row.parameter.name + '</a>';
                     }
