@@ -8,7 +8,7 @@ $(document).ready(function() {
         'ajax': '/api/v1/catalogue/observation/?format=datatables',
         'columns': [
             {
-                'data': 'astro_object',
+                'data': 'astro_object.name',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
                         data = '<a href="/catalogue/astro_object/' + row.astro_object.slug + '">' + row.astro_object.name + '</a>';
@@ -29,7 +29,7 @@ $(document).ready(function() {
             {'data': 'sigma_up'},
             {'data': 'sigma_down'},
             {
-                'data': 'reference',
+                'data': 'reference.first_author',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
                         data = '<a href="/catalogue/reference/' + row.reference.slug + '">' + row.reference.first_author + ' (' + row.reference.year + ')' + '</a>';
