@@ -101,8 +101,9 @@ def search(request):
 
 def reference_list(request):
     references = Reference.objects.all()
+    date_updated = references.order_by("-date_updated").values_list("date_updated", flat=True).first()
     return render(request, "catalogue/reference_list.html",
-        {"references": references})
+        {"references": references, "date_updated": date_updated})
 
 
 def reference_detail(request, slug):
@@ -113,8 +114,9 @@ def reference_detail(request, slug):
 
 def astro_object_list(request):
     astro_objects = AstroObject.objects.all()
+    date_updated = astro_objects.order_by("-date_updated").values_list("date_updated", flat=True).first()
     return render(request, "catalogue/astro_object_list.html",
-        {"astro_objects": astro_objects})
+        {"astro_objects": astro_objects, "date_updated": date_updated})
 
 
 def astro_object_detail(request, slug):
@@ -124,8 +126,9 @@ def astro_object_detail(request, slug):
 
 def parameter_list(request):
     parameters = Parameter.objects.all()
+    date_updated = parameters.order_by("-date_updated").values_list("date_updated", flat=True).first()
     return render(request, "catalogue/parameter_list.html",
-        {"parameters": parameters})
+        {"parameters": parameters, "date_updated": date_updated})
 
 def parameter_detail(request, slug):
     parameter = get_object_or_404(Parameter, slug=slug)
@@ -134,8 +137,9 @@ def parameter_detail(request, slug):
 
 def observation_list(request):
     observations = Observation.objects.all()
+    date_updated = observations.order_by("-date_updated").values_list("date_updated", flat=True).first()
     return render(request, "catalogue/observation_list.html",
-        {"observations": observations})
+        {"observations": observations, "date_updated": date_updated})
 
 
 def observation_detail(request, slug):

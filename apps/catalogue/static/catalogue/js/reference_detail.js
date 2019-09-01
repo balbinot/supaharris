@@ -3,6 +3,7 @@ function retrieve_reference(pk) {
         type: 'GET', 
         url: '/api/v1/catalogue/reference/' + pk + '?format=datatables', 
         dataType: 'json',
+        async: true,
         success: function(reference) {
             if (reference.data.ads_url.toLowerCase().includes('arxiv.org')) {
                 var ads_or_arxiv = 'arXiv';
@@ -21,7 +22,11 @@ function retrieve_reference(pk) {
             r[++n] = '<tr><th>Month</th><td>' + reference.data.month + '</td></tr>';
             r[++n] = '<tr><th>Volume</th><td>' + reference.data.volume + '</td></tr>';
             r[++n] = '<tr><th>Pages</th><td>' + reference.data.pages + '</td></tr>';
-            r[++n] = '<tr><th>DOI</th><td><a target="_blank" href="' + reference.data.doi + '">' + reference.data.doi + '</a></td></tr>';
+            if (reference.data.doi != null) {
+                r[++n] = '<tr><th>DOI</th><td><a target="_blank" href="' + reference.data.doi + '">' + reference.data.doi + '</a></td></tr>';
+            } else {
+                r[++n] = '<tr><th>DOI</th><td>---</td></tr>';
+            }
             if (ads_or_arxiv != null) {
                 r[++n] = '<tr><th>External URL</th><td><a target="_blank" href="' + reference.data.ads_url + '">' + ads_or_arxiv + '</a>'  + '</td></tr>';
             } else {
@@ -40,8 +45,6 @@ function retrieve_reference_observations(pk) {
         'language': {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
         },
-        'ordering': false,
-        'searching': false,
         'ajax': '/api/v1/catalogue/observation/?reference=' + pk + '&format=datatables',
         'columns': [
             {
@@ -52,7 +55,6 @@ function retrieve_reference_observations(pk) {
                         if(row.astro_object.altname) {
                             altname = ' (' + row.astro_object.altname + ') ';
                         }
-                        console.log(altname);
                         data = '<a href="/catalogue/astro_object/' + row.astro_object.slug
                             + '">' + row.astro_object.name + altname + '</a>';
                     }
