@@ -52,8 +52,12 @@ def index(request):
             parameter_names[1].decode("ascii") != "Dec" or
             parameter_names[2].decode("ascii") != "L" or
             parameter_names[3].decode("ascii") != "B"):
-        print("ERROR: incorrect indices")
-        return
+        import logging
+        logger = logging.getLogger("request")
+        logger.error("ERROR: incorrect indices in index")
+        return render(request, "catalogue/index.html", {
+            "fig_script": None, "fig_div": None
+        })
 
     names = relevant_observations["names"][::4]  # column /w astro_object__name
     ra, dec = relevant_observations["values"][0::4], relevant_observations["values"][1::4]
