@@ -25,7 +25,6 @@ DEBUG = env("DEBUG", default=False)
 DATABASES = {
     "default": env.db('DATABASE_URL'),
 }
-DATABASES["default"]["OPTIONS"] = { "CONN_MAX_AGE": 3600 }
 
 ALLOWED_HOSTS = ["*"]
 
