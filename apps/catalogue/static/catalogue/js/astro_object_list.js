@@ -2,6 +2,7 @@ $(document).ready(function() {
     var table = $('#astro_objects').DataTable({
         'serverSide': false,
         'processing': true,
+        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         'ajax': '/api/v1/catalogue/astro_object/?format=datatables',
         'columns': [
             {

@@ -3,6 +3,7 @@ function retrieve_astro_object_observations(pk) {
         'serverSide': false,
         'processing': true,
         'pageLength': 50,
+        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         'ajax': '/api/v1/catalogue/observation/?astro_object=' + pk + '&format=datatables',
         'columns': [
             {
