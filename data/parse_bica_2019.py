@@ -5,7 +5,8 @@ import numpy
 import logging
 from io import StringIO
 from matplotlib import pyplot
-
+from astropy import units as u
+from astropy import coordinates as coord
 
 logger = logging.getLogger("console")
 logger.logLevel = logging.DEBUG
@@ -41,13 +42,13 @@ def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), debug=False,):
             ref = line[8:365].strip()
             bib_code = line[366:385].strip()
             cat = line[386:396].strip()
-            ads_url = "https://ui.adsabs.harvard.edu/abs/{0}".format(bib_code)
 
-            logger.debug("Entry {0}/{1}".format(i+1, nentries))
-            logger.debug("  ref_code: {0}".format(ref_code))
-            logger.debug("  ref: {0}".format(ref))
-            logger.debug("  bib_code: {0}".format(bib_code))
-            logger.debug("  cat: {0}".format(cat))
+            if debug:
+                logger.debug("Entry {0}/{1}".format(i+1, nentries))
+                logger.debug("  ref_code: {0}".format(ref_code))
+                logger.debug("  ref: {0}".format(ref))
+                logger.debug("  bib_code: {0}".format(bib_code))
+                logger.debug("  cat: {0}".format(cat))
 
             entries[ref_code] = [ref, bib_code, cat]
     return entries
@@ -81,15 +82,17 @@ def parse_bica_2019_table2(fname="{0}table2.dat".format(BASEDIR), debug=False):
             obj_class = line[0:13].strip()
             nobj = line[14:18].strip()
             name = line[19:38].strip()
-            code = line[39:46].strip()
+            codes = line[39:46].strip()
 
-            logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
-            logger.debug("  obj_class: {0}".format(obj_class))
-            logger.debug("  nobj: {0}".format(nobj))
-            logger.debug("  name: {0}".format(name))
-            logger.debug("  code: {0}".format(code))
+            if debug:
+                logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
+                logger.debug("  obj_class: {0}".format(obj_class))
+                logger.debug("  nobj: {0}".format(nobj))
+                logger.debug("  name: {0}".format(name))
+                logger.debug("  codes: {0}".format(codes))
 
-            entries[code] = [obj_class, nobj, name]
+            for code in codes.split(","):
+                entries[code] = [obj_class, nobj, name]
     return entries
 
 
@@ -122,12 +125,15 @@ def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False
     # --------------------------------------------------------------------------------
 
     nentries, entries = 0, dict()
-    with open(fname, "rb") as f:
+    with gzip.open(fname, "r") as f:
         for line in f.readlines(): nentries += 1
     with gzip.open(fname, "r") as f:
         for i, line in enumerate(f.readlines()):
-            glan = line[0:6].strip().decode("ascii")
+            glon = line[0:6].strip().decode("ascii")
             glat = line[7:13].strip().decode("ascii")
+            sky_coord = coord.SkyCoord(
+                glon, glat, frame="galactic", equinox="J2000", unit=(u.deg, u.deg)
+            )
             rah = line[14:16].strip().decode("ascii")
             ram = line[17:19].strip().decode("ascii")
             ras = line[20:22].strip().decode("ascii")
@@ -135,36 +141,48 @@ def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False
             ded = line[24:26].strip().decode("ascii")
             dem = line[27:29].strip().decode("ascii")
             des = line[30:32].strip().decode("ascii")
+            sky_coord2 = coord.SkyCoord(
+                "{0} {1} {2} {3}{4} {5} {6}".format(
+                    rah, ram, ras, "+" if de_sign != "-" else de_sign, ded, dem, des
+                ), frame="icrs", equinox="J2000", unit=(u.hourangle, u.deg)
+            )
+            # sky_coord2.galactic should now match glon, glat ... :-)
             diama = line[33:40].strip().decode("ascii")
             diamb = line[41:48].strip().decode("ascii")
             name = line[49:161].strip().decode("ascii")
             obj_class1 = line[162:167].strip().decode("ascii")
             obj_class2 = line[168:173].strip().decode("ascii")
             comments = line[174:206].strip().decode("ascii")
-            code = line[207:254].strip().decode("ascii")
+            codes = line[207:254].strip().decode("ascii")
 
-            logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
-            logger.debug("  glan: {0}".format(glan))
-            logger.debug("  glat: {0}".format(glat))
-            logger.debug("  rah: {0}".format(rah))
-            logger.debug("  ram: {0}".format(ram))
-            logger.debug("  ras: {0}".format(ras))
-            logger.debug("  de_sign: {0}".format(de_sign))
-            logger.debug("  ded: {0}".format(ded))
-            logger.debug("  dem: {0}".format(dem))
-            logger.debug("  des: {0}".format(des))
-            logger.debug("  diama: {0}".format(diama))
-            logger.debug("  diamb: {0}".format(diamb))
-            logger.debug("  name: {0}".format(name))
-            logger.debug("  obj_class1: {0}".format(obj_class1))
-            logger.debug("  obj_class2: {0}".format(obj_class2))
-            logger.debug("  comments: {0}".format(comments))
-            logger.debug("  code: {0}".format(code))
+            if debug:
+                logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
+                logger.debug("  glon: {0}".format(glon))
+                logger.debug("  glat: {0}".format(glat))
+                logger.debug("  sky_coord: {0}".format(sky_coord))
+                logger.debug("  rah: {0}".format(rah))
+                logger.debug("  ram: {0}".format(ram))
+                logger.debug("  ras: {0}".format(ras))
+                logger.debug("  de_sign: {0}".format(de_sign))
+                logger.debug("  ded: {0}".format(ded))
+                logger.debug("  dem: {0}".format(dem))
+                logger.debug("  des: {0}".format(des))
+                logger.debug("  sky_coord2: {0}".format(sky_coord2))
+                logger.debug("  diama: {0}".format(diama))
+                logger.debug("  diamb: {0}".format(diamb))
+                logger.debug("  name: {0}".format(name))
+                logger.debug("  obj_class1: {0}".format(obj_class1))
+                logger.debug("  obj_class2: {0}".format(obj_class2))
+                logger.debug("  comments: {0}".format(comments))
+                logger.debug("  codes: {0}".format(codes))
 
-            entries[code] = [
-                glan, glat, rah, ram, ras, de_sign, ded, dem, des, diama, diamb,
-                name, obj_class1, obj_class2, comments, code
-            ]
+            for code in codes.split(","):
+                entries[code] = [
+                    glon, glat, sky_coord,
+                    rah, ram, ras, de_sign, ded, dem, des, sky_coord2,
+                    diama, diamb,
+                    name, obj_class1, obj_class2, comments
+                ]
     return entries
 
 
@@ -212,34 +230,41 @@ def parse_bica_2019_table4(fname="{0}table4.dat".format(BASEDIR), debug=False):
             w = line[14:20].strip()
             glon = line[21:27].strip()
             glat = line[28:34].strip()
+            # AttributeError: 'str' object has no attribute 'deg'
+            # sky_coord = coord.SkyCoord(
+            #     glon, glat, frame="galactic", equinox="J2000", unit=(u.deg, u.deg)
+            # )
             diama = line[35:41].strip()
             diamb = line[42:48].strip()
             name = line[49:102].strip()
             obj_class1 = line[103:106].strip()
             obj_class2 = line[107:113].strip()
             note = line[114:149].strip()
-            code = line[150:195].strip()
+            codes = line[150:195].strip()
             comments = line[196:264].strip()
 
-            logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
-            logger.debug("  u: {0}".format(u))
-            logger.debug("  v: {0}".format(v))
-            logger.debug("  w: {0}".format(w))
-            logger.debug("  glon: {0}".format(glon))
-            logger.debug("  glat: {0}".format(glat))
-            logger.debug("  diama: {0}".format(diama))
-            logger.debug("  diamb: {0}".format(diamb))
-            logger.debug("  name: {0}".format(name))
-            logger.debug("  obj_class1: {0}".format(obj_class1))
-            logger.debug("  obj_class2: {0}".format(obj_class2))
-            logger.debug("  note: {0}".format(note))
-            logger.debug("  code: {0}".format(code))
-            logger.debug("  comments: {0}".format(comments))
+            if debug:
+                logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
+                logger.debug("  u: {0}".format(u))
+                logger.debug("  v: {0}".format(v))
+                logger.debug("  w: {0}".format(w))
+                logger.debug("  glon: {0}".format(glon))
+                logger.debug("  glat: {0}".format(glat))
+                # logger.debug("  sky_coord: {0}".format(sky_coord))
+                logger.debug("  diama: {0}".format(diama))
+                logger.debug("  diamb: {0}".format(diamb))
+                logger.debug("  name: {0}".format(name))
+                logger.debug("  obj_class1: {0}".format(obj_class1))
+                logger.debug("  obj_class2: {0}".format(obj_class2))
+                logger.debug("  note: {0}".format(note))
+                logger.debug("  codes: {0}".format(codes))
+                logger.debug("  comments: {0}".format(comments))
 
-            entries[code] = [
-                u, v, w, glon, glat, diama, diamb, name, obj_class1, obj_class2,
-                note, code, comments
-            ]
+            for code in codes.split(","):
+                entries[code] = [
+                    u, v, w, glon, glat, diama, diamb, name, obj_class1, obj_class2,
+                    note, comments
+                ]
     return entries
 
 
@@ -293,6 +318,9 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
         for i, line in enumerate(f.readlines()):
             glon = line[0:6].strip()
             glat = line[7:13].strip()
+            sky_coord = coord.SkyCoord(
+                glon, glat, frame="galactic", equinox="J2000", unit=(u.deg, u.deg)
+            )
             rah = line[14:16].strip()
             ram = line[17:19].strip()
             ras = line[20:22].strip()
@@ -300,6 +328,11 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
             ded = line[24:26].strip()
             dem = line[27:29].strip()
             des = line[30:32].strip()
+            sky_coord2 = coord.SkyCoord(
+                "{0} {1} {2} {3}{4} {5} {6}".format(
+                    rah, ram, ras, "+" if de_sign != "-" else de_sign, ded, dem, des
+                ), frame="icrs", equinox="J2000", unit=(u.hourangle, u.deg)
+            )
             diama = line[33:39].strip()
             diamb = line[40:45].strip()
             name = line[46:102].strip()
@@ -308,41 +341,67 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
             dist = line[120:124].strip()
             vmag = line[125:130].strip()
             memb = line[131:139].strip()
-            code = line[140:185].strip()
+            codes = line[140:185].strip()
             comments = line[186:261].strip()
 
-            logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
-            logger.debug("  glon: {0}".format(glon))
-            logger.debug("  glat: {0}".format(glat))
-            logger.debug("  rah: {0}".format(rah))
-            logger.debug("  ram: {0}".format(ram))
-            logger.debug("  ras: {0}".format(ras))
-            logger.debug("  de_sign: {0}".format(de_sign))
-            logger.debug("  ded: {0}".format(ded))
-            logger.debug("  dem: {0}".format(dem))
-            logger.debug("  des: {0}".format(des))
-            logger.debug("  diama: {0}".format(diama))
-            logger.debug("  diamb: {0}".format(diamb))
-            logger.debug("  name: {0}".format(name))
-            logger.debug("  obj_class1: {0}".format(obj_class1))
-            logger.debug("  obj_class2: {0}".format(obj_class2))
-            logger.debug("  dist: {0}".format(dist))
-            logger.debug("  vmag: {0}".format(vmag))
-            logger.debug("  memb: {0}".format(memb))
-            logger.debug("  code: {0}".format(code))
-            logger.debug("  comments: {0}".format(comments))
+            if debug:
+                logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
+                logger.debug("  glon: {0}".format(glon))
+                logger.debug("  glat: {0}".format(glat))
+                logger.debug("  sky_coord: {0}".format(sky_coord))
+                logger.debug("  rah: {0}".format(rah))
+                logger.debug("  ram: {0}".format(ram))
+                logger.debug("  ras: {0}".format(ras))
+                logger.debug("  de_sign: {0}".format(de_sign))
+                logger.debug("  ded: {0}".format(ded))
+                logger.debug("  dem: {0}".format(dem))
+                logger.debug("  des: {0}".format(des))
+                logger.debug("  sky_coord2: {0}".format(sky_coord2))
+                logger.debug("  diama: {0}".format(diama))
+                logger.debug("  diamb: {0}".format(diamb))
+                logger.debug("  name: {0}".format(name))
+                logger.debug("  obj_class1: {0}".format(obj_class1))
+                logger.debug("  obj_class2: {0}".format(obj_class2))
+                logger.debug("  dist: {0}".format(dist))
+                logger.debug("  vmag: {0}".format(vmag))
+                logger.debug("  memb: {0}".format(memb))
+                logger.debug("  codes: {0}".format(codes))
+                logger.debug("  comments: {0}".format(comments))
 
-            entries[code] = [
-                glon, glat, rah, ram, ras, de_sign, ded, dem, des, diama, diamb,
-                name, obj_class1, obj_class2, dist, vmag, memb, code, comments
+            for code in codes.split(","):
+                entries[code] = [
+                    glon, glat, sky_coord,
+                    rah, ram, ras, de_sign, ded, dem, des, sky_coord2,
+                    diama, diamb,
+                    name, obj_class1, obj_class2, dist, vmag, memb, comments
 
-            ]
+                ]
     return entries
 
 
 if __name__ == "__main__":
     refs = parse_bica_2019_refs(debug=True)
+
+    print("\nTable 2")
     t2 = parse_bica_2019_table2(debug=True)
+    for i, (k, v) in enumerate(t2.items()):
+        print("{0:<15s}{1}".format(k, v))
+        if i > 10: break
+
+    print("\nTable 3")
     t3 = parse_bica_2019_table3(debug=True)
+    for i, (k, v) in enumerate(t3.items()):
+        print("{0:<15s}{1}".format(k, v))
+        if i > 10: break
+
+    print("\nTable 4")
     t4 = parse_bica_2019_table4(debug=True)
+    for i, (k, v) in enumerate(t4.items()):
+        print("{0:<15s}{1}".format(k, v))
+        if i > 10: break
+
+    print("\nTable 5")
     t5 = parse_bica_2019_table5(debug=True)
+    for i, (k, v) in enumerate(t5.items()):
+        print("{0:<15s}{1}".format(k, v))
+        if i > 10: break
