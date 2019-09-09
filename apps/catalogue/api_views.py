@@ -37,7 +37,7 @@ class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
             return ReferenceDetailSerializer
         return super().get_serializer_class()  # create/destroy/update
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -50,7 +50,7 @@ class AstroObjectClassificationViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     search_fields = ["name",]
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -73,7 +73,7 @@ class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
             return AstroObjectDetailSerializer
         return super().get_serializer_class()  # create/destroy/update
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -87,7 +87,7 @@ class ParameterViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ["name", "description"]
 
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -109,6 +109,6 @@ class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     filterset_fields = ("astro_object", "parameter", "reference")
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)

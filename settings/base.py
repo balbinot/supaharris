@@ -26,6 +26,10 @@ DATABASES = {
     "default": env.db('DATABASE_URL'),
 }
 
+CACHES = {
+    "default": env.cache()
+}
+
 ALLOWED_HOSTS = ["*"]
 
 
@@ -56,6 +60,7 @@ SITE_ID = 1
 
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -64,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "silk.middleware.SilkyMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "settings.urls"
