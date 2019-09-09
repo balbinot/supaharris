@@ -35,10 +35,10 @@
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/cookieconsent/cookieconsent.min.css' %}" rel="styelsheet" type="text/css">
-    <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/bokeh/css/bokeh.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/bokeh/css/bokeh-widgets.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/bokeh/css/bokeh-tables.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block topscripts %}
@@ -81,53 +81,24 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{% url 'accounts:logout' %}">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include 'footer.html' %}
 
-    {% include 'footer.html' %}
-
-    {% block bottomscripts %}
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-    <script src="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.js' %}"></script>
-
-    <!-- Page level plugin JavaScript-->
-    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin.min.js' %}"></script>
-    <script src="{% static 'catalogue/js/search.js' %}"></script>
-
-    <!-- Cookie consent pop-up -->
-    <script type="text/javascript" src="{% static 'vendor/cookieconsent/cookieconsent.min.js' %}"></script>
-
-    <!-- Bokeh -->
-    <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-widgets.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-tables.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-api.min.js' %}"></script>
-    {% endblock bottomscripts %}
+  {% block bottomscripts %}
+  <script type="text/javascript" src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/cookieconsent/cookieconsent.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-widgets.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-tables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/bokehjs/js/bokeh-api.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/sb-admin.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'catalogue/js/search.js' %}"></script>
+  {% endblock bottomscripts %}
 
 </body>
 </html>
