@@ -16,7 +16,7 @@ from catalogue.models import (
     AstroObjectClassification,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_harris_1996ed2010 import parse_data
+from data.parse_harris_1996ed2010 import parse_harris1996ed2010
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -39,8 +39,9 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         GC = AstroObjectClassification.objects.get(name="Globular Cluster")
 
         # Get the data. Note that save_as_xlsx requires openpyxl
-        cluster_list = parse_data(save_as_xlsx=False)
+        cluster_list = parse_harris1996ed2010(save_as_xlsx=False)
 
+        # Keys: Values --> SupaHarris: Harris parameter names
         parameter_map = OrderedDict({
             # Coordinates
             "RA": "ra",                    # Right ascension               (Epoch J2000)

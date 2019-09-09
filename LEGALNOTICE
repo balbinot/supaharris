@@ -15,6 +15,11 @@ Data
     Data:   http://physwww.mcmaster.ca/~harris/mwgc.dat
     Folder: data/MW_GCS_Hilker2019
 
+    Name:   VandenBerg+ 2013
+    Paper:  https://ui.adsabs.harvard.edu/abs/2013ApJ...775..134V/abstract
+    Data:   https://arxiv.org/e-print/1308.2257 (parsed Table 2 from .tex file)
+    Folder: data/MW_GCS_VandenBerg2013
+
     Name:   Bica+ 2019
     Paper:  https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract
     Data:   https://ui.adsabs.harvard.edu/abs/2019yCat..51570012B/abstract

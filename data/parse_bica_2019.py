@@ -3,7 +3,6 @@ import sys
 import gzip
 import numpy
 import logging
-from io import StringIO
 from matplotlib import pyplot
 from astropy import units as u
 from astropy import coordinates as coord
