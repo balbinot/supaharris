@@ -73,6 +73,24 @@ gulp.task('vendor', function(cb) {
     ])
     .pipe(gulp.dest('./vendor/jquery-typeahead'))
 
+  // Bokeh JS
+  gulp.src([
+      './node_modules/bokehjs/build/js/*',
+    ])
+    .pipe(gulp.dest('./vendor/bokehjs/js'))
+
+  // Bokeh CSS
+  gulp.src([
+      './node_modules/bokehjs/build/css/*',
+    ])
+    .pipe(gulp.dest('./vendor/bokehjs/css'))
+
+  // Cookieconsent
+  gulp.src([
+      './node_modules/cookieconsent/build/**',
+    ])
+    .pipe(gulp.dest('./vendor/cookieconsent'))
+
   cb();
 
 });
