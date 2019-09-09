@@ -2052,6 +2052,11 @@ pre code {
   opacity: 1;
 }
 
+.form-control::-moz-placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
 .form-control:-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
@@ -5129,8 +5134,10 @@ input[type="button"].btn-block {
 @media (min-width: 576px) {
   .card-columns {
     -webkit-column-count: 3;
+    -moz-column-count: 3;
     column-count: 3;
     -webkit-column-gap: 1.25rem;
+    -moz-column-gap: 1.25rem;
     column-gap: 1.25rem;
     orphans: 1;
     widows: 1;
@@ -10605,6 +10612,7 @@ body {
 @media (min-width: 576px) {
   .card-columns {
     -webkit-column-count: 1;
+    -moz-column-count: 1;
     column-count: 1;
   }
 }
@@ -10612,6 +10620,7 @@ body {
 @media (min-width: 768px) {
   .card-columns {
     -webkit-column-count: 2;
+    -moz-column-count: 2;
     column-count: 2;
   }
 }
@@ -10619,6 +10628,7 @@ body {
 @media (min-width: 1200px) {
   .card-columns {
     -webkit-column-count: 2;
+    -moz-column-count: 2;
     column-count: 2;
   }
 }
@@ -10674,6 +10684,10 @@ body {
   color: transparent;
 }
 
+.form-label-group input::-moz-placeholder {
+  color: transparent;
+}
+
 .form-label-group input::placeholder {
   color: transparent;
 }
@@ -10721,37 +10735,4 @@ body.sidebar-toggled footer.sticky-footer {
   body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
-}
-
-
-.autocomplete {
-  /*the container must be positioned relative:*/
-  position: relative;
-  display: inline-block;
-}
-.autocomplete-items {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #d4d4d4;
-}
-.autocomplete-items div:hover {
-  /*when hovering an item:*/
-  background-color: #e9e9e9;
-}
-.autocomplete-active {
-  /*when navigating through the items using the arrow keys:*/
-  background-color: DodgerBlue !important;
-  color: #ffffff;
 }
