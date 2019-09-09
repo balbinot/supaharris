@@ -1,8 +1,8 @@
 $(document).ready(function() {
     var table = $('#astro_objects').DataTable({
-        'serverSide': false,
+        'serverSide': true,
         'processing': true,
-        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        'lengthMenu': [[10, 25, 50, 100, 500, 1000, 5000], [10, 25, 50, 100, 500, 1000, 5000]],
         'ajax': '/api/v1/catalogue/astro_object/?format=datatables',
         'columns': [
             {
@@ -15,7 +15,7 @@ $(document).ready(function() {
                 }
             },
             {'data': 'altname'},
-            {'data': 'classifications', 'searchable': false},
+            {'data': 'classifications', 'name': 'classifications.name'},
             {'data': 'frontend_url', 'visible': false, 'searchable': false},
         ]
     });

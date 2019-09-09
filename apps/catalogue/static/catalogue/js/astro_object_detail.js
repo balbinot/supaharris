@@ -10,6 +10,7 @@ function retrieve_astro_object_observations(pk) {
                 'data': 'parameter.name',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
+                        console.log(data);
                         data = '<a href="' + row.frontend_url
                             + '" data-toggle="tooltip" data-placement="right" title="'
                             + row.parameter.description + '">' + row.parameter.name + '</a>';
@@ -21,7 +22,7 @@ function retrieve_astro_object_observations(pk) {
             { 'data': 'sigma_up' },
             { 'data': 'sigma_down' },
             {
-                'data': 'reference',
+                'data': 'reference.first_author',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
                         data = '<a href="/catalogue/reference/' + row.reference.slug

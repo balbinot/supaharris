@@ -1,11 +1,8 @@
 $(document).ready(function() {
     var table = $('#observations').DataTable({
-        'serverSide': false,
+        'serverSide': true,
         'processing': true,
-        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        'language': {
-            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
-        },
+        'lengthMenu': [[10, 25, 50, 100, 500, 1000, 5000], [10, 25, 50, 100, 500, 1000, 5000]],
         'ajax': '/api/v1/catalogue/observation/?format=datatables',
         'columns': [
             {
@@ -30,7 +27,8 @@ $(document).ready(function() {
             {'data': 'sigma_up'},
             {'data': 'sigma_down'},
             {
-                'data': 'reference.first_author',
+                'data': 'reference',
+                'name': 'reference.first_author, reference.year',
                 'render': function(data, type, row, meta){
                     if(type === 'display'){
                         data = '<a href="/catalogue/reference/' + row.reference.slug + '">' + row.reference.first_author + ' (' + row.reference.year + ')' + '</a>';
