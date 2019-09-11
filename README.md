@@ -3,11 +3,8 @@ supaharris
 
 **supaharris.com globular and star cluster database**
 
-.. image:: https://travis-ci.org/tlrh314/supaharris.svg?branch=master
-   :target: http://travis-ci.org/tlrh314/supaharris
-
-.. image:: https://img.shields.io/badge/license-AGPL3-brightgreen.svg
-   :target: https://github.com/tlrh314/supaharris/blob/master/LICENSE
+[![Status](https://travis-ci.org/tlrh314/supaharris.svg?branch=master)](https://travis-ci.org/tlrh314/supaharris)  
+[![MIT license](http://img.shields.io/badge/license-AGPL3-brightgreen.svg)](https://github.com/tlrh314/supaharris/blob/master/LICENSE)
 
 
 | Reference | Parser | Status | Management command | Status |
