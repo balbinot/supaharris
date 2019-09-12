@@ -10,7 +10,7 @@ addons:
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 install:
-  - pip3 install -r requirements.txt
+  - pip install -r requirements.txt
 script:
   - python manage.py test accounts.tests
   - python manage.py test catalogue.tests
