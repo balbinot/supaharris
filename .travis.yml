@@ -1,21 +1,33 @@
+# vim: sw=2 ts=2 sts=2 expandtab
+
 dist: bionic
 sudo: true
 language: python
-python:
-  - '3.7'
-  - '3.6'
-  - '3.5'
-addons:
-  mariadb: '10.4'
-before_install:
-  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
+services:
+  - docker
+
+matrix:
+  include:
+    - env:
+        - DB=mariadb:10.4
+    python: "3.7"
+
 install:
   - pip install -r requirements.txt
+
 before_script:
+  # Setup the database
+  - ./.travis/initializedb.sh
+  - python -VV
+  - rm -f ~/.my.cnf # set in .travis.initializedb.sh for the above commands - we should be using database.json however
+
+  # Setup Django settings
   - cp settings/.env.example settings/.env
-  - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql:\/\/root:@localhost:3306\/test/g" settings/.env;
+  - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql:\/\/test2:some password@127.0.0.1:3306\/test2/g" settings/.env;
   - rm settings/.env.bak
   - grep -R "DATABASE_URL" settings/.env
+
 script:
   - python manage.py test accounts.tests
   - python manage.py test catalogue.tests
