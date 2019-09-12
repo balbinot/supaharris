@@ -13,7 +13,8 @@ install:
   - pip install -r requirements.txt
 before_script:
   - cp settings/.env.example settings/.env
-  - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql://root:@localhost:3306/g" settings/.env;
+  - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql:\/\/root:@localhost:3306\/test/g" settings/.env;
+  - rm settings/.env.bak
   - grep -R "DATABASE_URL" settings/.env
 script:
   - python manage.py test accounts.tests
