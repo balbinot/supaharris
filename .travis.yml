@@ -11,6 +11,10 @@ before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 install:
   - pip install -r requirements.txt
+before_script:
+  - cp settings/.env.example settings/.env
+  - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql://root:@localhost:3306/g" settings/.env;
+  - grep -R "DATABASE_URL" settings/.env
 script:
   - python manage.py test accounts.tests
   - python manage.py test catalogue.tests
