@@ -1,3 +1,4 @@
+import numpy
 import logging
 import factory
 from faker import Factory
@@ -32,14 +33,48 @@ class ParameterFactory(factory.DjangoModelFactory):
     scale = 1.0
 
 
+def generate_bib_code(author=None, journal=None, volume=None, pages=None):
+    if not author:
+        author = faker.last_name()
+    if not journal:
+        journals = [k.upper()[0:8] for k,v in Reference.JOURNALS]
+        journal = journals[faker.random_int(min=0, max=len(journals))]
+    if not volume:
+        volume = faker.random_int(min=1, max=450)
+    if not pages:
+        pages = faker.random_int(min=1, max=450)
+    bib_code = "{0}{1}{2}{3}{4}{5}".format(
+        journal,
+        "."*(8 - len(journal)),
+        volume,
+        "."*(3 - int(numpy.log10(volume))),
+        pages,
+        author.upper()[0]
+    )
+    return bib_code
+
+
 class ReferenceFactory(factory.DjangoModelFactory):
     class Meta:
         model = Reference
         django_get_or_create = ("ads_url",)
 
     ads_url = factory.LazyAttribute(lambda _: faker.url())
+    title = factory.LazyAttribute(lambda _: faker.sentence())
+    first_author = factory.LazyAttribute(lambda _: faker.last_name())
     journal = factory.LazyAttribute(lambda _:
-        faker.random_int(min=0, max=len(Reference.JOURNALS))
+        faker.random_int(min=0, max=len(Reference.JOURNALS)-1)
+    )
+    month = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=12))
+    volume = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
+    pages = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
+    bib_code = factory.LazyAttribute(lambda _:
+        generate_bib_code(
+            _.first_author,
+            Reference.JOURNALS[_.journal][0].upper()[0:8],
+            _.volume,
+            _.pages,
+        )
     )
 
     @factory.post_generation
@@ -95,8 +130,8 @@ class ProfileFactory(factory.DjangoModelFactory):
         model = Profile
 
     profile_type = factory.LazyAttribute(lambda _: faker.name())
-    # reference
-    # astro_object
+    reference = factory.SubFactory(ReferenceFactory)
+    astro_object = factory.SubFactory(AstroObjectFactory)
     # profile_type
     # profile
     # model_parameters
@@ -106,10 +141,9 @@ class ProfileFactory(factory.DjangoModelFactory):
 class AuxiliaryFactory(factory.DjangoModelFactory):
     class Meta:
         model = Auxiliary
-        django_get_or_create = ("name",)
 
-    # reference
-    # astro_object
+    reference = factory.SubFactory(ReferenceFactory)
+    astro_object = factory.SubFactory(AstroObjectFactory)
     # path
     # url
 
@@ -118,11 +152,13 @@ class ObservationFactory(factory.DjangoModelFactory):
     class Meta:
         model = Observation
 
-    # reference
-    # astro_object
-    # parameter
+    reference = factory.SubFactory(ReferenceFactory)
+    astro_object = factory.SubFactory(AstroObjectFactory)
+    parameter = factory.SubFactory(ParameterFactory)
 
-    # value
+    value = factory.LazyAttribute(lambda _:
+        faker.random_int(min=-999999, max=999999) / 1000
+    )
     # sigma_up
     # sigma_down
 
@@ -131,8 +167,7 @@ class RankFactory(factory.DjangoModelFactory):
     class Meta:
         model = Rank
 
-    # observation
-
-    # rank
-    # weight
+    observation = factory.SubFactory(ObservationFactory)
+    rank = factory.LazyAttribute(lambda _: faker.random_int(min=0, max=20))
+    weight = factory.LazyAttribute(lambda _: faker.random_int(min=0, max=20))
     # compilation_name

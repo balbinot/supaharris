@@ -37,7 +37,7 @@ class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
             return ReferenceListSerializer
         if self.action == "retrieve":
             return ReferenceDetailSerializer
-        return super().get_serializer_class()  # create/destroy/update
+        return ReferenceListSerializer   # head/create/destroy/update
 
     @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
