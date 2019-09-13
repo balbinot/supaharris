@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # `env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/random | head -c 50; echo`
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="secret")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
@@ -26,7 +26,11 @@ DATABASES = {
     "default": env.db('DATABASE_URL'),
 }
 
-ALLOWED_HOSTS = [u"127.0.0.1", u"localhost", env("ALLOWED_HOST1"), env("ALLOWED_HOST2")]
+CACHES = {
+    "default": env.cache()
+}
+
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,10 +46,10 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "tinymce",
-    "django_extensions",
     "django_filters",
     "rest_framework",
     "rest_framework_datatables",
+    "silk",
 
     "about",
     "accounts",
@@ -56,6 +60,7 @@ SITE_ID = 1
 
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -63,6 +68,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "silk.middleware.SilkyMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "settings.urls"
@@ -147,6 +154,20 @@ vars().update(EMAIL_CONFIG)
 DEFAULT_FROM_EMAIL = "info@supaharris.com"
 SERVER_EMAIL = "info@supaharris.com"
 
+
+# http://django-filebrowser.readthedocs.io/en/latest/settings.html
+# FILEBROWSER_DIRECTORY = "/media/uploads"
+FILEBROWSER_DEFAULT_PERMISSIONS = 0o644
+FILEBROWSER_OVERWRITE_EXISTING = True
+FILEBROWSER_EXTENSIONS = {
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Document': [], # ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
+    'Video': [], # ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
+    'Audio': [], # ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+}
+FILEBROWSER_ADMIN_VERSIONS = ['big']  # 'thumbnail', 'small', 'medium', 'large'
+
+
 # Sentry for error reporting
 SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
 import sentry_sdk
@@ -156,8 +177,38 @@ sentry_sdk.init(
     integrations=[DjangoIntegration()],
 )
 
+# To retrieve data from ADS api
+ADS_API_TOKEN = env("ADS_API_TOKEN", default="")
+
 from settings.tinymce import *
 from settings.djangorestframework import *
 
-# Needs to be loaded after setting SECRET_KEY etc
-from settings.filebrowser import *
+# Silky for profiling / monitoring the api response times
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True   # default is_staff=True; overwrite below
+SILKY_PERMISSIONS = lambda user: user.is_superuser
+SILKY_PYTHON_PROFILER = False
+SILKY_PYTHON_PROFILER_BINARY = False
+SILKY_PYTHON_PROFILER_RESULT_PATH = os.path.join(BASE_DIR, "profiles")
+# SILKY_MAX_REQUEST_BODY_SIZE = -1     # Silk takes anything <0 as no limit
+# SILKY_MAX_RESPONSE_BODY_SIZE = 1024  # If response body>1024 bytes, ignore
+# SILKY_INTERCEPT_PERCENT = 50 # log only 50% of requests
+# SILKY_MAX_RECORDED_REQUESTS = 10**4  # garbage collection of old data
+# SILKY_MAX_RECORDED_REQUESTS_CHECK_PERCENT = 10
+SILKY_META = True  # to check the effect Silk itself has on response time
+
+if DEBUG:
+    PREPEND_WWW = False
+
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'django_extensions',
+    ]
+
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+
+    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'JQUERY_URL': '',
+    }

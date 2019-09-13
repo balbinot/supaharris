@@ -1,7 +1,9 @@
 $(document).ready(function() {
     var table = $('#parameters').DataTable({
         'serverSide': false,
+        'processing': true,
         'pageLength': 50,
+        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         'ajax': '/api/v1/catalogue/parameter/?format=datatables',
         'columns': [
             {
@@ -10,7 +12,7 @@ $(document).ready(function() {
                     console.log(data);
                     console.log(row);
                     if(type === 'display'){
-                        data = '<a href="/catalogue/parameter/' + row.slug + '">' + row.name + '</a>';
+                        data = '<a href="' + row.frontend_url + '">' + row.name + '</a>';
                     }
                     return data;
                 }

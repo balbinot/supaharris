@@ -1,0 +1,267 @@
+J/AJ/157/12   Star clusters, associations, & candidates in the MW  (Bica+, 2019)
+================================================================================
+A multi-band catalog of 10978 star clusters, associations, and candidates
+in the Milky Way.
+    Bica E., Pavani D.B., Bonatto C.J., Lima E.F.
+    <Astron. J., 157, 12 (2019)>
+    =2019AJ....157...12B    (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Milky Way ; Galaxies, nearby ; Clusters, open ;
+              Clusters, globular ; Associations, stellar ; Morphology
+Keywords: astronomical databases: atlases - astronomical databases: catalogs -
+          astronomical databases: surveys - Galaxy: bulge - Galaxy: disk -
+          Galaxy: halo
+
+Abstract:
+    We present a catalog of Galactic star clusters, associations and candidates
+    with 10978 entries. This multi-band catalog was constructed over 20 years,
+    starting with visual inspections on the Digital Sky Survey and incremented
+    with the 2MASS, WISE, VVV, Spitzer, and Herschel surveys. Large and small
+    catalogs, as well as papers on individual objects have been systematically
+    cross-identified. The catalog provides Galactic and equatorial coordinates,
+    angular diameters, and chronologically ordered designations, making it
+    simple to assign discoveries and verify how often the objects were
+    cataloged by different authors, search methods, and/or surveys. Detection
+    in a single band is the minimum constraint to validate an entry. About
+    3200 objects have measured parameters in the literature. A fundamental
+    contribution of the present study is to present an additional ~7700 objects
+    for the first analyses of nature, photometry, spectroscopy and structure.
+    The present focus is not to compile or determine fundamental parameters,
+    but to provide a catalog uniformly characterizing the entries. A major
+    result is that now 4234 embedded clusters are cataloged, a factor of ~1.5
+    larger than open clusters. In addition to cross-identifications in
+    different references and wavelength domains, we also communicate the
+    discovery of 638 star clusters and similar objects. The present general
+    catalog provides previously studied objects and thousands of additional
+    entries in a homogeneous way, a timely contribution to Gaia-related works.
+
+Description:
+    In this work, both large (typically more than 1000 entries) and small
+    catalogs were analyzed. Also, small sample papers were taken into account.
+    Catalogs are in general related to specific surveys. Examples are
+    Bica et al. (2003, J/A+A/404/223), Dutra et al. (2003, J/A+A/400/533), and
+    Froebrich et al. (2007, J/MNRAS/374/399) with 2MASS, Mercer et al.
+    (2005, J/ApJ/635/560) with Spitzer, and Solin et al. (2012, J/A+A/542/A3)
+    with UKIDSS. Concerning the ESO-VISTA VVV survey, Borissova et al.
+    (2011, J/A+A/532/A131, 2014A&A...569A..24B) and Barba et al.
+    (2015A&A...581A.120B) provided new clusters toward the bulge and central
+    disk, which are as a rule absorbed ones. Lima et al. (2014A&A...568A..16L)
+    found new clusters in the NGC 6357 complex with VVV. Majaess (2013,
+    J/other/ApSS/344.175), Camargo et al. (2015, J/other/NewA/34.84, 2016,
+    J/MNRAS/455/3126) employed WISE in their EC discoveries. In the present
+    study, the Aladin Sky Atlas with several surveys therein was used to
+    cross-identify catalogs and individual cluster studies. The main
+    observational aspects for classifying objects are related to morphology.
+    We analyze the central concentration, hierarchical structures, stellar
+    density of the object in contrast to the field, Red, Green, and Blue (RGB)
+    band combinations for stellar colors, and the presence of dust and gas
+    emission. Finally, we estimate central coordinates and angular dimensions.
+    Previous analyses in the literature are also considered.
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+table2.dat        46      792   References for the CatClu (Table 3), CatKGr
+                                (Table 4), and CatGal (Table 5)
+                                catalogs
+table3.dat       254    10978   Clusters, candidates and alike objects
+table4.dat       264      242   242 kinematical groups and kinematical
+                                associations
+table5.dat       261      144   Local Group galaxies and their clusters and
+                                associations
+refs.dat         396      792   List of references
+--------------------------------------------------------------------------------
+
+See also:
+ VII/202 : Globular Clusters in the Milky Way (Harris, 1997)
+ B/ocl   : Optically visible open clusters and Candidates (Dias+ 2002-2015)
+ V/132   : SAI Open Clusters Catalog (Glushkova+, 2009)
+ J/A+A/397/177        : IR star clusters and stellar groups catalog
+                                                                   (Bica+, 2003)
+ J/A+A/400/533        : New infrared star clusters in southern Milky Way
+                                                                  (Dutra+, 2003)
+ J/A+A/404/223        : 2MASS IR star clusters in the Galaxy (Bica+, 2003)
+ J/ApJ/635/560        : New star clusters discovered in the GLIMPSE survey
+                                                                  (Mercer+ 2005)
+ J/ApJS/161/304       : Star clusters in the Milky Way and satellites
+                                                             (McLaughlin+, 2005)
+ J/A+A/447/921        : Galactic Open Cluster Candidates (Kronberger+, 2006)
+ J/MNRAS/374/399      : Infrared star clusters with |b|<20{deg}
+                                                              (Froebrich+, 2007)
+ J/A+A/532/A131       : New Galactic star clusters in VVV survey
+                                                              (Borissova+, 2011)
+ J/A+A/542/A3         : Stellar clusters from UKIDSS Galactic Plane Survey
+                                                                  (Solin+, 2012)
+ J/AJ/144/4           : Properties of dwarf galaxies in the Local Group
+                                                            (McConnachie+, 2012)
+ J/A+A/558/A53        : Milky Way global survey of star clusters. II.
+                                                             (Kharchenko+, 2013)
+ J/MNRAS/432/3349     : Galactic star clusters structural parameters
+                                                                (Camargo+, 2013)
+ J/other/ApSS/344.175 : Protoclusters and subclusters (Majaess, 2013)
+ J/A+A/568/A51        : Milky Way global survey of star clusters. III.
+                                                                (Schmeja+, 2014)
+ J/other/NewA/34.84   : New Galactic embedded cluster candidates
+                                                                (Camargo+, 2015)
+ J/A+A/585/A101       : Milky Way global survey of star clusters. V.
+                                                             (Kharchenko+, 2016)
+ J/ApJ/829/108        : Kinematic data of Galactic globular clusters
+                                                                  (Eadie+, 2016)
+ J/MNRAS/455/3126     : New Galactic star clusters and candidates
+                                                                (Camargo+, 2016)
+ J/A+A/618/A93        : Gaia DR2 open clusters in the Milky Way
+                                                          (Cantat-Gaudin+, 2018)
+ J/ApJ/856/152        : New star clusters in the central plane region
+                                                                    (Ryu+, 2018)
+ J/MNRAS/483/5508     : Three new Galactic star clusters (Ferreira+, 2019)
+
+Byte-by-byte Description of file: table2.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units Label   Explanations
+--------------------------------------------------------------------------------
+   1- 13 A13    ---   Class   Object type(s) (G1)
+  15- 18 I4     ---   Nobj    [1/3784] Number of relevant objects in the
+                               reference
+  20- 38 A19    ---   Name    Designation(s) and/or object types as guidelines
+  40- 46 A7     ---   Code    Reference code (REFNNNN, where NNNN is a random
+                               number) (see refs.dat file) (1)
+--------------------------------------------------------------------------------
+Note (1): Reference code is the link between the objects in Tables 3, 4 and 5
+  and their references in the present table.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table3.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units  Label   Explanations
+--------------------------------------------------------------------------------
+   1-  6 F6.2   deg    GLON    Galactic longitude
+   8- 13 F6.2   deg    GLAT    Galactic latitude
+  15- 16 I2     h      RAh     Hour of Right Ascension (J2000)
+  18- 19 I2     min    RAm     Minute of Right Ascension (J2000)
+  21- 22 I2     s      RAs     Second of Right Ascension (J2000)
+      24 A1     ---    DE-     Sign of the Declination (J2000)
+  25- 26 I2     deg    DEd     Degree of Declination (J2000)
+  28- 29 I2     arcmin DEm     Arcminute of Declination (J2000)
+  31- 32 I2     arcsec DEs     Arcsecond of Declination (J2000)
+  34- 40 F7.2   arcmin Diam-a  [0.01/4560] Major axis diameter
+  42- 48 F7.2   arcmin Diam-b  [0.01/2400] Minor axis diameter
+  50-161 A112   ---    Name    Chronologically ordered cross-identified
+                                designation(s)
+ 163-167 A5     ---    Class1  Object type (G1)
+ 169-173 A5     ---    Class2  Possible second object type (G1)
+ 175-206 A32    ---    Com     Comments
+ 208-254 A47    ---    Code    Reference code(s) (see Table 2)
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table4.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units Label   Explanations
+--------------------------------------------------------------------------------
+   1-  6 F6.1   km/s  U       [-322.7/80]? Heliocentric velocity component,
+                               positive towards the Galactic anticenter
+   8- 13 F6.1   km/s  V       [-322.6/164.9]? Heliocentric velocity component,
+                               positive towards direction of Galactic rotation
+  15- 20 F6.1   km/s  W       [-249.9/295]? Heliocentric velocity component,
+                               positive towards the North Galactic Pole
+  22- 27 F6.2   deg   GLON    [0.46/358.13]? Galactic longitude
+  29- 34 F6.2   deg   GLAT    [-89.38/77.6]? Galactic latitude
+  36- 41 F6.2   deg   Diam-a  [0.6/360]? Major diameter or length
+  43- 48 F6.2   deg   Diam-b  [0.1/360]? Minor diameter or width
+  50-102 A53    ---   Name    Designation(s)
+ 104-106 A3     ---   Class1  Object classification (G1)
+ 108-113 A6     ---   Class2  Additional object classification (G1)
+ 115-149 A35    ---   Note    Parameters note (1)
+ 151-195 A45    ---   Code    Reference code(s) (see Table 2)
+ 197-264 A68    ---   Com     Comments
+--------------------------------------------------------------------------------
+Note (1): The diversity of parameters and their availability precluded a sparse
+  table format. We give them individually in the parameter field: N (members or
+  sample), Dk (distance in kpc), a (age in Gyr, or old), f (iron metallity
+  [Fe/H]) or m (metals [m/H]), Vr (radial velocity in km/s), XG, YG, ZG
+  (Galactocentric coordinates in kpc), Mv (total absolute V magnitude), mass
+  (value in solar masses).
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table5.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units  Label  Explanations
+--------------------------------------------------------------------------------
+   1-  6 F6.2   deg    GLON   Galactic longitude
+   8- 13 F6.2   deg    GLAT   Galactic latitude
+  15- 16 I2     h      RAh    Hour of Right Ascension (J2000)
+  18- 19 I2     min    RAm    Minute of Right Ascension (J2000)
+  21- 22 I2     s      RAs    Second of Right Ascension (J2000)
+      24 A1     ---    DE-    Sign of the Declination (J2000)
+  25- 26 I2     deg    DEd    Degree of Declination (J2000)
+  28- 29 I2     arcmin DEm    Arcminute of Declination (J2000)
+  31- 32 I2     arcsec DEs    Arcsecond of Declination (J2000)
+  34- 39 F6.1   arcmin Diam-a [0.3/1500]? Major axis diameter
+  41- 45 F5.1   arcmin Diam-b [0.3/900]? Minor axis diameter
+  47-102 A56    ---    Name   Designation(s)
+ 104-107 A4     ---    Class1 Object classification (G1)
+ 109-119 A11    ---    Class2 Second object classification (1)
+ 121-124 I4     kpc    Dist   [7/2951] Distance
+ 126-130 F5.1   mag    VMag   [-20.8/0]? Total absolute V magnitude (2)
+ 132-139 A8     ---    Memb   Galaxy group membership (3)
+ 141-185 A45    ---    Code   Reference code(s) (see Table 2)
+ 187-261 A75    ---    Com    Census of star clusters & associations,
+                               and additional comments (4)
+--------------------------------------------------------------------------------
+Note (1): Morphological classification and/or UFG (ultra faint galaxy, Mv>-3.5);
+  we suggest QFG (quite faint galaxies, -7.0<Mv<-3.6).
+Note (2): MW value is the total absolute B magnitude.
+Note (3): The MW group corresponds to members typically within 200 kpc from
+  the Galactic center, while MW neighbors are beyond that, but not as isolated
+  as Local Group members (see also REF1220).
+Note (4): This field shows the number of star clusters, young/intermediate age
+  clusters, globular clusters and associations, according to the reference
+  code(s). Some galaxy parameters are given, following Table 4: metallicity
+  [Fe/H] (f), age (a, Gyr), radial velocity (Vr, km/s) and number of studied
+  stellar members (N).
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: refs.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  7  A7    ---     Code      Reference code
+   9-365  A357  ---     Ref       Complete reference (1)
+ 367-385  A19   ---     Bibcode   Bibcode of the reference
+ 387-396  A10   ---     Cat       Catalogue reference in VizieR
+--------------------------------------------------------------------------------
+Note (1): REF963 is related to the Asterism object type, and includes
+  3 electronic addresses that are currently active.
+--------------------------------------------------------------------------------
+
+Global notes:
+Note (G1): Object class as follows:
+      Assoc = Associations;
+         EC = Embedded Clusters;
+        ECC = Embedded Cluster Candidates;
+         OC = Open Clusters;
+        OCC = Open Cluster Candidates;
+        EGr = Embedded Groups;
+        Ast = Asterisms;
+       DGAL = Local Group Dwarf Galaxies;
+       NGAL = Local Group Normal Galaxies;
+         GC = Globular Clusters;
+        GCC = Globular Cluster Candidates;
+        OVD = Overdenstiy;
+        KAs = Kinematical Associations;
+        KGr = Kinematical Groups;
+        MHC = Magellanic Halos's Clusters;
+        MGr = Moving Group;
+  MC clusts = Magellanic Cloud clusters;
+       POCR = Open Cluster Remnant Candidates;
+      lPOCR = loose Open Cluster Remnant Candidates;
+      cPOCR = compact Open Cluster Remnant Candidates;
+      UltrF = Ultra-faint.
+--------------------------------------------------------------------------------
+
+History:
+    From electronic version of the journal
+
+================================================================================
+(End)           Prepared by [AAS], Tiphaine Pouvreau [CDS]           06-May-2019

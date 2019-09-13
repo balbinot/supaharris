@@ -1,3 +1,5 @@
+import ads
+import json
 import xlwt
 import requests
 import numpy as np
@@ -6,6 +8,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.utils import timezone
 from django.http import HttpResponse
+
 
 # Convert ADS/arXiv-style month abbreviation to integers
 MONTH_DICT = {
@@ -57,10 +60,10 @@ def export_to_xls(request, queryset):
     return response
 
 
-def requests_get(url, timeout=5, debug=settings.DEBUG):
+def requests_get(url, timeout=5, debug=settings.DEBUG, headers={}):
     try:
-        r = requests.get(url, timeout=timeout)
-    except requests.exceptions.TimeOut:
+        r = requests.get(url, timeout=timeout, headers=headers)
+    except requests.exceptions.Timeout:
         if debug:
             print("ERROR: could not retrieve '{0}'".format(url) +
                 " b/c requests.get timed out after {0} seconds".format(timeout))
@@ -87,7 +90,8 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     details["first_author"] = details["authors"].split(",")[0]
 
     # Example: "Submitted on DD MM YYYY"
-    date = soup.find("div", class_="dateline").text.replace("(", "").replace(")", "")
+    date = soup.find("div", class_="dateline").text.strip().replace("(", "").replace(")", "")
+    if debug: print("  date: {0}".format(date))
     void, void, day, month, year = date.split(" ")
     try:
         details["month"] = MONTH_DICT[month.lower()]
@@ -108,8 +112,63 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     return details
 
 
-def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
-    """ Here we obtain information for a Reference from ADS' Bibtex entry """
+def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
+    details = { line.split("=")[0].strip(): line.split("=")[1].strip(",").strip()
+        for line in relevant }
+
+    # Replace { bla }, but keep {} around last names
+    details["authors"] = details["author"][1:-1]  # mind the extra s ;-)
+    start, end = details["authors"].find("{"), details["authors"].find("}")
+    details["first_author"] = details["authors"][start+1:end]
+
+    # Remove {" bla "}
+    details["title"] = details["title"][2:-2]
+
+    # Clean up differences between new-style and old-style bibtex entry
+    if "month" in details.keys():
+        details["month"] = details["month"].lower().replace('"', '')
+    if "year" in details.keys():
+        details["year"] = int(details["year"].replace('"', ''))
+
+    # Remove all {, }, and \\
+    keys_available = list(details.keys())
+    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages", "volume", "booktitle"]
+    for key in list(set(keys_available).intersection(to_clean)):
+        details[key] = details[key].strip().strip("{").strip("}").strip("\\")
+
+    if "journal" not in details.keys():
+        if "booktitle" in details.keys():
+            # e.g. 1973BAAS....5..326M
+            if details["booktitle"] in journals.keys():
+                details["journal"] = details["booktitle"]
+            else:
+                details["journal"] = None
+        else:
+            details["journal"] = None
+
+    # Convert full name of the journal to journal abbreviation
+    journals_r = { v: k for k, v in journals.items() }
+    if details["journal"] == "arXiv e-prints": details["journal"] = "arxiv"
+    details["journal"] = journals_r.get(details["journal"], details["journal"])
+
+    # Convert ADS-style month abbreviation to integers
+    month_dict = {
+        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12
+    }
+    details["month"] = month_dict.get(details.get("month", None), None)
+    if details["month"]:
+        details["month"] = int(details["month"])
+
+    if debug:
+        print("Success!")
+        [ print("  {0:<20s}: {1}".format(k, v)) for k,v in details.items() ]
+
+    return details
+
+
+def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
+    """ Here we obtain information for a Reference from old-style ADS' Bibtex entry """
 
     if debug: print("Retrieving: {0}".format(url))
     r = requests_get(url, timeout=5)  # 5 seconds timeout
@@ -132,42 +191,36 @@ def scrape_reference_details_from_ads(url, journals, debug=settings.DEBUG):
     if r is False: return False
     soup = BeautifulSoup(r.content, "lxml")
     relevant = [ split for split in soup.text.split("\n") if "=" in split ]
-    details = { line.split("=")[0].strip(): line.split("=")[1].strip(",").strip()
-        for line in relevant }
+    return parse_bibtex_and_create_reference(relevant, journals, debug=debug)
 
-    # Replace { bla }, but keep {} around last names
-    details["authors"] = details["author"][1:-1]  # mind the extra s ;-)
-    start, end = details["authors"].find("{"), details["authors"].find("}")
-    details["first_author"] = details["authors"][start+1:end]
 
-    # Remove {" bla "}
-    details["title"] = details["title"][2:-2]
+def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=settings.DEBUG):
+    """ Here we obtain information for a Reference from new-style ADS' Bibtex entry """
 
-    # Remove all {, }, and \\
-    keys_available = list(details.keys())
-    to_clean = ["adsnote", "adsurl", "doi", "journal", "keywords", "pages"]
-    for key in list(set(keys_available).intersection(to_clean)):
-        details[key] = details[key].strip().strip("{").strip("}").strip("\\")
+    payload = {"bibcode": [ url.split("abs/")[-1].split("/")[0] ]}
+    if debug: print("Retrieving: {0}\n  payload: {1}".format(url, payload))
 
-    # Convert full name of the journal to journal abbreviation
-    journals_r = { v: k for k, v in journals.items() }
-    if details["journal"] == "arXiv e-prints": details["journal"] = "arxiv"
-    details["journal"] = journals_r.get(details["journal"], details["journal"])
-
-    # Convert ADS-style month abbreviation to integers
-    month_dict = {
-        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
-        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12
+    headers = {
+        "Authorization": "Bearer {0}".format(settings.ADS_API_TOKEN),
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "user-agent": "Supaharris Bot v1.3.3.7"
     }
     try:
-        details["month"] = month_dict[details["month"]]
-    except KeyError:
+        r = requests.post(
+            "https://api.adsabs.harvard.edu/v1/export/bibtex",
+            params={"q":"*:*", "fl": "bibcode,title", "rows": 2000},
+            data=json.dumps(payload), headers=headers, timeout=timeout,
+        )
+    except requests.exceptions.Timeout:
         if debug:
-            print("ERROR: key {0} not found in month_dict {1}".format(
-                details["month"], month_dict))
+            print("ERROR: could not retrieve '{0}'".format(url) +
+                " b/c requests.get timed out after {0} seconds".format(timeout))
         return False
+    data = json.loads(r.content)
 
-    if debug:
-        print("Success!")
-        [ print("  {0:<20s}: {1}".format(k, v)) for k,v in details.items() ]
-    return details
+    if r is False or r.status_code != 200 or "export" not in data: return False
+    # TODO: handle 429 with incremental back-off and max attempts
+
+    relevant = [ split for split in data["export"].split("\n") if "=" in split ]
+    return parse_bibtex_and_create_reference(relevant, journals, debug=debug)

@@ -1,0 +1,24 @@
+# Auto-generated
+__pycache__/
+*.swp
+*.pyc
+.DS_Store
+
+# Not needed to run the application
+.coveragerc
+.dockerignore
+.git/
+.gitignore
+Dockerfile
+README.md
+fixtures
+coveragerc
+docker-compose*
+nginx/
+profiles/
+
+# Development storage location, and do not want to copy secrets into the image
+db.sqlite3
+storage/
+settings/.env
+staticfiles/node_modules/*

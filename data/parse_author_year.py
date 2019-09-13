@@ -1,4 +1,4 @@
-def parse_data(fname="my_database.csv"):
+def parse_author_year_data(fname="./folder/my_database.csv"):
     # with open(fname) as f:
     #     f.readlines()
 

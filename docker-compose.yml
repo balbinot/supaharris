@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    build:
+      context: nginx
+    image: supaharris-nginx
+    depends_on:
+      - 'django'
+    restart: unless-stopped
+    volumes:
+      - ${SUPAHARRIS_STORAGE-./storage/}certbot/conf:/etc/letsencrypt
+      - ${SUPAHARRIS_STORAGE-./storage/}certbot/www:/var/www/certbot
+      - ${SUPAHARRIS_STORAGE-./storage/}django/media:/var/www/supaharris/media
+      - ${SUPAHARRIS_STORAGE-./storage/}django/static:/var/www/supaharris/static
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ${SUPAHARRIS_STORAGE-./storage/}certbot/conf:/etc/letsencrypt
+      - ${SUPAHARRIS_STORAGE-./storage/}certbot/www:/var/www/certbot
+    restart: unless-stopped
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  mariadb:
+    image: mariadb:10.4
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SUPAHARRIS_MYSQL_ROOT_PASSWORD-secret}
+      - MYSQL_USER=${SUPAHARRIS_MYSQL_USER-dbuser}
+      - MYSQL_PASSWORD=${SUPAHARRIS_MYSQL_PASSWORD-dbpassword}
+      - MYSQL_DATABASE=${SUPAHARRIS_MYSQL_DATABASE-supaharris}
+    volumes:
+      - ${SUPAHARRIS_STORAGE-./storage/}mariadb:/var/lib/mysql
+    restart: unless-stopped
+
+  django:
+    build:
+      context: .
+    image: supaharris
+    environment:
+      DJANGO_SETTINGS_MODULE: settings
+      DJANGO_ENV_FILE: settings/.env
+    depends_on:
+      - 'mariadb'
+    volumes:
+      - .:/supaharris
+      - ./settings/.env:/supaharris/settings/.env:ro
+      - ${SUPAHARRIS_STORAGE-./storage/}django/log:/supaharris/log:rw
+      - ${SUPAHARRIS_STORAGE-./storage/}django/media:/supaharris/media:rw
+      - ${SUPAHARRIS_STORAGE-./storage/}django/static:/supaharris/static:rw
+    restart: unless-stopped
+    command: ['uwsgi', '--ini', 'uwsgi/supaharris.ini']
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: 'redis-server ${REDIS_PASSWORD-}'
+
+
+networks:
+  default:
+    name: supaharris

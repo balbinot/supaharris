@@ -27,7 +27,8 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     # Time stamps, and logging of who changed user info
     last_updated_by = models.ForeignKey("self",
         on_delete=models.SET_NULL, blank=True, null=True,
-        related_name="has_changed_accounts")
+        related_name="has_changed_accounts"
+    )
     date_created = models.DateTimeField("Date Created", auto_now_add=True)
     date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
 
