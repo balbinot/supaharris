@@ -72,6 +72,8 @@
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
 - Build the image: `docker build -t supaharris .`
+- Setup local settings: `cp settings/.env.example settings/.env`
+- Edit `settings/.env` to tailor to your machine.
 - Run the server: `docker run --rm -it -v "$(pwd)/settings/.env:/supaharris/settings/.env" -v "$(pwd)":/supaharris -p 1337:1337 
   --name runserver supaharris bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
@@ -96,3 +98,14 @@
   - `python manage.py createsuperuser`
 - Visit the website at https://localhost (and accept the self-signed 
   certificate warning of the browser)
+
+
+## Generate ADS API Token
+Creation of a References requires the ADS or arXiv url, and all data are automatically
+retrieved on save. For the arXiv urls the bibtex is scraped, but for new-style ADS we
+rely on an API connection.
+
+- Create an account for new-style ADS, if you haven't alreay
+- [Go to you ADS user profile](https://ui.adsabs.harvard.edu/user/settings/token) 
+  and generate an API key
+- Add the key to `ADS_API_TOKEN` in `settings/.env`
