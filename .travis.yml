@@ -28,6 +28,9 @@ before_script:
   - rm settings/.env.bak
   - grep -R "DATABASE_URL" settings/.env
 
+  # Collectstatic
+  - python manage.py collectstatic --noinput -i node_modules -i gulpfile.js -i package.json -i package-lock.json
+
 script:
   - python manage.py test accounts.tests
   - python manage.py test catalogue.tests
