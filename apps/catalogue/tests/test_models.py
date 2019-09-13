@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 
 from catalogue.models import Reference
@@ -7,6 +8,8 @@ class AutoRetrieveReferenceDetailsTestCase(TestCase):
         super().setUp()
 
     def test_reference_save_method_retrieves_data_from_ads_url(self):
+        if not settings.ADS_API_TOKEN:
+            return
         # Tests utils.py --> scrape_reference_details_from_new_ads
         for ads_url in [
                 # Old ADS --> rewritten to new-style
