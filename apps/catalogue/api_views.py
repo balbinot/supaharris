@@ -1,9 +1,10 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import generics
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework_datatables.filters import DatatablesFilterBackend
 
 from catalogue.models import (
     Reference,
@@ -26,6 +27,7 @@ from catalogue.serializers import (
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Reference.objects.order_by("id")
     filter_backends = [
+        DatatablesFilterBackend,
         filters.SearchFilter,
     ]
     search_fields = ["first_author", "authors", "year", "title"]
@@ -37,7 +39,7 @@ class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
             return ReferenceDetailSerializer
         return super().get_serializer_class()  # create/destroy/update
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -46,11 +48,12 @@ class AstroObjectClassificationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AstroObjectClassification.objects.order_by("id")
     serializer_class = AstroObjectClassificationSerializer
     filter_backends = [
+        DatatablesFilterBackend,
         filters.SearchFilter,
     ]
     search_fields = ["name",]
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -62,6 +65,7 @@ class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
         "profiles", "auxiliaries",
     ).order_by("id")
     filter_backends = [
+        DatatablesFilterBackend,
         filters.SearchFilter,
     ]
     search_fields = ["name", "altname", "classifications__name"]
@@ -71,9 +75,9 @@ class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
             return AstroObjectListSerializer
         if self.action == "retrieve":
             return AstroObjectDetailSerializer
-        return super().get_serializer_class()  # create/destroy/update
+        return AstroObjectListSerializer  # head/create/destroy/update
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -82,12 +86,13 @@ class ParameterViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Parameter.objects.order_by("id")
     serializer_class = ParameterSerializer
     filter_backends = [
+        DatatablesFilterBackend,
         filters.SearchFilter,
     ]
     search_fields = ["name", "description"]
 
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
 
@@ -100,6 +105,7 @@ class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
     ).order_by("id")
     serializer_class = ObservationSerializer
     filter_backends = [
+        DatatablesFilterBackend,
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
@@ -109,6 +115,6 @@ class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     filterset_fields = ("astro_object", "parameter", "reference")
 
-    @method_decorator(cache_page(15 * 60))  # 15 minutes
+    @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)

@@ -2,6 +2,7 @@ $(document).ready(function() {
     var table = $('#references').DataTable({
         'serverSide': false,
         'processing': true,
+        'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         'ajax': '/api/v1/catalogue/reference/?format=datatables',
         'order': [[ 1, "desc" ]],
         'columns': [

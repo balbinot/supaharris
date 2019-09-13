@@ -23,16 +23,17 @@ from data.parse_bica_2019 import (
 )
 
 
-def create_references_for_bica_references():
+def create_references_for_bica_references(debug=True):
     references = list()
     bica_references = parse_bica_2019_refs()
     nrefs = len(bica_references)
     for i, (ref_code, [ref, bib_code, cat]) in enumerate(bica_references.items()):
-        print("Entry {0}/{1}".format(i+1, nrefs))
-        print("  ref_code: {0}".format(ref_code))
-        print("  ref: {0}".format(ref))
-        print("  bib_code: {0}".format(bib_code))
-        print("  cat: {0}".format(cat))
+        if debug:
+            print("Entry {0}/{1}".format(i+1, nrefs))
+            print("  ref_code: {0}".format(ref_code))
+            print("  ref: {0}".format(ref))
+            print("  bib_code: {0}".format(bib_code))
+            print("  cat: {0}".format(cat))
 
         ads_url = "https://ui.adsabs.harvard.edu/abs/{0}".format(bib_code)
         if bib_code == "-------------------":
@@ -49,10 +50,32 @@ def create_references_for_bica_references():
             references.append(ref_code)
 
         if not created:
-            print("Found the Reference: {0}\n".format(ref_code))
+            if debug: print("Found the Reference: {0}\n".format(ref_code))
         else:
-            print("Created the Reference: {0}\n".format(ref_code))
+            if debug: print("Created the Reference: {0}\n".format(ref_code))
     return references
+
+
+def combine_tables(debug=True):
+    t2 = parse_bica_2019_table2(debug=debug)
+    t3 = parse_bica_2019_table3(debug=debug)
+    t4 = parse_bica_2019_table4(debug=debug)
+    t5 = parse_bica_2019_table5(debug=debug)
+
+    keys = list(set(
+        list(t2.keys()) + list(t3.keys()) + list(t4.keys()) + list(t5.keys())
+    ))
+    print("Total (unique) keys: {0}".format(len(keys)))
+
+    combined = dict()
+    for k in keys:
+        combined[k] = dict()
+        combined[k]["t2"] = t2.get(k, None)
+        combined[k]["t3"] = t3.get(k, None)
+        combined[k]["t4"] = t4.get(k, None)
+        combined[k]["t5"] = t5.get(k, None)
+
+    return combined
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -73,16 +96,16 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             print("Created the Reference: {0}\n".format(bica2019))
 
-
         # Parse and get or create Reference instances for refs.dat
-        references = create_references_for_bica_references()
+        references = create_references_for_bica_references(debug=False)
+        print("INFO: found {0} references".format(len(references)))
+        combined = combine_tables(debug=False)
+        print("INFO: found {0} references in the combined tables".format(len(combined)))
+        unknown_references = [k for k in combined.keys() if k not in references]
+        print("WARNING: found {0} unknown_references".format(len(unknown_references)))
 
 
         # TODO: match the four Bica+ 2019 tables, add AstroObject and Observation instances
-        t2 = parse_bica_2019_table2()
-        t3 = parse_bica_2019_table3()
-        t4 = parse_bica_2019_table4()
-        t5 = parse_bica_2019_table5()
         return
 
         # Here we get one particular parameter as an example to help you

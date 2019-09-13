@@ -1,7 +1,13 @@
+import logging
 import numpy as np
 import pandas as pd
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+
+logger = logging.getLogger("console")
+logger.logLevel = logging.DEBUG
+
+BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Harris1996e2010/"
 
 
 class Cluster(object):
@@ -104,9 +110,9 @@ class Cluster(object):
             do.muV = self.sp_mu_V
 
 
-def parse_data(debug=True, save_as_xlsx=False):
+def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
     if debug:
-        print("\nParsing Harris 1996, 2010 ed.")
+        print("\nParsing Harris 1996, 2010 ed.\n")
     cluster_list = {}
 
     def read_float(s):
@@ -133,8 +139,7 @@ def parse_data(debug=True, save_as_xlsx=False):
 
     # Parsing first file
 
-    suf = ""
-    f1 = open(suf+"data/MW_GCS_Harris1996e2010/f1.dat")
+    f1 = open(BASEDIR+"/f1.dat")
     df1 = pd.DataFrame(columns=["cname", "altname", "RA", "Dec", "L", "B", "R_Sun"])
 
     for line in f1:
@@ -176,7 +181,7 @@ def parse_data(debug=True, save_as_xlsx=False):
     # NGC 104     -0.72 10   0.04 14.06 13.37  3.95  -9.42   0.37  0.88  0.53  1.14  G4    0.09
 
     # Now parsing second file
-    f2 = open(suf+"data/MW_GCS_Harris1996e2010/f2.dat")
+    f2 = open(BASEDIR+"f2.dat")
     df2 = pd.DataFrame(columns=["[Fe/H]", "E(B-V)", "ellip", "V_t"])
     for line in f2:
         gid = line[:12].strip()
@@ -208,7 +213,7 @@ def parse_data(debug=True, save_as_xlsx=False):
     #01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
     # NGC 104      -18.0   0.1   -26.7    11.0   0.3   2.07      0.36  3.17   14.38   4.88   7.84  9.55
 
-    f3 = open(suf+"data/MW_GCS_Harris1996e2010/f3.dat")
+    f3 = open(BASEDIR+"f3.dat")
     df3 = pd.DataFrame(columns=["r_c", "r_h", "c", "sig_v", "esig_v", "mu_V", "V_r", "eV_r"])
     for line in f3:
         gid = line[:12].strip()
@@ -252,3 +257,7 @@ def parse_data(debug=True, save_as_xlsx=False):
         print(df)
 
     return cluster_list
+
+
+if __name__ == "__main__":
+    cluster_list = parse_harris1996ed2010(debug=True, save_as_xlsx=False)

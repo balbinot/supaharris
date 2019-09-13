@@ -1,6 +1,14 @@
+# supaharris
+
+[![Software license](http://img.shields.io/badge/license-AGPL3-brightgreen.svg)](https://github.com/tlrh314/supaharris/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/tlrh314/supaharris.svg?branch=master)](https://travis-ci.org/tlrh314/supaharris)
+[![Quality Score](https://img.shields.io/scrutinizer/g/tlrh314/supaharris.svg?style=flat-square)](https://scrutinizer-ci.com/g/tlrh314/supaharris)
+
+
 | Reference | Parser | Status | Management command | Status |
 |-----------|--------|--------|--------------------|--------|
 | [Harris 1996, 2010 ed.](https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract) | [`parse_harris_1996ed2010.py`](data/parse_harris_1996ed2010.py) | Done | [`add_harris_1996ed2010.py`](apps/catalogue/management/commands/add_harris_1996ed2010.py) | Done
+| [VandenBerg+ 2013](https://ui.adsabs.harvard.edu/abs/2013ApJ...775..134V/abstract) | [`parse_vandenberg_2013.py`](data/parse_vandenberg_2013.py) | Done | [`add_vandenberg_2013.py`](apps/catalogue/management/commands/add_vandenberg_2013.py) | Done
 | [Bica+ 2019](https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract) | [`parse_bica_2019.py`](data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
 | [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`parse_hilker_2019.py`](data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
 
@@ -101,6 +109,7 @@
 
 
 ## Generate ADS API Token
+
 Creation of a References requires the ADS or arXiv url, and all data are automatically
 retrieved on save. For the arXiv urls the bibtex is scraped, but for new-style ADS we
 rely on an API connection.
@@ -109,3 +118,18 @@ rely on an API connection.
 - [Go to you ADS user profile](https://ui.adsabs.harvard.edu/user/settings/token) 
   and generate an API key
 - Add the key to `ADS_API_TOKEN` in `settings/.env`
+
+
+## Optional, if frontend changes are required
+- Install [NodeJS](https://nodejs.org/en/download/) with npm
+- `cd staticfiles`
+- `npm install`
+- New packages can now be added, e.g. `npm install bokehjs`
+
+#### Gulp Tasks
+
+- `gulp` the default task that builds everything
+- `gulp dev` browserSync opens the project in your default browser and live reloads when changes are made
+- `gulp css` compiles SCSS files into CSS and minifies the compiled CSS
+- `gulp js` minifies the themes JS file
+- `gulp vendor` copies dependencies from node_modules to the vendor directory

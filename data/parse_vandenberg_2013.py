@@ -1,12 +1,14 @@
 import os
 import numpy
-import matplotlib
-from matplotlib import pyplot
+import logging
 
-from data.plotsettings import *
+logger = logging.getLogger("console")
+logger.logLevel = logging.DEBUG
+
+BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_VandenBerg2013/"
 
 
-def read_vandenberg2013_data(fname="data/MW_GCS_VandenBerg2013/table2.txt"):
+def read_vandenberg2013_data(fname="{0}table2.txt".format(BASEDIR)):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         print("ERROR: file not found: {0}".format(fname))
         return
@@ -16,45 +18,37 @@ def read_vandenberg2013_data(fname="data/MW_GCS_VandenBerg2013/table2.txt"):
         "float", "float", "float", "float", "float"
     ]
     names = [
-        "NGC", "Name", "FeH", "Age", "fAge", "Method", "Fig", "Range",
-        "HBType", "R_GC", "M_V", "v_e,0", "log10sigma0"
+        "NGC", "Name", "[Fe/H]", "Age", "fAge", "Method", "Fig", "Range",
+        "HBType", "R_GC", "M_Vt", "v_e0", "log10sigma0"
     ]
     data = numpy.genfromtxt(fname, delimiter=",", dtype=dtype, names=names)
 
-    # The galactocentric radius of the Milky Way is calculated by Harris
-    # as R_gc = sqrt( (X-8)^2 + Y^2 + Z^2 ), where X, Y, Z are in a
-    # Sun-centered coordinate system. For a 'fair' comparison of the MW
-    # calactocentric radius we multiply the three-dimensional radius by pi/4,
-    # i.e. Rproj = Rgc x (pi/4), as per Huxor (2014, Fig. 17)
-    dtype = numpy.dtype(data.dtype.descr + [("Rproj", "float")])
-    data_Rproj = numpy.empty(data.shape, dtype=dtype)
+    dtype = numpy.dtype(data.dtype.descr + [("sigma0", "float")])
+    data2 = numpy.empty(data.shape, dtype=dtype)
     for name in data.dtype.names:
-        data_Rproj[name] = data[name]
-    data_Rproj["Rproj"] = numpy.pi/4 * data["R_GC"]
-    data = data_Rproj
-
-    return data
+        data2[name] = data[name]
+    data2["sigma0"] = 10**data["log10sigma0"]
+    return data2
 
 
-def print_vandenberg2013_data(data, example=True):
-    width = 115
+def print_vandenberg2013_data(data, first_five_rows=True):
+    width = 130
 
     print("\n{0}".format("-"*width))
     print("{0:<6s}{1:^7}{2:^8s}{3:^8s}{4:^8s}{5:^8s}{6:^7s}{7:^16s}".format(
         "NGC", "Name", "[Fe/H]", "Age", "fAge", "Method", "Fig", "Range"), end="")
-    print("{0:>8s}{1:>8s}{2:>8s}{3:>8s}{4:>15s}".format(
-        "HBType", "R_GC", "M_V", "v_e,0", "log(sigma0)"))
+    print("{0:>8s}{1:>8s}{2:>8s}{3:>8s}{4:>15s}{5:>15s}".format(
+        "HBType", "R_GC", "M_V", "v_e,0", "log(sigma0)", "sigma0"))
     print("{0}".format("-"*width))
     for i, row in enumerate(data):
         print("{0:<6s}{1:^7s}{2:^8.2f}{3:^8.2f}{4:^8.2f}{5:^8s}{6:^7s}{7:^16s}".format(
             str(row[0]), row[1].decode("ascii"), row[2], row[3],
             row[4], row[5].decode("ascii"), row[6].decode("ascii"),
             row[7].decode("ascii")), end="")
-        print("{0: 8.1f}{1: 8.1f}{2: 8.1f}{3: 8.1f}{4: 15.1f}".format(
-            row[8], row[9], row[10], row[11], row[12]))
-        if example and i > 3: break
+        print("{0: 8.1f}{1: 8.1f}{2: 8.1f}{3: 8.1f}{4: 15.3f}{5: 15.1f}".format(
+            row[8], row[9], row[10], row[11], row[12], row[13]))
+        if first_five_rows and i > 3: break
     print("{0}\n".format("-"*width))
-
 
 
 def plot_vandenberg2013_figure33(data, ax=None):
@@ -81,8 +75,11 @@ def plot_vandenberg2013_figure33(data, ax=None):
 
 
 if __name__ == "__main__":
+    from plotsettings import *
+    from matplotlib import pyplot
+
     pyplot.switch_backend("agg")
 
     data = read_vandenberg2013_data()
-    print_vandenberg2013_data(data)
+    print_vandenberg2013_data(data, first_five_rows=False)
     plot_vandenberg2013_figure33(data)

@@ -21,3 +21,4 @@ profiles/
 db.sqlite3
 storage/
 settings/.env
+staticfiles/node_modules/*

@@ -48,6 +48,13 @@ def index(request):
 
     # Sanity check
     parameter_names = relevant_observations["parameter_names"][0:4]
+    if len(parameter_names) < 1:
+        import logging
+        logger = logging.getLogger("request")
+        logger.error("ERROR: no parameters in the database")
+        return render(request, "catalogue/index.html", {
+            "fig_script": None, "fig_div": None
+        })
     if (parameter_names[0].decode("ascii") != "RA" or
             parameter_names[1].decode("ascii") != "Dec" or
             parameter_names[2].decode("ascii") != "L" or

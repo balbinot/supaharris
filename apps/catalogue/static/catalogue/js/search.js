@@ -3,28 +3,51 @@ $(document).ready(function () {
     astroObjectNames = JSON.parse(sessionStorage.getItem('astroObjectNames'));
     if (astroObjectNames == null) {
         var astroObjectNames = getAstroObjectNames();
+    } else { 
+        var expected;
+        $.ajax({
+            type: 'GET',
+            async: false,
+            dataType: 'json',
+            url: '/api/v1/catalogue/astro_object/?format=json',
+            success: function(data) {
+                expected = data['count'];
+            },
+        });
+        console.log('# astroObjectNames expected =', expected);
+        console.log('# astroObjectNames found    =', Object.keys(astroObjectNames).length)
+        if(Object.keys(astroObjectNames).length != expected) {
+            var astroObjectNames = getAstroObjectNames();
+        } else {
+            console.log("Using astroObjectNames from sessionStorage.")
+        }
     }
     autocomplete(document.getElementById('globalSearch'), astroObjectNames);
 });
 
 
 function getAstroObjectNames(url, currentCount, astroObjectNames) {
+    console.log( 'Calling getAstroObjectNames ...' );
     url = (typeof url !== 'undefined') ?  url : '/api/v1/catalogue/astro_object/?format=json';
     currentCount = (typeof currentCount !== 'undefined') ?  currentCount : 0;
     astroObjectNames = (typeof astroObjectNames !== 'undefined') ?  astroObjectNames : {};
 
     $.ajax({
         type: 'GET',
-        async: false,
+        async: true,
         dataType: 'json',
         url: url,
         success: function(data) {
             var totalCount = data['count'];
             data['results'].forEach(function(row, i) {
               astroObjectNames[row.name] = row.frontend_url;
+              if(row.altname !== null){
+                  // astroObjectNames[row.altname] = row.frontend_url;
+                  console.log('TODO: altname', row.altname);
+              }
             });
             currentCount = Object.keys(astroObjectNames).length;
-            console.log( 'GET retrieved', currentCount, '/', totalCount, 'instances.' );
+            console.log( 'getAstroObjectNames --> GET retrieved', currentCount, '/', totalCount, 'instances.' );
 
             if (data['next'] != 'null') {
                 return getAstroObjectNames(data['next'], currentCount, astroObjectNames);
@@ -33,6 +56,7 @@ function getAstroObjectNames(url, currentCount, astroObjectNames) {
     });
 
     // Save astroObjectNames to sessionStorage
+    console.log( 'Saving astroObjectNames to sessionStorage.');
     sessionStorage.setItem('astroObjectNames', JSON.stringify(astroObjectNames));
     return astroObjectNames;
 };
@@ -57,6 +81,7 @@ function autocomplete(inp, astroObjectNames) {
         /* for each item in the array... */
         for (i = 0; i < arr.length; i++) {
             /* check if the item starts with the same letters as the text field value: */
+            // TODO: implement fuzzy matching, and split on ' ' (e.g. 'NGC 104')
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                 /* create a div element for each matching element: */
                 b = document.createElement('div');
