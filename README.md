@@ -54,6 +54,12 @@
     remove it from requirements.txt (and run with an sqlite3 database)
 - Setup local settings: `cp settings/.env.example settings/.env`
 - Edit `settings/.env` to tailor to your machine.
+  - The example [env](https://django-environ.readthedocs.io/en/latest/) uses the 
+    sqlite3 [database backend](https://docs.djangoproject.com/en/dev/ref/databases/),
+    [console EmailBackend](https://docs.djangoproject.com/en/dev/topics/email/#console-backend),
+    [DummyCache](https://docs.djangoproject.com/en/dev/topics/cache/#dummy-caching-for-development), 
+    and without support to auto-retrieve reference data through the 
+    [ADS API](https://github.com/tlrh314/supaharris#generate-ads-api-token)
 
 - `python manage.py check`
 - `python manage.py migrate`
@@ -107,7 +113,7 @@
 
 
 ## Optional, if frontend changes are required
-- Install [NodeJS](https://nodejs.org/en/download/) with npm
+- Install [NodeJS](https://nodejs.org/en/download/) including npm
 - `cd staticfiles`
 - `npm install`
 - New packages can now be added, e.g. `npm install bokehjs`
