@@ -1,15 +1,23 @@
 import os
+import sys
 import numpy
-import matplotlib
+import logging
 from matplotlib import pyplot
 
 # from .plotsettings import *
 
+logger = logging.getLogger("console")
 
-def parse_hilker_2019_orbits(fname="./MW_GCS_Hilker2019/orbits_table.txt", debug=False):
+BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Hilker2019/"
+
+
+def parse_hilker_2019_orbits(fname="{0}orbits_table.txt".format(BASEDIR), debug=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
-        print("ERROR: file not found: {0}".format(fname))
+        logger.error("ERROR: file not found: {0}".format(fname))
         return
+
+    if debug:
+        logger.debug("\nParsing Hilker+ (2019) orbits table")
 
     names = [
         "Cluster", "RA", "DEC", "l", "b",
@@ -40,48 +48,119 @@ def parse_hilker_2019_orbits(fname="./MW_GCS_Hilker2019/orbits_table.txt", debug
     ]
 
     if debug:
-        print("\nnames:     {}\ndtype:     {}\ndelimiter: {}\n".format(
+        logger.debug("\nnames:     {}\ndtype:     {}\ndelimiter: {}\n".format(
         len(names), len(dtype), len(delimiter) ))
 
-        print("\n(name, dtype, delimiter)")
+        logger.debug("-"*45)
+        logger.debug("{0:<15s}{1:<15s}{2:<15s}".format("name", "dtype", "delimiter"))
+        logger.debug("-"*45)
         for i in range(len(names)):
-            print(names[i], dtype[i], delimiter[i])
-        print("")
+            logger.debug("{0:<15s}{1:<15s}{2:<15d}".format(names[i], dtype[i], delimiter[i]))
+        logger.debug("-"*45 + "\n")
 
     data = numpy.genfromtxt(fname, skip_header=2, delimiter=delimiter,
         dtype=dtype, names=names, autostrip=True)
     if debug:
-        print("\nHere is the first entry:")
+        logger.debug("\nHere is the first entry:")
         for n in data.dtype.names:
-            print("{0:<20s}{1}".format(n, data[0][n]))
+            logger.debug("{0:<20s}{1}".format(n, data[0][n]))
 
-        print("\nHere are the first five rows:")
-        for i in range(5): print(data[i])
+        logger.debug("\nHere are the first five rows:")
+        for i in range(5): logger.debug(data[i])
 
-        print("\nHere are the colums Cluster, mualpha, mualpha_err, RPERI, RPERI_err")
-        print(data["Cluster"])
-        print(data["mualpha"])
-        print(data["mualpha_err"])
-        print(data["RPERI"])
-        print(data["RPERI_err"])
+        logger.debug("\nHere are the colums Cluster, mualpha, "+
+            "mualpha_err, RPERI, RPERI_err of the first five rows")
+        logger.debug(data["Cluster"][0:5])
+        logger.debug(data["mualpha"][0:5])
+        logger.debug(data["mualpha_err"][0:5])
+        logger.debug(data["RPERI"][0:5])
+        logger.debug(data["RPERI_err"][0:5])
 
     return data
 
 
-def parse_hilker_2019_combined(fname="./MW_GCS_Hilker2019/combined_table.txt", debug=False):
+def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), debug=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
-        print("ERROR: file not found: {0}".format(fname))
+        logger.error("ERROR: file not found: {0}".format(fname))
         return
 
+    if debug:
+        logger.debug("\nParsing Hilker+ (2019) combined table")
+
+    # TODO: something iffy is going on b/c we have two more columns in each
+    # row than the header indicates ...
+    names = [
+        "Cluster", "RA", "DEC", "R_Sun", "R_GC",
+        "Mass", "DM", "V", "M/L_V", "rc",
+        "rh,l", "rh,m", "rt", "rho_c", "rho_h,m",
+        "sig_c", "sig_h,m", "lg(Trh)", "MF", "F_REM",
+        "sig0", "vesc", "etac", "etah", "something",
+        "something2",
+    ]
+    dtype = [
+        "S16", "float", "float", "float", "float",
+        "float", "float", "float", "float", "float",
+        "float", "float", "float", "float", "float",
+        "float", "float", "float", "float", "float",
+        "float", "float", "float", "float", "float",
+        "float",
+    ]
+    delimiter = [
+        14, 10, 11, 8, 9,
+        12, 12, 6, 6, 7,
+        8, 7, 8, 9, 10,
+        7, 8, 8, 10, 6,
+        8, 8, 6, 8, 6,
+        7,
+    ]
+
+    if debug and False:
+        logger.debug("\nnames:     {}\ndtype:     {}\ndelimiter: {}\n".format(
+        len(names), len(dtype), len(delimiter) ))
+
+        logger.debug("-"*45)
+        logger.debug("{0:<15s}{1:<15s}{2:<15s}".format("name", "dtype", "delimiter"))
+        logger.debug("-"*45)
+        for i in range(len(names)):
+            logger.debug("{0:<15s}{1:<15s}{2:<15d}".format(names[i], dtype[i], delimiter[i]))
+        logger.debug("-"*45 + "\n")
+
+    data = numpy.genfromtxt(fname, skip_header=2, delimiter=delimiter,
+        dtype=dtype, names=names, autostrip=True)
+    if debug:
+        logger.debug("\nHere is the first entry:")
+        for n in data.dtype.names:
+            logger.debug("{0:<20s}{1}".format(n, data[0][n]))
+
+        logger.debug("\ndelimiter.cumsum()\n{0}\n".format(numpy.array(delimiter).cumsum()))
+
+        logger.debug("\nHere are the first five rows:")
+        for i in range(5): logger.debug(data[i])
+
+        logger.debug("\nHere are the colums Cluster"+
+            "of the first five rows")
+        logger.debug(data["Cluster"][0:5])
+
+    return data
 
 
-def parse_hilker_2019_radial_velocities(fname="./MW_GCS_Hilker2019/rv.dat", debug=False):
+
+def parse_hilker_2019_radial_velocities(fname="{0}rv.dat".format(BASEDIR), debug=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
-        print("ERROR: file not found: {0}".format(fname))
+        logger.error("ERROR: file not found: {0}".format(fname))
         return
 
 
 if __name__ == "__main__":
-    orbit_data = parse_hilker_2019_orbits(debug=True)
-    radial_velocity_data = parse_hilker_2019_combined(debug=True)
-    radial_velocity_data = parse_hilker_2019_radial_velocities(debug=True)
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
+    logger.info("Running {0}".format(__file__))
+
+    # hilker_orbits = parse_hilker_2019_orbits(debug=True)
+
+    hilker_combined = parse_hilker_2019_combined(debug=True)
+    # It seems Ter 2 has three nan values. So here we check which and why.
+    ter2, = numpy.where(hilker_combined["Cluster"] == b"Ter 2")
+    for n in hilker_combined.dtype.names:
+        logger.debug("{0:<20s}{1}".format(n, hilker_combined[ter2][0][n]))
+
+    # hilker_radial_velocities = parse_hilker_2019_radial_velocities(debug=True)
