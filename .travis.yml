@@ -25,8 +25,12 @@ before_script:
   # Setup Django settings
   - cp settings/.env.example settings/.env
   - sed -i.bak -e "s/DATABASE_URL=.*/DATABASE_URL=mysql:\/\/test2:some password@127.0.0.1:3306\/test2/g" settings/.env;
+  - sed -i.bak -e "s/DEBUG=.*/DEBUG=False/g" settings/.env;
   - rm settings/.env.bak
   - grep -R "DATABASE_URL" settings/.env
+
+  # Collectstatic
+  - python manage.py collectstatic --noinput -i node_modules -i gulpfile.js -i package.json -i package-lock.json
 
 script:
   - python manage.py test accounts.tests

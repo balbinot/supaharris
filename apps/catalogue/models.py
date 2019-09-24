@@ -349,7 +349,7 @@ class Profile(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return  "{} - Ref: {}".format(self.astro_object.name, self.astro_object.name)
+        return  "{} - Ref: {}".format(self.astro_object.name, self.reference)
 
 
 class Auxiliary(models.Model):
@@ -376,7 +376,7 @@ class Auxiliary(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return "{} - Ref: {}".format(astro_object.name, str(reference))
+        return "{} - Ref: {}".format(self.astro_object.name, str(self.reference))
 
 
 class Observation(models.Model):

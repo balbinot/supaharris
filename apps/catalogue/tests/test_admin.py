@@ -128,7 +128,7 @@ class RankAdminTestCase(AdminTestCase, TestCase):
         super().setUpTestData()
 
     def setUp(self):
-        self.admin_url_name = "catalogue_parameter"
+        self.admin_url_name = "catalogue_rank"
         self.admin_instance_pk = Rank.objects.last().pk
         self.count = Rank.objects.count()
 

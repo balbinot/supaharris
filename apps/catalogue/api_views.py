@@ -5,6 +5,7 @@ from rest_framework import filters
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_datatables.filters import DatatablesFilterBackend
+from rest_framework_datatables.pagination import DatatablesPageNumberPagination
 
 from catalogue.models import (
     Reference,
@@ -37,7 +38,7 @@ class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
             return ReferenceListSerializer
         if self.action == "retrieve":
             return ReferenceDetailSerializer
-        return super().get_serializer_class()  # create/destroy/update
+        return ReferenceListSerializer   # head/create/destroy/update
 
     @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
@@ -114,6 +115,10 @@ class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
         # "reference__author", "reference__year", "reference__title",
     ]
     filterset_fields = ("astro_object", "parameter", "reference")
+
+    # We need to add the page_size_query_param for ?length=123 to work in the
+    # regular PageNumberPagination ... :/
+    DatatablesPageNumberPagination.page_size_query_param = "length"
 
     @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
