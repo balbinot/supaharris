@@ -23,7 +23,7 @@ SECRET_KEY = env("SECRET_KEY", default="secret")
 DEBUG = env("DEBUG", default=False)
 
 DATABASES = {
-    "default": env.db('DATABASE_URL'),
+    "default": env.db("DATABASE_URL"),
 }
 
 CACHES = {
@@ -144,12 +144,12 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
 
 # Use a custom model for account management, which makes it much easier to
 # extend the model later on.
-AUTH_USER_MODEL = 'accounts.UserModel'
-LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'accounts:profile'
+AUTH_USER_MODEL = "accounts.UserModel"
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "accounts:profile"
 ADMIN_BCC = []
 
-EMAIL_CONFIG = env.email_url('EMAIL_URL')
+EMAIL_CONFIG = env.email_url("EMAIL_URL")
 vars().update(EMAIL_CONFIG)
 DEFAULT_FROM_EMAIL = "info@supaharris.com"
 SERVER_EMAIL = "info@supaharris.com"
@@ -160,70 +160,70 @@ SERVER_EMAIL = "info@supaharris.com"
 FILEBROWSER_DEFAULT_PERMISSIONS = 0o644
 FILEBROWSER_OVERWRITE_EXISTING = True
 FILEBROWSER_EXTENSIONS = {
-    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
-    'Document': [], # ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
-    'Video': [], # ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
-    'Audio': [], # ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+    "Image": [".jpg",".jpeg",".gif",".png",".tif",".tiff"],
+    "Document": [], # [".pdf",".doc",".rtf",".txt",".xls",".csv"],
+    "Video": [], # [".mov",".wmv",".mpeg",".mpg",".avi",".rm"],
+    "Audio": [], # [".mp3",".mp4",".wav",".aiff",".midi",".m4p"]
 }
-FILEBROWSER_ADMIN_VERSIONS = ['big']  # 'thumbnail', 'small', 'medium', 'large'
+FILEBROWSER_ADMIN_VERSIONS = ["big"]  # "thumbnail", "small", "medium", "large"
 
 
 # https://www.tinymce.com/docs/demo/full-featured/
 TINYMCE_DEFAULT_CONFIG = {
-  'selector': 'textarea',
-  'height': 500,
-  'theme': 'modern',
-  'plugins': [
-    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-    'searchreplace wordcount visualblocks visualchars code fullscreen',
-    'insertdatetime media nonbreaking save table contextmenu directionality',
-    'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc'
+  "selector": "textarea",
+  "height": 500,
+  "theme": "modern",
+  "plugins": [
+    "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+    "searchreplace wordcount visualblocks visualchars code fullscreen",
+    "insertdatetime media nonbreaking save table contextmenu directionality",
+    "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc"
   ],
-  'toolbar1': 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-  'toolbar2': 'print preview image | forecolor backcolor emoticons | codesample',
-  'image_advtab': True,
-  'templates': [
-    { 'title': 'Test template 1', 'content': 'Test 1' },
-    { 'title': 'Test template 2', 'content': 'Test 2' }
+  "toolbar1": "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+  "toolbar2": "print preview image | forecolor backcolor emoticons | codesample",
+  "image_advtab": True,
+  "templates": [
+    { "title": "Test template 1", "content": "Test 1" },
+    { "title": "Test template 2", "content": "Test 2" }
   ],
-  'content_css': [
-    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-    '//www.tinymce.com/css/codepen.min.css',
-    '/static/css/main.css',
+  "content_css": [
+    "//fonts.googleapis.com/css?family=Lato:300,300i,400,400i",
+    "//www.tinymce.com/css/codepen.min.css",
+    "/static/css/main.css",
   ],
 }
 # TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
 TINYMCE_FILEBROWSER = True
 TINYMCE_MINIMAL_CONFIG = {
-    'selector': 'textarea',
-    'height': 80,
-    'width': 500,
-    'menubar': False,
-    'statusbar': False,
-    'elementpath': False,
-    'plugins': [
-        'link paste autolink code',
+    "selector": "textarea",
+    "height": 80,
+    "width": 500,
+    "menubar": False,
+    "statusbar": False,
+    "elementpath": False,
+    "plugins": [
+        "link paste autolink code",
     ],
-    'toolbar1': 'undo redo | bold italic | bullist numlist outdent indent | link code',
-    'toolbar2': ''
+    "toolbar1": "undo redo | bold italic | bullist numlist outdent indent | link code",
+    "toolbar2": ""
 }
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-        'rest_framework_datatables.renderers.DatatablesRenderer',
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
     ),
-    'DEFAULT_FILTER_BACKENDS': [
-        'rest_framework_datatables.filters.DatatablesFilterBackend',
+    "DEFAULT_FILTER_BACKENDS": [
+        "rest_framework_datatables.filters.DatatablesFilterBackend",
         ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
-    'PAGE_SIZE': 50
+    "DEFAULT_PAGINATION_CLASS": "rest_framework_datatables.pagination.DatatablesPageNumberPagination",
+    "PAGE_SIZE": 50
 }
 
 
@@ -304,16 +304,16 @@ if DEBUG:
     PREPEND_WWW = False
 
     INSTALLED_APPS += [
-        'debug_toolbar',
-        'django_extensions',
+        "debug_toolbar",
+        "django_extensions",
     ]
 
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware", ]
 
-    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
     DEBUG_TOOLBAR_CONFIG = {
-        'JQUERY_URL': '',
+        "JQUERY_URL": "",
     }
 
     # Use None for unlimited persistent connections.
