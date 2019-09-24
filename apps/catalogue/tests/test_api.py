@@ -1,3 +1,6 @@
+import json
+from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APITestCase
 
 from catalogue.models import (
@@ -112,7 +115,7 @@ class ParameterViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
 class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
     @classmethod
     def setUpTestData(cls):
-        ObservationFactory.create_batch(2)
+        ObservationFactory.create_batch(151)
         super().setUpTestData()
 
     def setUp(self):
@@ -129,3 +132,18 @@ class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         self.serializer_fields = []
         self.resource_name_list = "Observation List"
         self.resource_name_detail = "Observation Instance"
+
+    def test_json_paginator(self):
+        for page_size in [1, 10, 50, 100, 150]:
+            uri = reverse(self.list_uri) + "?format=json&length={0}".format(page_size)
+            response = self.client.get(uri)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = json.loads(response.content)
+            self.assertEqual(len(data["results"]), page_size)
+
+    def test_datatables_paginator(self):
+        for page_size in [1, 10, 50, 100, 150]:
+            uri = reverse(self.list_uri) + "?format=datatables&length={0}".format(page_size)
+            response = self.client.get(uri)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data["data"]), page_size)
