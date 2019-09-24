@@ -82,7 +82,8 @@
 
 
 ## **Alternatively, run with Docker (Option 2)**
-- Make sure Docker Engine and docker-compose are installed (see Docker docs)
+- Make sure Docker Engine and docker-compose are installed 
+  (see [Docker docs[(https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
 - Build the image: `docker build -t supaharris .`
