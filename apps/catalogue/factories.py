@@ -33,21 +33,22 @@ class ParameterFactory(factory.DjangoModelFactory):
     scale = 1.0
 
 
-def generate_bib_code(author=None, journal=None, volume=None, pages=None):
+def generate_bib_code(author=None, year=None, journal=None, volume=None, pages=None):
     if not author:
         author = faker.last_name()
+    if not year:
+        year = faker.year()
     if not journal:
         journals = [k.upper()[0:8] for k,v in Reference.JOURNALS]
         journal = journals[faker.random_int(min=0, max=len(journals))]
     if not volume:
         volume = faker.random_int(min=1, max=450)
     if not pages:
-        pages = faker.random_int(min=1, max=450)
-    bib_code = "{0}{1}{2}{3}{4}{5}".format(
+        pages = faker.random_int(min=1, max=5000)
+    bib_code = "{0}{1:.<6}{2:.>3}{3:.>4}{4}".format(
+        year,
         journal,
-        "."*(8 - len(journal)),
         volume,
-        "."*(3 - int(numpy.log10(volume))),
         pages,
         author.upper()[0]
     )
@@ -57,24 +58,27 @@ def generate_bib_code(author=None, journal=None, volume=None, pages=None):
 class ReferenceFactory(factory.DjangoModelFactory):
     class Meta:
         model = Reference
-        django_get_or_create = ("ads_url",)
 
-    ads_url = factory.LazyAttribute(lambda _: faker.url())
     title = factory.LazyAttribute(lambda _: faker.sentence())
     first_author = factory.LazyAttribute(lambda _: faker.last_name())
     journal = factory.LazyAttribute(lambda _:
         faker.random_int(min=0, max=len(Reference.JOURNALS)-1)
     )
+    year = factory.LazyAttribute(lambda _: faker.year())
     month = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=12))
     volume = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
     pages = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
     bib_code = factory.LazyAttribute(lambda _:
         generate_bib_code(
             _.first_author,
+            _.year,
             Reference.JOURNALS[_.journal][0].upper()[0:8],
             _.volume,
             _.pages,
         )
+    )
+    ads_url = factory.LazyAttribute(lambda _:
+        "https://example.com/fake/{0}".format(_.bib_code)
     )
 
     @factory.post_generation
