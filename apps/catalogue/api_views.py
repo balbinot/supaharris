@@ -33,6 +33,9 @@ class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     search_fields = ["first_author", "authors", "year", "title"]
 
+    # Make url parameter 'length' work for all renderers
+    DatatablesPageNumberPagination.page_size_query_param = "length"
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReferenceListSerializer
@@ -54,6 +57,9 @@ class AstroObjectClassificationViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     search_fields = ["name",]
 
+    # Make url parameter 'length' work for all renderers
+    DatatablesPageNumberPagination.page_size_query_param = "length"
+
     @method_decorator(cache_page(4 * 3600))  # 4 hours
     def list(self, request, format=None):
         return super().list(request, format=format)
@@ -70,6 +76,9 @@ class AstroObjectViewSet(viewsets.ReadOnlyModelViewSet):
         filters.SearchFilter,
     ]
     search_fields = ["name", "altname", "classifications__name"]
+
+    # Make url parameter 'length' work for all renderers
+    DatatablesPageNumberPagination.page_size_query_param = "length"
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -91,6 +100,9 @@ class ParameterViewSet(viewsets.ReadOnlyModelViewSet):
         filters.SearchFilter,
     ]
     search_fields = ["name", "description"]
+
+    # Make url parameter 'length' work for all renderers
+    DatatablesPageNumberPagination.page_size_query_param = "length"
 
 
     @method_decorator(cache_page(4 * 3600))  # 4 hours
@@ -116,8 +128,7 @@ class ObservationViewSet(viewsets.ReadOnlyModelViewSet):
     ]
     filterset_fields = ("astro_object", "parameter", "reference")
 
-    # We need to add the page_size_query_param for ?length=123 to work in the
-    # regular PageNumberPagination ... :/
+    # Make url parameter 'length' work for all renderers
     DatatablesPageNumberPagination.page_size_query_param = "length"
 
     @method_decorator(cache_page(4 * 3600))  # 4 hours
