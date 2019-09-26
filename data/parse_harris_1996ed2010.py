@@ -152,7 +152,7 @@ def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
         c.latitude          = read_float(line[58:66])
         c.dist_from_sun     = read_float(line[66:73])
         c.dist_from_gal_cen = read_float(line[73:79])
-        c.Y                 = read_float(line[79:85])
+        c.X                 = read_float(line[79:85])
         c.Y                 = read_float(line[85:91])
         c.Z                 = read_float(line[91:])
 
