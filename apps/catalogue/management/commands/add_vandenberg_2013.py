@@ -15,8 +15,7 @@ from catalogue.models import (
     AstroObject,
     AstroObjectClassification,
 )
-from catalogue.management.commands.add_author_year import (
-    PrepareSupaHarrisDatabaseMixin)
+from catalogue.utils import PrepareSupaHarrisDatabaseMixin
 
 from data.parse_vandenberg_2013 import read_vandenberg2013_data
 
