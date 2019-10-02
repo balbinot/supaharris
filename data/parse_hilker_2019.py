@@ -12,6 +12,7 @@ BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Hilker2019/"
 
 
 def parse_hilker_2019_orbits(fname="{0}orbits_table.txt".format(BASEDIR), debug=False):
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -80,6 +81,7 @@ def parse_hilker_2019_orbits(fname="{0}orbits_table.txt".format(BASEDIR), debug=
 
 
 def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), debug=False):
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -144,18 +146,73 @@ def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), de
     return data
 
 
-
 def parse_hilker_2019_radial_velocities(fname="{0}rv.dat".format(BASEDIR), debug=False):
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    # The following Table contains the velocity dispersion profiles of 139
+    # Galactic globular clusters. The Table is based on the following papers:
+    #   - Watkins et al. (2015), ApJ 803, 29
+    #   - Baumgardt (2017), MNRAS 464, 2174
+    #   - Kamann et al. (2018), MNRAS, 473, 5591
+    #   - Baumgardt & Hilker (2018), MNRAS 478, 1520
+    #   - Baumgardt, Hilker, Sollima & Bellini (2019), MNRAS 482, 5138
+
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
+
+    if debug:
+        logger.debug("\nParsing Hilker+ (2019) velocity dispersion profiles")
+
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/veldis.html
+    # does have a column NStar, but that column is not available for
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    names = [
+        "Cluster", "radius", "velocity_dispersion",
+        "velocity_dispersion_err_up", "velocity_dispersion_err_down",
+        "type",
+    ]
+    dtype = [
+        "S16", "float", "float", "float", "float", "S16"
+    ]
+    delimiter = [
+        14, 7, 6, 6, 6, 6
+    ]
+
+    if debug and False:
+        logger.debug("\nnames:     {}\ndtype:     {}\ndelimiter: {}\n".format(
+        len(names), len(dtype), len(delimiter) ))
+
+        logger.debug("-"*45)
+        logger.debug("{0:<15s}{1:<15s}{2:<15s}".format("name", "dtype", "delimiter"))
+        logger.debug("-"*45)
+        for i in range(len(names)):
+            logger.debug("{0:<15s}{1:<15s}{2:<15d}".format(names[i], dtype[i], delimiter[i]))
+        logger.debug("-"*45 + "\n")
+
+    data = numpy.genfromtxt(fname, skip_header=0, delimiter=delimiter,
+        dtype=dtype, names=names, autostrip=True)
+    if debug:
+        logger.debug("\nHere is the first entry:")
+        for n in data.dtype.names:
+            logger.debug("{0:<40s}{1}".format(n, data[0][n]))
+
+        logger.debug("\ndelimiter.cumsum()\n{0}\n".format(numpy.array(delimiter).cumsum()))
+
+        logger.debug("\nHere are the first five rows:")
+        for i in range(5): logger.debug(data[i])
+
+        logger.debug("\nHere are the colums Cluster"+
+            "of the first five rows")
+        logger.debug(data["Cluster"][0:5])
+
+    return data
 
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger.info("Running {0}".format(__file__))
 
-    # hilker_orbits = parse_hilker_2019_orbits(debug=True)
+    hilker_orbits = parse_hilker_2019_orbits(debug=True)
 
     hilker_combined = parse_hilker_2019_combined(debug=True)
     # It seems Ter 2 has three nan values. So here we check which and why.
@@ -163,4 +220,4 @@ if __name__ == "__main__":
     for n in hilker_combined.dtype.names:
         logger.debug("{0:<20s}{1}".format(n, hilker_combined[ter2][0][n]))
 
-    # hilker_radial_velocities = parse_hilker_2019_radial_velocities(debug=True)
+    hilker_radial_velocities = parse_hilker_2019_radial_velocities(debug=True)
