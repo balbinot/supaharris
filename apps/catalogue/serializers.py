@@ -116,3 +116,17 @@ class ObservationSerializer(ModelSerializer):
         )
         datatables_always_serialize = ("id",)
         depth = 1
+
+
+class ObservationTableSerializer(Serializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # TODO: only use the Parameter instances for which the given Reference has
+        # Observation instances ...
+        self.fields = {"name": CharField()}
+        for p in Parameter.objects.order_by("id"):
+            self.fields[p.name] = CharField()
+        print(self.fields)
+
+    def to_representation(self, obj):
+        return { k: getattr(self.instance[obj], k, None) for k in self.fields }
