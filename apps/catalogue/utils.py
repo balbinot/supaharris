@@ -33,24 +33,30 @@ class PrepareSupaHarrisDatabaseMixin(object):
 
 
 def print_parameters():
-    print("\nBelow we print all parameters that are available in the ", end="")
+    print("\n\n1) Below we print all parameters that are available in the ", end="")
     print("SupaHarris database. This will help you to figure out how ", end="")
     print("to 'convert' the parameters names in the database that you ",end="")
-    print("would like to add to 'valid 'SupaHarris' parameter names. To retrieve", end="")
-    print("a specific parameter, use:\n\n    `Parameter.objects.get(name='replaceme')`\n")
+    print("would like to add to 'valid 'SupaHarris' parameter names.")
 
-    print("\n{0:<10s}{1:<50s}{2:<12s}{3:<8s}".format(
-        "name", "description", "unit", "scale"))
+    print("\n  {0:<10s}{1:<10s}{2:<60s}{3:<12s}{4:<8s}".format(
+        "id", "name", "description", "unit", "scale"))
     for p in Parameter.objects.all():
-        print("{0:<10s}{1:<50s}{2:<12s}{3:<8.2f}".format(
-            p.name, p.description, p.unit, p.scale))
+        print("  {0:<10d}{1:<10s}{2:<60s}{3:<12s}{4:<8.2f}".format(
+            p.id, p.name, p.description, p.unit, p.scale))
+
+    print("\nTo retrieve a specific parameter, use:\n")
+    print("  `ra = Parameter.objects.get(name='RA')`, or")
+    print("  `ra = Parameter.objects.get(id=1)`")
 
 
 def print_astro_object_classifications():
-    print("\nBelow we print all object classification that are available ", end="")
-    print("in the SupaHarris database. To retrieve them a specific ", end="")
-    print("instance, use:\n\n    `AstroObjectClassification.objects.get(name='replaceme')`\n")
+    print("\n\n2) Below we print all object classification that are available ", end="")
+    print("in the SupaHarris database.")
 
-    print("\n{0:<50s}".format("name"))
-    for c in AstroObjectClassification.objects.all():
-        print("{0:<50s}".format(c.name))
+    print("\n  {0:<10s}{1:<50s}".format("id", "name"))
+    for aoc in AstroObjectClassification.objects.all():
+        print("  {0:<10d}{1:<50s}".format(aoc.id, aoc.name))
+
+    print("To retrieve a specific object, use:\n\n")
+    print("  `gc = AstroObjectClassification.objects.get(name='Globular Cluster')`, or")
+    print("  `gc = AstroObjectClassification.objects.get(id=18)`")
