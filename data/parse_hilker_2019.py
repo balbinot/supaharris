@@ -2,7 +2,12 @@ import os
 import sys
 import numpy
 import logging
+import requests
+from bs4 import BeautifulSoup
 from matplotlib import pyplot
+from urllib.parse import urlparse
+
+from django.utils.text import slugify
 
 # from .plotsettings import *
 
@@ -208,9 +213,96 @@ def parse_hilker_2019_radial_velocities(fname="{0}rv.dat".format(BASEDIR), debug
     return data
 
 
+def scrape_individual_fits_from_baumgardt_website(logger,
+        outdir="{0}figures/".format(BASEDIR), force_get_img=False):
+    """ Retrieve the GAIA selection, Orbit over last 2 Gyr (xy and Rz plane),
+        HST photometry, Mass function, and N-body fit gif/pdf images from the
+        website of Holger Baumgardt. This function returns a dict /w GC name
+        as keys, where the values are a (nested) dict with key: the url of the
+        img src, and value: path to where the image is stored locally.
+
+        The data ingestion script can later insert Auxiliary instances with
+        Reference Baumgardt & Hilker (2018) b/c that seems to be the reference
+        for the Nbody fits to the data? The AstroObject can be retrieved using
+        the GC name, path = the local image, and url will be the img src."""
+
+    base_url = "https://people.smp.uq.edu.au/HolgerBaumgardt/globular/fits/"
+    clusterlist = "{0}clusterlist.html".format(base_url)
+
+    r = requests.get(clusterlist)
+    if r.status_code != 200:
+        logger.error("ERROR: could not retrieve {0}".format(clusterlist))
+        return
+    soup = BeautifulSoup(r.content, "lxml")
+
+    gcs = [( a.text, "{0}{1}".format(base_url, a["href"]) ) for a in soup.find_all("a")]
+    Ngcs = len(gcs)
+    logger.info("Found {0} globular clusters\n".format(Ngcs))
+
+    # Get the nodata.gif in case we hit 404 at the individual GC pages later on
+    nodata = "{0}nodata.gif".format(outdir)
+    if not os.path.exists(nodata) and not os.path.isfile(nodata):
+        logger.info("GET nodata.gif")
+        nodata_url = "{0}phot/nodata.gif".format(base_url)
+        r = requests.get(nodata_url, stream=True)
+        if r.status_code != 200:
+            logger.error("  ERROR: could not retrieve {0}".format(nodata_url))
+            import sys; sys.exit(1)
+        with open(nodata, "wb") as f:
+            for chunk in r:  # reads the data in chunks of 128 bytes
+                f.write(chunk)
+        logger.info("Success GET nodata.gif\n")
+    else:
+        logger.info("File exists: {0}\n".format(nodata))
+
+    figures = [
+        "GAIA_selection", "Orbit_last_2Gyr_xy", "Orbit_last_2Gyr_Rz",
+        "HST_photometry", "Mass_function", "Nbody_fit"
+    ]
+    data = dict()
+    for i, gc in enumerate(gcs):
+        gc_name, gc_url = gc
+        data[gc_name] = dict()
+        data[gc_name]["url"] = gc_url
+        logger.info("\nGET {0}/{1}: {2} @ {3}".format(i+1, Ngcs, gc_name, gc_url))
+
+        r = requests.get(gc_url)
+        if r.status_code != 200:
+            logger.error("  ERROR: could not retrieve {0}".format(gc_url))
+            void = input("Press any key to continue")
+            continue
+        soup = BeautifulSoup(r.content, "lxml")
+
+        for img, fig_name in zip(soup.find_all("img"), figures):
+            img_src = "{0}{1}".format(base_url, img["src"])
+            logger.info("    {0} --> {1}".format(fig_name, img_src))
+
+            path = urlparse(img_src).path
+            ext = os.path.splitext(path)[1]
+            fname = "{0}{1}_{2}{3}".format(outdir, slugify(gc_name), fig_name, ext)
+            data[gc_name]["img_src"] = fname
+            if os.path.exists(fname) and os.path.isfile(fname) and not force_get_img:
+                logger.info("    already have {0}".format(fname))
+                continue
+
+            logger.info("    saving as {0}".format(fname))
+            r = requests.get(img_src, stream=True)
+            if r.status_code != 200:
+                logger.warning("  WARNING: could not retrieve {0}. Set to nodata.gif".format(img_src))
+                os.system("cp {0} {1}".format(nodata, fname))
+            with open(fname, "wb") as f:
+                for chunk in r:  # reads the data in chunks of 128 bytes
+                    f.write(chunk)
+
+    return data
+
+
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger.info("Running {0}".format(__file__))
+
+    gc_fits = scrape_individual_fits_from_baumgardt_website(logger)
+    import sys; sys.exit(0)
 
     hilker_orbits = parse_hilker_2019_orbits(debug=True)
 
