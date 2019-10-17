@@ -297,11 +297,80 @@ def scrape_individual_fits_from_baumgardt_website(logger,
     return data
 
 
+def parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=True,
+        fname="{0}appendix_combined_table.txt".format(BASEDIR)):
+    """ Data retrieved 20191017 from
+    https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/appendix.html,
+    link at bottom 'Click here for an ASCII file with the combined radial velocity data of all clusters.'
+    --> https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/combined_table.txt
+
+    'The following table contains the individual stellar radial velocities that
+    we derived from ESO proposals prior to 2014. The data files also contain the
+    Gaia DR2, APOGEE DR14, Keck/DEIMOS, Keck/HIRES and Keck/NIRSPEC radial
+    velocities which are not included in Appendix D of the MNRAS paper. At the
+    moment the data files contain about 1/3 of all radial velocities. The
+    inclusion of the remaining data is underway... '
+
+    This function parses the combined_table.txt file.
+    """
+
+    if not os.path.isfile(fname) or not os.path.exists(fname):
+        logger.error("ERROR: file not found: {0}".format(fname))
+        return
+
+    if debug:
+        logger.debug("\nParsing Hilker+ (2019) individual radial velocity data")
+
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/veldis.html
+    # does have a column NStar, but that column is not available for
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    names = [
+        "Cluster", "2MASS_ID", "RA", "DEC", "RV", "E_RV",
+        "DCEN", "J_mag", "E_J_mag", "K_mag", "E_K_mag", "P_Mem", "NRV", "P_Single",
+    ]
+    dtype = [
+        "U16", "U18", "float", "float", "float", "float",
+        "float", "float", "float", "float", "float", "float", "int", "float"
+    ]
+    delimiter = [
+        9, 18, 13, 13, 10, 10,
+        9, 6, 6, 8, 6, 10, 3, 9
+    ]
+
+    if debug and False:
+        logger.debug("\nnames:     {}\ndtype:     {}\ndelimiter: {}\n".format(
+        len(names), len(dtype), len(delimiter) ))
+
+        logger.debug("-"*45)
+        logger.debug("{0:<15s}{1:<15s}{2:<15s}".format("name", "dtype", "delimiter"))
+        logger.debug("-"*45)
+        for i in range(len(names)):
+            logger.debug("{0:<15s}{1:<15s}{2:<15d}".format(names[i], dtype[i], delimiter[i]))
+        logger.debug("-"*45 + "\n")
+
+    data = numpy.genfromtxt(fname, skip_header=2, delimiter=delimiter,
+        dtype=dtype, names=names, autostrip=True)
+    if debug:
+        logger.debug("\nHere is the first entry:")
+        for n in data.dtype.names:
+            logger.debug("{0:<40s}{1}".format(n, data[0][n]))
+        logger.debug("\nHere is the 129th entry:")
+        for n in data.dtype.names:
+            logger.debug("{0:<40s}{1}".format(n, data[129][n]))
+
+        logger.debug("\ndelimiter.cumsum()\n{0}\n".format(numpy.array(delimiter).cumsum()))
+
+        logger.debug("\nHere are the first 50 rows:")
+        for i in range(50): logger.debug(data[i])
+
+    return data
+
+
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger.info("Running {0}".format(__file__))
 
-    gc_fits = scrape_individual_fits_from_baumgardt_website(logger)
+    individual_rvs = parse_individual_rvs_of_stars_in_field_of_clusters(logger)
     import sys; sys.exit(0)
 
     hilker_orbits = parse_hilker_2019_orbits(debug=True)
@@ -313,3 +382,5 @@ if __name__ == "__main__":
         logger.debug("{0:<20s}{1}".format(n, hilker_combined[ter2][0][n]))
 
     hilker_radial_velocities = parse_hilker_2019_radial_velocities(debug=True)
+
+    gc_fits = scrape_individual_fits_from_baumgardt_website(logger)
