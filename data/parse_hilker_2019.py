@@ -94,15 +94,12 @@ def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), de
     if debug:
         logger.debug("\nParsing Hilker+ (2019) combined table")
 
-    # TODO: something iffy is going on b/c we have two more columns in each
-    # row than the header indicates ...
     names = [
         "Cluster", "RA", "DEC", "R_Sun", "R_GC",
-        "Mass", "DM", "V", "M/L_V", "rc",
+        "Mass", "DM", "V", "V_err", "M/L_V", "M/L_V_err", "rc",
         "rh,l", "rh,m", "rt", "rho_c", "rho_h,m",
         "sig_c", "sig_h,m", "lg(Trh)", "MF", "F_REM",
-        "sig0", "vesc", "etac", "etah", "something",
-        "something2",
+        "sig0", "vesc", "etac", "etah",
     ]
     dtype = [
         "S16", "float", "float", "float", "float",

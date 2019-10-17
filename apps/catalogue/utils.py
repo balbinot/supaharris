@@ -4,13 +4,16 @@ from catalogue.models import AstroObjectClassification
 
 class PrepareSupaHarrisDatabaseMixin(object):
     def handle(self, *args, **options):
-        print("Just making sure that your database has all required fixtures!")
-        print_info = options.get("print_info")
-        if "prin_info" in options.keys():
-            options.pop("print_info")
+        # Verbosity level; 0=minimal output, 1=normal output,
+        # 2=verbose output, 3=very verbose output
+        self.verbosity = int(options["verbosity"])
 
+        print("PrepareSupaHarrisDatabaseMixin: making sure that your" +
+            " database has all required fixtures!")
         try:
             self.GC = AstroObjectClassification.objects.get(name="Globular Cluster")
+            assert self.GC.id == 18, "Incorrect id for AstroObjectClassification"+ \
+                    " 'Globular Cluster', expected 18 but found {0}".format(self.GC.id)
         except AstroObjectClassification.DoesNotExist:
             print("\nWops, you forgot to load the AstroObjectClassification fixtures first!")
             print("But don't worry, we'll do this for you right now!")
@@ -19,7 +22,9 @@ class PrepareSupaHarrisDatabaseMixin(object):
             print("\nAll set.")
 
         try:
-            Parameter.objects.get(name="RA")
+            ra = Parameter.objects.get(name="RA")
+            assert ra.id == 1, "Incorrect id for Parameter"+ \
+                    " 'RA', expected 1 but found {0}".format(ra.id)
         except Parameter.DoesNotExist:
             print("\nWops, you forgot to load the Parameter fixtures first!")
             print("But don't worry, we'll do this for you right now!")
@@ -27,7 +32,7 @@ class PrepareSupaHarrisDatabaseMixin(object):
             call_command("loaddata", "fixtures/catalogue_Parameter")
             print("\nAll set.")
 
-        if print_info:
+        if self.verbosity >= 1:  # verbosity = {1: normal, 2: verbose, and 3: very verbose}
             print_parameters()
             print_astro_object_classifications()
 

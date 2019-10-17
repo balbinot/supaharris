@@ -34,11 +34,17 @@ Data
 
     Name:   Hilker+ 2019
     Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract
+              https://arxiv.org/pdf/1811.01507.pdf
+              J/MNRAS/482/5138/table1
+              J/MNRAS/482/5138/table4
             https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B/abstract
+              https://arxiv.org/pdf/1804.08359.pdf
             https://ui.adsabs.harvard.edu/abs/2017MNRAS.464.2174B/abstract
+              https://arxiv.org/pdf/1609.08794.pdf
             https://ui.adsabs.harvard.edu/abs/2017MNRAS.471.3668S/abstract
+              https://arxiv.org/pdf/1708.09529.pdf
     Data:   https://people.smp.uq.edu.au/HolgerBaumgardt/globular/
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt, retrieved Aug 12, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt, retrieved Aug 12, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat, retrieved Aug 12, 2019
     Folder: data/MW_GCS_Hilker2019
