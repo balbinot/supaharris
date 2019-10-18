@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from catalogue.models import (
+    Auxiliary,
     Reference,
     Parameter,
     Observation,
@@ -17,15 +18,52 @@ from data.parse_hilker_2019 import (
     parse_hilker_2019_orbits,
     parse_hilker_2019_combined,
     parse_hilker_2019_radial_velocities,
+    parse_baumgardt_2019_mnras_482_5138_table1,
+    parse_baumgardt_2019_mnras_482_5138_table4,
 )
+
+
+def add_baumgardt_2019_mnras_482_5138(logger, BHSB2019):
+    table1 = parse_baumgardt_2019_mnras_482_5138_table1()
+    table4 = parse_baumgardt_2019_mnras_482_5138_table4()
+
+    # For IC 1257 and Ter 10 we found that the cluster centres given in Harris (1996)
+    # were incorrect, and determined new centres for the positions of the member
+    # stars found in the Gaia DR2 catalogue.
+
+    # This work measured (mean) proper motions and line of sight velocities and
+    # errors for GCs in the Milky Way. Moreover, the authors calculated the
+    # internal velocity dispersion profiles.
+
+    for p_b19 in data.keys():
+        print("p_b19: {0}".format(p_b19))
+
+    for entry in data:
+        entry["Name"]
+
+
+def add_fits(logger):
+    fits = scrape_individual_fits_from_baumgardt_website(logger)
+    for gc_name in fits:
+        print("GC name: {0}".format(gc_name))
+
+    return
+
+    for bla in bla:
+        aux = Auxiliary(
+            reference=bla,
+            astro_object=bla,
+            path=FilePathField,
+            url=URLField
+        )
+
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add Hilker+ 2019 data to the SupaHarris database"
 
     def handle(self, *args, **options):
-        super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
-        return
+        super().handle(*args, **options)  # to run our Mixin modifications
 
         cmd = __file__.split("/")[-1].replace(".py", "")
         print("\n\nRunning the management command '{0}'\n".format(cmd))
@@ -101,6 +139,11 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             print("Created the Reference: {0}\n".format(SBH2019))
 
-        hilker_2019_orbits = parse_hilker_2019_orbits()
-        hilker_2019_combined = parse_hilker_2019_combined()
-        hilker_2019_radial_velocities = parse_hilker_2019_radial_velocities()
+
+        add_baumgardt_2019_mnras_482_5138(logger, BHSB2019)
+        add_fits(logger)
+
+        # TODO: add
+        hilker_2019_orbits = parse_hilker_2019_orbits(logger)
+        hilker_2019_combined = parse_hilker_2019_combined(logger)
+        hilker_2019_radial_velocities = parse_hilker_2019_radial_velocities(logger)

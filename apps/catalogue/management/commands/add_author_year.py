@@ -21,6 +21,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add ReplaceMe data to the database"
 
     def handle(self, *args, **options):
+        logger = logging.getLogger("console")
         super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
         return
 
@@ -84,4 +85,3 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
                 value=gc_R_Sun,
             )
             print("Created the Observation: {0}".format(observation))
-
