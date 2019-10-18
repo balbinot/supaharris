@@ -9,14 +9,12 @@ from urllib.parse import urlparse
 
 from django.utils.text import slugify
 
-# from .plotsettings import *
-
-logger = logging.getLogger("console")
-
+# LOGGER = logging.getLogger("console")
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Hilker2019/"
 
 
-def parse_hilker_2019_orbits(fname="{0}orbits_table.txt".format(BASEDIR), debug=False):
+def parse_hilker_2019_orbits(logger,
+        fname="{0}orbits_table.txt".format(BASEDIR), debug=False):
     # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
@@ -85,7 +83,8 @@ def parse_hilker_2019_orbits(fname="{0}orbits_table.txt".format(BASEDIR), debug=
     return data
 
 
-def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), debug=False):
+def parse_hilker_2019_combined(logger,
+        fname="{0}combined_table.txt".format(BASEDIR), debug=False):
     # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
@@ -148,7 +147,8 @@ def parse_hilker_2019_combined(fname="{0}combined_table.txt".format(BASEDIR), de
     return data
 
 
-def parse_hilker_2019_radial_velocities(fname="{0}rv.dat".format(BASEDIR), debug=False):
+def parse_hilker_2019_radial_velocities(logger,
+        fname="{0}rv.dat".format(BASEDIR), debug=False):
     # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
     # The following Table contains the velocity dispersion profiles of 139
     # Galactic globular clusters. The Table is based on the following papers:
@@ -294,7 +294,7 @@ def scrape_individual_fits_from_baumgardt_website(logger,
     return data
 
 
-def parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=True,
+def parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=False,
         fname="{0}appendix_combined_table.txt".format(BASEDIR)):
     """ Data retrieved 20191017 from
     https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/appendix.html,
@@ -363,16 +363,29 @@ def parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=True,
     return data
 
 
+def parse_baumgardt_2019_mnras_482_5138_table1():
+    from astroquery.vizier import Vizier
+    Vizier.ROW_LIMIT = -1
+    return Vizier.get_catalogs('J/MNRAS/482/5138/table1')[0]
+
+
+def parse_baumgardt_2019_mnras_482_5138_table4():
+    from astroquery.vizier import Vizier
+    Vizier.ROW_LIMIT = -1
+    return Vizier.get_catalogs('J/MNRAS/482/5138/table4')[0]
+
+
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
+    logger = logging.getLogger(__name__)
     logger.info("Running {0}".format(__file__))
 
-    individual_rvs = parse_individual_rvs_of_stars_in_field_of_clusters(logger)
+    individual_rvs = parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=True)
     import sys; sys.exit(0)
 
-    hilker_orbits = parse_hilker_2019_orbits(debug=True)
+    hilker_orbits = parse_hilker_2019_orbits(logger, debug=True)
 
-    hilker_combined = parse_hilker_2019_combined(debug=True)
+    hilker_combined = parse_hilker_2019_combined(logger, debug=True)
     # It seems Ter 2 has three nan values. So here we check which and why.
     ter2, = numpy.where(hilker_combined["Cluster"] == b"Ter 2")
     for n in hilker_combined.dtype.names:
@@ -381,3 +394,6 @@ if __name__ == "__main__":
     hilker_radial_velocities = parse_hilker_2019_radial_velocities(debug=True)
 
     gc_fits = scrape_individual_fits_from_baumgardt_website(logger)
+
+    h19_table1 = parse_baumgardt_2019_mnras_482_5138_table1()
+    h19_table4 = parse_baumgardt_2019_mnras_482_5138_table4()
