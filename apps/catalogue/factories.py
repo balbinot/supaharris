@@ -25,7 +25,7 @@ class ParameterFactory(factory.DjangoModelFactory):
         model = Parameter
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestParameter {0}".format(n))
     description = factory.LazyAttribute(lambda _: faker.text(
         max_nb_chars=faker.random_int(min=42, max=255)
     ))
@@ -60,7 +60,7 @@ class ReferenceFactory(factory.DjangoModelFactory):
         model = Reference
 
     title = factory.LazyAttribute(lambda _: faker.sentence())
-    first_author = factory.LazyAttribute(lambda _: faker.last_name())
+    first_author = factory.Sequence(lambda n: "TestReference {0}".format(n))
     journal = factory.LazyAttribute(lambda _:
         faker.random_int(min=0, max=len(Reference.JOURNALS)-1)
     )
@@ -102,7 +102,7 @@ class AstroObjectClassificationFactory(factory.DjangoModelFactory):
         model = AstroObjectClassification
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestClassification {0}".format(n))
     abbreviation = factory.LazyAttribute(lambda _: faker.name())
 
 
@@ -111,7 +111,7 @@ class AstroObjectFactory(factory.DjangoModelFactory):
         model = AstroObject
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestObject {0}".format(n))
 
     @factory.post_generation
     def classifications(self, create, extracted, **kwargs):
