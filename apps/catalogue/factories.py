@@ -133,13 +133,13 @@ class ProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
 
-    profile_type = factory.LazyAttribute(lambda _: faker.name())
     reference = factory.SubFactory(ReferenceFactory)
     astro_object = factory.SubFactory(AstroObjectFactory)
-    # profile_type
-    # profile
-    # model_parameters
-    # model_flavour
+
+    x = list(range(0, 10, 1))
+    y = factory.LazyAttribute(lambda _: [i**2 for i in _.x])
+    x_description = factory.Sequence(lambda n: "x{0}".format(n))
+    y_description = factory.Sequence(lambda n: "y{0}".format(n))
 
 
 class AuxiliaryFactory(factory.DjangoModelFactory):

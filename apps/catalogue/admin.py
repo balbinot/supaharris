@@ -211,9 +211,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {"fields": (
-            "astro_object",
-            "profile_type", "profile", "model_parameters", "model_flavour",
-            "reference",
+            "astro_object", "reference",
+            "x", "x_description", "y", "y_description",
             )
         }),
         ("Meta", {

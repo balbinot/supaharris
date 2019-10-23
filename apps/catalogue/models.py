@@ -331,11 +331,10 @@ class Profile(models.Model):
         AstroObject, related_name="profiles", on_delete=models.CASCADE
     )
 
-    # TODO: restrict options of profile_type?
-    profile_type = models.CharField(max_length=256, null=True, blank=True)
-    profile = JSONField()
-    model_parameters = JSONField()
-    model_flavour = models.CharField(max_length=256, null=True, blank=True)
+    x = JSONField()
+    y = JSONField()
+    x_description = models.TextField(max_length=256, null=True, blank=True)
+    y_description = models.TextField(max_length=256, null=True, blank=True)
 
     # Time stamps, and logging of who changed user info
     last_updated_by = models.ForeignKey(UserModel,
