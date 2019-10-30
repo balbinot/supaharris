@@ -7,9 +7,13 @@ from bs4 import BeautifulSoup
 from matplotlib import pyplot
 from urllib.parse import urlparse
 
+logging.getLogger("keyring.backend").setLevel(logging.WARNING)
+from astroquery.vizier import Vizier
+Vizier.ROW_LIMIT = -1
+
 from django.utils.text import slugify
 
-# LOGGER = logging.getLogger("console")
+
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Hilker2019/"
 
 
@@ -33,7 +37,7 @@ def parse_hilker_2019_orbits(logger,
         "RAP_err"
     ]
     dtype = [
-        "S16", "float", "float", "float", "float",
+        "U16", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
@@ -101,7 +105,7 @@ def parse_hilker_2019_combined(logger,
         "sig0", "vesc", "etac", "etah",
     ]
     dtype = [
-        "S16", "float", "float", "float", "float",
+        "U16", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
         "float", "float", "float", "float", "float",
@@ -174,7 +178,7 @@ def parse_hilker_2019_radial_velocities(logger,
         "type",
     ]
     dtype = [
-        "S16", "float", "float", "float", "float", "S16"
+        "U16", "float", "float", "float", "float", "U16"
     ]
     delimiter = [
         14, 7, 6, 6, 6, 6
@@ -208,6 +212,14 @@ def parse_hilker_2019_radial_velocities(logger,
         logger.debug(data["Cluster"][0:5])
 
     return data
+
+
+def parse_baumgardt_2019_mnras_482_5138_table1():
+    return Vizier.get_catalogs("J/MNRAS/482/5138/table1")[0]
+
+
+def parse_baumgardt_2019_mnras_482_5138_table4():
+    return Vizier.get_catalogs("J/MNRAS/482/5138/table4")[0]
 
 
 def scrape_individual_fits_from_baumgardt_website(logger,
@@ -363,18 +375,6 @@ def parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=False,
     return data
 
 
-def parse_baumgardt_2019_mnras_482_5138_table1():
-    from astroquery.vizier import Vizier
-    Vizier.ROW_LIMIT = -1
-    return Vizier.get_catalogs('J/MNRAS/482/5138/table1')[0]
-
-
-def parse_baumgardt_2019_mnras_482_5138_table4():
-    from astroquery.vizier import Vizier
-    Vizier.ROW_LIMIT = -1
-    return Vizier.get_catalogs('J/MNRAS/482/5138/table4')[0]
-
-
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger = logging.getLogger(__name__)
@@ -387,7 +387,7 @@ if __name__ == "__main__":
 
     hilker_combined = parse_hilker_2019_combined(logger, debug=True)
     # It seems Ter 2 has three nan values. So here we check which and why.
-    ter2, = numpy.where(hilker_combined["Cluster"] == b"Ter 2")
+    ter2, = numpy.where(hilker_combined["Cluster"] == "Ter 2")
     for n in hilker_combined.dtype.names:
         logger.debug("{0:<20s}{1}".format(n, hilker_combined[ter2][0][n]))
 
