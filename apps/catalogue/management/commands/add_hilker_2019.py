@@ -177,6 +177,7 @@ def add_orbits(logger, name_id_map):
     # These measured quantities are then used to do the orbital integrations
     # (for a given Milky Way mass model / analytical potential), giving derived
     # quantities X/Y/Z/U/V/W, R_Peri, R_Apo /w propagated uncertainties.
+    # In particular, the authors use the Irrgang et al. (2013) galactic model.
     # TODO: we may have to convert the heliocentric coordinates to ensure the
     # Baumgardt values are consistent with those quoted by Harris (1996). The
     # exact definition of the coordinate system may differ.
@@ -253,7 +254,7 @@ def add_orbits(logger, name_id_map):
     nrows = len(data)
     logger.info("\n  Found {0} rows".format(nrows))
     for i, row in enumerate(data):
-        if i > 5: break
+        # if i > 5: break
         logger.info("\n  {0} / {1}".format(i+1, nrows))
 
         gc_name = row["Cluster"]
@@ -309,6 +310,8 @@ def add_orbits(logger, name_id_map):
             parameter=rhopmrade, value=row["rhopmrade"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
 
+        # TODO: Distance from the Gal. centre in direction of Sun (note that the
+        # definition is opposite to the more common definition of X from Sun to GC)
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=X, value=row["X"], sigma_up=row["DX"], sigma_down=row["DX"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
@@ -340,21 +343,277 @@ def add_orbits(logger, name_id_map):
 
 
 def add_combined(logger, name_id_map):
+    # The relevant reference for the masses, structural parameters, and velocity
+    # dispersion profiles seems to be Baumgardt & Hilker (2018)
+    #     https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B
+
+    # The authors fit a suite of Nbody models to the observed surface density
+    # and dispersion profiles to infer the mass, mass-to-light, core radius,
+    # half-mass radius, half-light radius, central density, density inside the
+    # half-mass radius, the half-mass relaxation time, the global mass function
+    # slope, the mass-weighted (1D) velocity dispersion, and the central escape
+    # velocity. The paper does this for 112 GCs, but the data set seems to be
+    # updated as it contains 154 entries.
+
+    # The data are available at the website of Holger Baumgardt
+    #   https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
+
     logger.info("\n  Add combined_table.txt")
+
+    # Relevant Parameter instances
+    # RA = Parameter.objects.get(name="RA")
+    # Dec = Parameter.objects.get(name="Dec")
+    # R_Sun = Parameter.objects.get(name="R_Sun")
+    # R_Gal = Parameter.objects.get(name="R_Gal")
+    Mass = Parameter.objects.get(name="Mass")
+    V_t = Parameter.objects.get(name="V_t")
+
+    MLv, created = Parameter.objects.get_or_create(name="M/Lv",
+        defaults={"scale": 1, "unit": ""})
+    MLv.description = "V-band M/L ratio"
+    MLv.save()
+    if created:
+        logger.info("  Created: {0}".format(MLv))
+    else:
+        logger.info("  Found: {0}".format(MLv))
+
+    sp_r_c = Parameter.objects.get(name="sp_r_c")  # unit: arcmin
+    sp_r_h = Parameter.objects.get(name="sp_r_h")  # unit: arcmin
+
+    sp_r_hm, created = Parameter.objects.get_or_create(name="sp_r_hm",
+        defaults={"scale": 1, "unit": "arcmin"})  # arcmin for consistency /w sp_r_c and sp_r_h
+    sp_r_hm.description = "Half-mass radius (3D)"
+    sp_r_hm.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_r_hm))
+    else:
+        logger.info("  Found: {0}".format(sp_r_hm))
+
+    sp_r_t, created = Parameter.objects.get_or_create(name="sp_r_t",
+        defaults={"scale": 1, "unit": "arcmin"})
+    sp_r_t.description = "Tidal radius according to eq. 8 of Webb et al. (2013), ApJ 764, 124"
+    sp_r_t.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_r_t))
+    else:
+        logger.info("  Found: {0}".format(sp_r_t))
+
+    sp_lg_rho_c, created = Parameter.objects.get_or_create(name="sp_lg_rho_c",
+        defaults={"scale": 1, "unit": "log10(MSun/pc^3)"})
+    sp_lg_rho_c.description = "Core density"
+    sp_lg_rho_c.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_lg_rho_c))
+    else:
+        logger.info("  Found: {0}".format(sp_lg_rho_c))
+
+    sp_lg_rho_hm, created = Parameter.objects.get_or_create(name="sp_lg_rho_hm",
+        defaults={"scale": 1, "unit": "log10(MSun/pc^3)"})
+    sp_lg_rho_hm.description = "Density inside the half-mass radius"
+    sp_lg_rho_hm.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_lg_rho_hm))
+    else:
+        logger.info("  Found: {0}".format(sp_lg_rho_hm))
+
+    sigma_0 = Parameter.objects.get(name="sigma_0")
+
+    sigma_hm, created = Parameter.objects.get_or_create(name="sigma_hm",
+        defaults={"scale": 1, "unit": "MSun/pc^2"})
+    sigma_hm.description = "Surface density of stars inside the half-mass radius"
+    sigma_hm.save()
+    if created:
+        logger.info("  Created: {0}".format(sigma_hm))
+    else:
+        logger.info("  Found: {0}".format(sigma_hm))
+
+    sp_lg_thm, created = Parameter.objects.get_or_create(name="sp_lg_thm",
+        defaults={"scale": 1, "unit": "log10(yr)"})
+    sp_lg_thm.description = "Half-mass relaxation time"
+    sp_lg_thm.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_lg_thm))
+    else:
+        logger.info("  Found: {0}".format(sp_lg_thm))
+
+    sp_mf_slope, created = Parameter.objects.get_or_create(name="sp_mf_slope",
+        defaults={"scale": 1, "unit": "log10(yr)"})
+    sp_mf_slope.description = "Global mass function slope of 0.2 to 0.8 MSun" + \
+        " main-sequence stars, alpha_Kroupa = -1.50 over this range."
+    sp_mf_slope.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_mf_slope))
+    else:
+        logger.info("  Found: {0}".format(sp_mf_slope))
+
+    sp_frac_rem, created = Parameter.objects.get_or_create(name="sp_frac_rem",
+        defaults={"scale": 1, "unit": ""})
+    sp_frac_rem.description = "Mass fraction of remnants"
+    sp_frac_rem.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_frac_rem))
+    else:
+        logger.info("  Found: {0}".format(sp_frac_rem))
+
+    sig_v_r = Parameter.objects.get(name="sig_v_r")  # km/s
+    v_e_0 = Parameter.objects.get(name="v_e_0")  # km/s
+
+    sp_eta_c, created = Parameter.objects.get_or_create(name="sp_eta_c",
+        defaults={"scale": 1, "unit": ""})
+    sp_eta_c.description = "Mass segregation parameter from Trenti & van der " + \
+        "Marel (2013) for stars in the core and in the mass range 0.5 to 0.8 MSun"
+    sp_eta_c.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_eta_c))
+    else:
+        logger.info("  Found: {0}".format(sp_eta_c))
+
+    sp_eta_hm, created = Parameter.objects.get_or_create(name="sp_eta_hm",
+        defaults={"scale": 1, "unit": ""})
+    sp_eta_hm.description = "Mass segregation parameter from Trenti & van der " + \
+        "Marel (2013) for stars at the half-mass radius and in the mass range " + \
+        "0.5 to 0.8 MSun"
+    sp_eta_hm.save()
+    if created:
+        logger.info("  Created: {0}".format(sp_eta_hm))
+    else:
+        logger.info("  Found: {0}".format(sp_eta_hm))
+
+    # Relevant Reference
+    ref = Reference.objects.get(
+        ads_url="https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B")
+    logger.info("\n  Using the Reference: {0}".format(ref))
+
+    # Get the data
     data = parse_hilker_2019_combined(logger)
 
+    # TODO: "Clusters where the mass had to be estimated based on the
+    # total luminosity are shown in italics."
+    mass_from_luminosity = [
+        "FSR 1735", "IC 1257", "Ter 2", "Djor 1", "UKS 1", "Ter 9",
+        "Ter 10", "2MASS-GC01", "2MASS-GC02", "Ter 12",
+    ]
+
+    # TODO: "Distances with error bars are derived by us, the other distances
+    # are taken from the literature"
+    # The table at https://people.smp.uq.edu.au/HolgerBaumgardt/globular/parameter.html
+    # does contain error bars for R_Sun. However, the file `combined_table.txt'
+    # does not the contain error bars on distances ...
+    # The `orbits_table.txt', on the other hand, provides the distance error `ERsun'
+
     nrows = len(data)
-    logger.info("    Found {0} rows".format(nrows))
+    logger.info("\n  Found {0} rows".format(nrows))
     for i, row in enumerate(data):
-        logger.debug("    {0} / {1}".format(i+1, nrows))
+        if i > 5: break
+        logger.debug("\n  {0} / {1}".format(i+1, nrows))
 
         gc_name = row["Cluster"]
         if gc_name in name_id_map:
             gc = AstroObject.objects.get(id=name_id_map[gc_name])
-            logger.info("      Found: {0}{1} for '{2}'".format(gc.name,
+            logger.info("    Found: {0}{1} for '{2}'".format(gc.name,
                 " ({0})".format(gc.altname) if gc.altname else "", gc_name))
         else:
-            logger.info("      Created: {0}".format(gc_name))
+            logger.info("    ERROR: did not find {0}".format(gc_name))
+            sys.exit(1)
+
+        if gc_name in mass_from_luminosity:
+            # TODO: what do we do with this information?
+            logger.info("    TODO: Mass taken from luminosity")
+
+        # Added above in add_orbits method.
+        # row["RA"]
+        # row["DEC"]
+        # value=row["R_Sun"]
+        # value=row["R_GC"]
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=Mass, value=row["Mass"], sigma_up=row["DM"], sigma_down=row["DM"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Apparent V-band magnitude and an approximate error
+        # SupaHarris: Integrated V magnitude
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=V_t, value=row["V"], sigma_up=row["V_err"], sigma_down=row["V_err"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=MLv, value=row["ML_V"], sigma_up=row["ML_V_err"], sigma_down=row["ML_V_err"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Core radius using Spitzer (1987) definition
+        # SupaHarris: King core radius. TODO: compare to Harris (1996) definition
+        # TODO: convert parsec to arcmin
+        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+        #     parameter=sp_r_c, value=row["rc"])
+        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Projected half-light radius
+        # SupaHarris: Half-light radius. TODO: compare to Harris (1996) definition
+        # TODO: convert parsec to arcmin
+        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+        #     parameter=sp_r_h, value=row["rhl"])
+        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # TODO: convert parsec to arcmin
+        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+        #     parameter=sp_r_hm, value=row["rhm"])
+        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # TODO: convert parsec to arcmin
+        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+        #     parameter=sp_r_t, value=row["rt"])
+        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_lg_rho_c, value=row["rho_c"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_lg_rho_hm, value=row["rho_hm"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: not explicitly mentioned. Just pops up in combined_table.txt
+        # SupaHarris: Central surface density of stars at the cluster center in MSun/pc^2
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sigma_0, value=row["sig_c"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: not explicitly mentioned. Just pops up in combined_table.txt
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sigma_hm, value=row["sig_hm"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_lg_thm, value=row["lgTrh"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_mf_slope, value=row["MF"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_frac_rem, value=row["F_REM"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Central 1D velocity dispersion
+        # SupaHarris: Central velocity dispersion
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sig_v_r, value=row["sig0"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Central escape velocity
+        # SupaHarris: Central escape velocity
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=v_e_0, value=row["vesc"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_eta_c, value=row["etac"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_eta_hm, value=row["etah"])
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
 
 
 def add_rv(logger, name_id_map):
@@ -512,9 +771,11 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         name_id_map = map_names_to_ids()
 
         # Add the 6D phase space information plus the Orbit integrations
-        add_orbits(self.logger, name_id_map)
+        # add_orbits(self.logger, name_id_map)
 
-        # add_combined(self.logger, name_id_map)
+        # Add the structural parameters
+        add_combined(self.logger, name_id_map)
+
         # add_rv(self.logger, name_id_map)
         # add_baumgardt_2019_mnras_482_5138(self.logger, name_id_map)
         # add_fits(self.logger, name_id_map)
