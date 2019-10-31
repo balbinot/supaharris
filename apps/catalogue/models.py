@@ -333,6 +333,8 @@ class Profile(models.Model):
 
     x = JSONField()
     y = JSONField()
+    y_sigma_up = JSONField(null=True, blank=True)
+    y_sigma_down = JSONField(null=True, blank=True)
     x_description = models.TextField(max_length=256, null=True, blank=True)
     y_description = models.TextField(max_length=256, null=True, blank=True)
 
@@ -348,7 +350,10 @@ class Profile(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return  "{} - Ref: {}".format(self.astro_object.name, self.reference)
+        return "{}. Ref: {}. {} vs {}".format(
+            str(self.astro_object.name), str(self.reference),
+            self.x_description, self.y_description
+        )
 
 
 class Auxiliary(models.Model):
