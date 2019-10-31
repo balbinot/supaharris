@@ -352,7 +352,7 @@ class Profile(models.Model):
     def __str__(self):
         return "{}. Ref: {}. {} vs {}".format(
             str(self.astro_object.name), str(self.reference),
-            self.x_description, self.y_description
+            self.y_description, self.x_description
         )
 
 

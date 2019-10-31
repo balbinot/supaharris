@@ -208,10 +208,15 @@ class AuxiliaryAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    list_display = ( "get_name", "astro_object", "reference", "get_len_x", "get_len_y" )
     autocomplete_fields = ( "astro_object", "reference", )
     search_fields = ( "astro_object", "reference", )
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
+    )
+    list_filter = (
+        ("astro_object", RelatedDropdownFilter),
+        ("reference", RelatedDropdownFilter),
     )
 
     fieldsets = (
@@ -234,3 +239,18 @@ class ProfileAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user
         super().save_model(request, obj, form, change)
+
+    def get_name(self, obj):
+        return "{} vs {}".format(obj.y_description, obj.x_description)
+    get_name.short_description = "Profile"
+
+    def get_len_x(self, obj):
+        return len(obj.x)
+    get_len_x.short_description = "len(x)"
+    # TODO: annotate the qs /w len_x?
+    # get_len_x.admin_order_field = "len_x"
+
+    def get_len_y(self, obj):
+        return len(obj.y)
+    get_len_y.short_description = "len(y)"
+    # get_len_y.admin_order_field = "len_y"
