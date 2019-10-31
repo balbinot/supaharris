@@ -223,7 +223,9 @@ def parse_baumgardt_2019_mnras_482_5138_table4():
 
 
 def scrape_individual_fits_from_baumgardt_website(logger,
-        outdir="{0}figures/".format(BASEDIR), force_get_img=False):
+        outdir="{0}../../staticfiles/img/aux/hbsb2019/".format(BASEDIR),
+        force_get_img=False):
+
     """ Retrieve the GAIA selection, Orbit over last 2 Gyr (xy and Rz plane),
         HST photometry, Mass function, and N-body fit gif/pdf images from the
         website of Holger Baumgardt. This function returns a dict /w GC name
@@ -270,6 +272,7 @@ def scrape_individual_fits_from_baumgardt_website(logger,
     ]
     data = dict()
     for i, gc in enumerate(gcs):
+        if i > 5: break
         gc_name, gc_url = gc
         data[gc_name] = dict()
         data[gc_name]["url"] = gc_url
@@ -289,7 +292,7 @@ def scrape_individual_fits_from_baumgardt_website(logger,
             path = urlparse(img_src).path
             ext = os.path.splitext(path)[1]
             fname = "{0}{1}_{2}{3}".format(outdir, slugify(gc_name), fig_name, ext)
-            data[gc_name]["img_src"] = fname
+            data[gc_name][fig_name] = { "fname": fname, "img_src": img_src }
             if os.path.exists(fname) and os.path.isfile(fname) and not force_get_img:
                 logger.info("    already have {0}".format(fname))
                 continue
