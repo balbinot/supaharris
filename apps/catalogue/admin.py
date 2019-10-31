@@ -130,6 +130,11 @@ class ObservationAdmin(admin.ModelAdmin):
     readonly_fields = (
         "date_created", "date_updated", "last_updated_by",
     )
+    list_filter = (
+        ("astro_object", RelatedDropdownFilter),
+        ("parameter", RelatedDropdownFilter),
+        ("reference", RelatedDropdownFilter),
+    )
 
     fieldsets = (
         (None, {"fields": (
