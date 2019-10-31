@@ -14,6 +14,7 @@ from catalogue.models import (
     Observation,
     AstroObject,
     AstroObjectClassification,
+    Profile,
 )
 from catalogue.utils import map_names_to_ids
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
@@ -504,7 +505,7 @@ def add_combined(logger, name_id_map):
     nrows = len(data)
     logger.info("\n  Found {0} rows".format(nrows))
     for i, row in enumerate(data):
-        if i > 5: break
+        # if i > 5: break
         logger.debug("\n  {0} / {1}".format(i+1, nrows))
 
         gc_name = row["Cluster"]
@@ -617,38 +618,51 @@ def add_combined(logger, name_id_map):
 
 
 def add_rv(logger, name_id_map):
-    logger.info("\n  Add rv.dat")
+    # Velocity dispersion profiles as function of radius, either for the
+    # dispersion in radial velocity, or for the dispersion in proper motion.
 
+    # The data are available at the website of Holger Baumgardt
+    #     https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+    # TODO: rv.dat does not include Nstar, whereas the DataTable at the website
+    # does. However, our Profile model also does not have support for Nstar,
+    # but it could be added as a seperate Profile instance /w x=radii, y=Nstar?
+
+    logger.info("\n  Add rv.dat\n")
+
+    # Relevant Reference instances
     ads_url = "https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B"
     BHSB2019 = Reference.objects.get(ads_url=ads_url)
-    logger.info("    Using the Reference: {0}".format(BHSB2019))
+    logger.info("  Using the Reference: {0}".format(BHSB2019))
 
     ads_url = "https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.5591K"
     K2018 = Reference.objects.get(ads_url=ads_url)
-    logger.info("    Using the Reference: {0}".format(K2018))
+    logger.info("  Using the Reference: {0}".format(K2018))
 
     ads_url = "https://ui.adsabs.harvard.edu/abs/2015ApJ...803...29W"
     W2015 = Reference.objects.get(ads_url=ads_url)
-    logger.info("    Using the Reference: {0}".format(W2015))
+    logger.info("  Using the Reference: {0}".format(W2015))
 
     # Parse and iterate through the data
     data = parse_hilker_2019_radial_velocities(logger)
     gc_names = numpy.unique(data["Cluster"])
     ngcs = len(gc_names)
-    logger.info("\n    Found {0} GCs /w {1} data points".format(ngcs, len(data)))
+    logger.info("\n  Found {0} GCs /w {1} data points".format(ngcs, len(data)))
 
-    w = " "*8
+    w = " "*6
     for i, gc_name in enumerate(gc_names):
-        logger.debug("    {0} / {1}".format(i+1, ngcs))
+        # if i > 5: break
+        logger.debug("\n  {0} / {1}".format(i+1, ngcs))
+
         if gc_name in name_id_map:
             gc = AstroObject.objects.get(id=name_id_map[gc_name])
-            logger.info("      Found: {0}{1} for '{2}'".format(gc.name,
+            logger.info("    Found: {0}{1} for '{2}'".format(gc.name,
                 " ({0})".format(gc.altname) if gc.altname else "", gc_name))
         else:
-            logger.info("      Created: {0}".format(gc_name))
+            logger.info("    ERROR: did not find {0}".format(gc_name))
+            sys.exit(1)
 
         igc, = numpy.where(data["Cluster"] == gc_name)
-        logger.info("      this GC has {0} data points".format(len(igc)))
+        logger.info("    this GC has {0} data points".format(len(igc)))
 
         radii = data["radius"][igc]
         velocity_dispersion = data["velocity_dispersion"][igc]
@@ -664,8 +678,16 @@ def add_rv(logger, name_id_map):
             logger.debug("{0}{1}".format(w, velocity_dispersion[rv_from_h19]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_up[rv_from_h19]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_down[rv_from_h19]))
-
-        # Kamann et al. (2018), MNRAS, 473, 5591
+            p, created = Profile.objects.get_or_create(reference=BHSB2019, astro_object=gc,
+                x=list(radii[rv_from_h19]),
+                x_description="Radius [arcsec]",
+                y=list(velocity_dispersion[rv_from_h19]),
+                y_description="Velocity dispersion (radial velocity) [km/s]",
+                y_sigma_up=list(velocity_dispersion_err_up[rv_from_h19]),
+                y_sigma_down=list(velocity_dispersion_err_down[rv_from_h19])
+            )
+            logger.debug("    {0}: {1}".format("Created" if created else "Found", p))
+        # Kamann evelocity_dispersion_err_down[rv_from_h19]))t al. (2018), MNRAS, 473, 5591
         rv_from_k18, = numpy.where(data_type == "K18")
         if len (rv_from_k18) > 0:
             logger.debug("{0}RV from K18 --> Reference {1}".format(w, K2018))
@@ -673,6 +695,15 @@ def add_rv(logger, name_id_map):
             logger.debug("{0}{1}".format(w, velocity_dispersion[rv_from_k18]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_up[rv_from_k18]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_down[rv_from_k18]))
+            p, created = Profile.objects.get_or_create(reference=K2018, astro_object=gc,
+                x=list(radii[rv_from_k18]),
+                x_description="Radius [arcsec]",
+                y=list(velocity_dispersion[rv_from_k18]),
+                y_description="Velocity dispersion (radial velocity) [km/s]",
+                y_sigma_up=list(velocity_dispersion_err_up[rv_from_k18]),
+                y_sigma_down=list(velocity_dispersion_err_down[rv_from_k18])
+            )
+            logger.debug("    {0}: {1}".format("Created" if created else "Found", p))
 
         # Baumgardt, Hilker, Sollima & Bellini (2019), MNRAS 482, 5138
         pm_from_h19, = numpy.where(data_type == "GDR2")
@@ -682,6 +713,15 @@ def add_rv(logger, name_id_map):
             logger.debug("{0}{1}".format(w, velocity_dispersion[pm_from_h19]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_up[pm_from_h19]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_down[pm_from_h19]))
+            p, created = Profile.objects.get_or_create(reference=BHSB2019, astro_object=gc,
+                x=list(radii[pm_from_h19]),
+                x_description="Radius [arcsec]",
+                y=list(velocity_dispersion[pm_from_h19]),
+                y_description="Velocity dispersion (proper motion) [km/s]",
+                y_sigma_up=list(velocity_dispersion_err_up[pm_from_h19]),
+                y_sigma_down=list(velocity_dispersion_err_down[pm_from_h19])
+            )
+            logger.debug("    {0}: {1}".format("Created" if created else "Found", p))
 
         # Watkins et al. (2015), ApJ 803, 29
         pm_from_w15, = numpy.where(data_type == "W15")
@@ -691,8 +731,15 @@ def add_rv(logger, name_id_map):
             logger.debug("{0}{1}".format(w, velocity_dispersion[pm_from_w15]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_up[pm_from_w15]))
             logger.debug("{0}{1}".format(w, velocity_dispersion_err_down[pm_from_w15]))
-
-        if i>2: break
+            p, created = Profile.objects.get_or_create(reference=W2015, astro_object=gc,
+                x=list(radii[pm_from_w15]),
+                x_description="Radius [arcsec]",
+                y=list(velocity_dispersion[pm_from_w15]),
+                y_description="Velocity dispersion (proper motion) [km/s]",
+                y_sigma_up=list(velocity_dispersion_err_up[pm_from_w15]),
+                y_sigma_down=list(velocity_dispersion_err_down[pm_from_w15])
+            )
+            logger.debug("    {0}: {1}".format("Created" if created else "Found", p))
 
 
 def add_baumgardt_2019_mnras_482_5138(logger, name_id_map):
@@ -774,9 +821,9 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # add_orbits(self.logger, name_id_map)
 
         # Add the structural parameters
-        add_combined(self.logger, name_id_map)
+        # add_combined(self.logger, name_id_map)
 
-        # add_rv(self.logger, name_id_map)
+        add_rv(self.logger, name_id_map)
         # add_baumgardt_2019_mnras_482_5138(self.logger, name_id_map)
         # add_fits(self.logger, name_id_map)
         # add_rv_profiles(self.logger, name_id_map)

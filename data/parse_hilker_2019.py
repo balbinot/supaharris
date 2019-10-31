@@ -181,7 +181,7 @@ def parse_hilker_2019_radial_velocities(logger,
         "U16", "float", "float", "float", "float", "U16"
     ]
     delimiter = [
-        14, 7, 6, 6, 6, 6
+        13, 8, 6, 6, 6, 6
     ]
 
     if debug and False:
