@@ -627,12 +627,15 @@ def add_combined(logger, name_id_map):
         # Harris (1996) value, converted from arcmin to parsec
         rc_h96 = Observation.objects.filter(astro_object=gc, parameter=sp_r_c,
             reference=h96e10).first()  # arcmin
-        if rc_h96.value:
-            rc_h96_parsec = arcmin2parsec(rc_h96, distance_kpc)
-            logger.debug("    Comparison: {0}, value in arcmin".format(rc_h96))
-            logger.debug("      --> {0:.2f} parsec".format(rc_h96_parsec))
+        if rc_h96:  # checks that the instance exists
+            if rc_h96.value:  # checks that the instance has a value not None
+                rc_h96_parsec = arcmin2parsec(rc_h96, distance_kpc)
+                logger.debug("    Comparison: {0}, value in arcmin".format(rc_h96))
+                logger.debug("      --> {0:.2f} parsec".format(rc_h96_parsec))
+            else:
+                logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
         else:
-            logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
+            logger.debug("    Comparison: NO INSTANCE IN Harris (1996)!")
 
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=sp_r_c, value=rc_arcmin)
@@ -649,12 +652,15 @@ def add_combined(logger, name_id_map):
         logger.debug("      --> {0:.2f} arcmin".format(rhl_arcmin))
         rhl_h96 = Observation.objects.filter(astro_object=gc, parameter=sp_r_h,
             reference=h96e10).first()  # arcmin
-        if rhl_h96.value:
-            rhl_h96_parsec = arcmin2parsec(rhl_h96, distance_kpc)
-            logger.debug("    Comparison: {0}, value in arcmin".format(rhl_h96))
-            logger.debug("      --> {0:.2f} parsec".format(rhl_h96_parsec))
+        if rhl_h96:  # checks that the instance exists
+            if rhl_h96.value:  # checks that the instance has a value not None
+                rhl_h96_parsec = arcmin2parsec(rhl_h96, distance_kpc)
+                logger.debug("    Comparison: {0}, value in arcmin".format(rhl_h96))
+                logger.debug("      --> {0:.2f} parsec".format(rhl_h96_parsec))
+            else:
+                logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
         else:
-            logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
+            logger.debug("    Comparison: NO INSTANCE IN Harris (1996)!")
 
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=sp_r_h, value=rhl_arcmin)
