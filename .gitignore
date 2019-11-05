@@ -125,7 +125,6 @@ ENV/
 .local
 .pki
 
-# Project-specific folders
 /settings/*.env
 /storage
 /media

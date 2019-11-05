@@ -3,6 +3,7 @@ import os
 import sys
 import numpy
 import logging
+import astropy.units as u
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -24,12 +25,20 @@ from data.parse_hilker_2019 import (
     parse_hilker_2019_radial_velocities,
     parse_baumgardt_2019_mnras_482_5138_table1,
     parse_baumgardt_2019_mnras_482_5138_table4,
+    scrape_individual_fits_from_baumgardt_website,
     parse_individual_rvs_of_stars_in_field_of_clusters,
 )
 
 
 def create_references(logger):
     logger.info("\ncreate_references")
+
+    ads_url = "https://ui.adsabs.harvard.edu/abs/2019arXiv190802778H"
+    HBSB2019, created = Reference.objects.get_or_create(ads_url=ads_url)
+    if not created:
+        logger.info("  Found the Reference: {0}".format(HBSB2019))
+    else:
+        logger.info("  Created the Reference: {0}".format(HBSB2019))
 
     # Copy-paste from arXiv:1908.02778v1:
     # Baumgardt (2017) first compared a large grid of 900 N-body models to
@@ -154,7 +163,6 @@ def create_new_gcs(logger, GC):
     else:
         logger.info("  Found: {0}".format(mercer5))
 
-
     # TODO: update Ko 1, Ko 2 classification (Paust, Wilson & van Belle 2014)
     # --> several Gyr old Open Clusters removed from Sagittarius dwarf galaxy.
     Koposov1 = AstroObject.objects.get(name="Ko 1")
@@ -168,6 +176,18 @@ def create_new_gcs(logger, GC):
     # TODO: BH 176 --> old, metal-rich open cluster that could belong to the
     # galactic thick disc (Davoust, Sharina & Donzelli 2011; Sharina+ 2014)
     BH176 = AstroObject.objects.get(name="BH 176")
+
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/fits/clusterlist.html
+    # has previously unmentioned GCs, so we create AstroObject instances for those.
+    for gc_name in ["BH 140", "ESO 280", "ESO 452", "FSR 1758"]:
+        gc, created = AstroObject.objects.get_or_create(
+            name=gc_name
+        )
+        gc.classifications.add(GC)
+        if created:
+            logger.info("  Created: {0}".format(gc))
+        else:
+            logger.info("  Found: {0}".format(gc))
 
 
 def add_orbits(logger, name_id_map):
@@ -212,7 +232,7 @@ def add_orbits(logger, name_id_map):
     # Create new Parameter instances
     U, created = Parameter.objects.get_or_create(name="U",
         defaults={"scale": 1, "unit": "km/s"})
-    U.description = "Heliocentric velocity component U"
+    U.description = "Heliocentric velocity component U [in X direction]"
     U.save()
     if created:
         logger.info("  Created: {0}".format(U))
@@ -220,7 +240,7 @@ def add_orbits(logger, name_id_map):
         logger.info("  Found: {0}".format(U))
     V, created = Parameter.objects.get_or_create(name="V",
         defaults={"scale": 1, "unit": "km/s"})
-    V.description = "Heliocentric velocity component V"
+    V.description = "Heliocentric velocity component V [in Y direction]"
     V.save()
     if created:
         logger.info("  Created: {0}".format(V))
@@ -228,12 +248,29 @@ def add_orbits(logger, name_id_map):
         logger.info("  Found: {0}".format(V))
     W, created = Parameter.objects.get_or_create(name="W",
         defaults={"scale": 1, "unit": "km/s"})
-    W.description = "Heliocentric velocity component W"
+    W.description = "Heliocentric velocity component W [in Z direction]"
     W.save()
     if created:
         logger.info("  Created: {0}".format(W))
     else:
         logger.info("  Found: {0}".format(W))
+
+    X_alt, created = Parameter.objects.get_or_create(name="X_alt",
+        defaults={"scale": 1, "unit": "kpc"})
+    X_alt.description = "Galactic distance component X [from Gal. centre in direction of Sun]"
+    X_alt.save()
+    if created:
+        logger.info("  Created: {0}".format(X_alt))
+    else:
+        logger.info("  Found: {0}".format(X_alt))
+    U_alt, created = Parameter.objects.get_or_create(name="U_alt",
+        defaults={"scale": 1, "unit": "km/s"})
+    U_alt.description = "Heliocentric velocity component U [in X_alt direction]"
+    U_alt.save()
+    if created:
+        logger.info("  Created: {0}".format(U_alt))
+    else:
+        logger.info("  Found: {0}".format(U_alt))
 
     rhopmrade, created = Parameter.objects.get_or_create(name="rhopmrade",
         defaults={"scale": 1, "unit": ""})
@@ -246,7 +283,8 @@ def add_orbits(logger, name_id_map):
 
     # Relevant Reference
     ref = Reference.objects.get(
-        ads_url="https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B")
+        ads_url="https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B"
+    )
     logger.info("\n  Using the Reference: {0}".format(ref))
 
     # Get the data
@@ -311,10 +349,10 @@ def add_orbits(logger, name_id_map):
             parameter=rhopmrade, value=row["rhopmrade"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
 
-        # TODO: Distance from the Gal. centre in direction of Sun (note that the
+        # Distance from the Gal. centre in direction of Sun (note that the
         # definition is opposite to the more common definition of X from Sun to GC)
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-            parameter=X, value=row["X"], sigma_up=row["DX"], sigma_down=row["DX"])
+            parameter=X_alt, value=row["X"], sigma_up=row["DX"], sigma_down=row["DX"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=Y, value=row["Y"], sigma_up=row["DY"], sigma_down=row["DY"])
@@ -324,7 +362,7 @@ def add_orbits(logger, name_id_map):
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
 
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-            parameter=U, value=row["U"], sigma_up=row["DU"], sigma_down=row["DU"])
+            parameter=U_alt, value=row["U"], sigma_up=row["DU"], sigma_down=row["DU"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=V, value=row["V"], sigma_up=row["DV"], sigma_down=row["DV"])
@@ -341,6 +379,18 @@ def add_orbits(logger, name_id_map):
             parameter=R_apo, value=row["RAP"],
             sigma_up=row["RAP_err"], sigma_down=row["RAP_err"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+
+def arcmin2parsec(arcmin, distance_kpc):
+    radian = (arcmin.value*u.arcmin).to(u.rad)
+    parsec = numpy.tan(radian) * distance_kpc*1000
+    return parsec
+
+
+def parsec2arcmin(parsec, distance_kpc):
+    radian = numpy.arctan2(parsec, distance_kpc*1000)
+    arcmin = (radian*u.rad).to(u.arcmin).value
+    return arcmin
 
 
 def add_combined(logger, name_id_map):
@@ -364,7 +414,7 @@ def add_combined(logger, name_id_map):
     # Relevant Parameter instances
     # RA = Parameter.objects.get(name="RA")
     # Dec = Parameter.objects.get(name="Dec")
-    # R_Sun = Parameter.objects.get(name="R_Sun")
+    R_Sun = Parameter.objects.get(name="R_Sun")  # to convert radii in pc to '' (or arcmin)
     # R_Gal = Parameter.objects.get(name="R_Gal")
     Mass = Parameter.objects.get(name="Mass")
     V_t = Parameter.objects.get(name="V_t")
@@ -482,8 +532,19 @@ def add_combined(logger, name_id_map):
 
     # Relevant Reference
     ref = Reference.objects.get(
-        ads_url="https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B")
+        ads_url="https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B"
+    )
     logger.info("\n  Using the Reference: {0}".format(ref))
+
+    # To retrieve sp_r_c, sp_r_h [in arcmin] from Harris (1996)
+    h96e10 = Reference.objects.get(
+        ads_url="https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H"
+    )
+
+    # If we want to retrieve Observation for R_Sun created in add_orbits method above
+    # B19 = Reference.objects.get(
+    #     ads_url="https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B"
+    # )
 
     # Get the data
     data = parse_hilker_2019_combined(logger)
@@ -541,29 +602,82 @@ def add_combined(logger, name_id_map):
             parameter=MLv, value=row["ML_V"], sigma_up=row["ML_V_err"], sigma_down=row["ML_V_err"])
         logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
 
-        # Baumgardt website: Core radius using Spitzer (1987) definition
-        # SupaHarris: King core radius. TODO: compare to Harris (1996) definition
-        # TODO: convert parsec to arcmin
-        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-        #     parameter=sp_r_c, value=row["rc"])
-        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+        # Baumgardt website: Core radius using Spitzer (1987) definition, value in parsec
+        # SupaHarris: King core radius [arcmin].
+        # TODO: compare both definitions
+        rc_parsec = row["rc"]
+
+        # Compare to Harris (1996) values, converted from arcmin to parsec. Need distance.
+        # i) either use distance from Harris (1996),
+        # distance = Observation.objects.filter(reference=h96e10, astro_object=gc,
+        #     parameter=R_Sun).first()
+        # ii) or use distance already loaded into SupaHarris
+        # distance = Observation.objects.filter(reference=B19, astro_object=gc,
+        #     parameter=R_Sun).first()
+        # iii) or use the distance provided in this dataset, i.e. row["R_Sun"]
+        # --> we opt for iii.
+        distance_kpc = row["R_Sun"]
+
+        # Baumgardt value, converted from parsec to arcmin
+        rc_arcmin = parsec2arcmin(rc_parsec, distance_kpc)
+        logger.debug("    King Core radius: {0} parsec".format(rc_parsec))
+        logger.debug("      --> {0:.2f} arcmin".format(rc_arcmin))
+
+        # Harris (1996) value, converted from arcmin to parsec
+        rc_h96 = Observation.objects.filter(astro_object=gc, parameter=sp_r_c,
+            reference=h96e10).first()  # arcmin
+        if rc_h96.value:
+            rc_h96_parsec = arcmin2parsec(rc_h96, distance_kpc)
+            logger.debug("    Comparison: {0}, value in arcmin".format(rc_h96))
+            logger.debug("      --> {0:.2f} parsec".format(rc_h96_parsec))
+        else:
+            logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
+
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_r_c, value=rc_arcmin)
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
 
         # Baumgardt website: Projected half-light radius
         # SupaHarris: Half-light radius. TODO: compare to Harris (1996) definition
-        # TODO: convert parsec to arcmin
-        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-        #     parameter=sp_r_h, value=row["rhl"])
-        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+        rhl_parsec = row["rhl"]
 
-        # TODO: convert parsec to arcmin
-        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-        #     parameter=sp_r_hm, value=row["rhm"])
-        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+        # Baumgardt value, converted from parsec to arcmin
+        rhl_arcmin = parsec2arcmin(rhl_parsec, distance_kpc)
+        logger.debug("    Half-light radius: {0} parsec".format(rhl_parsec))
+        logger.debug("      --> {0:.2f} arcmin".format(rhl_arcmin))
+        rhl_h96 = Observation.objects.filter(astro_object=gc, parameter=sp_r_h,
+            reference=h96e10).first()  # arcmin
+        if rhl_h96.value:
+            rhl_h96_parsec = arcmin2parsec(rhl_h96, distance_kpc)
+            logger.debug("    Comparison: {0}, value in arcmin".format(rhl_h96))
+            logger.debug("      --> {0:.2f} parsec".format(rhl_h96_parsec))
+        else:
+            logger.debug("    Comparison: NO VALUE IN Harris (1996)!")
 
-        # TODO: convert parsec to arcmin
-        # o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
-        #     parameter=sp_r_t, value=row["rt"])
-        # logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_r_h, value=rhl_arcmin)
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+
+        rhm_parsec = row["rhm"]
+        rhm_arcmin = parsec2arcmin(rhm_parsec, distance_kpc)
+        logger.debug("    Half-mass radius: {0} parsec".format(rhm_parsec))
+        logger.debug("      --> {0:.2f} arcmin".format(rhm_arcmin))
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_r_hm, value=rhm_arcmin)
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
+
+        rt_parsec = row["rt"]
+        rt_arcmin = parsec2arcmin(rt_parsec, distance_kpc)
+        logger.debug("    Tidal radius: {0} parsec".format(rt_parsec))
+        logger.debug("      --> {0:.2f} arcmin".format(rt_arcmin))
+        o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
+            parameter=sp_r_t, value=rt_arcmin)
+        logger.debug("    {0}: {1}".format("Created" if created else "Found", o))
+
 
         o, created = Observation.objects.get_or_create(reference=ref, astro_object=gc,
             parameter=sp_lg_rho_c, value=row["rho_c"])
@@ -744,7 +858,10 @@ def add_rv(logger, name_id_map):
 
 def add_baumgardt_2019_mnras_482_5138(logger, name_id_map):
     logger.info("\n  Add Baumgardt (2019) MNRAS 482, 5138")
+
+    # Table1 --> should be the same data as added in add_orbits
     table1 = parse_baumgardt_2019_mnras_482_5138_table1()
+    # Table4 --> should be the same data as added in add_rv
     table4 = parse_baumgardt_2019_mnras_482_5138_table4()
 
     nrows = len(table1)
@@ -754,49 +871,93 @@ def add_baumgardt_2019_mnras_482_5138(logger, name_id_map):
 
     nrows = len(table4)
     logger.info("    Found {0} rows in table4".format(nrows))
-    return
-    for i, row in enumerate(table4):
-        logger.debug("    {0} / {1}".format(i+1, nrows))
+    # for i, row in enumerate(table4):
+    #     logger.debug("    {0} / {1}".format(i+1, nrows))
 
 
 def add_fits(logger, name_id_map):
     logger.info("\n  Add individual GC fits scraped from Baumgardt website")
-    return
 
+    # Relevant Reference
+    ref = Reference.objects.get(
+        ads_url="https://ui.adsabs.harvard.edu/abs/2019arXiv190802778H")
+    logger.info("\n  Using the Reference: {0}".format(ref))
+
+    # Get the data
     fits = scrape_individual_fits_from_baumgardt_website(logger)
-    for gc_name in fits:
-        logger.info("    GC name: {0}".format(gc_name))
+    ngcs = len(fits)
+    logger.info("\n  Found {0} GCs".format(ngcs))
 
-    return
+    for i, gc_name in enumerate(fits.keys()):
+        if i > 5: break
+        logger.debug("\n  {0} / {1}".format(i+1, ngcs))
 
-    for bla in bla:
-        aux = Auxiliary(
-            reference=bla,
-            astro_object=bla,
-            path=FilePathField,
-            url=URLField
-        )
+        if gc_name in name_id_map:
+            gc = AstroObject.objects.get(id=name_id_map[gc_name])
+            logger.info("  Found: {0}{1} for '{2}'".format(gc.name,
+                " ({0})".format(gc.altname) if gc.altname else "", gc_name))
+        else:
+            logger.info("  ERROR: did not find {0}".format(gc_name))
+            sys.exit(1)
+
+        for figure in fits[gc_name]:
+            if figure == "url": continue
+            fname = fits[gc_name][figure]["fname"]
+            img_src = fits[gc_name][figure]["img_src"]
+            logger.debug("    fname: {0}".format(fname))
+            logger.debug("    img_src: {0}".format(img_src))
+
+            aux, created = Auxiliary.objects.get_or_create(
+                reference=ref,
+                astro_object=gc,
+                path=FilePathField,
+                url=img_src
+            )
+            logger.debug("    {0}: {1}".format("Created" if created else "Found", aux))
 
 
 def add_rv_profiles(logger, name_id_map):
+    # https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/appendix.html
+
+    # Baumgardt & Hilker (2018)
+    #     https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B
+
     logger.info("\n  Add radial velocity profiles (appendix)")
+
+    # Relevant Reference
+    ref = Reference.objects.get(
+        ads_url="https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B")
+    logger.info("\n  Using the Reference: {0}".format(ref))
+
+    # Get the data
     data = parse_individual_rvs_of_stars_in_field_of_clusters(logger, debug=False)
 
     gc_names = numpy.unique(data["Cluster"])
     ngcs = len(gc_names)
-    logger.info("    Found {0} GCs /w {1} data points".format(ngcs, len(data)))
+    logger.info("\n  Found {0} GCs /w {1} data points".format(ngcs, len(data)))
 
     for i, gc_name in enumerate(gc_names):
-        logger.debug("    {0} / {1}".format(i+1, ngcs))
+        logger.debug("\n  {0} / {1}".format(i+1, ngcs))
         if gc_name in name_id_map:
             gc = AstroObject.objects.get(id=name_id_map[gc_name])
-            logger.info("      Found: {0}{1} for '{2}'".format(gc.name,
+            logger.info("    Found: {0}{1} for '{2}'".format(gc.name,
                 " ({0})".format(gc.altname) if gc.altname else "", gc_name))
         else:
-            logger.info("      Created: {0}".format(gc_name))
+            logger.info("    ERROR: did not find {0}".format(gc_name))
+            sys.exit(1)
 
         igc, = numpy.where(data["Cluster"] == gc_name)
-        logger.info("      this GC has {0} data points".format(len(igc)))
+        logger.info("    this GC has {0} data points".format(len(igc)))
+
+        # TODO: 2MASS ID can be used to create an AstroObject /w AstroObjectClassifaction
+        # Star, and with a parent-child relationship of AstroObject w/ self. The
+        # parent would be gc. However, not all entries of the individual stars
+        # have 2MASS ID, so how would we handle insertion of stars without an ID?
+
+        # Parameters would be RA, DEC, Radial Velocity (/w error), J_mag, and K_mag.
+        # Possibly also P_Mem (probability that a star is a cluster member)
+        # DCEN is the distance of the star to the cluster center, which can be
+        # calculated given RA, Dec, and the centroid of the cluster itself.
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -821,9 +982,14 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # add_orbits(self.logger, name_id_map)
 
         # Add the structural parameters
-        # add_combined(self.logger, name_id_map)
+        add_combined(self.logger, name_id_map)
+        return
 
-        add_rv(self.logger, name_id_map)
-        # add_baumgardt_2019_mnras_482_5138(self.logger, name_id_map)
-        # add_fits(self.logger, name_id_map)
+        # Add the velocity dispersion profiles
+        # add_rv(self.logger, name_id_map)
+
+        # Add the plots that live at the Holger Baumgardt website
+        add_fits(self.logger, name_id_map)
+
+        # TODO: add data of individual stars in the GCs
         # add_rv_profiles(self.logger, name_id_map)
