@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2012 - 2018, Anaconda, Inc., and Bokeh Contributors
+ * Copyright (c) 2012 - 2019, Anaconda, Inc., and Bokeh Contributors
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,38 +27,60 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 (function(root, factory) {
-//  if(typeof exports === 'object' && typeof module === 'object')
-//    factory(require("Bokeh"));
-//  else if(typeof define === 'function' && define.amd)
-//    define(["Bokeh"], factory);
-//  else if(typeof exports === 'object')
-//    factory(require("Bokeh"));
-//  else
-    factory(root["Bokeh"]);
+  factory(root["Bokeh"]);
 })(this, function(Bokeh) {
   var define;
-  return (function(modules, aliases, entry) {
+  return (function(modules, entry, aliases, externals) {
     if (Bokeh != null) {
-      return Bokeh.register_plugin(modules, aliases, entry);
+      return Bokeh.register_plugin(modules, entry, aliases, externals);
     } else {
       throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
     }
   })
 ({
-478: /* models/widgets/tables/cell_editors */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var p = require(18) /* ../../../core/properties */;
-    var dom_1 = require(5) /* ../../../core/dom */;
-    var dom_view_1 = require(6) /* ../../../core/dom_view */;
-    var model_1 = require(62) /* ../../../model */;
-    var data_table_1 = require(481) /* ./data_table */;
-    var tables_1 = require(489) /* ../../../styles/widgets/tables */;
+514: /* models/widgets/tables/main.js */ function _(require, module, exports) {
+    var Tables = require(515) /* ./index */;
+    exports.Tables = Tables;
+    var base_1 = require(108) /* ../../../base */;
+    base_1.register_models(Tables);
+},
+515: /* models/widgets/tables/index.js */ function _(require, module, exports) {
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
+    }
+    __export(require(516) /* ./cell_editors */);
+    __export(require(537) /* ./cell_formatters */);
+    var data_table_1 = require(517) /* ./data_table */;
+    exports.DataTable = data_table_1.DataTable;
+    var table_column_1 = require(540) /* ./table_column */;
+    exports.TableColumn = table_column_1.TableColumn;
+    var table_widget_1 = require(533) /* ./table_widget */;
+    exports.TableWidget = table_widget_1.TableWidget;
+    var row_aggregators_1 = require(541) /* ./row_aggregators */;
+    exports.AvgAggregator = row_aggregators_1.AvgAggregator;
+    exports.MinAggregator = row_aggregators_1.MinAggregator;
+    exports.MaxAggregator = row_aggregators_1.MaxAggregator;
+    exports.SumAggregator = row_aggregators_1.SumAggregator;
+    var data_cube_1 = require(542) /* ./data_cube */;
+    exports.GroupingInfo = data_cube_1.GroupingInfo;
+    exports.DataCube = data_cube_1.DataCube;
+},
+516: /* models/widgets/tables/cell_editors.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var p = require(121) /* ../../../core/properties */;
+    var dom_1 = require(163) /* ../../../core/dom */;
+    var dom_view_1 = require(161) /* ../../../core/dom_view */;
+    var model_1 = require(166) /* ../../../model */;
+    var data_table_1 = require(517) /* ./data_table */;
+    var tables_1 = require(535) /* ../../../styles/widgets/tables */;
     var CellEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(CellEditorView, _super);
         function CellEditorView(options) {
-            var _this = _super.call(this, tslib_1.__assign({ model: options.column.model }, options)) || this;
+            var _this = _super.call(this, Object.assign({ model: options.column.model }, options)) || this;
             _this.args = options;
             _this.render(); // XXX: this isn't governed by layout
             return _this;
@@ -142,19 +164,19 @@
         CellEditorView.prototype.validate = function () {
             return this.validateValue(this.getValue());
         };
-        CellEditorView.__name__ = "CellEditorView";
         return CellEditorView;
     }(dom_view_1.DOMView));
     exports.CellEditorView = CellEditorView;
+    CellEditorView.__name__ = "CellEditorView";
     var CellEditor = /** @class */ (function (_super) {
         tslib_1.__extends(CellEditor, _super);
         function CellEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        CellEditor.__name__ = "CellEditor";
         return CellEditor;
     }(model_1.Model));
     exports.CellEditor = CellEditor;
+    CellEditor.__name__ = "CellEditor";
     var StringEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(StringEditorView, _super);
         function StringEditorView() {
@@ -184,26 +206,26 @@
             this.inputEl.defaultValue = this.defaultValue;
             this.inputEl.select();
         };
-        StringEditorView.__name__ = "StringEditorView";
         return StringEditorView;
     }(CellEditorView));
     exports.StringEditorView = StringEditorView;
+    StringEditorView.__name__ = "StringEditorView";
     var StringEditor = /** @class */ (function (_super) {
         tslib_1.__extends(StringEditor, _super);
         function StringEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        StringEditor.initClass = function () {
+        StringEditor.init_StringEditor = function () {
             this.prototype.default_view = StringEditorView;
             this.define({
                 completions: [p.Array, []],
             });
         };
-        StringEditor.__name__ = "StringEditor";
         return StringEditor;
     }(CellEditor));
     exports.StringEditor = StringEditor;
-    StringEditor.initClass();
+    StringEditor.__name__ = "StringEditor";
+    StringEditor.init_StringEditor();
     var TextEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(TextEditorView, _super);
         function TextEditorView() {
@@ -212,23 +234,23 @@
         TextEditorView.prototype._createInput = function () {
             return dom_1.textarea();
         };
-        TextEditorView.__name__ = "TextEditorView";
         return TextEditorView;
     }(CellEditorView));
     exports.TextEditorView = TextEditorView;
+    TextEditorView.__name__ = "TextEditorView";
     var TextEditor = /** @class */ (function (_super) {
         tslib_1.__extends(TextEditor, _super);
         function TextEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        TextEditor.initClass = function () {
+        TextEditor.init_TextEditor = function () {
             this.prototype.default_view = TextEditorView;
         };
-        TextEditor.__name__ = "TextEditor";
         return TextEditor;
     }(CellEditor));
     exports.TextEditor = TextEditor;
-    TextEditor.initClass();
+    TextEditor.__name__ = "TextEditor";
+    TextEditor.init_TextEditor();
     var SelectEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(SelectEditorView, _super);
         function SelectEditorView() {
@@ -244,26 +266,26 @@
             }
             this.focus();
         };
-        SelectEditorView.__name__ = "SelectEditorView";
         return SelectEditorView;
     }(CellEditorView));
     exports.SelectEditorView = SelectEditorView;
+    SelectEditorView.__name__ = "SelectEditorView";
     var SelectEditor = /** @class */ (function (_super) {
         tslib_1.__extends(SelectEditor, _super);
         function SelectEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        SelectEditor.initClass = function () {
+        SelectEditor.init_SelectEditor = function () {
             this.prototype.default_view = SelectEditorView;
             this.define({
                 options: [p.Array, []],
             });
         };
-        SelectEditor.__name__ = "SelectEditor";
         return SelectEditor;
     }(CellEditor));
     exports.SelectEditor = SelectEditor;
-    SelectEditor.initClass();
+    SelectEditor.__name__ = "SelectEditor";
+    SelectEditor.init_SelectEditor();
     var PercentEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(PercentEditorView, _super);
         function PercentEditorView() {
@@ -272,23 +294,23 @@
         PercentEditorView.prototype._createInput = function () {
             return dom_1.input({ type: "text" });
         };
-        PercentEditorView.__name__ = "PercentEditorView";
         return PercentEditorView;
     }(CellEditorView));
     exports.PercentEditorView = PercentEditorView;
+    PercentEditorView.__name__ = "PercentEditorView";
     var PercentEditor = /** @class */ (function (_super) {
         tslib_1.__extends(PercentEditor, _super);
         function PercentEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        PercentEditor.initClass = function () {
+        PercentEditor.init_PercentEditor = function () {
             this.prototype.default_view = PercentEditorView;
         };
-        PercentEditor.__name__ = "PercentEditor";
         return PercentEditor;
     }(CellEditor));
     exports.PercentEditor = PercentEditor;
-    PercentEditor.initClass();
+    PercentEditor.__name__ = "PercentEditor";
+    PercentEditor.init_PercentEditor();
     var CheckboxEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(CheckboxEditorView, _super);
         function CheckboxEditorView() {
@@ -307,23 +329,23 @@
         CheckboxEditorView.prototype.serializeValue = function () {
             return this.inputEl.checked;
         };
-        CheckboxEditorView.__name__ = "CheckboxEditorView";
         return CheckboxEditorView;
     }(CellEditorView));
     exports.CheckboxEditorView = CheckboxEditorView;
+    CheckboxEditorView.__name__ = "CheckboxEditorView";
     var CheckboxEditor = /** @class */ (function (_super) {
         tslib_1.__extends(CheckboxEditor, _super);
         function CheckboxEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        CheckboxEditor.initClass = function () {
+        CheckboxEditor.init_CheckboxEditor = function () {
             this.prototype.default_view = CheckboxEditorView;
         };
-        CheckboxEditor.__name__ = "CheckboxEditor";
         return CheckboxEditor;
     }(CellEditor));
     exports.CheckboxEditor = CheckboxEditor;
-    CheckboxEditor.initClass();
+    CheckboxEditor.__name__ = "CheckboxEditor";
+    CheckboxEditor.init_CheckboxEditor();
     var IntEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(IntEditorView, _super);
         function IntEditorView() {
@@ -355,26 +377,26 @@
             else
                 return _super.prototype.validateValue.call(this, value);
         };
-        IntEditorView.__name__ = "IntEditorView";
         return IntEditorView;
     }(CellEditorView));
     exports.IntEditorView = IntEditorView;
+    IntEditorView.__name__ = "IntEditorView";
     var IntEditor = /** @class */ (function (_super) {
         tslib_1.__extends(IntEditor, _super);
         function IntEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        IntEditor.initClass = function () {
+        IntEditor.init_IntEditor = function () {
             this.prototype.default_view = IntEditorView;
             this.define({
                 step: [p.Number, 1],
             });
         };
-        IntEditor.__name__ = "IntEditor";
         return IntEditor;
     }(CellEditor));
     exports.IntEditor = IntEditor;
-    IntEditor.initClass();
+    IntEditor.__name__ = "IntEditor";
+    IntEditor.init_IntEditor();
     var NumberEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(NumberEditorView, _super);
         function NumberEditorView() {
@@ -406,26 +428,26 @@
             else
                 return _super.prototype.validateValue.call(this, value);
         };
-        NumberEditorView.__name__ = "NumberEditorView";
         return NumberEditorView;
     }(CellEditorView));
     exports.NumberEditorView = NumberEditorView;
+    NumberEditorView.__name__ = "NumberEditorView";
     var NumberEditor = /** @class */ (function (_super) {
         tslib_1.__extends(NumberEditor, _super);
         function NumberEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        NumberEditor.initClass = function () {
+        NumberEditor.init_NumberEditor = function () {
             this.prototype.default_view = NumberEditorView;
             this.define({
                 step: [p.Number, 0.01],
             });
         };
-        NumberEditor.__name__ = "NumberEditor";
         return NumberEditor;
     }(CellEditor));
     exports.NumberEditor = NumberEditor;
-    NumberEditor.initClass();
+    NumberEditor.__name__ = "NumberEditor";
+    NumberEditor.init_NumberEditor();
     var TimeEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(TimeEditorView, _super);
         function TimeEditorView() {
@@ -434,23 +456,23 @@
         TimeEditorView.prototype._createInput = function () {
             return dom_1.input({ type: "text" });
         };
-        TimeEditorView.__name__ = "TimeEditorView";
         return TimeEditorView;
     }(CellEditorView));
     exports.TimeEditorView = TimeEditorView;
+    TimeEditorView.__name__ = "TimeEditorView";
     var TimeEditor = /** @class */ (function (_super) {
         tslib_1.__extends(TimeEditor, _super);
         function TimeEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        TimeEditor.initClass = function () {
+        TimeEditor.init_TimeEditor = function () {
             this.prototype.default_view = TimeEditorView;
         };
-        TimeEditor.__name__ = "TimeEditor";
         return TimeEditor;
     }(CellEditor));
     exports.TimeEditor = TimeEditor;
-    TimeEditor.initClass();
+    TimeEditor.__name__ = "TimeEditor";
+    TimeEditor.init_TimeEditor();
     var DateEditorView = /** @class */ (function (_super) {
         tslib_1.__extends(DateEditorView, _super);
         function DateEditorView() {
@@ -500,509 +522,46 @@
             //  $.datepicker.dpDiv.css(top: position.top + 30, left: position.left)
             return _super.prototype.position.call(this);
         };
-        DateEditorView.prototype.getValue = function () { };
-        //return @$datepicker.datepicker("getDate").getTime()
-        DateEditorView.prototype.setValue = function (_val) { };
-        DateEditorView.__name__ = "DateEditorView";
+        DateEditorView.prototype.getValue = function () {
+            //return @$datepicker.datepicker("getDate").getTime()
+        };
+        DateEditorView.prototype.setValue = function (_val) {
+            //@$datepicker.datepicker("setDate", new Date(val))
+        };
         return DateEditorView;
     }(CellEditorView));
     exports.DateEditorView = DateEditorView;
+    DateEditorView.__name__ = "DateEditorView";
     var DateEditor = /** @class */ (function (_super) {
         tslib_1.__extends(DateEditor, _super);
         function DateEditor() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        DateEditor.initClass = function () {
+        DateEditor.init_DateEditor = function () {
             this.prototype.default_view = DateEditorView;
         };
-        DateEditor.__name__ = "DateEditor";
         return DateEditor;
     }(CellEditor));
     exports.DateEditor = DateEditor;
-    DateEditor.initClass();
-}
-,
-479: /* models/widgets/tables/cell_formatters */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var Numbro = require(396) /* numbro */;
-    var compile_template = require(505) /* underscore.template */;
-    var tz = require(425) /* timezone */;
-    var p = require(18) /* ../../../core/properties */;
-    var dom_1 = require(5) /* ../../../core/dom */;
-    var types_1 = require(46) /* ../../../core/util/types */;
-    var model_1 = require(62) /* ../../../model */;
-    var CellFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(CellFormatter, _super);
-        function CellFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        CellFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
-            if (value == null)
-                return "";
-            else
-                return (value + "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        };
-        CellFormatter.__name__ = "CellFormatter";
-        return CellFormatter;
-    }(model_1.Model));
-    exports.CellFormatter = CellFormatter;
-    var StringFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(StringFormatter, _super);
-        function StringFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        StringFormatter.initClass = function () {
-            this.define({
-                font_style: [p.FontStyle, "normal"],
-                text_align: [p.TextAlign, "left"],
-                text_color: [p.Color],
-            });
-        };
-        StringFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
-            var _a = this, font_style = _a.font_style, text_align = _a.text_align, text_color = _a.text_color;
-            var text = dom_1.div({}, value == null ? "" : "" + value);
-            switch (font_style) {
-                case "bold":
-                    text.style.fontWeight = "bold";
-                    break;
-                case "italic":
-                    text.style.fontStyle = "italic";
-                    break;
-            }
-            if (text_align != null)
-                text.style.textAlign = text_align;
-            if (text_color != null)
-                text.style.color = text_color;
-            return text.outerHTML;
-        };
-        StringFormatter.__name__ = "StringFormatter";
-        return StringFormatter;
-    }(CellFormatter));
-    exports.StringFormatter = StringFormatter;
-    StringFormatter.initClass();
-    var NumberFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(NumberFormatter, _super);
-        function NumberFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        NumberFormatter.initClass = function () {
-            this.define({
-                format: [p.String, '0,0'],
-                language: [p.String, 'en'],
-                rounding: [p.RoundingFunction, 'round'],
-            });
-        };
-        NumberFormatter.prototype.doFormat = function (row, cell, value, columnDef, dataContext) {
-            var _this = this;
-            var _a = this, format = _a.format, language = _a.language;
-            var rounding = (function () {
-                switch (_this.rounding) {
-                    case "round":
-                    case "nearest": return Math.round;
-                    case "floor":
-                    case "rounddown": return Math.floor;
-                    case "ceil":
-                    case "roundup": return Math.ceil;
-                }
-            })();
-            value = Numbro.format(value, format, language, rounding);
-            return _super.prototype.doFormat.call(this, row, cell, value, columnDef, dataContext);
-        };
-        NumberFormatter.__name__ = "NumberFormatter";
-        return NumberFormatter;
-    }(StringFormatter));
-    exports.NumberFormatter = NumberFormatter;
-    NumberFormatter.initClass();
-    var BooleanFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(BooleanFormatter, _super);
-        function BooleanFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        BooleanFormatter.initClass = function () {
-            this.define({
-                icon: [p.String, 'check'],
-            });
-        };
-        BooleanFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
-            return !!value ? dom_1.i({ class: this.icon }).outerHTML : "";
-        };
-        BooleanFormatter.__name__ = "BooleanFormatter";
-        return BooleanFormatter;
-    }(CellFormatter));
-    exports.BooleanFormatter = BooleanFormatter;
-    BooleanFormatter.initClass();
-    var DateFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(DateFormatter, _super);
-        function DateFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        DateFormatter.initClass = function () {
-            this.define({
-                format: [p.String, 'ISO-8601'],
-            });
-        };
-        DateFormatter.prototype.getFormat = function () {
-            // using definitions provided here: https://api.jqueryui.com/datepicker/
-            // except not implementing TICKS
-            switch (this.format) {
-                case "ATOM":
-                case "W3C":
-                case "RFC-3339":
-                case "ISO-8601":
-                    return "%Y-%m-%d";
-                case "COOKIE":
-                    return "%a, %d %b %Y";
-                case "RFC-850":
-                    return "%A, %d-%b-%y";
-                case "RFC-1123":
-                case "RFC-2822":
-                    return "%a, %e %b %Y";
-                case "RSS":
-                case "RFC-822":
-                case "RFC-1036":
-                    return "%a, %e %b %y";
-                case "TIMESTAMP":
-                    return undefined;
-                default:
-                    return this.format;
-            }
-        };
-        DateFormatter.prototype.doFormat = function (row, cell, value, columnDef, dataContext) {
-            value = types_1.isString(value) ? parseInt(value, 10) : value;
-            var date = tz(value, this.getFormat());
-            return _super.prototype.doFormat.call(this, row, cell, date, columnDef, dataContext);
-        };
-        DateFormatter.__name__ = "DateFormatter";
-        return DateFormatter;
-    }(CellFormatter));
-    exports.DateFormatter = DateFormatter;
-    DateFormatter.initClass();
-    var HTMLTemplateFormatter = /** @class */ (function (_super) {
-        tslib_1.__extends(HTMLTemplateFormatter, _super);
-        function HTMLTemplateFormatter(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        HTMLTemplateFormatter.initClass = function () {
-            this.define({
-                template: [p.String, '<%= value %>'],
-            });
-        };
-        HTMLTemplateFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, dataContext) {
-            var template = this.template;
-            if (value == null)
-                return "";
-            else {
-                var compiled_template = compile_template(template);
-                var context = tslib_1.__assign({}, dataContext, { value: value });
-                return compiled_template(context);
-            }
-        };
-        HTMLTemplateFormatter.__name__ = "HTMLTemplateFormatter";
-        return HTMLTemplateFormatter;
-    }(CellFormatter));
-    exports.HTMLTemplateFormatter = HTMLTemplateFormatter;
-    HTMLTemplateFormatter.initClass();
-}
-,
-480: /* models/widgets/tables/data_cube */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var p = require(18) /* ../../../core/properties */;
-    var dom_1 = require(5) /* ../../../core/dom */;
-    var slickgrid_1 = require(491) /* slickgrid */;
-    var data_table_1 = require(481) /* ./data_table */;
-    var model_1 = require(62) /* ../../../model */;
-    function groupCellFormatter(_row, _cell, _value, _columnDef, dataContext) {
-        var collapsed = dataContext.collapsed, level = dataContext.level, title = dataContext.title;
-        var toggle = dom_1.span({
-            class: "slick-group-toggle " + (collapsed ? 'collapsed' : 'expanded'),
-            style: { 'margin-left': level * 15 + "px" },
-        });
-        var titleElement = dom_1.span({
-            class: 'slick-group-title',
-            level: level,
-        }, title);
-        return "" + toggle.outerHTML + titleElement.outerHTML;
-    }
-    function indentFormatter(formatter, indent) {
-        return function (row, cell, value, columnDef, dataContext) {
-            var spacer = dom_1.span({
-                class: 'slick-group-toggle',
-                style: { 'margin-left': (indent || 0) * 15 + "px" },
-            });
-            var formatted = formatter ? formatter(row, cell, value, columnDef, dataContext) : "" + value;
-            return "" + spacer.outerHTML + (formatted && formatted.replace(/^<div/, '<span').replace(/div>$/, 'span>'));
-        };
-    }
-    function handleGridClick(event, args) {
-        var item = this.getDataItem(args.row);
-        if (item instanceof slickgrid_1.Group && event.target.classList.contains('slick-group-toggle')) {
-            if (item.collapsed) {
-                this.getData().expandGroup(item.groupingKey);
-            }
-            else {
-                this.getData().collapseGroup(item.groupingKey);
-            }
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            this.invalidate();
-            this.render();
-        }
-    }
-    var GroupingInfo = /** @class */ (function (_super) {
-        tslib_1.__extends(GroupingInfo, _super);
-        function GroupingInfo(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        GroupingInfo.initClass = function () {
-            this.prototype.type = 'GroupingInfo';
-            this.define({
-                getter: [p.String, ''],
-                aggregators: [p.Array, []],
-                collapsed: [p.Boolean, false],
-            });
-        };
-        Object.defineProperty(GroupingInfo.prototype, "comparer", {
-            get: function () {
-                return function (a, b) {
-                    return a.value === b.value ? 0 : a.value > b.value ? 1 : -1;
-                };
-            },
-            enumerable: true,
-            configurable: true
-        });
-        GroupingInfo.__name__ = "GroupingInfo";
-        return GroupingInfo;
-    }(model_1.Model));
-    exports.GroupingInfo = GroupingInfo;
-    GroupingInfo.initClass();
-    var DataCubeProvider = /** @class */ (function (_super) {
-        tslib_1.__extends(DataCubeProvider, _super);
-        function DataCubeProvider(source, view, columns, target) {
-            var _this = _super.call(this, source, view) || this;
-            _this.columns = columns;
-            _this.groupingInfos = [];
-            _this.groupingDelimiter = ':|:';
-            _this.target = target;
-            return _this;
-        }
-        DataCubeProvider.prototype.setGrouping = function (groupingInfos) {
-            this.groupingInfos = groupingInfos;
-            this.toggledGroupsByLevel = groupingInfos.map(function () { return ({}); });
-            this.refresh();
-        };
-        DataCubeProvider.prototype.extractGroups = function (rows, parentGroup) {
-            var _this = this;
-            var groups = [];
-            var groupsByValue = new Map();
-            var level = parentGroup ? parentGroup.level + 1 : 0;
-            var _a = this.groupingInfos[level], comparer = _a.comparer, getter = _a.getter;
-            rows.forEach(function (row) {
-                var value = _this.source.data[getter][row];
-                var group = groupsByValue.get(value);
-                if (!group) {
-                    var groupingKey = parentGroup ? "" + parentGroup.groupingKey + _this.groupingDelimiter + value : "" + value;
-                    group = Object.assign(new slickgrid_1.Group(), { value: value, level: level, groupingKey: groupingKey });
-                    groups.push(group);
-                    groupsByValue.set(value, group);
-                }
-                group.rows.push(row);
-            });
-            if (level < this.groupingInfos.length - 1) {
-                groups.forEach(function (group) {
-                    group.groups = _this.extractGroups(group.rows, group);
-                });
-            }
-            groups.sort(comparer);
-            return groups;
-        };
-        DataCubeProvider.prototype.calculateTotals = function (group, aggregators) {
-            var totals = { avg: {}, max: {}, min: {}, sum: {} };
-            var data = this.source.data;
-            var keys = Object.keys(data);
-            var items = group.rows.map(function (i) {
-                return keys.reduce(function (o, c) {
-                    var _a;
-                    return (tslib_1.__assign({}, o, (_a = {}, _a[c] = data[c][i], _a)));
-                }, {});
-            });
-            aggregators.forEach(function (aggregator) {
-                aggregator.init();
-                items.forEach(function (item) { return aggregator.accumulate(item); });
-                aggregator.storeResult(totals);
-            });
-            return totals;
-        };
-        DataCubeProvider.prototype.addTotals = function (groups, level) {
-            var _this = this;
-            if (level === void 0) {
-                level = 0;
-            }
-            var _a = this.groupingInfos[level], aggregators = _a.aggregators, groupCollapsed = _a.collapsed;
-            var toggledGroups = this.toggledGroupsByLevel[level];
-            groups.forEach(function (group) {
-                if (group.groups) {
-                    _this.addTotals(group.groups, level + 1);
-                }
-                if (aggregators.length && group.rows.length) {
-                    group.totals = _this.calculateTotals(group, aggregators);
-                }
-                group.collapsed = groupCollapsed !== toggledGroups[group.groupingKey];
-                group.title = group.value ? "" + group.value : "";
-            });
-        };
-        DataCubeProvider.prototype.flattenedGroupedRows = function (groups, level) {
-            var _this = this;
-            if (level === void 0) {
-                level = 0;
-            }
-            var rows = [];
-            groups.forEach(function (group) {
-                rows.push(group);
-                if (!group.collapsed) {
-                    var subRows = group.groups
-                        ? _this.flattenedGroupedRows(group.groups, level + 1)
-                        : group.rows;
-                    rows.push.apply(rows, subRows);
-                }
-            });
-            return rows;
-        };
-        DataCubeProvider.prototype.refresh = function () {
-            var groups = this.extractGroups(this.view.indices);
-            var labels = this.source.data[this.columns[0].field];
-            if (groups.length) {
-                this.addTotals(groups);
-                this.rows = this.flattenedGroupedRows(groups);
-                this.target.data = {
-                    row_indices: this.rows.map(function (value) { return value instanceof slickgrid_1.Group ? value.rows : value; }),
-                    labels: this.rows.map(function (value) { return value instanceof slickgrid_1.Group ? value.title : labels[value]; }),
-                };
-            }
-        };
-        DataCubeProvider.prototype.getLength = function () {
-            return this.rows.length;
-        };
-        DataCubeProvider.prototype.getItem = function (i) {
-            var _a;
-            var item = this.rows[i];
-            var data = this.source.data;
-            return item instanceof slickgrid_1.Group
-                ? item
-                : Object.keys(data)
-                    .reduce(function (o, c) {
-                    var _a;
-                    return (tslib_1.__assign({}, o, (_a = {}, _a[c] = data[c][item], _a)));
-                }, (_a = {}, _a[data_table_1.DTINDEX_NAME] = item, _a));
-        };
-        DataCubeProvider.prototype.getItemMetadata = function (i) {
-            var myItem = this.rows[i];
-            var columns = this.columns.slice(1);
-            var aggregators = myItem instanceof slickgrid_1.Group
-                ? this.groupingInfos[myItem.level].aggregators
-                : [];
-            function adapter(column) {
-                var myField = column.field, formatter = column.formatter;
-                var aggregator = aggregators.find(function (_a) {
-                    var field_ = _a.field_;
-                    return field_ === myField;
-                });
-                if (aggregator) {
-                    var key_1 = aggregator.key;
-                    return {
-                        formatter: function (row, cell, _value, columnDef, dataContext) {
-                            return formatter ? formatter(row, cell, dataContext.totals[key_1][myField], columnDef, dataContext) : '';
-                        },
-                    };
-                }
-                return {};
-            }
-            return myItem instanceof slickgrid_1.Group
-                ? {
-                    selectable: false,
-                    focusable: false,
-                    cssClasses: 'slick-group',
-                    columns: [{ formatter: groupCellFormatter }].concat(columns.map(adapter)),
-                }
-                : {};
-        };
-        DataCubeProvider.prototype.collapseGroup = function (groupingKey) {
-            var level = groupingKey.split(this.groupingDelimiter).length - 1;
-            this.toggledGroupsByLevel[level][groupingKey] = !this.groupingInfos[level].collapsed;
-            this.refresh();
-        };
-        DataCubeProvider.prototype.expandGroup = function (groupingKey) {
-            var level = groupingKey.split(this.groupingDelimiter).length - 1;
-            this.toggledGroupsByLevel[level][groupingKey] = this.groupingInfos[level].collapsed;
-            this.refresh();
-        };
-        DataCubeProvider.__name__ = "DataCubeProvider";
-        return DataCubeProvider;
-    }(data_table_1.TableDataProvider));
-    exports.DataCubeProvider = DataCubeProvider;
-    var DataCubeView = /** @class */ (function (_super) {
-        tslib_1.__extends(DataCubeView, _super);
-        function DataCubeView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DataCubeView.prototype.render = function () {
-            var options = {
-                enableCellNavigation: this.model.selectable !== false,
-                enableColumnReorder: false,
-                forceFitColumns: this.model.fit_columns,
-                multiColumnSort: false,
-                editable: this.model.editable,
-                autoEdit: false,
-                rowHeight: this.model.row_height,
-            };
-            var columns = this.model.columns.map(function (column) { return column.toColumn(); });
-            columns[0].formatter = indentFormatter(columns[0].formatter, this.model.grouping.length);
-            delete columns[0].editor;
-            this.data = new DataCubeProvider(this.model.source, this.model.view, columns, this.model.target);
-            this.data.setGrouping(this.model.grouping);
-            this.el.style.width = this.model.width + "px";
-            this.grid = new slickgrid_1.Grid(this.el, this.data, columns, options);
-            this.grid.onClick.subscribe(handleGridClick);
-        };
-        DataCubeView.__name__ = "DataCubeView";
-        return DataCubeView;
-    }(data_table_1.DataTableView));
-    exports.DataCubeView = DataCubeView;
-    var DataCube = /** @class */ (function (_super) {
-        tslib_1.__extends(DataCube, _super);
-        function DataCube(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        DataCube.initClass = function () {
-            this.prototype.type = 'DataCube';
-            this.prototype.default_view = DataCubeView;
-            this.define({
-                grouping: [p.Array, []],
-                target: [p.Instance],
-            });
-        };
-        DataCube.__name__ = "DataCube";
-        return DataCube;
-    }(data_table_1.DataTable));
-    exports.DataCube = DataCube;
-    DataCube.initClass();
-}
-,
-481: /* models/widgets/tables/data_table */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var RowSelectionModel = require(496) /* slickgrid/plugins/slick.rowselectionmodel */.RowSelectionModel;
-    var CheckboxSelectColumn = require(495) /* slickgrid/plugins/slick.checkboxselectcolumn */.CheckboxSelectColumn;
-    var CellExternalCopyManager = require(494) /* slickgrid/plugins/slick.cellexternalcopymanager */.CellExternalCopyManager;
-    var slickgrid_1 = require(491) /* slickgrid */;
-    var p = require(18) /* ../../../core/properties */;
-    var string_1 = require(40) /* ../../../core/util/string */;
-    var types_1 = require(46) /* ../../../core/util/types */;
-    var array_1 = require(24) /* ../../../core/util/array */;
-    var object_1 = require(35) /* ../../../core/util/object */;
-    var logging_1 = require(17) /* ../../../core/logging */;
-    var layout_1 = require(13) /* ../../../core/layout */;
-    var table_widget_1 = require(486) /* ./table_widget */;
-    var widget_1 = require(487) /* ../widget */;
-    var tables_1 = require(489) /* ../../../styles/widgets/tables */;
+    DateEditor.__name__ = "DateEditor";
+    DateEditor.init_DateEditor();
+},
+517: /* models/widgets/tables/data_table.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var RowSelectionModel = require(518) /* slickgrid/plugins/slick.rowselectionmodel */.RowSelectionModel;
+    var CheckboxSelectColumn = require(522) /* slickgrid/plugins/slick.checkboxselectcolumn */.CheckboxSelectColumn;
+    var CellExternalCopyManager = require(523) /* slickgrid/plugins/slick.cellexternalcopymanager */.CellExternalCopyManager;
+    var slickgrid_1 = require(524) /* slickgrid */;
+    var p = require(121) /* ../../../core/properties */;
+    var string_1 = require(127) /* ../../../core/util/string */;
+    var types_1 = require(109) /* ../../../core/util/types */;
+    var array_1 = require(110) /* ../../../core/util/array */;
+    var object_1 = require(125) /* ../../../core/util/object */;
+    var logging_1 = require(167) /* ../../../core/logging */;
+    var layout_1 = require(282) /* ../../../core/layout */;
+    var table_widget_1 = require(533) /* ./table_widget */;
+    var widget_1 = require(534) /* ../widget */;
+    var tables_1 = require(535) /* ../../../styles/widgets/tables */;
     exports.DTINDEX_NAME = "__bkdt_internal_index__";
     var TableDataProvider = /** @class */ (function () {
         function TableDataProvider(source, view) {
@@ -1063,14 +622,14 @@
                 return 0;
             });
         };
-        TableDataProvider.__name__ = "TableDataProvider";
         return TableDataProvider;
     }());
     exports.TableDataProvider = TableDataProvider;
+    TableDataProvider.__name__ = "TableDataProvider";
     var DataTableView = /** @class */ (function (_super) {
         tslib_1.__extends(DataTableView, _super);
         function DataTableView() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super.apply(this, arguments) || this;
             _this._in_selection_update = false;
             _this._warned_not_reorderable = false;
             return _this;
@@ -1104,16 +663,18 @@
             this.data.constructor(this.model.source, this.model.view);
             // This is obnoxious but there is no better way to programmatically force
             // a re-sort on the existing sorted columns until/if we start using DataView
-            var columns = this.grid.getColumns();
-            var sorters = this.grid.getSortColumns().map(function (x) {
-                return ({
-                    sortCol: {
-                        field: columns[_this.grid.getColumnIndex(x.columnId)].field,
-                    },
-                    sortAsc: x.sortAsc,
+            if (this.model.sortable) {
+                var columns_1 = this.grid.getColumns();
+                var sorters = this.grid.getSortColumns().map(function (x) {
+                    return ({
+                        sortCol: {
+                            field: columns_1[_this.grid.getColumnIndex(x.columnId)].field,
+                        },
+                        sortAsc: x.sortAsc,
+                    });
                 });
-            });
-            this.data.sort(sorters);
+                this.data.sort(sorters);
+            }
             this.grid.invalidate();
             this.grid.render();
         };
@@ -1194,6 +755,8 @@
             this.data = new TableDataProvider(this.model.source, this.model.view);
             this.grid = new slickgrid_1.Grid(this.el, this.data, columns, options);
             this.grid.onSort.subscribe(function (_event, args) {
+                if (!_this.model.sortable)
+                    return;
                 columns = args.sortCols;
                 _this.data.sort(columns);
                 _this.grid.invalidate();
@@ -1239,10 +802,10 @@
             }
             this.grid.resizeCanvas();
         };
-        DataTableView.__name__ = "DataTableView";
         return DataTableView;
     }(widget_1.WidgetView));
     exports.DataTableView = DataTableView;
+    DataTableView.__name__ = "DataTableView";
     var DataTable = /** @class */ (function (_super) {
         tslib_1.__extends(DataTable, _super);
         function DataTable(attrs) {
@@ -1255,7 +818,7 @@
             enumerable: true,
             configurable: true
         });
-        DataTable.initClass = function () {
+        DataTable.init_DataTable = function () {
             this.prototype.default_view = DataTableView;
             this.define({
                 columns: [p.Array, []],
@@ -1288,284 +851,179 @@
             }
             return null;
         };
-        DataTable.__name__ = "DataTable";
         return DataTable;
     }(table_widget_1.TableWidget));
     exports.DataTable = DataTable;
-    DataTable.initClass();
-}
-,
-482: /* models/widgets/tables/index */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    tslib_1.__exportStar(require(478) /* ./cell_editors */, exports);
-    tslib_1.__exportStar(require(479) /* ./cell_formatters */, exports);
-    var data_table_1 = require(481) /* ./data_table */;
-    exports.DataTable = data_table_1.DataTable;
-    var table_column_1 = require(485) /* ./table_column */;
-    exports.TableColumn = table_column_1.TableColumn;
-    var table_widget_1 = require(486) /* ./table_widget */;
-    exports.TableWidget = table_widget_1.TableWidget;
-    var row_aggregators_1 = require(484) /* ./row_aggregators */;
-    exports.AvgAggregator = row_aggregators_1.AvgAggregator;
-    exports.MinAggregator = row_aggregators_1.MinAggregator;
-    exports.MaxAggregator = row_aggregators_1.MaxAggregator;
-    exports.SumAggregator = row_aggregators_1.SumAggregator;
-    var data_cube_1 = require(480) /* ./data_cube */;
-    exports.GroupingInfo = data_cube_1.GroupingInfo;
-    exports.DataCube = data_cube_1.DataCube;
-}
-,
-483: /* models/widgets/tables/main */ function _(require, module, exports) {
-    var Tables = require(482) /* ./index */;
-    exports.Tables = Tables;
-    var base_1 = require(0) /* ../../../base */;
-    base_1.register_models(Tables);
-}
-,
-484: /* models/widgets/tables/row_aggregators */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var slickgrid_1 = require(491) /* slickgrid */;
-    var _a = slickgrid_1.Data.Aggregators, Avg = _a.Avg, Min = _a.Min, Max = _a.Max, Sum = _a.Sum;
-    var p = require(18) /* ../../../core/properties */;
-    var model_1 = require(62) /* ../../../model */;
-    var RowAggregator = /** @class */ (function (_super) {
-        tslib_1.__extends(RowAggregator, _super);
-        function RowAggregator(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        RowAggregator.initClass = function () {
-            this.prototype.type = 'RowAggregator';
-            this.define({
-                field_: [p.String, ''],
-            });
+    DataTable.__name__ = "DataTable";
+    DataTable.init_DataTable();
+},
+518: /* slickgrid/plugins/slick.rowselectionmodel.js */ function _(require, module, exports) {
+    var $ = require(519) /* ../slick.jquery */;
+    var Slick = require(521) /* ../slick.core */;
+    function RowSelectionModel(options) {
+        var _grid;
+        var _ranges = [];
+        var _self = this;
+        var _handler = new Slick.EventHandler();
+        var _inHandler;
+        var _options;
+        var _defaults = {
+            selectActiveRow: true
         };
-        RowAggregator.__name__ = "RowAggregator";
-        return RowAggregator;
-    }(model_1.Model));
-    exports.RowAggregator = RowAggregator;
-    RowAggregator.initClass();
-    var avg = new Avg();
-    var AvgAggregator = /** @class */ (function (_super) {
-        tslib_1.__extends(AvgAggregator, _super);
-        function AvgAggregator() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.key = 'avg';
-            _this.init = avg.init;
-            _this.accumulate = avg.accumulate;
-            _this.storeResult = avg.storeResult;
-            return _this;
+        function init(grid) {
+            _options = $.extend(true, {}, _defaults, options);
+            _grid = grid;
+            _handler.subscribe(_grid.onActiveCellChanged, wrapHandler(handleActiveCellChange));
+            _handler.subscribe(_grid.onKeyDown, wrapHandler(handleKeyDown));
+            _handler.subscribe(_grid.onClick, wrapHandler(handleClick));
         }
-        AvgAggregator.initClass = function () {
-            this.prototype.type = 'AvgAggregator';
-        };
-        AvgAggregator.__name__ = "AvgAggregator";
-        return AvgAggregator;
-    }(RowAggregator));
-    exports.AvgAggregator = AvgAggregator;
-    AvgAggregator.initClass();
-    var min = new Min();
-    var MinAggregator = /** @class */ (function (_super) {
-        tslib_1.__extends(MinAggregator, _super);
-        function MinAggregator() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.key = 'min';
-            _this.init = min.init;
-            _this.accumulate = min.accumulate;
-            _this.storeResult = min.storeResult;
-            return _this;
+        function destroy() {
+            _handler.unsubscribeAll();
         }
-        MinAggregator.initClass = function () {
-            this.prototype.type = 'MinAggregator';
-        };
-        MinAggregator.__name__ = "MinAggregator";
-        return MinAggregator;
-    }(RowAggregator));
-    exports.MinAggregator = MinAggregator;
-    MinAggregator.initClass();
-    var max = new Max();
-    var MaxAggregator = /** @class */ (function (_super) {
-        tslib_1.__extends(MaxAggregator, _super);
-        function MaxAggregator() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.key = 'max';
-            _this.init = max.init;
-            _this.accumulate = max.accumulate;
-            _this.storeResult = max.storeResult;
-            return _this;
-        }
-        MaxAggregator.initClass = function () {
-            this.prototype.type = 'MaxAggregator';
-        };
-        MaxAggregator.__name__ = "MaxAggregator";
-        return MaxAggregator;
-    }(RowAggregator));
-    exports.MaxAggregator = MaxAggregator;
-    MaxAggregator.initClass();
-    var sum = new Sum();
-    var SumAggregator = /** @class */ (function (_super) {
-        tslib_1.__extends(SumAggregator, _super);
-        function SumAggregator() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.key = 'sum';
-            _this.init = sum.init;
-            _this.accumulate = sum.accumulate;
-            _this.storeResult = sum.storeResult;
-            return _this;
-        }
-        SumAggregator.initClass = function () {
-            this.prototype.type = 'SumAggregator';
-        };
-        SumAggregator.__name__ = "SumAggregator";
-        return SumAggregator;
-    }(RowAggregator));
-    exports.SumAggregator = SumAggregator;
-    SumAggregator.initClass();
-}
-,
-485: /* models/widgets/tables/table_column */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var cell_formatters_1 = require(479) /* ./cell_formatters */;
-    var cell_editors_1 = require(478) /* ./cell_editors */;
-    var p = require(18) /* ../../../core/properties */;
-    var string_1 = require(40) /* ../../../core/util/string */;
-    var model_1 = require(62) /* ../../../model */;
-    var TableColumn = /** @class */ (function (_super) {
-        tslib_1.__extends(TableColumn, _super);
-        function TableColumn(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        TableColumn.initClass = function () {
-            this.define({
-                field: [p.String],
-                title: [p.String],
-                width: [p.Number, 300],
-                formatter: [p.Instance, function () { return new cell_formatters_1.StringFormatter(); }],
-                editor: [p.Instance, function () { return new cell_editors_1.StringEditor(); }],
-                sortable: [p.Boolean, true],
-                default_sort: [p.Sort, "ascending"],
-            });
-        };
-        TableColumn.prototype.toColumn = function () {
-            return {
-                id: string_1.uniqueId(),
-                field: this.field,
-                name: this.title,
-                width: this.width,
-                formatter: this.formatter != null ? this.formatter.doFormat.bind(this.formatter) : undefined,
-                model: this.editor,
-                editor: this.editor.default_view,
-                sortable: this.sortable,
-                defaultSortAsc: this.default_sort == "ascending",
+        function wrapHandler(handler) {
+            return function () {
+                if (!_inHandler) {
+                    _inHandler = true;
+                    handler.apply(this, arguments);
+                    _inHandler = false;
+                }
             };
-        };
-        TableColumn.__name__ = "TableColumn";
-        return TableColumn;
-    }(model_1.Model));
-    exports.TableColumn = TableColumn;
-    TableColumn.initClass();
-}
-,
-486: /* models/widgets/tables/table_widget */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var widget_1 = require(487) /* ../widget */;
-    var cds_view_1 = require(211) /* ../../sources/cds_view */;
-    var p = require(18) /* ../../../core/properties */;
-    var TableWidget = /** @class */ (function (_super) {
-        tslib_1.__extends(TableWidget, _super);
-        function TableWidget(attrs) {
-            return _super.call(this, attrs) || this;
         }
-        TableWidget.initClass = function () {
-            this.define({
-                source: [p.Instance],
-                view: [p.Instance, function () { return new cds_view_1.CDSView(); }],
-            });
-        };
-        TableWidget.prototype.initialize = function () {
-            _super.prototype.initialize.call(this);
-            if (this.view.source == null) {
-                this.view.source = this.source;
-                this.view.compute_indices();
+        function rangesToRows(ranges) {
+            var rows = [];
+            for (var i = 0; i < ranges.length; i++) {
+                for (var j = ranges[i].fromRow; j <= ranges[i].toRow; j++) {
+                    rows.push(j);
+                }
             }
-        };
-        TableWidget.__name__ = "TableWidget";
-        return TableWidget;
-    }(widget_1.Widget));
-    exports.TableWidget = TableWidget;
-    TableWidget.initClass();
-}
-,
-487: /* models/widgets/widget */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var html_box_1 = require(164) /* ../layouts/html_box */;
-    var p = require(18) /* ../../core/properties */;
-    var WidgetView = /** @class */ (function (_super) {
-        tslib_1.__extends(WidgetView, _super);
-        function WidgetView() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            return rows;
         }
-        WidgetView.prototype._width_policy = function () {
-            return this.model.orientation == "horizontal" ? _super.prototype._width_policy.call(this) : "fixed";
-        };
-        WidgetView.prototype._height_policy = function () {
-            return this.model.orientation == "horizontal" ? "fixed" : _super.prototype._height_policy.call(this);
-        };
-        WidgetView.prototype.box_sizing = function () {
-            var sizing = _super.prototype.box_sizing.call(this);
-            if (this.model.orientation == "horizontal") {
-                if (sizing.width == null)
-                    sizing.width = this.model.default_size;
+        function rowsToRanges(rows) {
+            var ranges = [];
+            var lastCell = _grid.getColumns().length - 1;
+            for (var i = 0; i < rows.length; i++) {
+                ranges.push(new Slick.Range(rows[i], 0, rows[i], lastCell));
             }
-            else {
-                if (sizing.height == null)
-                    sizing.height = this.model.default_size;
-            }
-            return sizing;
-        };
-        WidgetView.__name__ = "WidgetView";
-        return WidgetView;
-    }(html_box_1.HTMLBoxView));
-    exports.WidgetView = WidgetView;
-    var Widget = /** @class */ (function (_super) {
-        tslib_1.__extends(Widget, _super);
-        function Widget(attrs) {
-            return _super.call(this, attrs) || this;
+            return ranges;
         }
-        Widget.initClass = function () {
-            this.define({
-                orientation: [p.Orientation, "horizontal"],
-                default_size: [p.Number, 300],
-            });
-            this.override({
-                margin: [5, 5, 5, 5],
-            });
-        };
-        Widget.__name__ = "Widget";
-        return Widget;
-    }(html_box_1.HTMLBox));
-    exports.Widget = Widget;
-    Widget.initClass();
-}
-,
-488: /* styles/widgets/slickgrid */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root {\n  /*\nIMPORTANT:\nIn order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.\nNo built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS\nclasses should alter those!\n*/\n  /*\nIMPORTANT:\nIn order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.\nNo built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS\nclasses should alter those!\n*/\n  /* Menu button */\n  /* Menu */\n  /* Menu items */\n  /* Disabled */\n}\n.bk-root .slick-header.ui-state-default,\n.bk-root .slick-headerrow.ui-state-default,\n.bk-root .slick-footerrow.ui-state-default,\n.bk-root .slick-top-panel-scroller.ui-state-default {\n  width: 100%;\n  overflow: auto;\n  position: relative;\n  border-left: 0px !important;\n}\n.bk-root .slick-header.ui-state-default {\n  overflow: inherit;\n}\n.bk-root .slick-header::-webkit-scrollbar,\n.bk-root .slick-headerrow::-webkit-scrollbar,\n.bk-root .slick-footerrow::-webkit-scrollbar {\n  display: none;\n}\n.bk-root .slick-header-columns,\n.bk-root .slick-headerrow-columns,\n.bk-root .slick-footerrow-columns {\n  position: relative;\n  white-space: nowrap;\n  cursor: default;\n  overflow: hidden;\n}\n.bk-root .slick-header-column.ui-state-default {\n  position: relative;\n  display: inline-block;\n  box-sizing: content-box !important;\n  /* this here only for Firefox! */\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  height: 16px;\n  line-height: 16px;\n  margin: 0;\n  padding: 4px;\n  border-right: 1px solid silver;\n  border-left: 0px !important;\n  border-top: 0px !important;\n  border-bottom: 0px !important;\n  float: left;\n}\n.bk-root .slick-headerrow-column.ui-state-default,\n.bk-root .slick-footerrow-column.ui-state-default {\n  padding: 4px;\n}\n.bk-root .slick-header-column-sorted {\n  font-style: italic;\n}\n.bk-root .slick-sort-indicator {\n  display: inline-block;\n  width: 8px;\n  height: 5px;\n  margin-left: 4px;\n  margin-top: 6px;\n  float: left;\n}\n.bk-root .slick-sort-indicator-numbered {\n  display: inline-block;\n  width: 8px;\n  height: 5px;\n  margin-left: 4px;\n  margin-top: 0;\n  line-height: 20px;\n  float: left;\n  font-family: Arial;\n  font-style: normal;\n  font-weight: bold;\n  color: #6190CD;\n}\n.bk-root .slick-sort-indicator-desc {\n  background: url(images/sort-desc.gif);\n}\n.bk-root .slick-sort-indicator-asc {\n  background: url(images/sort-asc.gif);\n}\n.bk-root .slick-resizable-handle {\n  position: absolute;\n  font-size: 0.1px;\n  display: block;\n  cursor: col-resize;\n  width: 9px;\n  right: -5px;\n  top: 0;\n  height: 100%;\n  z-index: 1;\n}\n.bk-root .slick-sortable-placeholder {\n  background: silver;\n}\n.bk-root .grid-canvas {\n  position: relative;\n  outline: 0;\n}\n.bk-root .slick-row.ui-widget-content,\n.bk-root .slick-row.ui-state-active {\n  position: absolute;\n  border: 0px;\n  width: 100%;\n}\n.bk-root .slick-cell,\n.bk-root .slick-headerrow-column,\n.bk-root .slick-footerrow-column {\n  position: absolute;\n  border: 1px solid transparent;\n  border-right: 1px dotted silver;\n  border-bottom-color: silver;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  vertical-align: middle;\n  z-index: 1;\n  padding: 1px 2px 2px 1px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: default;\n}\n.bk-root .slick-cell,\n.bk-root .slick-headerrow-column {\n  border-bottom-color: silver;\n}\n.bk-root .slick-footerrow-column {\n  border-top-color: silver;\n}\n.bk-root .slick-group-toggle {\n  display: inline-block;\n}\n.bk-root .slick-cell.highlighted {\n  background: lightskyblue;\n  background: rgba(0, 0, 255, 0.2);\n  -webkit-transition: all 0.5s;\n  -moz-transition: all 0.5s;\n  -o-transition: all 0.5s;\n  transition: all 0.5s;\n}\n.bk-root .slick-cell.flashing {\n  border: 1px solid red !important;\n}\n.bk-root .slick-cell.editable {\n  z-index: 11;\n  overflow: visible;\n  background: white;\n  border-color: black;\n  border-style: solid;\n}\n.bk-root .slick-cell:focus {\n  outline: none;\n}\n.bk-root .slick-reorder-proxy {\n  display: inline-block;\n  background: blue;\n  opacity: 0.15;\n  cursor: move;\n}\n.bk-root .slick-reorder-guide {\n  display: inline-block;\n  height: 2px;\n  background: blue;\n  opacity: 0.7;\n}\n.bk-root .slick-selection {\n  z-index: 10;\n  position: absolute;\n  border: 2px dashed black;\n}\n.bk-root .slick-header-columns {\n  background: url('images/header-columns-bg.gif') repeat-x center bottom;\n  border-bottom: 1px solid silver;\n}\n.bk-root .slick-header-column {\n  background: url('images/header-columns-bg.gif') repeat-x center bottom;\n  border-right: 1px solid silver;\n}\n.bk-root .slick-header-column:hover,\n.bk-root .slick-header-column-active {\n  background: white url('images/header-columns-over-bg.gif') repeat-x center bottom;\n}\n.bk-root .slick-headerrow {\n  background: #fafafa;\n}\n.bk-root .slick-headerrow-column {\n  background: #fafafa;\n  border-bottom: 0;\n  height: 100%;\n}\n.bk-root .slick-row.ui-state-active {\n  background: #F5F7D7;\n}\n.bk-root .slick-row {\n  position: absolute;\n  background: white;\n  border: 0px;\n  line-height: 20px;\n}\n.bk-root .slick-row.selected {\n  z-index: 10;\n  background: #DFE8F6;\n}\n.bk-root .slick-cell {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .slick-group {\n  border-bottom: 2px solid silver;\n}\n.bk-root .slick-group-toggle {\n  width: 9px;\n  height: 9px;\n  margin-right: 5px;\n}\n.bk-root .slick-group-toggle.expanded {\n  background: url(images/collapse.gif) no-repeat center center;\n}\n.bk-root .slick-group-toggle.collapsed {\n  background: url(images/expand.gif) no-repeat center center;\n}\n.bk-root .slick-group-totals {\n  color: gray;\n  background: white;\n}\n.bk-root .slick-group-select-checkbox {\n  width: 13px;\n  height: 13px;\n  margin: 3px 10px 0 0;\n  display: inline-block;\n}\n.bk-root .slick-group-select-checkbox.checked {\n  background: url(images/GrpCheckboxY.png) no-repeat center center;\n}\n.bk-root .slick-group-select-checkbox.unchecked {\n  background: url(images/GrpCheckboxN.png) no-repeat center center;\n}\n.bk-root .slick-cell.selected {\n  background-color: beige;\n}\n.bk-root .slick-cell.active {\n  border-color: gray;\n  border-style: solid;\n}\n.bk-root .slick-sortable-placeholder {\n  background: silver !important;\n}\n.bk-root .slick-row.odd {\n  background: #fafafa;\n}\n.bk-root .slick-row.ui-state-active {\n  background: #F5F7D7;\n}\n.bk-root .slick-row.loading {\n  opacity: 0.5;\n}\n.bk-root .slick-cell.invalid {\n  border-color: red;\n  -moz-animation-duration: 0.2s;\n  -webkit-animation-duration: 0.2s;\n  -moz-animation-name: slickgrid-invalid-hilite;\n  -webkit-animation-name: slickgrid-invalid-hilite;\n}\n@-moz-keyframes slickgrid-invalid-hilite {\n  from {\n    box-shadow: 0 0 6px red;\n  }\n  to {\n    box-shadow: none;\n  }\n}\n@-webkit-keyframes slickgrid-invalid-hilite {\n  from {\n    box-shadow: 0 0 6px red;\n  }\n  to {\n    box-shadow: none;\n  }\n}\n.bk-root .slick-column-name,\n.bk-root .slick-sort-indicator {\n  /**\n   * This makes all \"float:right\" elements after it that spill over to the next line\n   * display way below the lower boundary of the column thus hiding them.\n   */\n  display: inline-block;\n  float: left;\n  margin-bottom: 100px;\n}\n.bk-root .slick-header-button {\n  display: inline-block;\n  float: right;\n  vertical-align: top;\n  margin: 1px;\n  /**\n  * This makes all \"float:right\" elements after it that spill over to the next line\n  * display way below the lower boundary of the column thus hiding them.\n  */\n  margin-bottom: 100px;\n  height: 15px;\n  width: 15px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  cursor: pointer;\n}\n.bk-root .slick-header-button-hidden {\n  width: 0;\n  -webkit-transition: 0.2s width;\n  -ms-transition: 0.2s width;\n  transition: 0.2s width;\n}\n.bk-root .slick-header-column:hover > .slick-header-button {\n  width: 15px;\n}\n.bk-root .slick-header-menubutton {\n  position: absolute;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  width: 14px;\n  background-repeat: no-repeat;\n  background-position: left center;\n  background-image: url(../images/down.gif);\n  cursor: pointer;\n  display: none;\n  border-left: thin ridge silver;\n}\n.bk-root .slick-header-column:hover > .slick-header-menubutton,\n.bk-root .slick-header-column-active .slick-header-menubutton {\n  display: inline-block;\n}\n.bk-root .slick-header-menu {\n  position: absolute;\n  display: inline-block;\n  margin: 0;\n  padding: 2px;\n  cursor: default;\n}\n.bk-root .slick-header-menuitem {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n}\n.bk-root .slick-header-menuicon {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  vertical-align: middle;\n  margin-right: 4px;\n  background-repeat: no-repeat;\n  background-position: center center;\n}\n.bk-root .slick-header-menucontent {\n  display: inline-block;\n  vertical-align: middle;\n}\n.bk-root .slick-header-menuitem-disabled {\n  color: silver;\n}\n.bk-root .slick-columnpicker {\n  border: 1px solid #718BB7;\n  background: #f0f0f0;\n  padding: 6px;\n  -moz-box-shadow: 2px 2px 2px silver;\n  -webkit-box-shadow: 2px 2px 2px silver;\n  box-shadow: 2px 2px 2px silver;\n  min-width: 150px;\n  cursor: default;\n  position: absolute;\n  z-index: 20;\n  overflow: auto;\n  resize: both;\n}\n.bk-root .slick-columnpicker > .close {\n  float: right;\n}\n.bk-root .slick-columnpicker .title {\n  font-size: 16px;\n  width: 60%;\n  border-bottom: solid 1px #d6d6d6;\n  margin-bottom: 10px;\n}\n.bk-root .slick-columnpicker li {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  background: none;\n}\n.bk-root .slick-columnpicker input {\n  margin: 4px;\n}\n.bk-root .slick-columnpicker li a {\n  display: block;\n  padding: 4px;\n  font-weight: bold;\n}\n.bk-root .slick-columnpicker li a:hover {\n  background: white;\n}\n.bk-root .slick-pager {\n  width: 100%;\n  height: 26px;\n  border: 1px solid gray;\n  border-top: 0;\n  background: url('../images/header-columns-bg.gif') repeat-x center bottom;\n  vertical-align: middle;\n}\n.bk-root .slick-pager .slick-pager-status {\n  display: inline-block;\n  padding: 6px;\n}\n.bk-root .slick-pager .ui-icon-container {\n  display: inline-block;\n  margin: 2px;\n  border-color: gray;\n}\n.bk-root .slick-pager .slick-pager-nav {\n  display: inline-block;\n  float: left;\n  padding: 2px;\n}\n.bk-root .slick-pager .slick-pager-settings {\n  display: block;\n  float: right;\n  padding: 2px;\n}\n.bk-root .slick-pager .slick-pager-settings * {\n  vertical-align: middle;\n}\n.bk-root .slick-pager .slick-pager-settings a {\n  padding: 2px;\n  text-decoration: underline;\n  cursor: pointer;\n}\n.bk-root .slick-header-columns {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n.bk-root .slick-header-column {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n.bk-root .slick-header-column:hover,\n.bk-root .slick-header-column-active {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAWAIcAAKrM9tno++vz/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABYAAAgUAAUIHEiwoIAACBMqXMhwIQAAAQEAOw==\");\n}\n.bk-root .slick-group-toggle.expanded {\n  background-image: url(\"data:image/gif;base64,R0lGODlhCQAJAPcAAAFGeoCAgNXz/+v5/+v6/+z5/+36//L7//X8//j9/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACQAJAAAIMwADCBxIUIDBgwIEChgwwECBAgQUFjBAkaJCABgxGlB4AGHCAAIQiBypEEECkScJqgwQEAA7\");\n}\n.bk-root .slick-group-toggle.collapsed {\n  background-image: url(\"data:image/gif;base64,R0lGODlhCQAJAPcAAAFGeoCAgNXz/+v5/+v6/+z5/+36//L7//X8//j9/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACQAJAAAIOAADCBxIUIDBgwIEChgwAECBAgQUFjAAQIABAwoBaNSIMYCAAwIqGlSIAEHFkiQTIBCgkqDLAAEBADs=\");\n}\n.bk-root .slick-group-select-checkbox.checked {\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNkRpr/UAAAEcSURBVChTjdI9S8NQFAbg/raQXVwCRRFE7GK7OXTwD+ikk066VF3a0ja0hQTyQdJrwNq0zrYSQRLEXMSWSlCIb8glqRcFD+9yz3nugXwU4n9XQqMoGjj36uBJsTwuaNo3EwBG4Yy7pe7Gv8YcvhJCGFVsjxsjxujj6OTSGlHv+U2WZUZbPWKOv1ZjT5a7pbIoiptbO5b73mwrjHa1B27l8VlTEIS1damlTnEE+EEN9/P8WrfH81qdAIGeXvTTmzltdCy46sEhxpKUINReZR9NnqZbr9puugxV3NjWh/k74WmmEdWhmUNy2jNmWRc6fZTVADCqao52u+DGWTACYNT3fRxwtatPufTNR4yCIGAUn5hS+vJHhWGY/ANx/A3tvdv+1tZmuwAAAABJRU5ErkJggg==\");\n}\n.bk-root .slick-group-select-checkbox.unchecked {\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNkRpr/UAAACXSURBVChT1dIxC4MwEAXg/v8/VOhQVDBNakV0KA6pxS4JhWRSIYPEJxwdDi1de7wleR+3JIf486w0hKCKRpSvvOhZcCmvNQBRuKqdah03U7UjNNH81rOaBYDo8SQaPX8JANFEaLaGBeAPaaY61rGksiN6TmR5H1j9CSoAosYYHLA7vTxYMvVEZa0liif23r93xjm3/oEYF8PiDn/I2FHCAAAAAElFTkSuQmCC\");\n}\n.bk-root .slick-sort-indicator-desc {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDQAFAIcAAGGQzUD/QOPu+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAMAAAEALAAAAAANAAUAAAgeAAUAGEgQgIAACBEKLHgwYcKFBh1KFNhQosOKEgMCADs=\");\n}\n.bk-root .slick-sort-indicator-asc {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDQAFAIcAAGGQzUD/QOPu+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAMAAAEALAAAAAANAAUAAAgbAAMIDABgoEGDABIeRJhQ4cKGEA8KmEiRosGAADs=\");\n}\n.bk-root .slick-header-menubutton {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDgAOAIABADtKYwAAACH5BAEAAAEALAAAAAAOAA4AAAISjI+py+0PHZgUsGobhTn6DxoFADs=\");\n}\n.bk-root .slick-pager {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n");
-}
-,
-489: /* styles/widgets/tables */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    require(488) /* ./slickgrid */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root .bk-data-table {\n  box-sizing: content-box;\n  font-size: 11px;\n}\n.bk-root .bk-data-table input[type=\"checkbox\"] {\n  margin-left: 4px;\n  margin-right: 4px;\n}\n.bk-root .bk-cell-special-defaults {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n}\n.bk-root .bk-cell-select {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n}\n.bk-root .bk-cell-index {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n  text-align: right;\n  color: gray;\n}\n.bk-root .bk-header-index .slick-column-name {\n  float: right;\n}\n.bk-root .slick-row.selected .bk-cell-index {\n  background-color: transparent;\n}\n.bk-root .slick-cell {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .slick-cell.active {\n  border-style: dashed;\n}\n.bk-root .slick-cell.editable {\n  padding-left: 0;\n  padding-right: 0;\n}\n.bk-root .bk-cell-editor input,\n.bk-root .bk-cell-editor select {\n  width: 100%;\n  height: 100%;\n  border: 0;\n  margin: 0;\n  padding: 0;\n  outline: 0;\n  background: transparent;\n  vertical-align: baseline;\n}\n.bk-root .bk-cell-editor input {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .bk-cell-editor-completion {\n  font-size: 11px;\n}\n");
-    exports.bk_data_table = "bk-data-table";
-    exports.bk_cell_index = "bk-cell-index";
-    exports.bk_header_index = "bk-header-index";
-    exports.bk_cell_editor = "bk-cell-editor";
-    exports.bk_cell_select = "bk-cell-select";
-}
-,
-490: /* jquery/dist/jquery */ function _(require, module, exports) {
+        function getRowsRange(from, to) {
+            var i, rows = [];
+            for (i = from; i <= to; i++) {
+                rows.push(i);
+            }
+            for (i = to; i < from; i++) {
+                rows.push(i);
+            }
+            return rows;
+        }
+        function getSelectedRows() {
+            return rangesToRows(_ranges);
+        }
+        function setSelectedRows(rows) {
+            setSelectedRanges(rowsToRanges(rows));
+        }
+        function setSelectedRanges(ranges) {
+            // simple check for: empty selection didn't change, prevent firing onSelectedRangesChanged
+            if ((!_ranges || _ranges.length === 0) && (!ranges || ranges.length === 0)) {
+                return;
+            }
+            _ranges = ranges;
+            _self.onSelectedRangesChanged.notify(_ranges);
+        }
+        function getSelectedRanges() {
+            return _ranges;
+        }
+        function handleActiveCellChange(e, data) {
+            if (_options.selectActiveRow && data.row != null) {
+                setSelectedRanges([new Slick.Range(data.row, 0, data.row, _grid.getColumns().length - 1)]);
+            }
+        }
+        function handleKeyDown(e) {
+            var activeRow = _grid.getActiveCell();
+            if (_grid.getOptions().multiSelect && activeRow
+                && e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey
+                && (e.which == Slick.keyCode.UP || e.which == Slick.keyCode.DOWN)) {
+                var selectedRows = getSelectedRows();
+                selectedRows.sort(function (x, y) {
+                    return x - y;
+                });
+                if (!selectedRows.length) {
+                    selectedRows = [activeRow.row];
+                }
+                var top = selectedRows[0];
+                var bottom = selectedRows[selectedRows.length - 1];
+                var active;
+                if (e.which == Slick.keyCode.DOWN) {
+                    active = activeRow.row < bottom || top == bottom ? ++bottom : ++top;
+                }
+                else {
+                    active = activeRow.row < bottom ? --bottom : --top;
+                }
+                if (active >= 0 && active < _grid.getDataLength()) {
+                    _grid.scrollRowIntoView(active);
+                    var tempRanges = rowsToRanges(getRowsRange(top, bottom));
+                    setSelectedRanges(tempRanges);
+                }
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        function handleClick(e) {
+            var cell = _grid.getCellFromEvent(e);
+            if (!cell || !_grid.canCellBeActive(cell.row, cell.cell)) {
+                return false;
+            }
+            if (!_grid.getOptions().multiSelect || (!e.ctrlKey && !e.shiftKey && !e.metaKey)) {
+                return false;
+            }
+            var selection = rangesToRows(_ranges);
+            var idx = $.inArray(cell.row, selection);
+            if (idx === -1 && (e.ctrlKey || e.metaKey)) {
+                selection.push(cell.row);
+                _grid.setActiveCell(cell.row, cell.cell);
+            }
+            else if (idx !== -1 && (e.ctrlKey || e.metaKey)) {
+                selection = $.grep(selection, function (o, i) {
+                    return (o !== cell.row);
+                });
+                _grid.setActiveCell(cell.row, cell.cell);
+            }
+            else if (selection.length && e.shiftKey) {
+                var last = selection.pop();
+                var from = Math.min(cell.row, last);
+                var to = Math.max(cell.row, last);
+                selection = [];
+                for (var i = from; i <= to; i++) {
+                    if (i !== last) {
+                        selection.push(i);
+                    }
+                }
+                selection.push(last);
+                _grid.setActiveCell(cell.row, cell.cell);
+            }
+            var tempRanges = rowsToRanges(selection);
+            setSelectedRanges(tempRanges);
+            e.stopImmediatePropagation();
+            return true;
+        }
+        $.extend(this, {
+            "getSelectedRows": getSelectedRows,
+            "setSelectedRows": setSelectedRows,
+            "getSelectedRanges": getSelectedRanges,
+            "setSelectedRanges": setSelectedRanges,
+            "init": init,
+            "destroy": destroy,
+            "onSelectedRangesChanged": new Slick.Event()
+        });
+    }
+    module.exports = {
+        "RowSelectionModel": RowSelectionModel
+    };
+},
+519: /* slickgrid/slick.jquery.js */ function _(require, module, exports) {
+    module.exports = (typeof $ !== "undefined") ? $ : require(520) /* jquery */;
+},
+520: /* jquery/dist/jquery.js */ function _(require, module, exports) {
     /*!
      * jQuery JavaScript Library v3.4.1
      * https://jquery.com/
@@ -9803,1485 +9261,8 @@
         }
         return jQuery;
     });
-}
-,
-491: /* slickgrid/index */ function _(require, module, exports) {
-    var tslib = require(426) /* tslib */;
-    tslib.__exportStar(require(497) /* ./slick.core */, module.exports);
-    tslib.__exportStar(require(501) /* ./slick.grid */, module.exports);
-    tslib.__exportStar(require(498) /* ./slick.dataview */, module.exports);
-    tslib.__exportStar(require(499) /* ./slick.editors */, module.exports);
-    tslib.__exportStar(require(500) /* ./slick.formatters */, module.exports);
-    tslib.__exportStar(require(504) /* ./slick.remotemodel */, module.exports);
-    tslib.__exportStar(require(502) /* ./slick.groupitemmetadataprovider */, module.exports);
-}
-,
-492: /* slickgrid/lib/jquery.event.drag-2.3.0 */ function _(require, module, exports) {
-    /*!
-     * jquery.event.drag - v 2.3.0
-     * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
-     * Open Source MIT License - http://threedubmedia.com/code/license
-     */
-    // Created: 2008-06-04
-    // Updated: 2012-05-21
-    // Updated: 2016-08-16   Luiz Gonzaga dos Santos Filho
-    // REQUIRES: jquery 1.8 +, , event.drag 2.3.0
-    // TESTED WITH: jQuery 1.8.3, 1.11.2, 2.2.4, and 3.1.0
-    var $ = require(503) /* ../slick.jquery */;
-    // add the jquery instance method
-    $.fn.drag = function (str, arg, opts) {
-        // figure out the event type
-        var type = typeof str == "string" ? str : "", 
-        // figure out the event handler...
-        fn = $.isFunction(str) ? str : $.isFunction(arg) ? arg : null;
-        // fix the event type
-        if (type.indexOf("drag") !== 0)
-            type = "drag" + type;
-        // were options passed
-        opts = (str == fn ? arg : opts) || {};
-        // trigger or bind event handler
-        return fn ? this.on(type, opts, fn) : this.trigger(type);
-    };
-    // local refs (increase compression)
-    var $event = $.event, $special = $event.special, 
-    // configure the drag special event
-    drag = $special.drag = {
-        // these are the default settings
-        defaults: {
-            which: 1,
-            distance: 0,
-            not: ':input',
-            handle: null,
-            relative: false,
-            drop: true,
-            click: false // false to suppress click events after dragend (no proxy)
-        },
-        // the key name for stored drag data
-        datakey: "dragdata",
-        // prevent bubbling for better performance
-        noBubble: true,
-        // count bound related events
-        add: function (obj) {
-            // read the interaction data
-            var data = $.data(this, drag.datakey), 
-            // read any passed options
-            opts = obj.data || {};
-            // count another realted event
-            data.related += 1;
-            // extend data options bound with this event
-            // don't iterate "opts" in case it is a node
-            $.each(drag.defaults, function (key, def) {
-                if (opts[key] !== undefined)
-                    data[key] = opts[key];
-            });
-        },
-        // forget unbound related events
-        remove: function () {
-            $.data(this, drag.datakey).related -= 1;
-        },
-        // configure interaction, capture settings
-        setup: function () {
-            // check for related events
-            if ($.data(this, drag.datakey))
-                return;
-            // initialize the drag data with copied defaults
-            var data = $.extend({ related: 0 }, drag.defaults);
-            // store the interaction data
-            $.data(this, drag.datakey, data);
-            // bind the mousedown event, which starts drag interactions
-            $event.add(this, "touchstart mousedown", drag.init, data);
-            // prevent image dragging in IE...
-            if (this.attachEvent)
-                this.attachEvent("ondragstart", drag.dontstart);
-        },
-        // destroy configured interaction
-        teardown: function () {
-            var data = $.data(this, drag.datakey) || {};
-            // check for related events
-            if (data.related)
-                return;
-            // remove the stored data
-            $.removeData(this, drag.datakey);
-            // remove the mousedown event
-            $event.remove(this, "touchstart mousedown", drag.init);
-            // enable text selection
-            drag.textselect(true);
-            // un-prevent image dragging in IE...
-            if (this.detachEvent)
-                this.detachEvent("ondragstart", drag.dontstart);
-        },
-        // initialize the interaction
-        init: function (event) {
-            // sorry, only one touch at a time
-            if (drag.touched)
-                return;
-            // the drag/drop interaction data
-            var dd = event.data, results;
-            // check the which directive
-            if (event.which != 0 && dd.which > 0 && event.which != dd.which)
-                return;
-            // check for suppressed selector
-            if ($(event.target).is(dd.not))
-                return;
-            // check for handle selector
-            if (dd.handle && !$(event.target).closest(dd.handle, event.currentTarget).length)
-                return;
-            drag.touched = event.type == 'touchstart' ? this : null;
-            dd.propagates = 1;
-            dd.mousedown = this;
-            dd.interactions = [drag.interaction(this, dd)];
-            dd.target = event.target;
-            dd.pageX = event.pageX;
-            dd.pageY = event.pageY;
-            dd.dragging = null;
-            // handle draginit event...
-            results = drag.hijack(event, "draginit", dd);
-            // early cancel
-            if (!dd.propagates)
-                return;
-            // flatten the result set
-            results = drag.flatten(results);
-            // insert new interaction elements
-            if (results && results.length) {
-                dd.interactions = [];
-                $.each(results, function () {
-                    dd.interactions.push(drag.interaction(this, dd));
-                });
-            }
-            // remember how many interactions are propagating
-            dd.propagates = dd.interactions.length;
-            // locate and init the drop targets
-            if (dd.drop !== false && $special.drop)
-                $special.drop.handler(event, dd);
-            // disable text selection
-            drag.textselect(false);
-            // bind additional events...
-            if (drag.touched)
-                $event.add(drag.touched, "touchmove touchend", drag.handler, dd);
-            else
-                $event.add(document, "mousemove mouseup", drag.handler, dd);
-            // helps prevent text selection or scrolling
-            if (!drag.touched || dd.live)
-                return false;
-        },
-        // returns an interaction object
-        interaction: function (elem, dd) {
-            var offset = (elem && elem.ownerDocument)
-                ? $(elem)[dd.relative ? "position" : "offset"]() || { top: 0, left: 0 }
-                : { top: 0, left: 0 };
-            return {
-                drag: elem,
-                callback: new drag.callback(),
-                droppable: [],
-                offset: offset
-            };
-        },
-        // handle drag-releatd DOM events
-        handler: function (event) {
-            // read the data before hijacking anything
-            var dd = event.data;
-            // handle various events
-            switch (event.type) {
-                // mousemove, check distance, start dragging
-                case !dd.dragging && 'touchmove':
-                    event.preventDefault();
-                case !dd.dragging && 'mousemove':
-                    //  drag tolerance, x² + y² = distance²
-                    if (Math.pow(event.pageX - dd.pageX, 2) + Math.pow(event.pageY - dd.pageY, 2) < Math.pow(dd.distance, 2))
-                        break; // distance tolerance not reached
-                    event.target = dd.target; // force target from "mousedown" event (fix distance issue)
-                    drag.hijack(event, "dragstart", dd); // trigger "dragstart"
-                    if (dd.propagates) // "dragstart" not rejected
-                        dd.dragging = true; // activate interaction
-                // mousemove, dragging
-                case 'touchmove':
-                    event.preventDefault();
-                case 'mousemove':
-                    if (dd.dragging) {
-                        // trigger "drag"
-                        drag.hijack(event, "drag", dd);
-                        if (dd.propagates) {
-                            // manage drop events
-                            if (dd.drop !== false && $special.drop)
-                                $special.drop.handler(event, dd); // "dropstart", "dropend"
-                            break; // "drag" not rejected, stop
-                        }
-                        event.type = "mouseup"; // helps "drop" handler behave
-                    }
-                // mouseup, stop dragging
-                case 'touchend':
-                case 'mouseup':
-                default:
-                    if (drag.touched)
-                        $event.remove(drag.touched, "touchmove touchend", drag.handler); // remove touch events
-                    else
-                        $event.remove(document, "mousemove mouseup", drag.handler); // remove page events
-                    if (dd.dragging) {
-                        if (dd.drop !== false && $special.drop)
-                            $special.drop.handler(event, dd); // "drop"
-                        drag.hijack(event, "dragend", dd); // trigger "dragend"
-                    }
-                    drag.textselect(true); // enable text selection
-                    // if suppressing click events...
-                    if (dd.click === false && dd.dragging)
-                        $.data(dd.mousedown, "suppress.click", new Date().getTime() + 5);
-                    dd.dragging = drag.touched = false; // deactivate element
-                    break;
-            }
-        },
-        // re-use event object for custom events
-        hijack: function (event, type, dd, x, elem) {
-            // not configured
-            if (!dd)
-                return;
-            // remember the original event and type
-            var orig = { event: event.originalEvent, type: event.type }, 
-            // is the event drag related or drog related?
-            mode = type.indexOf("drop") ? "drag" : "drop", 
-            // iteration vars
-            result, i = x || 0, ia, $elems, callback, len = !isNaN(x) ? x : dd.interactions.length;
-            // modify the event type
-            event.type = type;
-            // protects originalEvent from side-effects
-            var noop = function () { };
-            event.originalEvent = new $.Event(orig.event, {
-                preventDefault: noop,
-                stopPropagation: noop,
-                stopImmediatePropagation: noop
-            });
-            // initialize the results
-            dd.results = [];
-            // handle each interacted element
-            do
-                if (ia = dd.interactions[i]) {
-                    // validate the interaction
-                    if (type !== "dragend" && ia.cancelled)
-                        continue;
-                    // set the dragdrop properties on the event object
-                    callback = drag.properties(event, dd, ia);
-                    // prepare for more results
-                    ia.results = [];
-                    // handle each element
-                    $(elem || ia[mode] || dd.droppable).each(function (p, subject) {
-                        // identify drag or drop targets individually
-                        callback.target = subject;
-                        // force propagtion of the custom event
-                        event.isPropagationStopped = function () { return false; };
-                        // handle the event
-                        result = subject ? $event.dispatch.call(subject, event, callback) : null;
-                        // stop the drag interaction for this element
-                        if (result === false) {
-                            if (mode == "drag") {
-                                ia.cancelled = true;
-                                dd.propagates -= 1;
-                            }
-                            if (type == "drop") {
-                                ia[mode][p] = null;
-                            }
-                        }
-                        // assign any dropinit elements
-                        else if (type == "dropinit")
-                            ia.droppable.push(drag.element(result) || subject);
-                        // accept a returned proxy element
-                        if (type == "dragstart")
-                            ia.proxy = $(drag.element(result) || ia.drag)[0];
-                        // remember this result
-                        ia.results.push(result);
-                        // forget the event result, for recycling
-                        delete event.result;
-                        // break on cancelled handler
-                        if (type !== "dropinit")
-                            return result;
-                    });
-                    // flatten the results
-                    dd.results[i] = drag.flatten(ia.results);
-                    // accept a set of valid drop targets
-                    if (type == "dropinit")
-                        ia.droppable = drag.flatten(ia.droppable);
-                    // locate drop targets
-                    if (type == "dragstart" && !ia.cancelled)
-                        callback.update();
-                }
-            while (++i < len);
-            // restore the original event & type
-            event.type = orig.type;
-            event.originalEvent = orig.event;
-            // return all handler results
-            return drag.flatten(dd.results);
-        },
-        // extend the callback object with drag/drop properties...
-        properties: function (event, dd, ia) {
-            var obj = ia.callback;
-            // elements
-            obj.drag = ia.drag;
-            obj.proxy = ia.proxy || ia.drag;
-            // starting mouse position
-            obj.startX = dd.pageX;
-            obj.startY = dd.pageY;
-            // current distance dragged
-            obj.deltaX = event.pageX - dd.pageX;
-            obj.deltaY = event.pageY - dd.pageY;
-            // original element position
-            obj.originalX = ia.offset.left;
-            obj.originalY = ia.offset.top;
-            // adjusted element position
-            obj.offsetX = obj.originalX + obj.deltaX;
-            obj.offsetY = obj.originalY + obj.deltaY;
-            // assign the drop targets information
-            obj.drop = drag.flatten((ia.drop || []).slice());
-            obj.available = drag.flatten((ia.droppable || []).slice());
-            return obj;
-        },
-        // determine is the argument is an element or jquery instance
-        element: function (arg) {
-            if (arg && (arg.jquery || arg.nodeType == 1))
-                return arg;
-        },
-        // flatten nested jquery objects and arrays into a single dimension array
-        flatten: function (arr) {
-            return $.map(arr, function (member) {
-                return member && member.jquery ? $.makeArray(member) :
-                    member && member.length ? drag.flatten(member) : member;
-            });
-        },
-        // toggles text selection attributes ON (true) or OFF (false)
-        textselect: function (bool) {
-            $(document)[bool ? "off" : "on"]("selectstart", drag.dontstart)
-                .css("MozUserSelect", bool ? "" : "none");
-            // .attr("unselectable", bool ? "off" : "on" )
-            document.unselectable = bool ? "off" : "on";
-        },
-        // suppress "selectstart" and "ondragstart" events
-        dontstart: function () {
-            return false;
-        },
-        // a callback instance contructor
-        callback: function () { }
-    };
-    // callback methods
-    drag.callback.prototype = {
-        update: function () {
-            if ($special.drop && this.available.length)
-                $.each(this.available, function (i) {
-                    $special.drop.locate(this, i);
-                });
-        }
-    };
-    // patch $.event.$dispatch to allow suppressing clicks
-    var $dispatch = $event.dispatch;
-    $event.dispatch = function (event) {
-        if ($.data(this, "suppress." + event.type) - new Date().getTime() > 0) {
-            $.removeData(this, "suppress." + event.type);
-            return;
-        }
-        return $dispatch.apply(this, arguments);
-    };
-    // share the same special event configuration with related events...
-    $special.draginit = $special.dragstart = $special.dragend = drag;
-}
-,
-493: /* slickgrid/lib/jquery.event.drop-2.3.0 */ function _(require, module, exports) {
-    /*!
-     * jquery.event.drop - v 2.3.0
-     * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
-     * Open Source MIT License - http://threedubmedia.com/code/license
-     */
-    // Created: 2008-06-04
-    // Updated: 2012-05-21
-    // Updated: 2016-08-16   Luiz Gonzaga dos Santos Filho
-    // REQUIRES: jquery 1.8 +, , event.drag 2.3.0
-    // TESTED WITH: jQuery 1.8.3, 1.11.2, 2.2.4, and 3.1.0
-    var $ = require(503) /* ../slick.jquery */;
-    // Events: drop, dropstart, dropend
-    // add the jquery instance method
-    $.fn.drop = function (str, arg, opts) {
-        // figure out the event type
-        var type = typeof str == "string" ? str : "", 
-        // figure out the event handler...
-        fn = $.isFunction(str) ? str : $.isFunction(arg) ? arg : null;
-        // fix the event type
-        if (type.indexOf("drop") !== 0)
-            type = "drop" + type;
-        // were options passed
-        opts = (str == fn ? arg : opts) || {};
-        // trigger or bind event handler
-        return fn ? this.on(type, opts, fn) : this.trigger(type);
-    };
-    // DROP MANAGEMENT UTILITY
-    // returns filtered drop target elements, caches their positions
-    $.drop = function (opts) {
-        opts = opts || {};
-        // safely set new options...
-        drop.multi = opts.multi === true ? Infinity :
-            opts.multi === false ? 1 : !isNaN(opts.multi) ? opts.multi : drop.multi;
-        drop.delay = opts.delay || drop.delay;
-        drop.tolerance = $.isFunction(opts.tolerance) ? opts.tolerance :
-            opts.tolerance === null ? null : drop.tolerance;
-        drop.mode = opts.mode || drop.mode || 'intersect';
-    };
-    // local refs (increase compression)
-    var $event = $.event, $special = $event.special, 
-    // configure the drop special event
-    drop = $.event.special.drop = {
-        // these are the default settings
-        multi: 1,
-        delay: 20,
-        mode: 'overlap',
-        // internal cache
-        targets: [],
-        // the key name for stored drop data
-        datakey: "dropdata",
-        // prevent bubbling for better performance
-        noBubble: true,
-        // count bound related events
-        add: function (obj) {
-            // read the interaction data
-            var data = $.data(this, drop.datakey);
-            // count another realted event
-            data.related += 1;
-        },
-        // forget unbound related events
-        remove: function () {
-            $.data(this, drop.datakey).related -= 1;
-        },
-        // configure the interactions
-        setup: function () {
-            // check for related events
-            if ($.data(this, drop.datakey))
-                return;
-            // initialize the drop element data
-            var data = {
-                related: 0,
-                active: [],
-                anyactive: 0,
-                winner: 0,
-                location: {}
-            };
-            // store the drop data on the element
-            $.data(this, drop.datakey, data);
-            // store the drop target in internal cache
-            drop.targets.push(this);
-        },
-        // destroy the configure interaction
-        teardown: function () {
-            var data = $.data(this, drop.datakey) || {};
-            // check for related events
-            if (data.related)
-                return;
-            // remove the stored data
-            $.removeData(this, drop.datakey);
-            // reference the targeted element
-            var element = this;
-            // remove from the internal cache
-            drop.targets = $.grep(drop.targets, function (target) {
-                return (target !== element);
-            });
-        },
-        // shared event handler
-        handler: function (event, dd) {
-            // local vars
-            var results, $targets;
-            // make sure the right data is available
-            if (!dd)
-                return;
-            // handle various events
-            switch (event.type) {
-                // draginit, from $.event.special.drag
-                case 'mousedown': // DROPINIT >>
-                case 'touchstart': // DROPINIT >>
-                    // collect and assign the drop targets
-                    $targets = $(drop.targets);
-                    if (typeof dd.drop == "string")
-                        $targets = $targets.filter(dd.drop);
-                    // reset drop data winner properties
-                    $targets.each(function () {
-                        var data = $.data(this, drop.datakey);
-                        data.active = [];
-                        data.anyactive = 0;
-                        data.winner = 0;
-                    });
-                    // set available target elements
-                    dd.droppable = $targets;
-                    // activate drop targets for the initial element being dragged
-                    $special.drag.hijack(event, "dropinit", dd);
-                    break;
-                // drag, from $.event.special.drag
-                case 'mousemove': // TOLERATE >>
-                case 'touchmove': // TOLERATE >>
-                    drop.event = event; // store the mousemove event
-                    if (!drop.timer)
-                        // monitor drop targets
-                        drop.tolerate(dd);
-                    break;
-                // dragend, from $.event.special.drag
-                case 'mouseup': // DROP >> DROPEND >>
-                case 'touchend': // DROP >> DROPEND >>
-                    drop.timer = clearTimeout(drop.timer); // delete timer
-                    if (dd.propagates) {
-                        $special.drag.hijack(event, "drop", dd);
-                        $special.drag.hijack(event, "dropend", dd);
-                    }
-                    break;
-            }
-        },
-        // returns the location positions of an element
-        locate: function (elem, index) {
-            var data = $.data(elem, drop.datakey), $elem = $(elem), posi = $elem.offset() || {}, height = $elem.outerHeight(), width = $elem.outerWidth(), location = {
-                elem: elem,
-                width: width,
-                height: height,
-                top: posi.top,
-                left: posi.left,
-                right: posi.left + width,
-                bottom: posi.top + height
-            };
-            // drag elements might not have dropdata
-            if (data) {
-                data.location = location;
-                data.index = index;
-                data.elem = elem;
-            }
-            return location;
-        },
-        // test the location positions of an element against another OR an X,Y coord
-        contains: function (target, test) {
-            return ((test[0] || test.left) >= target.left && (test[0] || test.right) <= target.right
-                && (test[1] || test.top) >= target.top && (test[1] || test.bottom) <= target.bottom);
-        },
-        // stored tolerance modes
-        modes: {
-            // target with mouse wins, else target with most overlap wins
-            'intersect': function (event, proxy, target) {
-                return this.contains(target, [event.pageX, event.pageY]) ? // check cursor
-                    1e9 : this.modes.overlap.apply(this, arguments); // check overlap
-            },
-            // target with most overlap wins
-            'overlap': function (event, proxy, target) {
-                // calculate the area of overlap...
-                return Math.max(0, Math.min(target.bottom, proxy.bottom) - Math.max(target.top, proxy.top))
-                    * Math.max(0, Math.min(target.right, proxy.right) - Math.max(target.left, proxy.left));
-            },
-            // proxy is completely contained within target bounds
-            'fit': function (event, proxy, target) {
-                return this.contains(target, proxy) ? 1 : 0;
-            },
-            // center of the proxy is contained within target bounds
-            'middle': function (event, proxy, target) {
-                return this.contains(target, [proxy.left + proxy.width * .5, proxy.top + proxy.height * .5]) ? 1 : 0;
-            }
-        },
-        // sort drop target cache by by winner (dsc), then index (asc)
-        sort: function (a, b) {
-            return (b.winner - a.winner) || (a.index - b.index);
-        },
-        // async, recursive tolerance execution
-        tolerate: function (dd) {
-            // declare local refs
-            var i, drp, drg, data, arr, len, elem, 
-            // interaction iteration variables
-            x = 0, ia, end = dd.interactions.length, 
-            // determine the mouse coords
-            xy = [drop.event.pageX, drop.event.pageY], 
-            // custom or stored tolerance fn
-            tolerance = drop.tolerance || drop.modes[drop.mode];
-            // go through each passed interaction...
-            do
-                if (ia = dd.interactions[x]) {
-                    // check valid interaction
-                    if (!ia)
-                        return;
-                    // initialize or clear the drop data
-                    ia.drop = [];
-                    // holds the drop elements
-                    arr = [];
-                    len = ia.droppable.length;
-                    // determine the proxy location, if needed
-                    if (tolerance)
-                        drg = drop.locate(ia.proxy);
-                    // reset the loop
-                    i = 0;
-                    // loop each stored drop target
-                    do
-                        if (elem = ia.droppable[i]) {
-                            data = $.data(elem, drop.datakey);
-                            drp = data.location;
-                            if (!drp)
-                                continue;
-                            // find a winner: tolerance function is defined, call it
-                            data.winner = tolerance ? tolerance.call(drop, drop.event, drg, drp)
-                                // mouse position is always the fallback
-                                : drop.contains(drp, xy) ? 1 : 0;
-                            arr.push(data);
-                        }
-                    while (++i < len); // loop
-                    // sort the drop targets
-                    arr.sort(drop.sort);
-                    // reset the loop
-                    i = 0;
-                    // loop through all of the targets again
-                    do
-                        if (data = arr[i]) {
-                            // winners...
-                            if (data.winner && ia.drop.length < drop.multi) {
-                                // new winner... dropstart
-                                if (!data.active[x] && !data.anyactive) {
-                                    // check to make sure that this is not prevented
-                                    if ($special.drag.hijack(drop.event, "dropstart", dd, x, data.elem)[0] !== false) {
-                                        data.active[x] = 1;
-                                        data.anyactive += 1;
-                                    }
-                                    // if false, it is not a winner
-                                    else
-                                        data.winner = 0;
-                                }
-                                // if it is still a winner
-                                if (data.winner)
-                                    ia.drop.push(data.elem);
-                            }
-                            // losers...
-                            else if (data.active[x] && data.anyactive == 1) {
-                                // former winner... dropend
-                                $special.drag.hijack(drop.event, "dropend", dd, x, data.elem);
-                                data.active[x] = 0;
-                                data.anyactive -= 1;
-                            }
-                        }
-                    while (++i < len); // loop
-                }
-            while (++x < end); // loop
-            // check if the mouse is still moving or is idle
-            if (drop.last && xy[0] == drop.last.pageX && xy[1] == drop.last.pageY)
-                delete drop.timer; // idle, don't recurse
-            else // recurse
-                drop.timer = setTimeout(function () {
-                    drop.tolerate(dd);
-                }, drop.delay);
-            // remember event, to compare idleness
-            drop.last = drop.event;
-        }
-    };
-    // share the same special event configuration with related events...
-    $special.dropinit = $special.dropstart = $special.dropend = drop;
-}
-,
-494: /* slickgrid/plugins/slick.cellexternalcopymanager */ function _(require, module, exports) {
-    var $ = require(503) /* ../slick.jquery */;
-    var Slick = require(497) /* ../slick.core */;
-    var keyCodes = Slick.keyCode;
-    function CellExternalCopyManager(options) {
-        /*
-          This manager enables users to copy/paste data from/to an external Spreadsheet application
-          such as MS-Excel® or OpenOffice-Spreadsheet.
-    
-          Since it is not possible to access directly the clipboard in javascript, the plugin uses
-          a trick to do it's job. After detecting the keystroke, we dynamically create a textarea
-          where the browser copies/pastes the serialized data.
-    
-          options:
-            copiedCellStyle : sets the css className used for copied cells. default : "copied"
-            copiedCellStyleLayerKey : sets the layer key for setting css values of copied cells. default : "copy-manager"
-            dataItemColumnValueExtractor : option to specify a custom column value extractor function
-            dataItemColumnValueSetter : option to specify a custom column value setter function
-            clipboardCommandHandler : option to specify a custom handler for paste actions
-            includeHeaderWhenCopying : set to true and the plugin will take the name property from each column (which is usually what appears in your header) and put that as the first row of the text that's copied to the clipboard
-            bodyElement: option to specify a custom DOM element which to will be added the hidden textbox. It's useful if the grid is inside a modal dialog.
-            onCopyInit: optional handler to run when copy action initializes
-            onCopySuccess: optional handler to run when copy action is complete
-            newRowCreator: function to add rows to table if paste overflows bottom of table, if this function is not provided new rows will be ignored.
-            readOnlyMode: suppresses paste
-            headerColumnValueExtractor : option to specify a custom column header value extractor function
-        */
-        var _grid;
-        var _self = this;
-        var _copiedRanges;
-        var _options = options || {};
-        var _copiedCellStyleLayerKey = _options.copiedCellStyleLayerKey || "copy-manager";
-        var _copiedCellStyle = _options.copiedCellStyle || "copied";
-        var _clearCopyTI = 0;
-        var _bodyElement = _options.bodyElement || document.body;
-        var _onCopyInit = _options.onCopyInit || null;
-        var _onCopySuccess = _options.onCopySuccess || null;
-        function init(grid) {
-            _grid = grid;
-            _grid.onKeyDown.subscribe(handleKeyDown);
-            // we need a cell selection model
-            var cellSelectionModel = grid.getSelectionModel();
-            if (!cellSelectionModel) {
-                throw new Error("Selection model is mandatory for this plugin. Please set a selection model on the grid before adding this plugin: grid.setSelectionModel(new Slick.CellSelectionModel())");
-            }
-            // we give focus on the grid when a selection is done on it.
-            // without this, if the user selects a range of cell without giving focus on a particular cell, the grid doesn't get the focus and key stroke handles (ctrl+c) don't work
-            cellSelectionModel.onSelectedRangesChanged.subscribe(function (e, args) {
-                _grid.focus();
-            });
-        }
-        function destroy() {
-            _grid.onKeyDown.unsubscribe(handleKeyDown);
-        }
-        function getHeaderValueForColumn(columnDef) {
-            if (_options.headerColumnValueExtractor) {
-                var val = _options.headerColumnValueExtractor(columnDef);
-                if (val) {
-                    return val;
-                }
-            }
-            return columnDef.name;
-        }
-        function getDataItemValueForColumn(item, columnDef, e) {
-            if (_options.dataItemColumnValueExtractor) {
-                var val = _options.dataItemColumnValueExtractor(item, columnDef);
-                if (val) {
-                    return val;
-                }
-            }
-            var retVal = '';
-            // if a custom getter is not defined, we call serializeValue of the editor to serialize
-            if (columnDef.editor) {
-                var editorArgs = {
-                    'container': $("<p>"),
-                    'column': columnDef,
-                    'position': { 'top': 0, 'left': 0 },
-                    'grid': _grid,
-                    'event': e
-                };
-                var editor = new columnDef.editor(editorArgs);
-                editor.loadValue(item);
-                retVal = editor.serializeValue();
-                editor.destroy();
-            }
-            else {
-                retVal = item[columnDef.field];
-            }
-            return retVal;
-        }
-        function setDataItemValueForColumn(item, columnDef, value) {
-            if (_options.dataItemColumnValueSetter) {
-                return _options.dataItemColumnValueSetter(item, columnDef, value);
-            }
-            // if a custom setter is not defined, we call applyValue of the editor to unserialize
-            if (columnDef.editor) {
-                var editorArgs = {
-                    'container': $("body"),
-                    'column': columnDef,
-                    'position': { 'top': 0, 'left': 0 },
-                    'grid': _grid
-                };
-                var editor = new columnDef.editor(editorArgs);
-                editor.loadValue(item);
-                editor.applyValue(item, value);
-                editor.destroy();
-            }
-            else {
-                item[columnDef.field] = value;
-            }
-        }
-        function _createTextBox(innerText) {
-            var ta = document.createElement('textarea');
-            ta.style.position = 'absolute';
-            ta.style.left = '-1000px';
-            ta.style.top = document.body.scrollTop + 'px';
-            ta.value = innerText;
-            _bodyElement.appendChild(ta);
-            ta.select();
-            return ta;
-        }
-        function _decodeTabularData(_grid, ta) {
-            var columns = _grid.getColumns();
-            var clipText = ta.value;
-            var clipRows = clipText.split(/[\n\f\r]/);
-            // trim trailing CR if present
-            if (clipRows[clipRows.length - 1] == "") {
-                clipRows.pop();
-            }
-            var clippedRange = [];
-            var j = 0;
-            _bodyElement.removeChild(ta);
-            for (var i = 0; i < clipRows.length; i++) {
-                if (clipRows[i] != "")
-                    clippedRange[j++] = clipRows[i].split("\t");
-                else
-                    clippedRange[i] = [""];
-            }
-            var selectedCell = _grid.getActiveCell();
-            var ranges = _grid.getSelectionModel().getSelectedRanges();
-            var selectedRange = ranges && ranges.length ? ranges[0] : null; // pick only one selection
-            var activeRow = null;
-            var activeCell = null;
-            if (selectedRange) {
-                activeRow = selectedRange.fromRow;
-                activeCell = selectedRange.fromCell;
-            }
-            else if (selectedCell) {
-                activeRow = selectedCell.row;
-                activeCell = selectedCell.cell;
-            }
-            else {
-                // we don't know where to paste
-                return;
-            }
-            var oneCellToMultiple = false;
-            var destH = clippedRange.length;
-            var destW = clippedRange.length ? clippedRange[0].length : 0;
-            if (clippedRange.length == 1 && clippedRange[0].length == 1 && selectedRange) {
-                oneCellToMultiple = true;
-                destH = selectedRange.toRow - selectedRange.fromRow + 1;
-                destW = selectedRange.toCell - selectedRange.fromCell + 1;
-            }
-            var availableRows = _grid.getData().length - activeRow;
-            var addRows = 0;
-            // ignore new rows if we don't have a "newRowCreator"
-            if (availableRows < destH && _options.newRowCreator) {
-                var d = _grid.getData();
-                for (addRows = 1; addRows <= destH - availableRows; addRows++)
-                    d.push({});
-                _grid.setData(d);
-                _grid.render();
-            }
-            var overflowsBottomOfGrid = activeRow + destH > _grid.getDataLength();
-            if (_options.newRowCreator && overflowsBottomOfGrid) {
-                var newRowsNeeded = activeRow + destH - _grid.getDataLength();
-                _options.newRowCreator(newRowsNeeded);
-            }
-            var clipCommand = {
-                isClipboardCommand: true,
-                clippedRange: clippedRange,
-                oldValues: [],
-                cellExternalCopyManager: _self,
-                _options: _options,
-                setDataItemValueForColumn: setDataItemValueForColumn,
-                markCopySelection: markCopySelection,
-                oneCellToMultiple: oneCellToMultiple,
-                activeRow: activeRow,
-                activeCell: activeCell,
-                destH: destH,
-                destW: destW,
-                maxDestY: _grid.getDataLength(),
-                maxDestX: _grid.getColumns().length,
-                h: 0,
-                w: 0,
-                execute: function () {
-                    this.h = 0;
-                    for (var y = 0; y < this.destH; y++) {
-                        this.oldValues[y] = [];
-                        this.w = 0;
-                        this.h++;
-                        for (var x = 0; x < this.destW; x++) {
-                            this.w++;
-                            var desty = activeRow + y;
-                            var destx = activeCell + x;
-                            if (desty < this.maxDestY && destx < this.maxDestX) {
-                                var nd = _grid.getCellNode(desty, destx);
-                                var dt = _grid.getDataItem(desty);
-                                this.oldValues[y][x] = dt[columns[destx]['field']];
-                                if (oneCellToMultiple)
-                                    this.setDataItemValueForColumn(dt, columns[destx], clippedRange[0][0]);
-                                else
-                                    this.setDataItemValueForColumn(dt, columns[destx], clippedRange[y] ? clippedRange[y][x] : '');
-                                _grid.updateCell(desty, destx);
-                                _grid.onCellChange.notify({
-                                    row: desty,
-                                    cell: destx,
-                                    item: dt,
-                                    grid: _grid
-                                });
-                            }
-                        }
-                    }
-                    var bRange = {
-                        'fromCell': activeCell,
-                        'fromRow': activeRow,
-                        'toCell': activeCell + this.w - 1,
-                        'toRow': activeRow + this.h - 1
-                    };
-                    this.markCopySelection([bRange]);
-                    _grid.getSelectionModel().setSelectedRanges([bRange]);
-                    this.cellExternalCopyManager.onPasteCells.notify({ ranges: [bRange] });
-                },
-                undo: function () {
-                    for (var y = 0; y < this.destH; y++) {
-                        for (var x = 0; x < this.destW; x++) {
-                            var desty = activeRow + y;
-                            var destx = activeCell + x;
-                            if (desty < this.maxDestY && destx < this.maxDestX) {
-                                var nd = _grid.getCellNode(desty, destx);
-                                var dt = _grid.getDataItem(desty);
-                                if (oneCellToMultiple)
-                                    this.setDataItemValueForColumn(dt, columns[destx], this.oldValues[0][0]);
-                                else
-                                    this.setDataItemValueForColumn(dt, columns[destx], this.oldValues[y][x]);
-                                _grid.updateCell(desty, destx);
-                                _grid.onCellChange.notify({
-                                    row: desty,
-                                    cell: destx,
-                                    item: dt,
-                                    grid: _grid
-                                });
-                            }
-                        }
-                    }
-                    var bRange = {
-                        'fromCell': activeCell,
-                        'fromRow': activeRow,
-                        'toCell': activeCell + this.w - 1,
-                        'toRow': activeRow + this.h - 1
-                    };
-                    this.markCopySelection([bRange]);
-                    _grid.getSelectionModel().setSelectedRanges([bRange]);
-                    this.cellExternalCopyManager.onPasteCells.notify({ ranges: [bRange] });
-                    if (addRows > 1) {
-                        var d = _grid.getData();
-                        for (; addRows > 1; addRows--)
-                            d.splice(d.length - 1, 1);
-                        _grid.setData(d);
-                        _grid.render();
-                    }
-                }
-            };
-            if (_options.clipboardCommandHandler) {
-                _options.clipboardCommandHandler(clipCommand);
-            }
-            else {
-                clipCommand.execute();
-            }
-        }
-        function handleKeyDown(e, args) {
-            var ranges;
-            if (!_grid.getEditorLock().isActive() || _grid.getOptions().autoEdit) {
-                if (e.which == keyCodes.ESC) {
-                    if (_copiedRanges) {
-                        e.preventDefault();
-                        clearCopySelection();
-                        _self.onCopyCancelled.notify({ ranges: _copiedRanges });
-                        _copiedRanges = null;
-                    }
-                }
-                if ((e.which === keyCodes.C || e.which === keyCodes.INSERT) && (e.ctrlKey || e.metaKey) && !e.shiftKey) { // CTRL+C or CTRL+INS
-                    if (_onCopyInit) {
-                        _onCopyInit.call();
-                    }
-                    ranges = _grid.getSelectionModel().getSelectedRanges();
-                    if (ranges.length != 0) {
-                        _copiedRanges = ranges;
-                        markCopySelection(ranges);
-                        _self.onCopyCells.notify({ ranges: ranges });
-                        var columns = _grid.getColumns();
-                        var clipText = "";
-                        for (var rg = 0; rg < ranges.length; rg++) {
-                            var range = ranges[rg];
-                            var clipTextRows = [];
-                            for (var i = range.fromRow; i < range.toRow + 1; i++) {
-                                var clipTextCells = [];
-                                var dt = _grid.getDataItem(i);
-                                if (clipTextRows == "" && _options.includeHeaderWhenCopying) {
-                                    var clipTextHeaders = [];
-                                    for (var j = range.fromCell; j < range.toCell + 1; j++) {
-                                        if (columns[j].name.length > 0)
-                                            clipTextHeaders.push(getHeaderValueForColumn(columns[j]));
-                                    }
-                                    clipTextRows.push(clipTextHeaders.join("\t"));
-                                }
-                                for (var j = range.fromCell; j < range.toCell + 1; j++) {
-                                    clipTextCells.push(getDataItemValueForColumn(dt, columns[j], e));
-                                }
-                                clipTextRows.push(clipTextCells.join("\t"));
-                            }
-                            clipText += clipTextRows.join("\r\n") + "\r\n";
-                        }
-                        if (window.clipboardData) {
-                            window.clipboardData.setData("Text", clipText);
-                            return true;
-                        }
-                        else {
-                            var focusEl = document.activeElement;
-                            var ta = _createTextBox(clipText);
-                            ta.focus();
-                            setTimeout(function () {
-                                _bodyElement.removeChild(ta);
-                                // restore focus
-                                if (focusEl)
-                                    focusEl.focus();
-                                else
-                                    console.log("Not element to restore focus to after copy?");
-                            }, 100);
-                            if (_onCopySuccess) {
-                                var rowCount = 0;
-                                // If it's cell selection, use the toRow/fromRow fields
-                                if (ranges.length === 1) {
-                                    rowCount = (ranges[0].toRow + 1) - ranges[0].fromRow;
-                                }
-                                else {
-                                    rowCount = ranges.length;
-                                }
-                                _onCopySuccess.call(this, rowCount);
-                            }
-                            return false;
-                        }
-                    }
-                }
-                if (!_options.readOnlyMode && ((e.which === keyCodes.V && (e.ctrlKey || e.metaKey) && !e.shiftKey)
-                    || (e.which === keyCodes.INSERT && e.shiftKey && !e.ctrlKey))) { // CTRL+V or Shift+INS
-                    var ta = _createTextBox('');
-                    setTimeout(function () {
-                        _decodeTabularData(_grid, ta);
-                    }, 100);
-                    return false;
-                }
-            }
-        }
-        function markCopySelection(ranges) {
-            clearCopySelection();
-            var columns = _grid.getColumns();
-            var hash = {};
-            for (var i = 0; i < ranges.length; i++) {
-                for (var j = ranges[i].fromRow; j <= ranges[i].toRow; j++) {
-                    hash[j] = {};
-                    for (var k = ranges[i].fromCell; k <= ranges[i].toCell && k < columns.length; k++) {
-                        hash[j][columns[k].id] = _copiedCellStyle;
-                    }
-                }
-            }
-            _grid.setCellCssStyles(_copiedCellStyleLayerKey, hash);
-            clearTimeout(_clearCopyTI);
-            _clearCopyTI = setTimeout(function () {
-                _self.clearCopySelection();
-            }, 2000);
-        }
-        function clearCopySelection() {
-            _grid.removeCellCssStyles(_copiedCellStyleLayerKey);
-        }
-        function setIncludeHeaderWhenCopying(includeHeaderWhenCopying) {
-            _options.includeHeaderWhenCopying = includeHeaderWhenCopying;
-        }
-        $.extend(this, {
-            "init": init,
-            "destroy": destroy,
-            "clearCopySelection": clearCopySelection,
-            "handleKeyDown": handleKeyDown,
-            "onCopyCells": new Slick.Event(),
-            "onCopyCancelled": new Slick.Event(),
-            "onPasteCells": new Slick.Event(),
-            "setIncludeHeaderWhenCopying": setIncludeHeaderWhenCopying
-        });
-    }
-    module.exports = {
-        "CellExternalCopyManager": CellExternalCopyManager
-    };
-}
-,
-495: /* slickgrid/plugins/slick.checkboxselectcolumn */ function _(require, module, exports) {
-    var $ = require(503) /* ../slick.jquery */;
-    var Slick = require(497) /* ../slick.core */;
-    function CheckboxSelectColumn(options) {
-        var _grid;
-        var _selectAll_UID = createUID();
-        var _handler = new Slick.EventHandler();
-        var _selectedRowsLookup = {};
-        var _defaults = {
-            columnId: "_checkbox_selector",
-            cssClass: null,
-            hideSelectAllCheckbox: false,
-            toolTip: "Select/Deselect All",
-            width: 30,
-            hideInColumnTitleRow: false,
-            hideInFilterHeaderRow: true
-        };
-        var _isSelectAllChecked = false;
-        var _options = $.extend(true, {}, _defaults, options);
-        function init(grid) {
-            _grid = grid;
-            _handler
-                .subscribe(_grid.onSelectedRowsChanged, handleSelectedRowsChanged)
-                .subscribe(_grid.onClick, handleClick)
-                .subscribe(_grid.onKeyDown, handleKeyDown);
-            if (!_options.hideInFilterHeaderRow) {
-                addCheckboxToFilterHeaderRow(grid);
-            }
-            if (!_options.hideInColumnTitleRow) {
-                _handler.subscribe(_grid.onHeaderClick, handleHeaderClick);
-            }
-        }
-        function destroy() {
-            _handler.unsubscribeAll();
-        }
-        function getOptions() {
-            return _options;
-        }
-        function setOptions(options) {
-            _options = $.extend(true, {}, _options, options);
-            if (_options.hideSelectAllCheckbox) {
-                hideSelectAllFromColumnHeaderTitleRow();
-                hideSelectAllFromColumnHeaderFilterRow();
-            }
-            else {
-                if (!_options.hideInColumnTitleRow) {
-                    if (_isSelectAllChecked) {
-                        _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox' checked='checked'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
-                    }
-                    else {
-                        _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
-                    }
-                    _handler.subscribe(_grid.onHeaderClick, handleHeaderClick);
-                }
-                else {
-                    hideSelectAllFromColumnHeaderTitleRow();
-                }
-                if (!_options.hideInFilterHeaderRow) {
-                    var selectAllContainer = $("#filter-checkbox-selectall-container");
-                    selectAllContainer.show();
-                    selectAllContainer.find('input[type="checkbox"]').prop("checked", _isSelectAllChecked);
-                }
-                else {
-                    hideSelectAllFromColumnHeaderFilterRow();
-                }
-            }
-        }
-        function hideSelectAllFromColumnHeaderTitleRow() {
-            _grid.updateColumnHeader(_options.columnId, "", "");
-        }
-        function hideSelectAllFromColumnHeaderFilterRow() {
-            $("#filter-checkbox-selectall-container").hide();
-        }
-        function handleSelectedRowsChanged(e, args) {
-            var selectedRows = _grid.getSelectedRows();
-            var lookup = {}, row, i;
-            for (i = 0; i < selectedRows.length; i++) {
-                row = selectedRows[i];
-                lookup[row] = true;
-                if (lookup[row] !== _selectedRowsLookup[row]) {
-                    _grid.invalidateRow(row);
-                    delete _selectedRowsLookup[row];
-                }
-            }
-            for (i in _selectedRowsLookup) {
-                _grid.invalidateRow(i);
-            }
-            _selectedRowsLookup = lookup;
-            _grid.render();
-            _isSelectAllChecked = selectedRows.length && selectedRows.length == _grid.getDataLength();
-            if (!_options.hideInColumnTitleRow && !_options.hideSelectAllCheckbox) {
-                if (_isSelectAllChecked) {
-                    _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox' checked='checked'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
-                }
-                else {
-                    _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
-                }
-            }
-            if (!_options.hideInFilterHeaderRow) {
-                var selectAllElm = $("#header-filter-selector" + _selectAll_UID);
-                selectAllElm.prop("checked", _isSelectAllChecked);
-            }
-        }
-        function handleKeyDown(e, args) {
-            if (e.which == 32) {
-                if (_grid.getColumns()[args.cell].id === _options.columnId) {
-                    // if editing, try to commit
-                    if (!_grid.getEditorLock().isActive() || _grid.getEditorLock().commitCurrentEdit()) {
-                        toggleRowSelection(args.row);
-                    }
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            }
-        }
-        function handleClick(e, args) {
-            // clicking on a row select checkbox
-            if (_grid.getColumns()[args.cell].id === _options.columnId && $(e.target).is(":checkbox")) {
-                // if editing, try to commit
-                if (_grid.getEditorLock().isActive() && !_grid.getEditorLock().commitCurrentEdit()) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    return;
-                }
-                toggleRowSelection(args.row);
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-            }
-        }
-        function toggleRowSelection(row) {
-            if (_selectedRowsLookup[row]) {
-                _grid.setSelectedRows($.grep(_grid.getSelectedRows(), function (n) {
-                    return n != row;
-                }));
-            }
-            else {
-                _grid.setSelectedRows(_grid.getSelectedRows().concat(row));
-            }
-            _grid.setActiveCell(row, getCheckboxColumnCellIndex());
-            _grid.focus();
-        }
-        function selectRows(rowArray) {
-            var i, l = rowArray.length, addRows = [];
-            for (i = 0; i < l; i++) {
-                if (!_selectedRowsLookup[rowArray[i]]) {
-                    addRows[addRows.length] = rowArray[i];
-                }
-            }
-            _grid.setSelectedRows(_grid.getSelectedRows().concat(addRows));
-        }
-        function deSelectRows(rowArray) {
-            var i, l = rowArray.length, removeRows = [];
-            for (i = 0; i < l; i++) {
-                if (_selectedRowsLookup[rowArray[i]]) {
-                    removeRows[removeRows.length] = rowArray[i];
-                }
-            }
-            _grid.setSelectedRows($.grep(_grid.getSelectedRows(), function (n) {
-                return removeRows.indexOf(n) < 0;
-            }));
-        }
-        function handleHeaderClick(e, args) {
-            if (args.column.id == _options.columnId && $(e.target).is(":checkbox")) {
-                // if editing, try to commit
-                if (_grid.getEditorLock().isActive() && !_grid.getEditorLock().commitCurrentEdit()) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    return;
-                }
-                if ($(e.target).is(":checked")) {
-                    var rows = [];
-                    for (var i = 0; i < _grid.getDataLength(); i++) {
-                        rows.push(i);
-                    }
-                    _grid.setSelectedRows(rows);
-                }
-                else {
-                    _grid.setSelectedRows([]);
-                }
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-            }
-        }
-        var _checkboxColumnCellIndex = null;
-        function getCheckboxColumnCellIndex() {
-            if (_checkboxColumnCellIndex === null) {
-                _checkboxColumnCellIndex = 0;
-                var colArr = _grid.getColumns();
-                for (var i = 0; i < colArr.length; i++) {
-                    if (colArr[i].id == _options.columnId) {
-                        _checkboxColumnCellIndex = i;
-                    }
-                }
-            }
-            return _checkboxColumnCellIndex;
-        }
-        function getColumnDefinition() {
-            return {
-                id: _options.columnId,
-                name: (_options.hideSelectAllCheckbox || _options.hideInColumnTitleRow) ? "" : "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>",
-                toolTip: _options.toolTip,
-                field: "sel",
-                width: _options.width,
-                resizable: false,
-                sortable: false,
-                cssClass: _options.cssClass,
-                hideSelectAllCheckbox: _options.hideSelectAllCheckbox,
-                formatter: checkboxSelectionFormatter
-            };
-        }
-        function addCheckboxToFilterHeaderRow(grid) {
-            grid.onHeaderRowCellRendered.subscribe(function (e, args) {
-                if (args.column.field === "sel") {
-                    $(args.node).empty();
-                    $("<span id='filter-checkbox-selectall-container'><input id='header-filter-selector" + _selectAll_UID + "' type='checkbox'><label for='header-filter-selector" + _selectAll_UID + "'></label></span>")
-                        .appendTo(args.node)
-                        .on('click', function (evnt) {
-                        handleHeaderClick(evnt, args);
-                    });
-                }
-            });
-        }
-        function createUID() {
-            return Math.round(10000000 * Math.random());
-        }
-        function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
-            var UID = createUID() + row;
-            if (dataContext) {
-                return _selectedRowsLookup[row]
-                    ? "<input id='selector" + UID + "' type='checkbox' checked='checked'><label for='selector" + UID + "'></label>"
-                    : "<input id='selector" + UID + "' type='checkbox'><label for='selector" + UID + "'></label>";
-            }
-            return null;
-        }
-        $.extend(this, {
-            "init": init,
-            "destroy": destroy,
-            "deSelectRows": deSelectRows,
-            "selectRows": selectRows,
-            "getColumnDefinition": getColumnDefinition,
-            "getOptions": getOptions,
-            "setOptions": setOptions,
-        });
-    }
-    module.exports = {
-        "CheckboxSelectColumn": CheckboxSelectColumn
-    };
-}
-,
-496: /* slickgrid/plugins/slick.rowselectionmodel */ function _(require, module, exports) {
-    var $ = require(503) /* ../slick.jquery */;
-    var Slick = require(497) /* ../slick.core */;
-    function RowSelectionModel(options) {
-        var _grid;
-        var _ranges = [];
-        var _self = this;
-        var _handler = new Slick.EventHandler();
-        var _inHandler;
-        var _options;
-        var _defaults = {
-            selectActiveRow: true
-        };
-        function init(grid) {
-            _options = $.extend(true, {}, _defaults, options);
-            _grid = grid;
-            _handler.subscribe(_grid.onActiveCellChanged, wrapHandler(handleActiveCellChange));
-            _handler.subscribe(_grid.onKeyDown, wrapHandler(handleKeyDown));
-            _handler.subscribe(_grid.onClick, wrapHandler(handleClick));
-        }
-        function destroy() {
-            _handler.unsubscribeAll();
-        }
-        function wrapHandler(handler) {
-            return function () {
-                if (!_inHandler) {
-                    _inHandler = true;
-                    handler.apply(this, arguments);
-                    _inHandler = false;
-                }
-            };
-        }
-        function rangesToRows(ranges) {
-            var rows = [];
-            for (var i = 0; i < ranges.length; i++) {
-                for (var j = ranges[i].fromRow; j <= ranges[i].toRow; j++) {
-                    rows.push(j);
-                }
-            }
-            return rows;
-        }
-        function rowsToRanges(rows) {
-            var ranges = [];
-            var lastCell = _grid.getColumns().length - 1;
-            for (var i = 0; i < rows.length; i++) {
-                ranges.push(new Slick.Range(rows[i], 0, rows[i], lastCell));
-            }
-            return ranges;
-        }
-        function getRowsRange(from, to) {
-            var i, rows = [];
-            for (i = from; i <= to; i++) {
-                rows.push(i);
-            }
-            for (i = to; i < from; i++) {
-                rows.push(i);
-            }
-            return rows;
-        }
-        function getSelectedRows() {
-            return rangesToRows(_ranges);
-        }
-        function setSelectedRows(rows) {
-            setSelectedRanges(rowsToRanges(rows));
-        }
-        function setSelectedRanges(ranges) {
-            // simple check for: empty selection didn't change, prevent firing onSelectedRangesChanged
-            if ((!_ranges || _ranges.length === 0) && (!ranges || ranges.length === 0)) {
-                return;
-            }
-            _ranges = ranges;
-            _self.onSelectedRangesChanged.notify(_ranges);
-        }
-        function getSelectedRanges() {
-            return _ranges;
-        }
-        function handleActiveCellChange(e, data) {
-            if (_options.selectActiveRow && data.row != null) {
-                setSelectedRanges([new Slick.Range(data.row, 0, data.row, _grid.getColumns().length - 1)]);
-            }
-        }
-        function handleKeyDown(e) {
-            var activeRow = _grid.getActiveCell();
-            if (_grid.getOptions().multiSelect && activeRow
-                && e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey
-                && (e.which == Slick.keyCode.UP || e.which == Slick.keyCode.DOWN)) {
-                var selectedRows = getSelectedRows();
-                selectedRows.sort(function (x, y) {
-                    return x - y;
-                });
-                if (!selectedRows.length) {
-                    selectedRows = [activeRow.row];
-                }
-                var top = selectedRows[0];
-                var bottom = selectedRows[selectedRows.length - 1];
-                var active;
-                if (e.which == Slick.keyCode.DOWN) {
-                    active = activeRow.row < bottom || top == bottom ? ++bottom : ++top;
-                }
-                else {
-                    active = activeRow.row < bottom ? --bottom : --top;
-                }
-                if (active >= 0 && active < _grid.getDataLength()) {
-                    _grid.scrollRowIntoView(active);
-                    var tempRanges = rowsToRanges(getRowsRange(top, bottom));
-                    setSelectedRanges(tempRanges);
-                }
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }
-        function handleClick(e) {
-            var cell = _grid.getCellFromEvent(e);
-            if (!cell || !_grid.canCellBeActive(cell.row, cell.cell)) {
-                return false;
-            }
-            if (!_grid.getOptions().multiSelect || (!e.ctrlKey && !e.shiftKey && !e.metaKey)) {
-                return false;
-            }
-            var selection = rangesToRows(_ranges);
-            var idx = $.inArray(cell.row, selection);
-            if (idx === -1 && (e.ctrlKey || e.metaKey)) {
-                selection.push(cell.row);
-                _grid.setActiveCell(cell.row, cell.cell);
-            }
-            else if (idx !== -1 && (e.ctrlKey || e.metaKey)) {
-                selection = $.grep(selection, function (o, i) {
-                    return (o !== cell.row);
-                });
-                _grid.setActiveCell(cell.row, cell.cell);
-            }
-            else if (selection.length && e.shiftKey) {
-                var last = selection.pop();
-                var from = Math.min(cell.row, last);
-                var to = Math.max(cell.row, last);
-                selection = [];
-                for (var i = from; i <= to; i++) {
-                    if (i !== last) {
-                        selection.push(i);
-                    }
-                }
-                selection.push(last);
-                _grid.setActiveCell(cell.row, cell.cell);
-            }
-            var tempRanges = rowsToRanges(selection);
-            setSelectedRanges(tempRanges);
-            e.stopImmediatePropagation();
-            return true;
-        }
-        $.extend(this, {
-            "getSelectedRows": getSelectedRows,
-            "setSelectedRows": setSelectedRows,
-            "getSelectedRanges": getSelectedRanges,
-            "setSelectedRanges": setSelectedRanges,
-            "init": init,
-            "destroy": destroy,
-            "onSelectedRangesChanged": new Slick.Event()
-        });
-    }
-    module.exports = {
-        "RowSelectionModel": RowSelectionModel
-    };
-}
-,
-497: /* slickgrid/slick.core */ function _(require, module, exports) {
+},
+521: /* slickgrid/slick.core.js */ function _(require, module, exports) {
     /***
      * Contains core SlickGrid classes.
      * @module Core
@@ -11714,1681 +9695,669 @@
         },
         "preClickClassName": "slick-edit-preclick"
     };
-}
-,
-498: /* slickgrid/slick.dataview */ function _(require, module, exports) {
-    var $ = require(503) /* ./slick.jquery */;
-    var Slick = require(497) /* ./slick.core */;
-    /***
-     * A sample Model implementation.
-     * Provides a filtered view of the underlying data.
-     *
-     * Relies on the data item having an "id" property uniquely identifying it.
-     */
-    function DataView(options) {
-        var self = this;
-        var defaults = {
-            groupItemMetadataProvider: null,
-            inlineFilters: false
+},
+522: /* slickgrid/plugins/slick.checkboxselectcolumn.js */ function _(require, module, exports) {
+    var $ = require(519) /* ../slick.jquery */;
+    var Slick = require(521) /* ../slick.core */;
+    function CheckboxSelectColumn(options) {
+        var _grid;
+        var _selectAll_UID = createUID();
+        var _handler = new Slick.EventHandler();
+        var _selectedRowsLookup = {};
+        var _defaults = {
+            columnId: "_checkbox_selector",
+            cssClass: null,
+            hideSelectAllCheckbox: false,
+            toolTip: "Select/Deselect All",
+            width: 30,
+            hideInColumnTitleRow: false,
+            hideInFilterHeaderRow: true
         };
-        // private
-        var idProperty = "id"; // property holding a unique row id
-        var items = []; // data by index
-        var rows = []; // data by row
-        var idxById = {}; // indexes by id
-        var rowsById = null; // rows by id; lazy-calculated
-        var filter = null; // filter function
-        var updated = null; // updated item ids
-        var suspend = false; // suspends the recalculation
-        var sortAsc = true;
-        var fastSortField;
-        var sortComparer;
-        var refreshHints = {};
-        var prevRefreshHints = {};
-        var filterArgs;
-        var filteredItems = [];
-        var compiledFilter;
-        var compiledFilterWithCaching;
-        var filterCache = [];
-        // grouping
-        var groupingInfoDefaults = {
-            getter: null,
-            formatter: null,
-            comparer: function (a, b) {
-                return (a.value === b.value ? 0 :
-                    (a.value > b.value ? 1 : -1));
-            },
-            predefinedValues: [],
-            aggregators: [],
-            aggregateEmpty: false,
-            aggregateCollapsed: false,
-            aggregateChildGroups: false,
-            collapsed: false,
-            displayTotalsRow: true,
-            lazyTotalsCalculation: false
-        };
-        var groupingInfos = [];
-        var groups = [];
-        var toggledGroupsByLevel = [];
-        var groupingDelimiter = ':|:';
-        var pagesize = 0;
-        var pagenum = 0;
-        var totalRows = 0;
-        // events
-        var onRowCountChanged = new Slick.Event();
-        var onRowsChanged = new Slick.Event();
-        var onPagingInfoChanged = new Slick.Event();
-        options = $.extend(true, {}, defaults, options);
-        function beginUpdate() {
-            suspend = true;
-        }
-        function endUpdate() {
-            suspend = false;
-            refresh();
-        }
-        function setRefreshHints(hints) {
-            refreshHints = hints;
-        }
-        function setFilterArgs(args) {
-            filterArgs = args;
-        }
-        function updateIdxById(startingIndex) {
-            startingIndex = startingIndex || 0;
-            var id;
-            for (var i = startingIndex, l = items.length; i < l; i++) {
-                id = items[i][idProperty];
-                if (id === undefined) {
-                    throw new Error("Each data element must implement a unique 'id' property");
-                }
-                idxById[id] = i;
+        var _isSelectAllChecked = false;
+        var _options = $.extend(true, {}, _defaults, options);
+        function init(grid) {
+            _grid = grid;
+            _handler
+                .subscribe(_grid.onSelectedRowsChanged, handleSelectedRowsChanged)
+                .subscribe(_grid.onClick, handleClick)
+                .subscribe(_grid.onKeyDown, handleKeyDown);
+            if (!_options.hideInFilterHeaderRow) {
+                addCheckboxToFilterHeaderRow(grid);
+            }
+            if (!_options.hideInColumnTitleRow) {
+                _handler.subscribe(_grid.onHeaderClick, handleHeaderClick);
             }
         }
-        function ensureIdUniqueness() {
-            var id;
-            for (var i = 0, l = items.length; i < l; i++) {
-                id = items[i][idProperty];
-                if (id === undefined || idxById[id] !== i) {
-                    throw new Error("Each data element must implement a unique 'id' property");
-                }
+        function destroy() {
+            _handler.unsubscribeAll();
+        }
+        function getOptions() {
+            return _options;
+        }
+        function setOptions(options) {
+            _options = $.extend(true, {}, _options, options);
+            if (_options.hideSelectAllCheckbox) {
+                hideSelectAllFromColumnHeaderTitleRow();
+                hideSelectAllFromColumnHeaderFilterRow();
             }
-        }
-        function getItems() {
-            return items;
-        }
-        function setItems(data, objectIdProperty) {
-            if (objectIdProperty !== undefined) {
-                idProperty = objectIdProperty;
-            }
-            items = filteredItems = data;
-            idxById = {};
-            updateIdxById();
-            ensureIdUniqueness();
-            refresh();
-        }
-        function setPagingOptions(args) {
-            if (args.pageSize != undefined) {
-                pagesize = args.pageSize;
-                pagenum = pagesize ? Math.min(pagenum, Math.max(0, Math.ceil(totalRows / pagesize) - 1)) : 0;
-            }
-            if (args.pageNum != undefined) {
-                pagenum = Math.min(args.pageNum, Math.max(0, Math.ceil(totalRows / pagesize) - 1));
-            }
-            onPagingInfoChanged.notify(getPagingInfo(), null, self);
-            refresh();
-        }
-        function getPagingInfo() {
-            var totalPages = pagesize ? Math.max(1, Math.ceil(totalRows / pagesize)) : 1;
-            return { pageSize: pagesize, pageNum: pagenum, totalRows: totalRows, totalPages: totalPages, dataView: self };
-        }
-        function sort(comparer, ascending) {
-            sortAsc = ascending;
-            sortComparer = comparer;
-            fastSortField = null;
-            if (ascending === false) {
-                items.reverse();
-            }
-            items.sort(comparer);
-            if (ascending === false) {
-                items.reverse();
-            }
-            idxById = {};
-            updateIdxById();
-            refresh();
-        }
-        /***
-         * Provides a workaround for the extremely slow sorting in IE.
-         * Does a [lexicographic] sort on a give column by temporarily overriding Object.prototype.toString
-         * to return the value of that field and then doing a native Array.sort().
-         */
-        function fastSort(field, ascending) {
-            sortAsc = ascending;
-            fastSortField = field;
-            sortComparer = null;
-            var oldToString = Object.prototype.toString;
-            Object.prototype.toString = (typeof field == "function") ? field : function () {
-                return this[field];
-            };
-            // an extra reversal for descending sort keeps the sort stable
-            // (assuming a stable native sort implementation, which isn't true in some cases)
-            if (ascending === false) {
-                items.reverse();
-            }
-            items.sort();
-            Object.prototype.toString = oldToString;
-            if (ascending === false) {
-                items.reverse();
-            }
-            idxById = {};
-            updateIdxById();
-            refresh();
-        }
-        function reSort() {
-            if (sortComparer) {
-                sort(sortComparer, sortAsc);
-            }
-            else if (fastSortField) {
-                fastSort(fastSortField, sortAsc);
-            }
-        }
-        function getFilteredItems() {
-            return filteredItems;
-        }
-        function getFilter() {
-            return filter;
-        }
-        function setFilter(filterFn) {
-            filter = filterFn;
-            if (options.inlineFilters) {
-                compiledFilter = compileFilter();
-                compiledFilterWithCaching = compileFilterWithCaching();
-            }
-            refresh();
-        }
-        function getGrouping() {
-            return groupingInfos;
-        }
-        function setGrouping(groupingInfo) {
-            if (!options.groupItemMetadataProvider) {
-                options.groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
-            }
-            groups = [];
-            toggledGroupsByLevel = [];
-            groupingInfo = groupingInfo || [];
-            groupingInfos = (groupingInfo instanceof Array) ? groupingInfo : [groupingInfo];
-            for (var i = 0; i < groupingInfos.length; i++) {
-                var gi = groupingInfos[i] = $.extend(true, {}, groupingInfoDefaults, groupingInfos[i]);
-                gi.getterIsAFn = typeof gi.getter === "function";
-                // pre-compile accumulator loops
-                gi.compiledAccumulators = [];
-                var idx = gi.aggregators.length;
-                while (idx--) {
-                    gi.compiledAccumulators[idx] = compileAccumulatorLoop(gi.aggregators[idx]);
-                }
-                toggledGroupsByLevel[i] = {};
-            }
-            refresh();
-        }
-        /**
-         * @deprecated Please use {@link setGrouping}.
-         */
-        function groupBy(valueGetter, valueFormatter, sortComparer) {
-            if (valueGetter == null) {
-                setGrouping([]);
-                return;
-            }
-            setGrouping({
-                getter: valueGetter,
-                formatter: valueFormatter,
-                comparer: sortComparer
-            });
-        }
-        /**
-         * @deprecated Please use {@link setGrouping}.
-         */
-        function setAggregators(groupAggregators, includeCollapsed) {
-            if (!groupingInfos.length) {
-                throw new Error("At least one grouping must be specified before calling setAggregators().");
-            }
-            groupingInfos[0].aggregators = groupAggregators;
-            groupingInfos[0].aggregateCollapsed = includeCollapsed;
-            setGrouping(groupingInfos);
-        }
-        function getItemByIdx(i) {
-            return items[i];
-        }
-        function getIdxById(id) {
-            return idxById[id];
-        }
-        function ensureRowsByIdCache() {
-            if (!rowsById) {
-                rowsById = {};
-                for (var i = 0, l = rows.length; i < l; i++) {
-                    rowsById[rows[i][idProperty]] = i;
-                }
-            }
-        }
-        function getRowByItem(item) {
-            ensureRowsByIdCache();
-            return rowsById[item[idProperty]];
-        }
-        function getRowById(id) {
-            ensureRowsByIdCache();
-            return rowsById[id];
-        }
-        function getItemById(id) {
-            return items[idxById[id]];
-        }
-        function mapItemsToRows(itemArray) {
-            var rows = [];
-            ensureRowsByIdCache();
-            for (var i = 0, l = itemArray.length; i < l; i++) {
-                var row = rowsById[itemArray[i][idProperty]];
-                if (row != null) {
-                    rows[rows.length] = row;
-                }
-            }
-            return rows;
-        }
-        function mapIdsToRows(idArray) {
-            var rows = [];
-            ensureRowsByIdCache();
-            for (var i = 0, l = idArray.length; i < l; i++) {
-                var row = rowsById[idArray[i]];
-                if (row != null) {
-                    rows[rows.length] = row;
-                }
-            }
-            return rows;
-        }
-        function mapRowsToIds(rowArray) {
-            var ids = [];
-            for (var i = 0, l = rowArray.length; i < l; i++) {
-                if (rowArray[i] < rows.length) {
-                    ids[ids.length] = rows[rowArray[i]][idProperty];
-                }
-            }
-            return ids;
-        }
-        function updateItem(id, item) {
-            if (idxById[id] === undefined || id !== item[idProperty]) {
-                throw new Error("Invalid or non-matching id");
-            }
-            items[idxById[id]] = item;
-            if (!updated) {
-                updated = {};
-            }
-            updated[id] = true;
-            refresh();
-        }
-        function insertItem(insertBefore, item) {
-            items.splice(insertBefore, 0, item);
-            updateIdxById(insertBefore);
-            refresh();
-        }
-        function addItem(item) {
-            items.push(item);
-            updateIdxById(items.length - 1);
-            refresh();
-        }
-        function deleteItem(id) {
-            var idx = idxById[id];
-            if (idx === undefined) {
-                throw new Error("Invalid id");
-            }
-            delete idxById[id];
-            items.splice(idx, 1);
-            updateIdxById(idx);
-            refresh();
-        }
-        function sortedAddItem(item) {
-            if (!sortComparer) {
-                throw new Error("sortedAddItem() requires a sort comparer, use sort()");
-            }
-            insertItem(sortedIndex(item), item);
-        }
-        function sortedUpdateItem(id, item) {
-            if (idxById[id] === undefined || id !== item[idProperty]) {
-                throw new Error("Invalid or non-matching id " + idxById[id]);
-            }
-            if (!sortComparer) {
-                throw new Error("sortedUpdateItem() requires a sort comparer, use sort()");
-            }
-            var oldItem = getItemById(id);
-            if (sortComparer(oldItem, item) !== 0) {
-                // item affects sorting -> must use sorted add
-                deleteItem(id);
-                sortedAddItem(item);
-            }
-            else { // update does not affect sorting -> regular update works fine
-                updateItem(id, item);
-            }
-        }
-        function sortedIndex(searchItem) {
-            var low = 0, high = items.length;
-            while (low < high) {
-                var mid = low + high >>> 1;
-                if (sortComparer(items[mid], searchItem) === -1) {
-                    low = mid + 1;
+            else {
+                if (!_options.hideInColumnTitleRow) {
+                    if (_isSelectAllChecked) {
+                        _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox' checked='checked'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
+                    }
+                    else {
+                        _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
+                    }
+                    _handler.subscribe(_grid.onHeaderClick, handleHeaderClick);
                 }
                 else {
-                    high = mid;
+                    hideSelectAllFromColumnHeaderTitleRow();
+                }
+                if (!_options.hideInFilterHeaderRow) {
+                    var selectAllContainer = $("#filter-checkbox-selectall-container");
+                    selectAllContainer.show();
+                    selectAllContainer.find('input[type="checkbox"]').prop("checked", _isSelectAllChecked);
+                }
+                else {
+                    hideSelectAllFromColumnHeaderFilterRow();
                 }
             }
-            return low;
         }
-        function getLength() {
-            return rows.length;
+        function hideSelectAllFromColumnHeaderTitleRow() {
+            _grid.updateColumnHeader(_options.columnId, "", "");
         }
-        function getItem(i) {
-            var item = rows[i];
-            // if this is a group row, make sure totals are calculated and update the title
-            if (item && item.__group && item.totals && !item.totals.initialized) {
-                var gi = groupingInfos[item.level];
-                if (!gi.displayTotalsRow) {
-                    calculateTotals(item.totals);
-                    item.title = gi.formatter ? gi.formatter(item) : item.value;
+        function hideSelectAllFromColumnHeaderFilterRow() {
+            $("#filter-checkbox-selectall-container").hide();
+        }
+        function handleSelectedRowsChanged(e, args) {
+            var selectedRows = _grid.getSelectedRows();
+            var lookup = {}, row, i;
+            for (i = 0; i < selectedRows.length; i++) {
+                row = selectedRows[i];
+                lookup[row] = true;
+                if (lookup[row] !== _selectedRowsLookup[row]) {
+                    _grid.invalidateRow(row);
+                    delete _selectedRowsLookup[row];
                 }
             }
-            // if this is a totals row, make sure it's calculated
-            else if (item && item.__groupTotals && !item.initialized) {
-                calculateTotals(item);
+            for (i in _selectedRowsLookup) {
+                _grid.invalidateRow(i);
             }
-            return item;
+            _selectedRowsLookup = lookup;
+            _grid.render();
+            _isSelectAllChecked = selectedRows.length && selectedRows.length == _grid.getDataLength();
+            if (!_options.hideInColumnTitleRow && !_options.hideSelectAllCheckbox) {
+                if (_isSelectAllChecked) {
+                    _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox' checked='checked'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
+                }
+                else {
+                    _grid.updateColumnHeader(_options.columnId, "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>", _options.toolTip);
+                }
+            }
+            if (!_options.hideInFilterHeaderRow) {
+                var selectAllElm = $("#header-filter-selector" + _selectAll_UID);
+                selectAllElm.prop("checked", _isSelectAllChecked);
+            }
         }
-        function getItemMetadata(i) {
-            var item = rows[i];
-            if (item === undefined) {
-                return null;
+        function handleKeyDown(e, args) {
+            if (e.which == 32) {
+                if (_grid.getColumns()[args.cell].id === _options.columnId) {
+                    // if editing, try to commit
+                    if (!_grid.getEditorLock().isActive() || _grid.getEditorLock().commitCurrentEdit()) {
+                        toggleRowSelection(args.row);
+                    }
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }
             }
-            // overrides for grouping rows
-            if (item.__group) {
-                return options.groupItemMetadataProvider.getGroupRowMetadata(item);
+        }
+        function handleClick(e, args) {
+            // clicking on a row select checkbox
+            if (_grid.getColumns()[args.cell].id === _options.columnId && $(e.target).is(":checkbox")) {
+                // if editing, try to commit
+                if (_grid.getEditorLock().isActive() && !_grid.getEditorLock().commitCurrentEdit()) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return;
+                }
+                toggleRowSelection(args.row);
+                e.stopPropagation();
+                e.stopImmediatePropagation();
             }
-            // overrides for totals rows
-            if (item.__groupTotals) {
-                return options.groupItemMetadataProvider.getTotalsRowMetadata(item);
+        }
+        function toggleRowSelection(row) {
+            if (_selectedRowsLookup[row]) {
+                _grid.setSelectedRows($.grep(_grid.getSelectedRows(), function (n) {
+                    return n != row;
+                }));
+            }
+            else {
+                _grid.setSelectedRows(_grid.getSelectedRows().concat(row));
+            }
+            _grid.setActiveCell(row, getCheckboxColumnCellIndex());
+            _grid.focus();
+        }
+        function selectRows(rowArray) {
+            var i, l = rowArray.length, addRows = [];
+            for (i = 0; i < l; i++) {
+                if (!_selectedRowsLookup[rowArray[i]]) {
+                    addRows[addRows.length] = rowArray[i];
+                }
+            }
+            _grid.setSelectedRows(_grid.getSelectedRows().concat(addRows));
+        }
+        function deSelectRows(rowArray) {
+            var i, l = rowArray.length, removeRows = [];
+            for (i = 0; i < l; i++) {
+                if (_selectedRowsLookup[rowArray[i]]) {
+                    removeRows[removeRows.length] = rowArray[i];
+                }
+            }
+            _grid.setSelectedRows($.grep(_grid.getSelectedRows(), function (n) {
+                return removeRows.indexOf(n) < 0;
+            }));
+        }
+        function handleHeaderClick(e, args) {
+            if (args.column.id == _options.columnId && $(e.target).is(":checkbox")) {
+                // if editing, try to commit
+                if (_grid.getEditorLock().isActive() && !_grid.getEditorLock().commitCurrentEdit()) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return;
+                }
+                if ($(e.target).is(":checked")) {
+                    var rows = [];
+                    for (var i = 0; i < _grid.getDataLength(); i++) {
+                        rows.push(i);
+                    }
+                    _grid.setSelectedRows(rows);
+                }
+                else {
+                    _grid.setSelectedRows([]);
+                }
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            }
+        }
+        var _checkboxColumnCellIndex = null;
+        function getCheckboxColumnCellIndex() {
+            if (_checkboxColumnCellIndex === null) {
+                _checkboxColumnCellIndex = 0;
+                var colArr = _grid.getColumns();
+                for (var i = 0; i < colArr.length; i++) {
+                    if (colArr[i].id == _options.columnId) {
+                        _checkboxColumnCellIndex = i;
+                    }
+                }
+            }
+            return _checkboxColumnCellIndex;
+        }
+        function getColumnDefinition() {
+            return {
+                id: _options.columnId,
+                name: (_options.hideSelectAllCheckbox || _options.hideInColumnTitleRow) ? "" : "<input id='header-selector" + _selectAll_UID + "' type='checkbox'><label for='header-selector" + _selectAll_UID + "'></label>",
+                toolTip: _options.toolTip,
+                field: "sel",
+                width: _options.width,
+                resizable: false,
+                sortable: false,
+                cssClass: _options.cssClass,
+                hideSelectAllCheckbox: _options.hideSelectAllCheckbox,
+                formatter: checkboxSelectionFormatter
+            };
+        }
+        function addCheckboxToFilterHeaderRow(grid) {
+            grid.onHeaderRowCellRendered.subscribe(function (e, args) {
+                if (args.column.field === "sel") {
+                    $(args.node).empty();
+                    $("<span id='filter-checkbox-selectall-container'><input id='header-filter-selector" + _selectAll_UID + "' type='checkbox'><label for='header-filter-selector" + _selectAll_UID + "'></label></span>")
+                        .appendTo(args.node)
+                        .on('click', function (evnt) {
+                        handleHeaderClick(evnt, args);
+                    });
+                }
+            });
+        }
+        function createUID() {
+            return Math.round(10000000 * Math.random());
+        }
+        function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
+            var UID = createUID() + row;
+            if (dataContext) {
+                return _selectedRowsLookup[row]
+                    ? "<input id='selector" + UID + "' type='checkbox' checked='checked'><label for='selector" + UID + "'></label>"
+                    : "<input id='selector" + UID + "' type='checkbox'><label for='selector" + UID + "'></label>";
             }
             return null;
         }
-        function expandCollapseAllGroups(level, collapse) {
-            if (level == null) {
-                for (var i = 0; i < groupingInfos.length; i++) {
-                    toggledGroupsByLevel[i] = {};
-                    groupingInfos[i].collapsed = collapse;
-                }
-            }
-            else {
-                toggledGroupsByLevel[level] = {};
-                groupingInfos[level].collapsed = collapse;
-            }
-            refresh();
-        }
-        /**
-         * @param level {Number} Optional level to collapse.  If not specified, applies to all levels.
-         */
-        function collapseAllGroups(level) {
-            expandCollapseAllGroups(level, true);
-        }
-        /**
-         * @param level {Number} Optional level to expand.  If not specified, applies to all levels.
-         */
-        function expandAllGroups(level) {
-            expandCollapseAllGroups(level, false);
-        }
-        function expandCollapseGroup(level, groupingKey, collapse) {
-            toggledGroupsByLevel[level][groupingKey] = groupingInfos[level].collapsed ^ collapse;
-            refresh();
-        }
-        /**
-         * @param varArgs Either a Slick.Group's "groupingKey" property, or a
-         *     variable argument list of grouping values denoting a unique path to the row.  For
-         *     example, calling collapseGroup('high', '10%') will collapse the '10%' subgroup of
-         *     the 'high' group.
-         */
-        function collapseGroup(varArgs) {
-            var args = Array.prototype.slice.call(arguments);
-            var arg0 = args[0];
-            if (args.length == 1 && arg0.indexOf(groupingDelimiter) != -1) {
-                expandCollapseGroup(arg0.split(groupingDelimiter).length - 1, arg0, true);
-            }
-            else {
-                expandCollapseGroup(args.length - 1, args.join(groupingDelimiter), true);
-            }
-        }
-        /**
-         * @param varArgs Either a Slick.Group's "groupingKey" property, or a
-         *     variable argument list of grouping values denoting a unique path to the row.  For
-         *     example, calling expandGroup('high', '10%') will expand the '10%' subgroup of
-         *     the 'high' group.
-         */
-        function expandGroup(varArgs) {
-            var args = Array.prototype.slice.call(arguments);
-            var arg0 = args[0];
-            if (args.length == 1 && arg0.indexOf(groupingDelimiter) != -1) {
-                expandCollapseGroup(arg0.split(groupingDelimiter).length - 1, arg0, false);
-            }
-            else {
-                expandCollapseGroup(args.length - 1, args.join(groupingDelimiter), false);
-            }
-        }
-        function getGroups() {
-            return groups;
-        }
-        function extractGroups(rows, parentGroup) {
-            var group;
-            var val;
-            var groups = [];
-            var groupsByVal = {};
-            var r;
-            var level = parentGroup ? parentGroup.level + 1 : 0;
-            var gi = groupingInfos[level];
-            for (var i = 0, l = gi.predefinedValues.length; i < l; i++) {
-                val = gi.predefinedValues[i];
-                group = groupsByVal[val];
-                if (!group) {
-                    group = new Slick.Group();
-                    group.value = val;
-                    group.level = level;
-                    group.groupingKey = (parentGroup ? parentGroup.groupingKey + groupingDelimiter : '') + val;
-                    groups[groups.length] = group;
-                    groupsByVal[val] = group;
-                }
-            }
-            for (var i = 0, l = rows.length; i < l; i++) {
-                r = rows[i];
-                val = gi.getterIsAFn ? gi.getter(r) : r[gi.getter];
-                group = groupsByVal[val];
-                if (!group) {
-                    group = new Slick.Group();
-                    group.value = val;
-                    group.level = level;
-                    group.groupingKey = (parentGroup ? parentGroup.groupingKey + groupingDelimiter : '') + val;
-                    groups[groups.length] = group;
-                    groupsByVal[val] = group;
-                }
-                group.rows[group.count++] = r;
-            }
-            if (level < groupingInfos.length - 1) {
-                for (var i = 0; i < groups.length; i++) {
-                    group = groups[i];
-                    group.groups = extractGroups(group.rows, group);
-                }
-            }
-            groups.sort(groupingInfos[level].comparer);
-            return groups;
-        }
-        function calculateTotals(totals) {
-            var group = totals.group;
-            var gi = groupingInfos[group.level];
-            var isLeafLevel = (group.level == groupingInfos.length);
-            var agg, idx = gi.aggregators.length;
-            if (!isLeafLevel && gi.aggregateChildGroups) {
-                // make sure all the subgroups are calculated
-                var i = group.groups.length;
-                while (i--) {
-                    if (!group.groups[i].totals.initialized) {
-                        calculateTotals(group.groups[i].totals);
-                    }
-                }
-            }
-            while (idx--) {
-                agg = gi.aggregators[idx];
-                agg.init();
-                if (!isLeafLevel && gi.aggregateChildGroups) {
-                    gi.compiledAccumulators[idx].call(agg, group.groups);
-                }
-                else {
-                    gi.compiledAccumulators[idx].call(agg, group.rows);
-                }
-                agg.storeResult(totals);
-            }
-            totals.initialized = true;
-        }
-        function addGroupTotals(group) {
-            var gi = groupingInfos[group.level];
-            var totals = new Slick.GroupTotals();
-            totals.group = group;
-            group.totals = totals;
-            if (!gi.lazyTotalsCalculation) {
-                calculateTotals(totals);
-            }
-        }
-        function addTotals(groups, level) {
-            level = level || 0;
-            var gi = groupingInfos[level];
-            var groupCollapsed = gi.collapsed;
-            var toggledGroups = toggledGroupsByLevel[level];
-            var idx = groups.length, g;
-            while (idx--) {
-                g = groups[idx];
-                if (g.collapsed && !gi.aggregateCollapsed) {
-                    continue;
-                }
-                // Do a depth-first aggregation so that parent group aggregators can access subgroup totals.
-                if (g.groups) {
-                    addTotals(g.groups, level + 1);
-                }
-                if (gi.aggregators.length && (gi.aggregateEmpty || g.rows.length || (g.groups && g.groups.length))) {
-                    addGroupTotals(g);
-                }
-                g.collapsed = groupCollapsed ^ toggledGroups[g.groupingKey];
-                g.title = gi.formatter ? gi.formatter(g) : g.value;
-            }
-        }
-        function flattenGroupedRows(groups, level) {
-            level = level || 0;
-            var gi = groupingInfos[level];
-            var groupedRows = [], rows, gl = 0, g;
-            for (var i = 0, l = groups.length; i < l; i++) {
-                g = groups[i];
-                groupedRows[gl++] = g;
-                if (!g.collapsed) {
-                    rows = g.groups ? flattenGroupedRows(g.groups, level + 1) : g.rows;
-                    for (var j = 0, jj = rows.length; j < jj; j++) {
-                        groupedRows[gl++] = rows[j];
-                    }
-                }
-                if (g.totals && gi.displayTotalsRow && (!g.collapsed || gi.aggregateCollapsed)) {
-                    groupedRows[gl++] = g.totals;
-                }
-            }
-            return groupedRows;
-        }
-        function getFunctionInfo(fn) {
-            var fnRegex = /^function[^(]*\(([^)]*)\)\s*{([\s\S]*)}$/;
-            var matches = fn.toString().match(fnRegex);
-            return {
-                params: matches[1].split(","),
-                body: matches[2]
-            };
-        }
-        function compileAccumulatorLoop(aggregator) {
-            var accumulatorInfo = getFunctionInfo(aggregator.accumulate);
-            var fn = new Function("_items", "for (var " + accumulatorInfo.params[0] + ", _i=0, _il=_items.length; _i<_il; _i++) {" +
-                accumulatorInfo.params[0] + " = _items[_i]; " +
-                accumulatorInfo.body +
-                "}");
-            fn.displayName = fn.name = "compiledAccumulatorLoop";
-            return fn;
-        }
-        function compileFilter() {
-            var filterInfo = getFunctionInfo(filter);
-            var filterPath1 = "{ continue _coreloop; }$1";
-            var filterPath2 = "{ _retval[_idx++] = $item$; continue _coreloop; }$1";
-            // make some allowances for minification - there's only so far we can go with RegEx
-            var filterBody = filterInfo.body
-                .replace(/return false\s*([;}]|\}|$)/gi, filterPath1)
-                .replace(/return!1([;}]|\}|$)/gi, filterPath1)
-                .replace(/return true\s*([;}]|\}|$)/gi, filterPath2)
-                .replace(/return!0([;}]|\}|$)/gi, filterPath2)
-                .replace(/return ([^;}]+?)\s*([;}]|$)/gi, "{ if ($1) { _retval[_idx++] = $item$; }; continue _coreloop; }$2");
-            // This preserves the function template code after JS compression,
-            // so that replace() commands still work as expected.
-            var tpl = [
-                //"function(_items, _args) { ",
-                "var _retval = [], _idx = 0; ",
-                "var $item$, $args$ = _args; ",
-                "_coreloop: ",
-                "for (var _i = 0, _il = _items.length; _i < _il; _i++) { ",
-                "$item$ = _items[_i]; ",
-                "$filter$; ",
-                "} ",
-                "return _retval; "
-                //"}"
-            ].join("");
-            tpl = tpl.replace(/\$filter\$/gi, filterBody);
-            tpl = tpl.replace(/\$item\$/gi, filterInfo.params[0]);
-            tpl = tpl.replace(/\$args\$/gi, filterInfo.params[1]);
-            var fn = new Function("_items,_args", tpl);
-            fn.displayName = fn.name = "compiledFilter";
-            return fn;
-        }
-        function compileFilterWithCaching() {
-            var filterInfo = getFunctionInfo(filter);
-            var filterPath1 = "{ continue _coreloop; }$1";
-            var filterPath2 = "{ _cache[_i] = true;_retval[_idx++] = $item$; continue _coreloop; }$1";
-            // make some allowances for minification - there's only so far we can go with RegEx
-            var filterBody = filterInfo.body
-                .replace(/return false\s*([;}]|\}|$)/gi, filterPath1)
-                .replace(/return!1([;}]|\}|$)/gi, filterPath1)
-                .replace(/return true\s*([;}]|\}|$)/gi, filterPath2)
-                .replace(/return!0([;}]|\}|$)/gi, filterPath2)
-                .replace(/return ([^;}]+?)\s*([;}]|$)/gi, "{ if ((_cache[_i] = $1)) { _retval[_idx++] = $item$; }; continue _coreloop; }$2");
-            // This preserves the function template code after JS compression,
-            // so that replace() commands still work as expected.
-            var tpl = [
-                //"function(_items, _args, _cache) { ",
-                "var _retval = [], _idx = 0; ",
-                "var $item$, $args$ = _args; ",
-                "_coreloop: ",
-                "for (var _i = 0, _il = _items.length; _i < _il; _i++) { ",
-                "$item$ = _items[_i]; ",
-                "if (_cache[_i]) { ",
-                "_retval[_idx++] = $item$; ",
-                "continue _coreloop; ",
-                "} ",
-                "$filter$; ",
-                "} ",
-                "return _retval; "
-                //"}"
-            ].join("");
-            tpl = tpl.replace(/\$filter\$/gi, filterBody);
-            tpl = tpl.replace(/\$item\$/gi, filterInfo.params[0]);
-            tpl = tpl.replace(/\$args\$/gi, filterInfo.params[1]);
-            var fn = new Function("_items,_args,_cache", tpl);
-            fn.displayName = fn.name = "compiledFilterWithCaching";
-            return fn;
-        }
-        function uncompiledFilter(items, args) {
-            var retval = [], idx = 0;
-            for (var i = 0, ii = items.length; i < ii; i++) {
-                if (filter(items[i], args)) {
-                    retval[idx++] = items[i];
-                }
-            }
-            return retval;
-        }
-        function uncompiledFilterWithCaching(items, args, cache) {
-            var retval = [], idx = 0, item;
-            for (var i = 0, ii = items.length; i < ii; i++) {
-                item = items[i];
-                if (cache[i]) {
-                    retval[idx++] = item;
-                }
-                else if (filter(item, args)) {
-                    retval[idx++] = item;
-                    cache[i] = true;
-                }
-            }
-            return retval;
-        }
-        function getFilteredAndPagedItems(items) {
-            if (filter) {
-                var batchFilter = options.inlineFilters ? compiledFilter : uncompiledFilter;
-                var batchFilterWithCaching = options.inlineFilters ? compiledFilterWithCaching : uncompiledFilterWithCaching;
-                if (refreshHints.isFilterNarrowing) {
-                    filteredItems = batchFilter(filteredItems, filterArgs);
-                }
-                else if (refreshHints.isFilterExpanding) {
-                    filteredItems = batchFilterWithCaching(items, filterArgs, filterCache);
-                }
-                else if (!refreshHints.isFilterUnchanged) {
-                    filteredItems = batchFilter(items, filterArgs);
-                }
-            }
-            else {
-                // special case:  if not filtering and not paging, the resulting
-                // rows collection needs to be a copy so that changes due to sort
-                // can be caught
-                filteredItems = pagesize ? items : items.concat();
-            }
-            // get the current page
-            var paged;
-            if (pagesize) {
-                if (filteredItems.length <= pagenum * pagesize) {
-                    if (filteredItems.length === 0) {
-                        pagenum = 0;
-                    }
-                    else {
-                        pagenum = Math.floor((filteredItems.length - 1) / pagesize);
-                    }
-                }
-                paged = filteredItems.slice(pagesize * pagenum, pagesize * pagenum + pagesize);
-            }
-            else {
-                paged = filteredItems;
-            }
-            return { totalRows: filteredItems.length, rows: paged };
-        }
-        function getRowDiffs(rows, newRows) {
-            var item, r, eitherIsNonData, diff = [];
-            var from = 0, to = newRows.length;
-            if (refreshHints && refreshHints.ignoreDiffsBefore) {
-                from = Math.max(0, Math.min(newRows.length, refreshHints.ignoreDiffsBefore));
-            }
-            if (refreshHints && refreshHints.ignoreDiffsAfter) {
-                to = Math.min(newRows.length, Math.max(0, refreshHints.ignoreDiffsAfter));
-            }
-            for (var i = from, rl = rows.length; i < to; i++) {
-                if (i >= rl) {
-                    diff[diff.length] = i;
-                }
-                else {
-                    item = newRows[i];
-                    r = rows[i];
-                    if ((groupingInfos.length && (eitherIsNonData = (item.__nonDataRow) || (r.__nonDataRow)) &&
-                        item.__group !== r.__group ||
-                        item.__group && !item.equals(r))
-                        || (eitherIsNonData &&
-                            // no good way to compare totals since they are arbitrary DTOs
-                            // deep object comparison is pretty expensive
-                            // always considering them 'dirty' seems easier for the time being
-                            (item.__groupTotals || r.__groupTotals))
-                        || item[idProperty] != r[idProperty]
-                        || (updated && updated[item[idProperty]])) {
-                        diff[diff.length] = i;
-                    }
-                }
-            }
-            return diff;
-        }
-        function recalc(_items) {
-            rowsById = null;
-            if (refreshHints.isFilterNarrowing != prevRefreshHints.isFilterNarrowing ||
-                refreshHints.isFilterExpanding != prevRefreshHints.isFilterExpanding) {
-                filterCache = [];
-            }
-            var filteredItems = getFilteredAndPagedItems(_items);
-            totalRows = filteredItems.totalRows;
-            var newRows = filteredItems.rows;
-            groups = [];
-            if (groupingInfos.length) {
-                groups = extractGroups(newRows);
-                if (groups.length) {
-                    addTotals(groups);
-                    newRows = flattenGroupedRows(groups);
-                }
-            }
-            var diff = getRowDiffs(rows, newRows);
-            rows = newRows;
-            return diff;
-        }
-        function refresh() {
-            if (suspend) {
-                return;
-            }
-            var countBefore = rows.length;
-            var totalRowsBefore = totalRows;
-            var diff = recalc(items, filter); // pass as direct refs to avoid closure perf hit
-            // if the current page is no longer valid, go to last page and recalc
-            // we suffer a performance penalty here, but the main loop (recalc) remains highly optimized
-            if (pagesize && totalRows < pagenum * pagesize) {
-                pagenum = Math.max(0, Math.ceil(totalRows / pagesize) - 1);
-                diff = recalc(items, filter);
-            }
-            updated = null;
-            prevRefreshHints = refreshHints;
-            refreshHints = {};
-            if (totalRowsBefore !== totalRows) {
-                onPagingInfoChanged.notify(getPagingInfo(), null, self);
-            }
-            if (countBefore !== rows.length) {
-                onRowCountChanged.notify({ previous: countBefore, current: rows.length, dataView: self }, null, self);
-            }
-            if (diff.length > 0) {
-                onRowsChanged.notify({ rows: diff, dataView: self }, null, self);
-            }
-        }
-        /***
-         * Wires the grid and the DataView together to keep row selection tied to item ids.
-         * This is useful since, without it, the grid only knows about rows, so if the items
-         * move around, the same rows stay selected instead of the selection moving along
-         * with the items.
-         *
-         * NOTE:  This doesn't work with cell selection model.
-         *
-         * @param grid {Slick.Grid} The grid to sync selection with.
-         * @param preserveHidden {Boolean} Whether to keep selected items that go out of the
-         *     view due to them getting filtered out.
-         * @param preserveHiddenOnSelectionChange {Boolean} Whether to keep selected items
-         *     that are currently out of the view (see preserveHidden) as selected when selection
-         *     changes.
-         * @return {Slick.Event} An event that notifies when an internal list of selected row ids
-         *     changes.  This is useful since, in combination with the above two options, it allows
-         *     access to the full list selected row ids, and not just the ones visible to the grid.
-         * @method syncGridSelection
-         */
-        function syncGridSelection(grid, preserveHidden, preserveHiddenOnSelectionChange) {
-            var self = this;
-            var inHandler;
-            var selectedRowIds = self.mapRowsToIds(grid.getSelectedRows());
-            var onSelectedRowIdsChanged = new Slick.Event();
-            function setSelectedRowIds(rowIds) {
-                if (selectedRowIds.join(",") == rowIds.join(",")) {
-                    return;
-                }
-                selectedRowIds = rowIds;
-                onSelectedRowIdsChanged.notify({
-                    "grid": grid,
-                    "ids": selectedRowIds,
-                    "dataView": self
-                }, new Slick.EventData(), self);
-            }
-            function update() {
-                if (selectedRowIds.length > 0) {
-                    inHandler = true;
-                    var selectedRows = self.mapIdsToRows(selectedRowIds);
-                    if (!preserveHidden) {
-                        setSelectedRowIds(self.mapRowsToIds(selectedRows));
-                    }
-                    grid.setSelectedRows(selectedRows);
-                    inHandler = false;
-                }
-            }
-            grid.onSelectedRowsChanged.subscribe(function (e, args) {
-                if (inHandler) {
-                    return;
-                }
-                var newSelectedRowIds = self.mapRowsToIds(grid.getSelectedRows());
-                if (!preserveHiddenOnSelectionChange || !grid.getOptions().multiSelect) {
-                    setSelectedRowIds(newSelectedRowIds);
-                }
-                else {
-                    // keep the ones that are hidden
-                    var existing = $.grep(selectedRowIds, function (id) { return self.getRowById(id) === undefined; });
-                    // add the newly selected ones
-                    setSelectedRowIds(existing.concat(newSelectedRowIds));
-                }
-            });
-            this.onRowsChanged.subscribe(update);
-            this.onRowCountChanged.subscribe(update);
-            return onSelectedRowIdsChanged;
-        }
-        function syncGridCellCssStyles(grid, key) {
-            var hashById;
-            var inHandler;
-            // since this method can be called after the cell styles have been set,
-            // get the existing ones right away
-            storeCellCssStyles(grid.getCellCssStyles(key));
-            function storeCellCssStyles(hash) {
-                hashById = {};
-                for (var row in hash) {
-                    var id = rows[row][idProperty];
-                    hashById[id] = hash[row];
-                }
-            }
-            function update() {
-                if (hashById) {
-                    inHandler = true;
-                    ensureRowsByIdCache();
-                    var newHash = {};
-                    for (var id in hashById) {
-                        var row = rowsById[id];
-                        if (row != undefined) {
-                            newHash[row] = hashById[id];
-                        }
-                    }
-                    grid.setCellCssStyles(key, newHash);
-                    inHandler = false;
-                }
-            }
-            grid.onCellCssStylesChanged.subscribe(function (e, args) {
-                if (inHandler) {
-                    return;
-                }
-                if (key != args.key) {
-                    return;
-                }
-                if (args.hash) {
-                    storeCellCssStyles(args.hash);
-                }
-                else {
-                    grid.onCellCssStylesChanged.unsubscribe(styleChanged);
-                    self.onRowsChanged.unsubscribe(update);
-                    self.onRowCountChanged.unsubscribe(update);
-                }
-            });
-            this.onRowsChanged.subscribe(update);
-            this.onRowCountChanged.subscribe(update);
-        }
         $.extend(this, {
-            // methods
-            "beginUpdate": beginUpdate,
-            "endUpdate": endUpdate,
-            "setPagingOptions": setPagingOptions,
-            "getPagingInfo": getPagingInfo,
-            "getItems": getItems,
-            "setItems": setItems,
-            "setFilter": setFilter,
-            "getFilter": getFilter,
-            "getFilteredItems": getFilteredItems,
-            "sort": sort,
-            "fastSort": fastSort,
-            "reSort": reSort,
-            "setGrouping": setGrouping,
-            "getGrouping": getGrouping,
-            "groupBy": groupBy,
-            "setAggregators": setAggregators,
-            "collapseAllGroups": collapseAllGroups,
-            "expandAllGroups": expandAllGroups,
-            "collapseGroup": collapseGroup,
-            "expandGroup": expandGroup,
-            "getGroups": getGroups,
-            "getIdxById": getIdxById,
-            "getRowByItem": getRowByItem,
-            "getRowById": getRowById,
-            "getItemById": getItemById,
-            "getItemByIdx": getItemByIdx,
-            "mapItemsToRows": mapItemsToRows,
-            "mapRowsToIds": mapRowsToIds,
-            "mapIdsToRows": mapIdsToRows,
-            "setRefreshHints": setRefreshHints,
-            "setFilterArgs": setFilterArgs,
-            "refresh": refresh,
-            "updateItem": updateItem,
-            "insertItem": insertItem,
-            "addItem": addItem,
-            "deleteItem": deleteItem,
-            "sortedAddItem": sortedAddItem,
-            "sortedUpdateItem": sortedUpdateItem,
-            "syncGridSelection": syncGridSelection,
-            "syncGridCellCssStyles": syncGridCellCssStyles,
-            // data provider methods
-            "getLength": getLength,
-            "getItem": getItem,
-            "getItemMetadata": getItemMetadata,
-            // events
-            "onRowCountChanged": onRowCountChanged,
-            "onRowsChanged": onRowsChanged,
-            "onPagingInfoChanged": onPagingInfoChanged
+            "init": init,
+            "destroy": destroy,
+            "deSelectRows": deSelectRows,
+            "selectRows": selectRows,
+            "getColumnDefinition": getColumnDefinition,
+            "getOptions": getOptions,
+            "setOptions": setOptions,
         });
     }
-    function AvgAggregator(field) {
-        this.field_ = field;
-        this.init = function () {
-            this.count_ = 0;
-            this.nonNullCount_ = 0;
-            this.sum_ = 0;
-        };
-        this.accumulate = function (item) {
-            var val = item[this.field_];
-            this.count_++;
-            if (val != null && val !== "" && !isNaN(val)) {
-                this.nonNullCount_++;
-                this.sum_ += parseFloat(val);
-            }
-        };
-        this.storeResult = function (groupTotals) {
-            if (!groupTotals.avg) {
-                groupTotals.avg = {};
-            }
-            if (this.nonNullCount_ != 0) {
-                groupTotals.avg[this.field_] = this.sum_ / this.nonNullCount_;
-            }
-        };
-    }
-    function MinAggregator(field) {
-        this.field_ = field;
-        this.init = function () {
-            this.min_ = null;
-        };
-        this.accumulate = function (item) {
-            var val = item[this.field_];
-            if (val != null && val !== "" && !isNaN(val)) {
-                if (this.min_ == null || val < this.min_) {
-                    this.min_ = val;
-                }
-            }
-        };
-        this.storeResult = function (groupTotals) {
-            if (!groupTotals.min) {
-                groupTotals.min = {};
-            }
-            groupTotals.min[this.field_] = this.min_;
-        };
-    }
-    function MaxAggregator(field) {
-        this.field_ = field;
-        this.init = function () {
-            this.max_ = null;
-        };
-        this.accumulate = function (item) {
-            var val = item[this.field_];
-            if (val != null && val !== "" && !isNaN(val)) {
-                if (this.max_ == null || val > this.max_) {
-                    this.max_ = val;
-                }
-            }
-        };
-        this.storeResult = function (groupTotals) {
-            if (!groupTotals.max) {
-                groupTotals.max = {};
-            }
-            groupTotals.max[this.field_] = this.max_;
-        };
-    }
-    function SumAggregator(field) {
-        this.field_ = field;
-        this.init = function () {
-            this.sum_ = null;
-        };
-        this.accumulate = function (item) {
-            var val = item[this.field_];
-            if (val != null && val !== "" && !isNaN(val)) {
-                this.sum_ += parseFloat(val);
-            }
-        };
-        this.storeResult = function (groupTotals) {
-            if (!groupTotals.sum) {
-                groupTotals.sum = {};
-            }
-            groupTotals.sum[this.field_] = this.sum_;
-        };
-    }
-    // TODO:  add more built-in aggregators
-    // TODO:  merge common aggregators in one to prevent needles iterating
-    var Aggregators = {
-        Avg: AvgAggregator,
-        Min: MinAggregator,
-        Max: MaxAggregator,
-        Sum: SumAggregator
-    };
     module.exports = {
-        DataView: DataView,
-        Aggregators: Aggregators,
-        Data: { Aggregators: Aggregators },
+        "CheckboxSelectColumn": CheckboxSelectColumn
     };
-}
-,
-499: /* slickgrid/slick.editors */ function _(require, module, exports) {
-    var $ = require(503) /* ./slick.jquery */;
-    var Slick = require(497) /* ./slick.core */;
-    /***
-     * Contains basic SlickGrid editors.
-     * @module Editors
-     * @namespace Slick
-     */
-    function TextEditor(args) {
-        var $input;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
-            $input = $("<INPUT type=text class='editor-text' />")
-                .appendTo(args.container)
-                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
-                .focus()
-                .select();
-        };
-        this.destroy = function () {
-            $input.remove();
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        this.getValue = function () {
-            return $input.val();
-        };
-        this.setValue = function (val) {
-            $input.val(val);
-        };
-        this.loadValue = function (item) {
-            defaultValue = item[args.column.field] || "";
-            $input.val(defaultValue);
-            $input[0].defaultValue = defaultValue;
-            $input.select();
-        };
-        this.serializeValue = function () {
-            return $input.val();
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-        };
-        this.validate = function () {
-            if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
+},
+523: /* slickgrid/plugins/slick.cellexternalcopymanager.js */ function _(require, module, exports) {
+    var $ = require(519) /* ../slick.jquery */;
+    var Slick = require(521) /* ../slick.core */;
+    var keyCodes = Slick.keyCode;
+    function CellExternalCopyManager(options) {
+        /*
+          This manager enables users to copy/paste data from/to an external Spreadsheet application
+          such as MS-Excel® or OpenOffice-Spreadsheet.
+    
+          Since it is not possible to access directly the clipboard in javascript, the plugin uses
+          a trick to do it's job. After detecting the keystroke, we dynamically create a textarea
+          where the browser copies/pastes the serialized data.
+    
+          options:
+            copiedCellStyle : sets the css className used for copied cells. default : "copied"
+            copiedCellStyleLayerKey : sets the layer key for setting css values of copied cells. default : "copy-manager"
+            dataItemColumnValueExtractor : option to specify a custom column value extractor function
+            dataItemColumnValueSetter : option to specify a custom column value setter function
+            clipboardCommandHandler : option to specify a custom handler for paste actions
+            includeHeaderWhenCopying : set to true and the plugin will take the name property from each column (which is usually what appears in your header) and put that as the first row of the text that's copied to the clipboard
+            bodyElement: option to specify a custom DOM element which to will be added the hidden textbox. It's useful if the grid is inside a modal dialog.
+            onCopyInit: optional handler to run when copy action initializes
+            onCopySuccess: optional handler to run when copy action is complete
+            newRowCreator: function to add rows to table if paste overflows bottom of table, if this function is not provided new rows will be ignored.
+            readOnlyMode: suppresses paste
+            headerColumnValueExtractor : option to specify a custom column header value extractor function
+        */
+        var _grid;
+        var _self = this;
+        var _copiedRanges;
+        var _options = options || {};
+        var _copiedCellStyleLayerKey = _options.copiedCellStyleLayerKey || "copy-manager";
+        var _copiedCellStyle = _options.copiedCellStyle || "copied";
+        var _clearCopyTI = 0;
+        var _bodyElement = _options.bodyElement || document.body;
+        var _onCopyInit = _options.onCopyInit || null;
+        var _onCopySuccess = _options.onCopySuccess || null;
+        function init(grid) {
+            _grid = grid;
+            _grid.onKeyDown.subscribe(handleKeyDown);
+            // we need a cell selection model
+            var cellSelectionModel = grid.getSelectionModel();
+            if (!cellSelectionModel) {
+                throw new Error("Selection model is mandatory for this plugin. Please set a selection model on the grid before adding this plugin: grid.setSelectionModel(new Slick.CellSelectionModel())");
             }
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    function IntegerEditor(args) {
-        var $input;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
-            $input = $("<INPUT type=text class='editor-text' />")
-                .appendTo(args.container)
-                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
-                .focus()
-                .select();
-        };
-        this.destroy = function () {
-            $input.remove();
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        this.loadValue = function (item) {
-            defaultValue = item[args.column.field];
-            $input.val(defaultValue);
-            $input[0].defaultValue = defaultValue;
-            $input.select();
-        };
-        this.serializeValue = function () {
-            return parseInt($input.val(), 10) || 0;
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-        };
-        this.validate = function () {
-            if (isNaN($input.val())) {
-                return {
-                    valid: false,
-                    msg: "Please enter a valid integer"
-                };
-            }
-            if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
-            }
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    function FloatEditor(args) {
-        var $input;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
-            $input = $("<INPUT type=text class='editor-text' />")
-                .appendTo(args.container)
-                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
-                .focus()
-                .select();
-        };
-        this.destroy = function () {
-            $input.remove();
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        function getDecimalPlaces() {
-            // returns the number of fixed decimal places or null
-            var rtn = args.column.editorFixedDecimalPlaces;
-            if (typeof rtn == 'undefined') {
-                rtn = FloatEditor.DefaultDecimalPlaces;
-            }
-            return (!rtn && rtn !== 0 ? null : rtn);
+            // we give focus on the grid when a selection is done on it.
+            // without this, if the user selects a range of cell without giving focus on a particular cell, the grid doesn't get the focus and key stroke handles (ctrl+c) don't work
+            cellSelectionModel.onSelectedRangesChanged.subscribe(function (e, args) {
+                _grid.focus();
+            });
         }
-        this.loadValue = function (item) {
-            defaultValue = item[args.column.field];
-            var decPlaces = getDecimalPlaces();
-            if (decPlaces !== null
-                && (defaultValue || defaultValue === 0)
-                && defaultValue.toFixed) {
-                defaultValue = defaultValue.toFixed(decPlaces);
-            }
-            $input.val(defaultValue);
-            $input[0].defaultValue = defaultValue;
-            $input.select();
-        };
-        this.serializeValue = function () {
-            var rtn = parseFloat($input.val());
-            if (FloatEditor.AllowEmptyValue) {
-                if (!rtn && rtn !== 0) {
-                    rtn = '';
+        function destroy() {
+            _grid.onKeyDown.unsubscribe(handleKeyDown);
+        }
+        function getHeaderValueForColumn(columnDef) {
+            if (_options.headerColumnValueExtractor) {
+                var val = _options.headerColumnValueExtractor(columnDef);
+                if (val) {
+                    return val;
                 }
+            }
+            return columnDef.name;
+        }
+        function getDataItemValueForColumn(item, columnDef, e) {
+            if (_options.dataItemColumnValueExtractor) {
+                var val = _options.dataItemColumnValueExtractor(item, columnDef);
+                if (val) {
+                    return val;
+                }
+            }
+            var retVal = '';
+            // if a custom getter is not defined, we call serializeValue of the editor to serialize
+            if (columnDef.editor) {
+                var editorArgs = {
+                    'container': $("<p>"),
+                    'column': columnDef,
+                    'position': { 'top': 0, 'left': 0 },
+                    'grid': _grid,
+                    'event': e
+                };
+                var editor = new columnDef.editor(editorArgs);
+                editor.loadValue(item);
+                retVal = editor.serializeValue();
+                editor.destroy();
             }
             else {
-                rtn = rtn || 0;
+                retVal = item[columnDef.field];
             }
-            var decPlaces = getDecimalPlaces();
-            if (decPlaces !== null
-                && (rtn || rtn === 0)
-                && rtn.toFixed) {
-                rtn = parseFloat(rtn.toFixed(decPlaces));
+            return retVal;
+        }
+        function setDataItemValueForColumn(item, columnDef, value) {
+            if (_options.dataItemColumnValueSetter) {
+                return _options.dataItemColumnValueSetter(item, columnDef, value);
             }
-            return rtn;
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-        };
-        this.validate = function () {
-            if (isNaN($input.val())) {
-                return {
-                    valid: false,
-                    msg: "Please enter a valid number"
+            // if a custom setter is not defined, we call applyValue of the editor to unserialize
+            if (columnDef.editor) {
+                var editorArgs = {
+                    'container': $("body"),
+                    'column': columnDef,
+                    'position': { 'top': 0, 'left': 0 },
+                    'grid': _grid
                 };
+                var editor = new columnDef.editor(editorArgs);
+                editor.loadValue(item);
+                editor.applyValue(item, value);
+                editor.destroy();
             }
-            if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
+            else {
+                item[columnDef.field] = value;
             }
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    FloatEditor.DefaultDecimalPlaces = null;
-    FloatEditor.AllowEmptyValue = false;
-    function DateEditor(args) {
-        var $input;
-        var defaultValue;
-        var scope = this;
-        var calendarOpen = false;
-        this.init = function () {
-            $input = $("<INPUT type=text class='editor-text' />");
-            $input.appendTo(args.container);
-            $input.focus().select();
-            $input.datepicker({
-                showOn: "button",
-                buttonImageOnly: true,
-                beforeShow: function () {
-                    calendarOpen = true;
-                },
-                onClose: function () {
-                    calendarOpen = false;
-                }
-            });
-            $input.width($input.width() - 18);
-        };
-        this.destroy = function () {
-            $.datepicker.dpDiv.stop(true, true);
-            $input.datepicker("hide");
-            $input.datepicker("destroy");
-            $input.remove();
-        };
-        this.show = function () {
-            if (calendarOpen) {
-                $.datepicker.dpDiv.stop(true, true).show();
+        }
+        function _createTextBox(innerText) {
+            var ta = document.createElement('textarea');
+            ta.style.position = 'absolute';
+            ta.style.left = '-1000px';
+            ta.style.top = document.body.scrollTop + 'px';
+            ta.value = innerText;
+            _bodyElement.appendChild(ta);
+            ta.select();
+            return ta;
+        }
+        function _decodeTabularData(_grid, ta) {
+            var columns = _grid.getColumns();
+            var clipText = ta.value;
+            var clipRows = clipText.split(/[\n\f\r]/);
+            // trim trailing CR if present
+            if (clipRows[clipRows.length - 1] == "") {
+                clipRows.pop();
             }
-        };
-        this.hide = function () {
-            if (calendarOpen) {
-                $.datepicker.dpDiv.stop(true, true).hide();
+            var clippedRange = [];
+            var j = 0;
+            _bodyElement.removeChild(ta);
+            for (var i = 0; i < clipRows.length; i++) {
+                if (clipRows[i] != "")
+                    clippedRange[j++] = clipRows[i].split("\t");
+                else
+                    clippedRange[i] = [""];
             }
-        };
-        this.position = function (position) {
-            if (!calendarOpen) {
+            var selectedCell = _grid.getActiveCell();
+            var ranges = _grid.getSelectionModel().getSelectedRanges();
+            var selectedRange = ranges && ranges.length ? ranges[0] : null; // pick only one selection
+            var activeRow = null;
+            var activeCell = null;
+            if (selectedRange) {
+                activeRow = selectedRange.fromRow;
+                activeCell = selectedRange.fromCell;
+            }
+            else if (selectedCell) {
+                activeRow = selectedCell.row;
+                activeCell = selectedCell.cell;
+            }
+            else {
+                // we don't know where to paste
                 return;
             }
-            $.datepicker.dpDiv
-                .css("top", position.top + 30)
-                .css("left", position.left);
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        this.loadValue = function (item) {
-            defaultValue = item[args.column.field];
-            $input.val(defaultValue);
-            $input[0].defaultValue = defaultValue;
-            $input.select();
-        };
-        this.serializeValue = function () {
-            return $input.val();
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-        };
-        this.validate = function () {
-            if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
+            var oneCellToMultiple = false;
+            var destH = clippedRange.length;
+            var destW = clippedRange.length ? clippedRange[0].length : 0;
+            if (clippedRange.length == 1 && clippedRange[0].length == 1 && selectedRange) {
+                oneCellToMultiple = true;
+                destH = selectedRange.toRow - selectedRange.fromRow + 1;
+                destW = selectedRange.toCell - selectedRange.fromCell + 1;
             }
-            return {
-                valid: true,
-                msg: null
+            var availableRows = _grid.getData().length - activeRow;
+            var addRows = 0;
+            // ignore new rows if we don't have a "newRowCreator"
+            if (availableRows < destH && _options.newRowCreator) {
+                var d = _grid.getData();
+                for (addRows = 1; addRows <= destH - availableRows; addRows++)
+                    d.push({});
+                _grid.setData(d);
+                _grid.render();
+            }
+            var overflowsBottomOfGrid = activeRow + destH > _grid.getDataLength();
+            if (_options.newRowCreator && overflowsBottomOfGrid) {
+                var newRowsNeeded = activeRow + destH - _grid.getDataLength();
+                _options.newRowCreator(newRowsNeeded);
+            }
+            var clipCommand = {
+                isClipboardCommand: true,
+                clippedRange: clippedRange,
+                oldValues: [],
+                cellExternalCopyManager: _self,
+                _options: _options,
+                setDataItemValueForColumn: setDataItemValueForColumn,
+                markCopySelection: markCopySelection,
+                oneCellToMultiple: oneCellToMultiple,
+                activeRow: activeRow,
+                activeCell: activeCell,
+                destH: destH,
+                destW: destW,
+                maxDestY: _grid.getDataLength(),
+                maxDestX: _grid.getColumns().length,
+                h: 0,
+                w: 0,
+                execute: function () {
+                    this.h = 0;
+                    for (var y = 0; y < this.destH; y++) {
+                        this.oldValues[y] = [];
+                        this.w = 0;
+                        this.h++;
+                        for (var x = 0; x < this.destW; x++) {
+                            this.w++;
+                            var desty = activeRow + y;
+                            var destx = activeCell + x;
+                            if (desty < this.maxDestY && destx < this.maxDestX) {
+                                var nd = _grid.getCellNode(desty, destx);
+                                var dt = _grid.getDataItem(desty);
+                                this.oldValues[y][x] = dt[columns[destx]['field']];
+                                if (oneCellToMultiple)
+                                    this.setDataItemValueForColumn(dt, columns[destx], clippedRange[0][0]);
+                                else
+                                    this.setDataItemValueForColumn(dt, columns[destx], clippedRange[y] ? clippedRange[y][x] : '');
+                                _grid.updateCell(desty, destx);
+                                _grid.onCellChange.notify({
+                                    row: desty,
+                                    cell: destx,
+                                    item: dt,
+                                    grid: _grid
+                                });
+                            }
+                        }
+                    }
+                    var bRange = {
+                        'fromCell': activeCell,
+                        'fromRow': activeRow,
+                        'toCell': activeCell + this.w - 1,
+                        'toRow': activeRow + this.h - 1
+                    };
+                    this.markCopySelection([bRange]);
+                    _grid.getSelectionModel().setSelectedRanges([bRange]);
+                    this.cellExternalCopyManager.onPasteCells.notify({ ranges: [bRange] });
+                },
+                undo: function () {
+                    for (var y = 0; y < this.destH; y++) {
+                        for (var x = 0; x < this.destW; x++) {
+                            var desty = activeRow + y;
+                            var destx = activeCell + x;
+                            if (desty < this.maxDestY && destx < this.maxDestX) {
+                                var nd = _grid.getCellNode(desty, destx);
+                                var dt = _grid.getDataItem(desty);
+                                if (oneCellToMultiple)
+                                    this.setDataItemValueForColumn(dt, columns[destx], this.oldValues[0][0]);
+                                else
+                                    this.setDataItemValueForColumn(dt, columns[destx], this.oldValues[y][x]);
+                                _grid.updateCell(desty, destx);
+                                _grid.onCellChange.notify({
+                                    row: desty,
+                                    cell: destx,
+                                    item: dt,
+                                    grid: _grid
+                                });
+                            }
+                        }
+                    }
+                    var bRange = {
+                        'fromCell': activeCell,
+                        'fromRow': activeRow,
+                        'toCell': activeCell + this.w - 1,
+                        'toRow': activeRow + this.h - 1
+                    };
+                    this.markCopySelection([bRange]);
+                    _grid.getSelectionModel().setSelectedRanges([bRange]);
+                    this.cellExternalCopyManager.onPasteCells.notify({ ranges: [bRange] });
+                    if (addRows > 1) {
+                        var d = _grid.getData();
+                        for (; addRows > 1; addRows--)
+                            d.splice(d.length - 1, 1);
+                        _grid.setData(d);
+                        _grid.render();
+                    }
+                }
             };
-        };
-        this.init();
-    }
-    function YesNoSelectEditor(args) {
-        var $select;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            $select = $("<SELECT tabIndex='0' class='editor-yesno'><OPTION value='yes'>Yes</OPTION><OPTION value='no'>No</OPTION></SELECT>");
-            $select.appendTo(args.container);
-            $select.focus();
-        };
-        this.destroy = function () {
-            $select.remove();
-        };
-        this.focus = function () {
-            $select.focus();
-        };
-        this.loadValue = function (item) {
-            $select.val((defaultValue = item[args.column.field]) ? "yes" : "no");
-            $select.select();
-        };
-        this.serializeValue = function () {
-            return ($select.val() == "yes");
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return ($select.val() != defaultValue);
-        };
-        this.validate = function () {
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    function CheckboxEditor(args) {
-        var $select;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            $select = $("<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>");
-            $select.appendTo(args.container);
-            $select.focus();
-        };
-        this.destroy = function () {
-            $select.remove();
-        };
-        this.focus = function () {
-            $select.focus();
-        };
-        this.loadValue = function (item) {
-            defaultValue = !!item[args.column.field];
-            if (defaultValue) {
-                $select.prop('checked', true);
+            if (_options.clipboardCommandHandler) {
+                _options.clipboardCommandHandler(clipCommand);
             }
             else {
-                $select.prop('checked', false);
+                clipCommand.execute();
             }
-        };
-        this.preClick = function () {
-            $select.prop('checked', !$select.prop('checked'));
-        };
-        this.serializeValue = function () {
-            return $select.prop('checked');
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (this.serializeValue() !== defaultValue);
-        };
-        this.validate = function () {
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    function PercentCompleteEditor(args) {
-        var $input, $picker;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            $input = $("<INPUT type=text class='editor-percentcomplete' />");
-            $input.width($(args.container).innerWidth() - 25);
-            $input.appendTo(args.container);
-            $picker = $("<div class='editor-percentcomplete-picker' />").appendTo(args.container);
-            $picker.append("<div class='editor-percentcomplete-helper'><div class='editor-percentcomplete-wrapper'><div class='editor-percentcomplete-slider' /><div class='editor-percentcomplete-buttons' /></div></div>");
-            $picker.find(".editor-percentcomplete-buttons").append("<button val=0>Not started</button><br/><button val=50>In Progress</button><br/><button val=100>Complete</button>");
-            $input.focus().select();
-            $picker.find(".editor-percentcomplete-slider").slider({
-                orientation: "vertical",
-                range: "min",
-                value: defaultValue,
-                slide: function (event, ui) {
-                    $input.val(ui.value);
-                }
-            });
-            $picker.find(".editor-percentcomplete-buttons button").on("click", function (e) {
-                $input.val($(this).attr("val"));
-                $picker.find(".editor-percentcomplete-slider").slider("value", $(this).attr("val"));
-            });
-        };
-        this.destroy = function () {
-            $input.remove();
-            $picker.remove();
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        this.loadValue = function (item) {
-            $input.val(defaultValue = item[args.column.field]);
-            $input.select();
-        };
-        this.serializeValue = function () {
-            return parseInt($input.val(), 10) || 0;
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ((parseInt($input.val(), 10) || 0) != defaultValue);
-        };
-        this.validate = function () {
-            if (isNaN(parseInt($input.val(), 10))) {
-                return {
-                    valid: false,
-                    msg: "Please enter a valid positive number"
-                };
-            }
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    /*
-     * An example of a "detached" editor.
-     * The UI is added onto document BODY and .position(), .show() and .hide() are implemented.
-     * KeyDown events are also handled to provide handling for Tab, Shift-Tab, Esc and Ctrl-Enter.
-     */
-    function LongTextEditor(args) {
-        var $input, $wrapper;
-        var defaultValue;
-        var scope = this;
-        this.init = function () {
-            var $container = $("body");
-            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
-            $wrapper = $("<DIV style='z-index:10000;position:absolute;background:white;padding:5px;border:3px solid gray; -moz-border-radius:10px; border-radius:10px;'/>")
-                .appendTo($container);
-            $input = $("<TEXTAREA hidefocus rows=5 style='background:white;width:250px;height:80px;border:0;outline:0'>")
-                .appendTo($wrapper);
-            $("<DIV style='text-align:right'><BUTTON>Save</BUTTON><BUTTON>Cancel</BUTTON></DIV>")
-                .appendTo($wrapper);
-            $wrapper.find("button:first").on("click", this.save);
-            $wrapper.find("button:last").on("click", this.cancel);
-            $input.on("keydown", this.handleKeyDown);
-            scope.position(args.position);
-            $input.focus().select();
-        };
-        this.handleKeyDown = function (e) {
-            if (e.which == Slick.keyCode.ENTER && e.ctrlKey) {
-                scope.save();
-            }
-            else if (e.which == Slick.keyCode.ESCAPE) {
-                e.preventDefault();
-                scope.cancel();
-            }
-            else if (e.which == Slick.keyCode.TAB && e.shiftKey) {
-                e.preventDefault();
-                args.grid.navigatePrev();
-            }
-            else if (e.which == Slick.keyCode.TAB) {
-                e.preventDefault();
-                args.grid.navigateNext();
-            }
-            else if (e.which == $.ui.keyCode.LEFT || e.which == $.ui.keyCode.RIGHT) {
-                if (args.grid.getOptions().editorCellNavOnLRKeys) {
-                    var cursorPosition = this.selectionStart;
-                    var textLength = this.value.length;
-                    if (e.keyCode === $.ui.keyCode.LEFT && cursorPosition === 0) {
-                        args.grid.navigatePrev();
+        }
+        function handleKeyDown(e, args) {
+            var ranges;
+            if (!_grid.getEditorLock().isActive() || _grid.getOptions().autoEdit) {
+                if (e.which == keyCodes.ESC) {
+                    if (_copiedRanges) {
+                        e.preventDefault();
+                        clearCopySelection();
+                        _self.onCopyCancelled.notify({ ranges: _copiedRanges });
+                        _copiedRanges = null;
                     }
-                    if (e.keyCode === $.ui.keyCode.RIGHT && cursorPosition >= textLength - 1) {
-                        args.grid.navigateNext();
+                }
+                if ((e.which === keyCodes.C || e.which === keyCodes.INSERT) && (e.ctrlKey || e.metaKey) && !e.shiftKey) { // CTRL+C or CTRL+INS
+                    if (_onCopyInit) {
+                        _onCopyInit.call();
+                    }
+                    ranges = _grid.getSelectionModel().getSelectedRanges();
+                    if (ranges.length != 0) {
+                        _copiedRanges = ranges;
+                        markCopySelection(ranges);
+                        _self.onCopyCells.notify({ ranges: ranges });
+                        var columns = _grid.getColumns();
+                        var clipText = "";
+                        for (var rg = 0; rg < ranges.length; rg++) {
+                            var range = ranges[rg];
+                            var clipTextRows = [];
+                            for (var i = range.fromRow; i < range.toRow + 1; i++) {
+                                var clipTextCells = [];
+                                var dt = _grid.getDataItem(i);
+                                if (clipTextRows == "" && _options.includeHeaderWhenCopying) {
+                                    var clipTextHeaders = [];
+                                    for (var j = range.fromCell; j < range.toCell + 1; j++) {
+                                        if (columns[j].name.length > 0)
+                                            clipTextHeaders.push(getHeaderValueForColumn(columns[j]));
+                                    }
+                                    clipTextRows.push(clipTextHeaders.join("\t"));
+                                }
+                                for (var j = range.fromCell; j < range.toCell + 1; j++) {
+                                    clipTextCells.push(getDataItemValueForColumn(dt, columns[j], e));
+                                }
+                                clipTextRows.push(clipTextCells.join("\t"));
+                            }
+                            clipText += clipTextRows.join("\r\n") + "\r\n";
+                        }
+                        if (window.clipboardData) {
+                            window.clipboardData.setData("Text", clipText);
+                            return true;
+                        }
+                        else {
+                            var focusEl = document.activeElement;
+                            var ta = _createTextBox(clipText);
+                            ta.focus();
+                            setTimeout(function () {
+                                _bodyElement.removeChild(ta);
+                                // restore focus
+                                if (focusEl)
+                                    focusEl.focus();
+                                else
+                                    console.log("Not element to restore focus to after copy?");
+                            }, 100);
+                            if (_onCopySuccess) {
+                                var rowCount = 0;
+                                // If it's cell selection, use the toRow/fromRow fields
+                                if (ranges.length === 1) {
+                                    rowCount = (ranges[0].toRow + 1) - ranges[0].fromRow;
+                                }
+                                else {
+                                    rowCount = ranges.length;
+                                }
+                                _onCopySuccess.call(this, rowCount);
+                            }
+                            return false;
+                        }
+                    }
+                }
+                if (!_options.readOnlyMode && ((e.which === keyCodes.V && (e.ctrlKey || e.metaKey) && !e.shiftKey)
+                    || (e.which === keyCodes.INSERT && e.shiftKey && !e.ctrlKey))) { // CTRL+V or Shift+INS
+                    var ta = _createTextBox('');
+                    setTimeout(function () {
+                        _decodeTabularData(_grid, ta);
+                    }, 100);
+                    return false;
+                }
+            }
+        }
+        function markCopySelection(ranges) {
+            clearCopySelection();
+            var columns = _grid.getColumns();
+            var hash = {};
+            for (var i = 0; i < ranges.length; i++) {
+                for (var j = ranges[i].fromRow; j <= ranges[i].toRow; j++) {
+                    hash[j] = {};
+                    for (var k = ranges[i].fromCell; k <= ranges[i].toCell && k < columns.length; k++) {
+                        hash[j][columns[k].id] = _copiedCellStyle;
                     }
                 }
             }
-        };
-        this.save = function () {
-            args.commitChanges();
-        };
-        this.cancel = function () {
-            $input.val(defaultValue);
-            args.cancelChanges();
-        };
-        this.hide = function () {
-            $wrapper.hide();
-        };
-        this.show = function () {
-            $wrapper.show();
-        };
-        this.position = function (position) {
-            $wrapper
-                .css("top", position.top - 5)
-                .css("left", position.left - 5);
-        };
-        this.destroy = function () {
-            $wrapper.remove();
-        };
-        this.focus = function () {
-            $input.focus();
-        };
-        this.loadValue = function (item) {
-            $input.val(defaultValue = item[args.column.field]);
-            $input.select();
-        };
-        this.serializeValue = function () {
-            return $input.val();
-        };
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-        this.isValueChanged = function () {
-            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-        };
-        this.validate = function () {
-            if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
-            }
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-        this.init();
-    }
-    /*
-     * Depending on the value of Grid option 'editorCellNavOnLRKeys', us
-     * Navigate to the cell on the left if the cursor is at the beginning of the input string
-     * and to the right cell if it's at the end. Otherwise, move the cursor within the text
-     */
-    function handleKeydownLRNav(e) {
-        var cursorPosition = this.selectionStart;
-        var textLength = this.value.length;
-        if ((e.keyCode === $.ui.keyCode.LEFT && cursorPosition > 0) ||
-            e.keyCode === $.ui.keyCode.RIGHT && cursorPosition < textLength - 1) {
-            e.stopImmediatePropagation();
+            _grid.setCellCssStyles(_copiedCellStyleLayerKey, hash);
+            clearTimeout(_clearCopyTI);
+            _clearCopyTI = setTimeout(function () {
+                _self.clearCopySelection();
+            }, 2000);
         }
-    }
-    function handleKeydownLRNoNav(e) {
-        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
-            e.stopImmediatePropagation();
+        function clearCopySelection() {
+            _grid.removeCellCssStyles(_copiedCellStyleLayerKey);
         }
+        function setIncludeHeaderWhenCopying(includeHeaderWhenCopying) {
+            _options.includeHeaderWhenCopying = includeHeaderWhenCopying;
+        }
+        $.extend(this, {
+            "init": init,
+            "destroy": destroy,
+            "clearCopySelection": clearCopySelection,
+            "handleKeyDown": handleKeyDown,
+            "onCopyCells": new Slick.Event(),
+            "onCopyCancelled": new Slick.Event(),
+            "onPasteCells": new Slick.Event(),
+            "setIncludeHeaderWhenCopying": setIncludeHeaderWhenCopying
+        });
     }
     module.exports = {
-        Editors: {
-            Text: TextEditor,
-            Integer: IntegerEditor,
-            Float: FloatEditor,
-            Date: DateEditor,
-            YesNoSelect: YesNoSelectEditor,
-            Checkbox: CheckboxEditor,
-            PercentComplete: PercentCompleteEditor,
-            LongText: LongTextEditor
-        }
+        "CellExternalCopyManager": CellExternalCopyManager
     };
-}
-,
-500: /* slickgrid/slick.formatters */ function _(require, module, exports) {
-    var Slick = require(497) /* ./slick.core */;
-    /***
-     * Contains basic SlickGrid formatters.
-     *
-     * NOTE:  These are merely examples.  You will most likely need to implement something more
-     *        robust/extensible/localizable/etc. for your use!
-     *
-     * @module Formatters
-     * @namespace Slick
-     */
-    function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
-        if (value == null || value === "") {
-            return "-";
-        }
-        else if (value < 50) {
-            return "<span style='color:red;font-weight:bold;'>" + value + "%</span>";
-        }
-        else {
-            return "<span style='color:green'>" + value + "%</span>";
-        }
-    }
-    function PercentCompleteBarFormatter(row, cell, value, columnDef, dataContext) {
-        if (value == null || value === "") {
-            return "";
-        }
-        var color;
-        if (value < 30) {
-            color = "red";
-        }
-        else if (value < 70) {
-            color = "silver";
-        }
-        else {
-            color = "green";
-        }
-        return "<span class='percent-complete-bar' style='background:" + color + ";width:" + value + "%'></span>";
-    }
-    function YesNoFormatter(row, cell, value, columnDef, dataContext) {
-        return value ? "Yes" : "No";
-    }
-    function CheckboxFormatter(row, cell, value, columnDef, dataContext) {
-        return '<img class="slick-edit-preclick" src="../images/' + (value ? "CheckboxY" : "CheckboxN") + '.png">';
-    }
-    function CheckmarkFormatter(row, cell, value, columnDef, dataContext) {
-        return value ? "<img src='../images/tick.png'>" : "";
-    }
-    module.exports = {
-        Formatters: {
-            PercentComplete: PercentCompleteFormatter,
-            PercentCompleteBar: PercentCompleteBarFormatter,
-            YesNo: YesNoFormatter,
-            Checkmark: CheckmarkFormatter,
-            Checkbox: CheckboxFormatter
-        }
-    };
-}
-,
-501: /* slickgrid/slick.grid */ function _(require, module, exports) {
+},
+524: /* slickgrid/index.js */ function _(require, module, exports) {
+    var tslib = require(113) /* tslib */;
+    tslib.__exportStar(require(521) /* ./slick.core */, module.exports);
+    tslib.__exportStar(require(525) /* ./slick.grid */, module.exports);
+    tslib.__exportStar(require(528) /* ./slick.dataview */, module.exports);
+    tslib.__exportStar(require(529) /* ./slick.editors */, module.exports);
+    tslib.__exportStar(require(530) /* ./slick.formatters */, module.exports);
+    tslib.__exportStar(require(531) /* ./slick.remotemodel */, module.exports);
+    tslib.__exportStar(require(532) /* ./slick.groupitemmetadataprovider */, module.exports);
+},
+525: /* slickgrid/slick.grid.js */ function _(require, module, exports) {
     /**
      * @license
      * (c) 2009-2016 Michael Leibman
@@ -13406,8 +10375,8 @@
      *     or data associated with any cell/row DOM nodes.  Cell editors must make sure they implement .destroy()
      *     and do proper cleanup.
      */
-    var $ = require(503) /* ./slick.jquery */;
-    var Slick = require(497) /* ./slick.core */;
+    var $ = require(519) /* ./slick.jquery */;
+    var Slick = require(521) /* ./slick.core */;
     // shared across all grids on the page
     var scrollbarDimensions;
     var maxSupportedCssHeight; // browser's breaking point
@@ -13424,10 +10393,10 @@
      **/
     function SlickGrid(container, data, columns, options) {
         if (!$.fn.drag) {
-            require(492) /* ./lib/jquery.event.drag-2.3.0 */;
+            require(526) /* ./lib/jquery.event.drag-2.3.0 */;
         }
         if (!$.fn.drop) {
-            require(493) /* ./lib/jquery.event.drop-2.3.0 */;
+            require(527) /* ./lib/jquery.event.drop-2.3.0 */;
         }
         // settings
         var defaults = {
@@ -16980,11 +13949,2456 @@
     module.exports = {
         Grid: SlickGrid
     };
-}
-,
-502: /* slickgrid/slick.groupitemmetadataprovider */ function _(require, module, exports) {
-    var $ = require(503) /* ./slick.jquery */;
-    var Slick = require(497) /* ./slick.core */;
+},
+526: /* slickgrid/lib/jquery.event.drag-2.3.0.js */ function _(require, module, exports) {
+    /*!
+     * jquery.event.drag - v 2.3.0
+     * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+     * Open Source MIT License - http://threedubmedia.com/code/license
+     */
+    // Created: 2008-06-04
+    // Updated: 2012-05-21
+    // Updated: 2016-08-16   Luiz Gonzaga dos Santos Filho
+    // REQUIRES: jquery 1.8 +, , event.drag 2.3.0
+    // TESTED WITH: jQuery 1.8.3, 1.11.2, 2.2.4, and 3.1.0
+    var $ = require(519) /* ../slick.jquery */;
+    // add the jquery instance method
+    $.fn.drag = function (str, arg, opts) {
+        // figure out the event type
+        var type = typeof str == "string" ? str : "", 
+        // figure out the event handler...
+        fn = $.isFunction(str) ? str : $.isFunction(arg) ? arg : null;
+        // fix the event type
+        if (type.indexOf("drag") !== 0)
+            type = "drag" + type;
+        // were options passed
+        opts = (str == fn ? arg : opts) || {};
+        // trigger or bind event handler
+        return fn ? this.on(type, opts, fn) : this.trigger(type);
+    };
+    // local refs (increase compression)
+    var $event = $.event, $special = $event.special, 
+    // configure the drag special event
+    drag = $special.drag = {
+        // these are the default settings
+        defaults: {
+            which: 1,
+            distance: 0,
+            not: ':input',
+            handle: null,
+            relative: false,
+            drop: true,
+            click: false // false to suppress click events after dragend (no proxy)
+        },
+        // the key name for stored drag data
+        datakey: "dragdata",
+        // prevent bubbling for better performance
+        noBubble: true,
+        // count bound related events
+        add: function (obj) {
+            // read the interaction data
+            var data = $.data(this, drag.datakey), 
+            // read any passed options
+            opts = obj.data || {};
+            // count another realted event
+            data.related += 1;
+            // extend data options bound with this event
+            // don't iterate "opts" in case it is a node
+            $.each(drag.defaults, function (key, def) {
+                if (opts[key] !== undefined)
+                    data[key] = opts[key];
+            });
+        },
+        // forget unbound related events
+        remove: function () {
+            $.data(this, drag.datakey).related -= 1;
+        },
+        // configure interaction, capture settings
+        setup: function () {
+            // check for related events
+            if ($.data(this, drag.datakey))
+                return;
+            // initialize the drag data with copied defaults
+            var data = $.extend({ related: 0 }, drag.defaults);
+            // store the interaction data
+            $.data(this, drag.datakey, data);
+            // bind the mousedown event, which starts drag interactions
+            $event.add(this, "touchstart mousedown", drag.init, data);
+            // prevent image dragging in IE...
+            if (this.attachEvent)
+                this.attachEvent("ondragstart", drag.dontstart);
+        },
+        // destroy configured interaction
+        teardown: function () {
+            var data = $.data(this, drag.datakey) || {};
+            // check for related events
+            if (data.related)
+                return;
+            // remove the stored data
+            $.removeData(this, drag.datakey);
+            // remove the mousedown event
+            $event.remove(this, "touchstart mousedown", drag.init);
+            // enable text selection
+            drag.textselect(true);
+            // un-prevent image dragging in IE...
+            if (this.detachEvent)
+                this.detachEvent("ondragstart", drag.dontstart);
+        },
+        // initialize the interaction
+        init: function (event) {
+            // sorry, only one touch at a time
+            if (drag.touched)
+                return;
+            // the drag/drop interaction data
+            var dd = event.data, results;
+            // check the which directive
+            if (event.which != 0 && dd.which > 0 && event.which != dd.which)
+                return;
+            // check for suppressed selector
+            if ($(event.target).is(dd.not))
+                return;
+            // check for handle selector
+            if (dd.handle && !$(event.target).closest(dd.handle, event.currentTarget).length)
+                return;
+            drag.touched = event.type == 'touchstart' ? this : null;
+            dd.propagates = 1;
+            dd.mousedown = this;
+            dd.interactions = [drag.interaction(this, dd)];
+            dd.target = event.target;
+            dd.pageX = event.pageX;
+            dd.pageY = event.pageY;
+            dd.dragging = null;
+            // handle draginit event...
+            results = drag.hijack(event, "draginit", dd);
+            // early cancel
+            if (!dd.propagates)
+                return;
+            // flatten the result set
+            results = drag.flatten(results);
+            // insert new interaction elements
+            if (results && results.length) {
+                dd.interactions = [];
+                $.each(results, function () {
+                    dd.interactions.push(drag.interaction(this, dd));
+                });
+            }
+            // remember how many interactions are propagating
+            dd.propagates = dd.interactions.length;
+            // locate and init the drop targets
+            if (dd.drop !== false && $special.drop)
+                $special.drop.handler(event, dd);
+            // disable text selection
+            drag.textselect(false);
+            // bind additional events...
+            if (drag.touched)
+                $event.add(drag.touched, "touchmove touchend", drag.handler, dd);
+            else
+                $event.add(document, "mousemove mouseup", drag.handler, dd);
+            // helps prevent text selection or scrolling
+            if (!drag.touched || dd.live)
+                return false;
+        },
+        // returns an interaction object
+        interaction: function (elem, dd) {
+            var offset = (elem && elem.ownerDocument)
+                ? $(elem)[dd.relative ? "position" : "offset"]() || { top: 0, left: 0 }
+                : { top: 0, left: 0 };
+            return {
+                drag: elem,
+                callback: new drag.callback(),
+                droppable: [],
+                offset: offset
+            };
+        },
+        // handle drag-releatd DOM events
+        handler: function (event) {
+            // read the data before hijacking anything
+            var dd = event.data;
+            // handle various events
+            switch (event.type) {
+                // mousemove, check distance, start dragging
+                case !dd.dragging && 'touchmove':
+                    event.preventDefault();
+                case !dd.dragging && 'mousemove':
+                    //  drag tolerance, x² + y² = distance²
+                    if (Math.pow(event.pageX - dd.pageX, 2) + Math.pow(event.pageY - dd.pageY, 2) < Math.pow(dd.distance, 2))
+                        break; // distance tolerance not reached
+                    event.target = dd.target; // force target from "mousedown" event (fix distance issue)
+                    drag.hijack(event, "dragstart", dd); // trigger "dragstart"
+                    if (dd.propagates) // "dragstart" not rejected
+                        dd.dragging = true; // activate interaction
+                // mousemove, dragging
+                case 'touchmove':
+                    event.preventDefault();
+                case 'mousemove':
+                    if (dd.dragging) {
+                        // trigger "drag"
+                        drag.hijack(event, "drag", dd);
+                        if (dd.propagates) {
+                            // manage drop events
+                            if (dd.drop !== false && $special.drop)
+                                $special.drop.handler(event, dd); // "dropstart", "dropend"
+                            break; // "drag" not rejected, stop
+                        }
+                        event.type = "mouseup"; // helps "drop" handler behave
+                    }
+                // mouseup, stop dragging
+                case 'touchend':
+                case 'mouseup':
+                default:
+                    if (drag.touched)
+                        $event.remove(drag.touched, "touchmove touchend", drag.handler); // remove touch events
+                    else
+                        $event.remove(document, "mousemove mouseup", drag.handler); // remove page events
+                    if (dd.dragging) {
+                        if (dd.drop !== false && $special.drop)
+                            $special.drop.handler(event, dd); // "drop"
+                        drag.hijack(event, "dragend", dd); // trigger "dragend"
+                    }
+                    drag.textselect(true); // enable text selection
+                    // if suppressing click events...
+                    if (dd.click === false && dd.dragging)
+                        $.data(dd.mousedown, "suppress.click", new Date().getTime() + 5);
+                    dd.dragging = drag.touched = false; // deactivate element
+                    break;
+            }
+        },
+        // re-use event object for custom events
+        hijack: function (event, type, dd, x, elem) {
+            // not configured
+            if (!dd)
+                return;
+            // remember the original event and type
+            var orig = { event: event.originalEvent, type: event.type }, 
+            // is the event drag related or drog related?
+            mode = type.indexOf("drop") ? "drag" : "drop", 
+            // iteration vars
+            result, i = x || 0, ia, $elems, callback, len = !isNaN(x) ? x : dd.interactions.length;
+            // modify the event type
+            event.type = type;
+            // protects originalEvent from side-effects
+            var noop = function () { };
+            event.originalEvent = new $.Event(orig.event, {
+                preventDefault: noop,
+                stopPropagation: noop,
+                stopImmediatePropagation: noop
+            });
+            // initialize the results
+            dd.results = [];
+            // handle each interacted element
+            do
+                if (ia = dd.interactions[i]) {
+                    // validate the interaction
+                    if (type !== "dragend" && ia.cancelled)
+                        continue;
+                    // set the dragdrop properties on the event object
+                    callback = drag.properties(event, dd, ia);
+                    // prepare for more results
+                    ia.results = [];
+                    // handle each element
+                    $(elem || ia[mode] || dd.droppable).each(function (p, subject) {
+                        // identify drag or drop targets individually
+                        callback.target = subject;
+                        // force propagtion of the custom event
+                        event.isPropagationStopped = function () { return false; };
+                        // handle the event
+                        result = subject ? $event.dispatch.call(subject, event, callback) : null;
+                        // stop the drag interaction for this element
+                        if (result === false) {
+                            if (mode == "drag") {
+                                ia.cancelled = true;
+                                dd.propagates -= 1;
+                            }
+                            if (type == "drop") {
+                                ia[mode][p] = null;
+                            }
+                        }
+                        // assign any dropinit elements
+                        else if (type == "dropinit")
+                            ia.droppable.push(drag.element(result) || subject);
+                        // accept a returned proxy element
+                        if (type == "dragstart")
+                            ia.proxy = $(drag.element(result) || ia.drag)[0];
+                        // remember this result
+                        ia.results.push(result);
+                        // forget the event result, for recycling
+                        delete event.result;
+                        // break on cancelled handler
+                        if (type !== "dropinit")
+                            return result;
+                    });
+                    // flatten the results
+                    dd.results[i] = drag.flatten(ia.results);
+                    // accept a set of valid drop targets
+                    if (type == "dropinit")
+                        ia.droppable = drag.flatten(ia.droppable);
+                    // locate drop targets
+                    if (type == "dragstart" && !ia.cancelled)
+                        callback.update();
+                }
+            while (++i < len);
+            // restore the original event & type
+            event.type = orig.type;
+            event.originalEvent = orig.event;
+            // return all handler results
+            return drag.flatten(dd.results);
+        },
+        // extend the callback object with drag/drop properties...
+        properties: function (event, dd, ia) {
+            var obj = ia.callback;
+            // elements
+            obj.drag = ia.drag;
+            obj.proxy = ia.proxy || ia.drag;
+            // starting mouse position
+            obj.startX = dd.pageX;
+            obj.startY = dd.pageY;
+            // current distance dragged
+            obj.deltaX = event.pageX - dd.pageX;
+            obj.deltaY = event.pageY - dd.pageY;
+            // original element position
+            obj.originalX = ia.offset.left;
+            obj.originalY = ia.offset.top;
+            // adjusted element position
+            obj.offsetX = obj.originalX + obj.deltaX;
+            obj.offsetY = obj.originalY + obj.deltaY;
+            // assign the drop targets information
+            obj.drop = drag.flatten((ia.drop || []).slice());
+            obj.available = drag.flatten((ia.droppable || []).slice());
+            return obj;
+        },
+        // determine is the argument is an element or jquery instance
+        element: function (arg) {
+            if (arg && (arg.jquery || arg.nodeType == 1))
+                return arg;
+        },
+        // flatten nested jquery objects and arrays into a single dimension array
+        flatten: function (arr) {
+            return $.map(arr, function (member) {
+                return member && member.jquery ? $.makeArray(member) :
+                    member && member.length ? drag.flatten(member) : member;
+            });
+        },
+        // toggles text selection attributes ON (true) or OFF (false)
+        textselect: function (bool) {
+            $(document)[bool ? "off" : "on"]("selectstart", drag.dontstart)
+                .css("MozUserSelect", bool ? "" : "none");
+            // .attr("unselectable", bool ? "off" : "on" )
+            document.unselectable = bool ? "off" : "on";
+        },
+        // suppress "selectstart" and "ondragstart" events
+        dontstart: function () {
+            return false;
+        },
+        // a callback instance contructor
+        callback: function () { }
+    };
+    // callback methods
+    drag.callback.prototype = {
+        update: function () {
+            if ($special.drop && this.available.length)
+                $.each(this.available, function (i) {
+                    $special.drop.locate(this, i);
+                });
+        }
+    };
+    // patch $.event.$dispatch to allow suppressing clicks
+    var $dispatch = $event.dispatch;
+    $event.dispatch = function (event) {
+        if ($.data(this, "suppress." + event.type) - new Date().getTime() > 0) {
+            $.removeData(this, "suppress." + event.type);
+            return;
+        }
+        return $dispatch.apply(this, arguments);
+    };
+    // share the same special event configuration with related events...
+    $special.draginit = $special.dragstart = $special.dragend = drag;
+},
+527: /* slickgrid/lib/jquery.event.drop-2.3.0.js */ function _(require, module, exports) {
+    /*!
+     * jquery.event.drop - v 2.3.0
+     * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+     * Open Source MIT License - http://threedubmedia.com/code/license
+     */
+    // Created: 2008-06-04
+    // Updated: 2012-05-21
+    // Updated: 2016-08-16   Luiz Gonzaga dos Santos Filho
+    // REQUIRES: jquery 1.8 +, , event.drag 2.3.0
+    // TESTED WITH: jQuery 1.8.3, 1.11.2, 2.2.4, and 3.1.0
+    var $ = require(519) /* ../slick.jquery */;
+    // Events: drop, dropstart, dropend
+    // add the jquery instance method
+    $.fn.drop = function (str, arg, opts) {
+        // figure out the event type
+        var type = typeof str == "string" ? str : "", 
+        // figure out the event handler...
+        fn = $.isFunction(str) ? str : $.isFunction(arg) ? arg : null;
+        // fix the event type
+        if (type.indexOf("drop") !== 0)
+            type = "drop" + type;
+        // were options passed
+        opts = (str == fn ? arg : opts) || {};
+        // trigger or bind event handler
+        return fn ? this.on(type, opts, fn) : this.trigger(type);
+    };
+    // DROP MANAGEMENT UTILITY
+    // returns filtered drop target elements, caches their positions
+    $.drop = function (opts) {
+        opts = opts || {};
+        // safely set new options...
+        drop.multi = opts.multi === true ? Infinity :
+            opts.multi === false ? 1 : !isNaN(opts.multi) ? opts.multi : drop.multi;
+        drop.delay = opts.delay || drop.delay;
+        drop.tolerance = $.isFunction(opts.tolerance) ? opts.tolerance :
+            opts.tolerance === null ? null : drop.tolerance;
+        drop.mode = opts.mode || drop.mode || 'intersect';
+    };
+    // local refs (increase compression)
+    var $event = $.event, $special = $event.special, 
+    // configure the drop special event
+    drop = $.event.special.drop = {
+        // these are the default settings
+        multi: 1,
+        delay: 20,
+        mode: 'overlap',
+        // internal cache
+        targets: [],
+        // the key name for stored drop data
+        datakey: "dropdata",
+        // prevent bubbling for better performance
+        noBubble: true,
+        // count bound related events
+        add: function (obj) {
+            // read the interaction data
+            var data = $.data(this, drop.datakey);
+            // count another realted event
+            data.related += 1;
+        },
+        // forget unbound related events
+        remove: function () {
+            $.data(this, drop.datakey).related -= 1;
+        },
+        // configure the interactions
+        setup: function () {
+            // check for related events
+            if ($.data(this, drop.datakey))
+                return;
+            // initialize the drop element data
+            var data = {
+                related: 0,
+                active: [],
+                anyactive: 0,
+                winner: 0,
+                location: {}
+            };
+            // store the drop data on the element
+            $.data(this, drop.datakey, data);
+            // store the drop target in internal cache
+            drop.targets.push(this);
+        },
+        // destroy the configure interaction
+        teardown: function () {
+            var data = $.data(this, drop.datakey) || {};
+            // check for related events
+            if (data.related)
+                return;
+            // remove the stored data
+            $.removeData(this, drop.datakey);
+            // reference the targeted element
+            var element = this;
+            // remove from the internal cache
+            drop.targets = $.grep(drop.targets, function (target) {
+                return (target !== element);
+            });
+        },
+        // shared event handler
+        handler: function (event, dd) {
+            // local vars
+            var results, $targets;
+            // make sure the right data is available
+            if (!dd)
+                return;
+            // handle various events
+            switch (event.type) {
+                // draginit, from $.event.special.drag
+                case 'mousedown': // DROPINIT >>
+                case 'touchstart': // DROPINIT >>
+                    // collect and assign the drop targets
+                    $targets = $(drop.targets);
+                    if (typeof dd.drop == "string")
+                        $targets = $targets.filter(dd.drop);
+                    // reset drop data winner properties
+                    $targets.each(function () {
+                        var data = $.data(this, drop.datakey);
+                        data.active = [];
+                        data.anyactive = 0;
+                        data.winner = 0;
+                    });
+                    // set available target elements
+                    dd.droppable = $targets;
+                    // activate drop targets for the initial element being dragged
+                    $special.drag.hijack(event, "dropinit", dd);
+                    break;
+                // drag, from $.event.special.drag
+                case 'mousemove': // TOLERATE >>
+                case 'touchmove': // TOLERATE >>
+                    drop.event = event; // store the mousemove event
+                    if (!drop.timer)
+                        // monitor drop targets
+                        drop.tolerate(dd);
+                    break;
+                // dragend, from $.event.special.drag
+                case 'mouseup': // DROP >> DROPEND >>
+                case 'touchend': // DROP >> DROPEND >>
+                    drop.timer = clearTimeout(drop.timer); // delete timer
+                    if (dd.propagates) {
+                        $special.drag.hijack(event, "drop", dd);
+                        $special.drag.hijack(event, "dropend", dd);
+                    }
+                    break;
+            }
+        },
+        // returns the location positions of an element
+        locate: function (elem, index) {
+            var data = $.data(elem, drop.datakey), $elem = $(elem), posi = $elem.offset() || {}, height = $elem.outerHeight(), width = $elem.outerWidth(), location = {
+                elem: elem,
+                width: width,
+                height: height,
+                top: posi.top,
+                left: posi.left,
+                right: posi.left + width,
+                bottom: posi.top + height
+            };
+            // drag elements might not have dropdata
+            if (data) {
+                data.location = location;
+                data.index = index;
+                data.elem = elem;
+            }
+            return location;
+        },
+        // test the location positions of an element against another OR an X,Y coord
+        contains: function (target, test) {
+            return ((test[0] || test.left) >= target.left && (test[0] || test.right) <= target.right
+                && (test[1] || test.top) >= target.top && (test[1] || test.bottom) <= target.bottom);
+        },
+        // stored tolerance modes
+        modes: {
+            // target with mouse wins, else target with most overlap wins
+            'intersect': function (event, proxy, target) {
+                return this.contains(target, [event.pageX, event.pageY]) ? // check cursor
+                    1e9 : this.modes.overlap.apply(this, arguments); // check overlap
+            },
+            // target with most overlap wins
+            'overlap': function (event, proxy, target) {
+                // calculate the area of overlap...
+                return Math.max(0, Math.min(target.bottom, proxy.bottom) - Math.max(target.top, proxy.top))
+                    * Math.max(0, Math.min(target.right, proxy.right) - Math.max(target.left, proxy.left));
+            },
+            // proxy is completely contained within target bounds
+            'fit': function (event, proxy, target) {
+                return this.contains(target, proxy) ? 1 : 0;
+            },
+            // center of the proxy is contained within target bounds
+            'middle': function (event, proxy, target) {
+                return this.contains(target, [proxy.left + proxy.width * .5, proxy.top + proxy.height * .5]) ? 1 : 0;
+            }
+        },
+        // sort drop target cache by by winner (dsc), then index (asc)
+        sort: function (a, b) {
+            return (b.winner - a.winner) || (a.index - b.index);
+        },
+        // async, recursive tolerance execution
+        tolerate: function (dd) {
+            // declare local refs
+            var i, drp, drg, data, arr, len, elem, 
+            // interaction iteration variables
+            x = 0, ia, end = dd.interactions.length, 
+            // determine the mouse coords
+            xy = [drop.event.pageX, drop.event.pageY], 
+            // custom or stored tolerance fn
+            tolerance = drop.tolerance || drop.modes[drop.mode];
+            // go through each passed interaction...
+            do
+                if (ia = dd.interactions[x]) {
+                    // check valid interaction
+                    if (!ia)
+                        return;
+                    // initialize or clear the drop data
+                    ia.drop = [];
+                    // holds the drop elements
+                    arr = [];
+                    len = ia.droppable.length;
+                    // determine the proxy location, if needed
+                    if (tolerance)
+                        drg = drop.locate(ia.proxy);
+                    // reset the loop
+                    i = 0;
+                    // loop each stored drop target
+                    do
+                        if (elem = ia.droppable[i]) {
+                            data = $.data(elem, drop.datakey);
+                            drp = data.location;
+                            if (!drp)
+                                continue;
+                            // find a winner: tolerance function is defined, call it
+                            data.winner = tolerance ? tolerance.call(drop, drop.event, drg, drp)
+                                // mouse position is always the fallback
+                                : drop.contains(drp, xy) ? 1 : 0;
+                            arr.push(data);
+                        }
+                    while (++i < len); // loop
+                    // sort the drop targets
+                    arr.sort(drop.sort);
+                    // reset the loop
+                    i = 0;
+                    // loop through all of the targets again
+                    do
+                        if (data = arr[i]) {
+                            // winners...
+                            if (data.winner && ia.drop.length < drop.multi) {
+                                // new winner... dropstart
+                                if (!data.active[x] && !data.anyactive) {
+                                    // check to make sure that this is not prevented
+                                    if ($special.drag.hijack(drop.event, "dropstart", dd, x, data.elem)[0] !== false) {
+                                        data.active[x] = 1;
+                                        data.anyactive += 1;
+                                    }
+                                    // if false, it is not a winner
+                                    else
+                                        data.winner = 0;
+                                }
+                                // if it is still a winner
+                                if (data.winner)
+                                    ia.drop.push(data.elem);
+                            }
+                            // losers...
+                            else if (data.active[x] && data.anyactive == 1) {
+                                // former winner... dropend
+                                $special.drag.hijack(drop.event, "dropend", dd, x, data.elem);
+                                data.active[x] = 0;
+                                data.anyactive -= 1;
+                            }
+                        }
+                    while (++i < len); // loop
+                }
+            while (++x < end); // loop
+            // check if the mouse is still moving or is idle
+            if (drop.last && xy[0] == drop.last.pageX && xy[1] == drop.last.pageY)
+                delete drop.timer; // idle, don't recurse
+            else // recurse
+                drop.timer = setTimeout(function () {
+                    drop.tolerate(dd);
+                }, drop.delay);
+            // remember event, to compare idleness
+            drop.last = drop.event;
+        }
+    };
+    // share the same special event configuration with related events...
+    $special.dropinit = $special.dropstart = $special.dropend = drop;
+},
+528: /* slickgrid/slick.dataview.js */ function _(require, module, exports) {
+    var $ = require(519) /* ./slick.jquery */;
+    var Slick = require(521) /* ./slick.core */;
+    /***
+     * A sample Model implementation.
+     * Provides a filtered view of the underlying data.
+     *
+     * Relies on the data item having an "id" property uniquely identifying it.
+     */
+    function DataView(options) {
+        var self = this;
+        var defaults = {
+            groupItemMetadataProvider: null,
+            inlineFilters: false
+        };
+        // private
+        var idProperty = "id"; // property holding a unique row id
+        var items = []; // data by index
+        var rows = []; // data by row
+        var idxById = {}; // indexes by id
+        var rowsById = null; // rows by id; lazy-calculated
+        var filter = null; // filter function
+        var updated = null; // updated item ids
+        var suspend = false; // suspends the recalculation
+        var sortAsc = true;
+        var fastSortField;
+        var sortComparer;
+        var refreshHints = {};
+        var prevRefreshHints = {};
+        var filterArgs;
+        var filteredItems = [];
+        var compiledFilter;
+        var compiledFilterWithCaching;
+        var filterCache = [];
+        // grouping
+        var groupingInfoDefaults = {
+            getter: null,
+            formatter: null,
+            comparer: function (a, b) {
+                return (a.value === b.value ? 0 :
+                    (a.value > b.value ? 1 : -1));
+            },
+            predefinedValues: [],
+            aggregators: [],
+            aggregateEmpty: false,
+            aggregateCollapsed: false,
+            aggregateChildGroups: false,
+            collapsed: false,
+            displayTotalsRow: true,
+            lazyTotalsCalculation: false
+        };
+        var groupingInfos = [];
+        var groups = [];
+        var toggledGroupsByLevel = [];
+        var groupingDelimiter = ':|:';
+        var pagesize = 0;
+        var pagenum = 0;
+        var totalRows = 0;
+        // events
+        var onRowCountChanged = new Slick.Event();
+        var onRowsChanged = new Slick.Event();
+        var onPagingInfoChanged = new Slick.Event();
+        options = $.extend(true, {}, defaults, options);
+        function beginUpdate() {
+            suspend = true;
+        }
+        function endUpdate() {
+            suspend = false;
+            refresh();
+        }
+        function setRefreshHints(hints) {
+            refreshHints = hints;
+        }
+        function setFilterArgs(args) {
+            filterArgs = args;
+        }
+        function updateIdxById(startingIndex) {
+            startingIndex = startingIndex || 0;
+            var id;
+            for (var i = startingIndex, l = items.length; i < l; i++) {
+                id = items[i][idProperty];
+                if (id === undefined) {
+                    throw new Error("Each data element must implement a unique 'id' property");
+                }
+                idxById[id] = i;
+            }
+        }
+        function ensureIdUniqueness() {
+            var id;
+            for (var i = 0, l = items.length; i < l; i++) {
+                id = items[i][idProperty];
+                if (id === undefined || idxById[id] !== i) {
+                    throw new Error("Each data element must implement a unique 'id' property");
+                }
+            }
+        }
+        function getItems() {
+            return items;
+        }
+        function setItems(data, objectIdProperty) {
+            if (objectIdProperty !== undefined) {
+                idProperty = objectIdProperty;
+            }
+            items = filteredItems = data;
+            idxById = {};
+            updateIdxById();
+            ensureIdUniqueness();
+            refresh();
+        }
+        function setPagingOptions(args) {
+            if (args.pageSize != undefined) {
+                pagesize = args.pageSize;
+                pagenum = pagesize ? Math.min(pagenum, Math.max(0, Math.ceil(totalRows / pagesize) - 1)) : 0;
+            }
+            if (args.pageNum != undefined) {
+                pagenum = Math.min(args.pageNum, Math.max(0, Math.ceil(totalRows / pagesize) - 1));
+            }
+            onPagingInfoChanged.notify(getPagingInfo(), null, self);
+            refresh();
+        }
+        function getPagingInfo() {
+            var totalPages = pagesize ? Math.max(1, Math.ceil(totalRows / pagesize)) : 1;
+            return { pageSize: pagesize, pageNum: pagenum, totalRows: totalRows, totalPages: totalPages, dataView: self };
+        }
+        function sort(comparer, ascending) {
+            sortAsc = ascending;
+            sortComparer = comparer;
+            fastSortField = null;
+            if (ascending === false) {
+                items.reverse();
+            }
+            items.sort(comparer);
+            if (ascending === false) {
+                items.reverse();
+            }
+            idxById = {};
+            updateIdxById();
+            refresh();
+        }
+        /***
+         * Provides a workaround for the extremely slow sorting in IE.
+         * Does a [lexicographic] sort on a give column by temporarily overriding Object.prototype.toString
+         * to return the value of that field and then doing a native Array.sort().
+         */
+        function fastSort(field, ascending) {
+            sortAsc = ascending;
+            fastSortField = field;
+            sortComparer = null;
+            var oldToString = Object.prototype.toString;
+            Object.prototype.toString = (typeof field == "function") ? field : function () {
+                return this[field];
+            };
+            // an extra reversal for descending sort keeps the sort stable
+            // (assuming a stable native sort implementation, which isn't true in some cases)
+            if (ascending === false) {
+                items.reverse();
+            }
+            items.sort();
+            Object.prototype.toString = oldToString;
+            if (ascending === false) {
+                items.reverse();
+            }
+            idxById = {};
+            updateIdxById();
+            refresh();
+        }
+        function reSort() {
+            if (sortComparer) {
+                sort(sortComparer, sortAsc);
+            }
+            else if (fastSortField) {
+                fastSort(fastSortField, sortAsc);
+            }
+        }
+        function getFilteredItems() {
+            return filteredItems;
+        }
+        function getFilter() {
+            return filter;
+        }
+        function setFilter(filterFn) {
+            filter = filterFn;
+            if (options.inlineFilters) {
+                compiledFilter = compileFilter();
+                compiledFilterWithCaching = compileFilterWithCaching();
+            }
+            refresh();
+        }
+        function getGrouping() {
+            return groupingInfos;
+        }
+        function setGrouping(groupingInfo) {
+            if (!options.groupItemMetadataProvider) {
+                options.groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
+            }
+            groups = [];
+            toggledGroupsByLevel = [];
+            groupingInfo = groupingInfo || [];
+            groupingInfos = (groupingInfo instanceof Array) ? groupingInfo : [groupingInfo];
+            for (var i = 0; i < groupingInfos.length; i++) {
+                var gi = groupingInfos[i] = $.extend(true, {}, groupingInfoDefaults, groupingInfos[i]);
+                gi.getterIsAFn = typeof gi.getter === "function";
+                // pre-compile accumulator loops
+                gi.compiledAccumulators = [];
+                var idx = gi.aggregators.length;
+                while (idx--) {
+                    gi.compiledAccumulators[idx] = compileAccumulatorLoop(gi.aggregators[idx]);
+                }
+                toggledGroupsByLevel[i] = {};
+            }
+            refresh();
+        }
+        /**
+         * @deprecated Please use {@link setGrouping}.
+         */
+        function groupBy(valueGetter, valueFormatter, sortComparer) {
+            if (valueGetter == null) {
+                setGrouping([]);
+                return;
+            }
+            setGrouping({
+                getter: valueGetter,
+                formatter: valueFormatter,
+                comparer: sortComparer
+            });
+        }
+        /**
+         * @deprecated Please use {@link setGrouping}.
+         */
+        function setAggregators(groupAggregators, includeCollapsed) {
+            if (!groupingInfos.length) {
+                throw new Error("At least one grouping must be specified before calling setAggregators().");
+            }
+            groupingInfos[0].aggregators = groupAggregators;
+            groupingInfos[0].aggregateCollapsed = includeCollapsed;
+            setGrouping(groupingInfos);
+        }
+        function getItemByIdx(i) {
+            return items[i];
+        }
+        function getIdxById(id) {
+            return idxById[id];
+        }
+        function ensureRowsByIdCache() {
+            if (!rowsById) {
+                rowsById = {};
+                for (var i = 0, l = rows.length; i < l; i++) {
+                    rowsById[rows[i][idProperty]] = i;
+                }
+            }
+        }
+        function getRowByItem(item) {
+            ensureRowsByIdCache();
+            return rowsById[item[idProperty]];
+        }
+        function getRowById(id) {
+            ensureRowsByIdCache();
+            return rowsById[id];
+        }
+        function getItemById(id) {
+            return items[idxById[id]];
+        }
+        function mapItemsToRows(itemArray) {
+            var rows = [];
+            ensureRowsByIdCache();
+            for (var i = 0, l = itemArray.length; i < l; i++) {
+                var row = rowsById[itemArray[i][idProperty]];
+                if (row != null) {
+                    rows[rows.length] = row;
+                }
+            }
+            return rows;
+        }
+        function mapIdsToRows(idArray) {
+            var rows = [];
+            ensureRowsByIdCache();
+            for (var i = 0, l = idArray.length; i < l; i++) {
+                var row = rowsById[idArray[i]];
+                if (row != null) {
+                    rows[rows.length] = row;
+                }
+            }
+            return rows;
+        }
+        function mapRowsToIds(rowArray) {
+            var ids = [];
+            for (var i = 0, l = rowArray.length; i < l; i++) {
+                if (rowArray[i] < rows.length) {
+                    ids[ids.length] = rows[rowArray[i]][idProperty];
+                }
+            }
+            return ids;
+        }
+        function updateItem(id, item) {
+            if (idxById[id] === undefined || id !== item[idProperty]) {
+                throw new Error("Invalid or non-matching id");
+            }
+            items[idxById[id]] = item;
+            if (!updated) {
+                updated = {};
+            }
+            updated[id] = true;
+            refresh();
+        }
+        function insertItem(insertBefore, item) {
+            items.splice(insertBefore, 0, item);
+            updateIdxById(insertBefore);
+            refresh();
+        }
+        function addItem(item) {
+            items.push(item);
+            updateIdxById(items.length - 1);
+            refresh();
+        }
+        function deleteItem(id) {
+            var idx = idxById[id];
+            if (idx === undefined) {
+                throw new Error("Invalid id");
+            }
+            delete idxById[id];
+            items.splice(idx, 1);
+            updateIdxById(idx);
+            refresh();
+        }
+        function sortedAddItem(item) {
+            if (!sortComparer) {
+                throw new Error("sortedAddItem() requires a sort comparer, use sort()");
+            }
+            insertItem(sortedIndex(item), item);
+        }
+        function sortedUpdateItem(id, item) {
+            if (idxById[id] === undefined || id !== item[idProperty]) {
+                throw new Error("Invalid or non-matching id " + idxById[id]);
+            }
+            if (!sortComparer) {
+                throw new Error("sortedUpdateItem() requires a sort comparer, use sort()");
+            }
+            var oldItem = getItemById(id);
+            if (sortComparer(oldItem, item) !== 0) {
+                // item affects sorting -> must use sorted add
+                deleteItem(id);
+                sortedAddItem(item);
+            }
+            else { // update does not affect sorting -> regular update works fine
+                updateItem(id, item);
+            }
+        }
+        function sortedIndex(searchItem) {
+            var low = 0, high = items.length;
+            while (low < high) {
+                var mid = low + high >>> 1;
+                if (sortComparer(items[mid], searchItem) === -1) {
+                    low = mid + 1;
+                }
+                else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+        function getLength() {
+            return rows.length;
+        }
+        function getItem(i) {
+            var item = rows[i];
+            // if this is a group row, make sure totals are calculated and update the title
+            if (item && item.__group && item.totals && !item.totals.initialized) {
+                var gi = groupingInfos[item.level];
+                if (!gi.displayTotalsRow) {
+                    calculateTotals(item.totals);
+                    item.title = gi.formatter ? gi.formatter(item) : item.value;
+                }
+            }
+            // if this is a totals row, make sure it's calculated
+            else if (item && item.__groupTotals && !item.initialized) {
+                calculateTotals(item);
+            }
+            return item;
+        }
+        function getItemMetadata(i) {
+            var item = rows[i];
+            if (item === undefined) {
+                return null;
+            }
+            // overrides for grouping rows
+            if (item.__group) {
+                return options.groupItemMetadataProvider.getGroupRowMetadata(item);
+            }
+            // overrides for totals rows
+            if (item.__groupTotals) {
+                return options.groupItemMetadataProvider.getTotalsRowMetadata(item);
+            }
+            return null;
+        }
+        function expandCollapseAllGroups(level, collapse) {
+            if (level == null) {
+                for (var i = 0; i < groupingInfos.length; i++) {
+                    toggledGroupsByLevel[i] = {};
+                    groupingInfos[i].collapsed = collapse;
+                }
+            }
+            else {
+                toggledGroupsByLevel[level] = {};
+                groupingInfos[level].collapsed = collapse;
+            }
+            refresh();
+        }
+        /**
+         * @param level {Number} Optional level to collapse.  If not specified, applies to all levels.
+         */
+        function collapseAllGroups(level) {
+            expandCollapseAllGroups(level, true);
+        }
+        /**
+         * @param level {Number} Optional level to expand.  If not specified, applies to all levels.
+         */
+        function expandAllGroups(level) {
+            expandCollapseAllGroups(level, false);
+        }
+        function expandCollapseGroup(level, groupingKey, collapse) {
+            toggledGroupsByLevel[level][groupingKey] = groupingInfos[level].collapsed ^ collapse;
+            refresh();
+        }
+        /**
+         * @param varArgs Either a Slick.Group's "groupingKey" property, or a
+         *     variable argument list of grouping values denoting a unique path to the row.  For
+         *     example, calling collapseGroup('high', '10%') will collapse the '10%' subgroup of
+         *     the 'high' group.
+         */
+        function collapseGroup(varArgs) {
+            var args = Array.prototype.slice.call(arguments);
+            var arg0 = args[0];
+            if (args.length == 1 && arg0.indexOf(groupingDelimiter) != -1) {
+                expandCollapseGroup(arg0.split(groupingDelimiter).length - 1, arg0, true);
+            }
+            else {
+                expandCollapseGroup(args.length - 1, args.join(groupingDelimiter), true);
+            }
+        }
+        /**
+         * @param varArgs Either a Slick.Group's "groupingKey" property, or a
+         *     variable argument list of grouping values denoting a unique path to the row.  For
+         *     example, calling expandGroup('high', '10%') will expand the '10%' subgroup of
+         *     the 'high' group.
+         */
+        function expandGroup(varArgs) {
+            var args = Array.prototype.slice.call(arguments);
+            var arg0 = args[0];
+            if (args.length == 1 && arg0.indexOf(groupingDelimiter) != -1) {
+                expandCollapseGroup(arg0.split(groupingDelimiter).length - 1, arg0, false);
+            }
+            else {
+                expandCollapseGroup(args.length - 1, args.join(groupingDelimiter), false);
+            }
+        }
+        function getGroups() {
+            return groups;
+        }
+        function extractGroups(rows, parentGroup) {
+            var group;
+            var val;
+            var groups = [];
+            var groupsByVal = {};
+            var r;
+            var level = parentGroup ? parentGroup.level + 1 : 0;
+            var gi = groupingInfos[level];
+            for (var i = 0, l = gi.predefinedValues.length; i < l; i++) {
+                val = gi.predefinedValues[i];
+                group = groupsByVal[val];
+                if (!group) {
+                    group = new Slick.Group();
+                    group.value = val;
+                    group.level = level;
+                    group.groupingKey = (parentGroup ? parentGroup.groupingKey + groupingDelimiter : '') + val;
+                    groups[groups.length] = group;
+                    groupsByVal[val] = group;
+                }
+            }
+            for (var i = 0, l = rows.length; i < l; i++) {
+                r = rows[i];
+                val = gi.getterIsAFn ? gi.getter(r) : r[gi.getter];
+                group = groupsByVal[val];
+                if (!group) {
+                    group = new Slick.Group();
+                    group.value = val;
+                    group.level = level;
+                    group.groupingKey = (parentGroup ? parentGroup.groupingKey + groupingDelimiter : '') + val;
+                    groups[groups.length] = group;
+                    groupsByVal[val] = group;
+                }
+                group.rows[group.count++] = r;
+            }
+            if (level < groupingInfos.length - 1) {
+                for (var i = 0; i < groups.length; i++) {
+                    group = groups[i];
+                    group.groups = extractGroups(group.rows, group);
+                }
+            }
+            groups.sort(groupingInfos[level].comparer);
+            return groups;
+        }
+        function calculateTotals(totals) {
+            var group = totals.group;
+            var gi = groupingInfos[group.level];
+            var isLeafLevel = (group.level == groupingInfos.length);
+            var agg, idx = gi.aggregators.length;
+            if (!isLeafLevel && gi.aggregateChildGroups) {
+                // make sure all the subgroups are calculated
+                var i = group.groups.length;
+                while (i--) {
+                    if (!group.groups[i].totals.initialized) {
+                        calculateTotals(group.groups[i].totals);
+                    }
+                }
+            }
+            while (idx--) {
+                agg = gi.aggregators[idx];
+                agg.init();
+                if (!isLeafLevel && gi.aggregateChildGroups) {
+                    gi.compiledAccumulators[idx].call(agg, group.groups);
+                }
+                else {
+                    gi.compiledAccumulators[idx].call(agg, group.rows);
+                }
+                agg.storeResult(totals);
+            }
+            totals.initialized = true;
+        }
+        function addGroupTotals(group) {
+            var gi = groupingInfos[group.level];
+            var totals = new Slick.GroupTotals();
+            totals.group = group;
+            group.totals = totals;
+            if (!gi.lazyTotalsCalculation) {
+                calculateTotals(totals);
+            }
+        }
+        function addTotals(groups, level) {
+            level = level || 0;
+            var gi = groupingInfos[level];
+            var groupCollapsed = gi.collapsed;
+            var toggledGroups = toggledGroupsByLevel[level];
+            var idx = groups.length, g;
+            while (idx--) {
+                g = groups[idx];
+                if (g.collapsed && !gi.aggregateCollapsed) {
+                    continue;
+                }
+                // Do a depth-first aggregation so that parent group aggregators can access subgroup totals.
+                if (g.groups) {
+                    addTotals(g.groups, level + 1);
+                }
+                if (gi.aggregators.length && (gi.aggregateEmpty || g.rows.length || (g.groups && g.groups.length))) {
+                    addGroupTotals(g);
+                }
+                g.collapsed = groupCollapsed ^ toggledGroups[g.groupingKey];
+                g.title = gi.formatter ? gi.formatter(g) : g.value;
+            }
+        }
+        function flattenGroupedRows(groups, level) {
+            level = level || 0;
+            var gi = groupingInfos[level];
+            var groupedRows = [], rows, gl = 0, g;
+            for (var i = 0, l = groups.length; i < l; i++) {
+                g = groups[i];
+                groupedRows[gl++] = g;
+                if (!g.collapsed) {
+                    rows = g.groups ? flattenGroupedRows(g.groups, level + 1) : g.rows;
+                    for (var j = 0, jj = rows.length; j < jj; j++) {
+                        groupedRows[gl++] = rows[j];
+                    }
+                }
+                if (g.totals && gi.displayTotalsRow && (!g.collapsed || gi.aggregateCollapsed)) {
+                    groupedRows[gl++] = g.totals;
+                }
+            }
+            return groupedRows;
+        }
+        function getFunctionInfo(fn) {
+            var fnRegex = /^function[^(]*\(([^)]*)\)\s*{([\s\S]*)}$/;
+            var matches = fn.toString().match(fnRegex);
+            return {
+                params: matches[1].split(","),
+                body: matches[2]
+            };
+        }
+        function compileAccumulatorLoop(aggregator) {
+            var accumulatorInfo = getFunctionInfo(aggregator.accumulate);
+            var fn = new Function("_items", "for (var " + accumulatorInfo.params[0] + ", _i=0, _il=_items.length; _i<_il; _i++) {" +
+                accumulatorInfo.params[0] + " = _items[_i]; " +
+                accumulatorInfo.body +
+                "}");
+            fn.displayName = fn.name = "compiledAccumulatorLoop";
+            return fn;
+        }
+        function compileFilter() {
+            var filterInfo = getFunctionInfo(filter);
+            var filterPath1 = "{ continue _coreloop; }$1";
+            var filterPath2 = "{ _retval[_idx++] = $item$; continue _coreloop; }$1";
+            // make some allowances for minification - there's only so far we can go with RegEx
+            var filterBody = filterInfo.body
+                .replace(/return false\s*([;}]|\}|$)/gi, filterPath1)
+                .replace(/return!1([;}]|\}|$)/gi, filterPath1)
+                .replace(/return true\s*([;}]|\}|$)/gi, filterPath2)
+                .replace(/return!0([;}]|\}|$)/gi, filterPath2)
+                .replace(/return ([^;}]+?)\s*([;}]|$)/gi, "{ if ($1) { _retval[_idx++] = $item$; }; continue _coreloop; }$2");
+            // This preserves the function template code after JS compression,
+            // so that replace() commands still work as expected.
+            var tpl = [
+                //"function(_items, _args) { ",
+                "var _retval = [], _idx = 0; ",
+                "var $item$, $args$ = _args; ",
+                "_coreloop: ",
+                "for (var _i = 0, _il = _items.length; _i < _il; _i++) { ",
+                "$item$ = _items[_i]; ",
+                "$filter$; ",
+                "} ",
+                "return _retval; "
+                //"}"
+            ].join("");
+            tpl = tpl.replace(/\$filter\$/gi, filterBody);
+            tpl = tpl.replace(/\$item\$/gi, filterInfo.params[0]);
+            tpl = tpl.replace(/\$args\$/gi, filterInfo.params[1]);
+            var fn = new Function("_items,_args", tpl);
+            fn.displayName = fn.name = "compiledFilter";
+            return fn;
+        }
+        function compileFilterWithCaching() {
+            var filterInfo = getFunctionInfo(filter);
+            var filterPath1 = "{ continue _coreloop; }$1";
+            var filterPath2 = "{ _cache[_i] = true;_retval[_idx++] = $item$; continue _coreloop; }$1";
+            // make some allowances for minification - there's only so far we can go with RegEx
+            var filterBody = filterInfo.body
+                .replace(/return false\s*([;}]|\}|$)/gi, filterPath1)
+                .replace(/return!1([;}]|\}|$)/gi, filterPath1)
+                .replace(/return true\s*([;}]|\}|$)/gi, filterPath2)
+                .replace(/return!0([;}]|\}|$)/gi, filterPath2)
+                .replace(/return ([^;}]+?)\s*([;}]|$)/gi, "{ if ((_cache[_i] = $1)) { _retval[_idx++] = $item$; }; continue _coreloop; }$2");
+            // This preserves the function template code after JS compression,
+            // so that replace() commands still work as expected.
+            var tpl = [
+                //"function(_items, _args, _cache) { ",
+                "var _retval = [], _idx = 0; ",
+                "var $item$, $args$ = _args; ",
+                "_coreloop: ",
+                "for (var _i = 0, _il = _items.length; _i < _il; _i++) { ",
+                "$item$ = _items[_i]; ",
+                "if (_cache[_i]) { ",
+                "_retval[_idx++] = $item$; ",
+                "continue _coreloop; ",
+                "} ",
+                "$filter$; ",
+                "} ",
+                "return _retval; "
+                //"}"
+            ].join("");
+            tpl = tpl.replace(/\$filter\$/gi, filterBody);
+            tpl = tpl.replace(/\$item\$/gi, filterInfo.params[0]);
+            tpl = tpl.replace(/\$args\$/gi, filterInfo.params[1]);
+            var fn = new Function("_items,_args,_cache", tpl);
+            fn.displayName = fn.name = "compiledFilterWithCaching";
+            return fn;
+        }
+        function uncompiledFilter(items, args) {
+            var retval = [], idx = 0;
+            for (var i = 0, ii = items.length; i < ii; i++) {
+                if (filter(items[i], args)) {
+                    retval[idx++] = items[i];
+                }
+            }
+            return retval;
+        }
+        function uncompiledFilterWithCaching(items, args, cache) {
+            var retval = [], idx = 0, item;
+            for (var i = 0, ii = items.length; i < ii; i++) {
+                item = items[i];
+                if (cache[i]) {
+                    retval[idx++] = item;
+                }
+                else if (filter(item, args)) {
+                    retval[idx++] = item;
+                    cache[i] = true;
+                }
+            }
+            return retval;
+        }
+        function getFilteredAndPagedItems(items) {
+            if (filter) {
+                var batchFilter = options.inlineFilters ? compiledFilter : uncompiledFilter;
+                var batchFilterWithCaching = options.inlineFilters ? compiledFilterWithCaching : uncompiledFilterWithCaching;
+                if (refreshHints.isFilterNarrowing) {
+                    filteredItems = batchFilter(filteredItems, filterArgs);
+                }
+                else if (refreshHints.isFilterExpanding) {
+                    filteredItems = batchFilterWithCaching(items, filterArgs, filterCache);
+                }
+                else if (!refreshHints.isFilterUnchanged) {
+                    filteredItems = batchFilter(items, filterArgs);
+                }
+            }
+            else {
+                // special case:  if not filtering and not paging, the resulting
+                // rows collection needs to be a copy so that changes due to sort
+                // can be caught
+                filteredItems = pagesize ? items : items.concat();
+            }
+            // get the current page
+            var paged;
+            if (pagesize) {
+                if (filteredItems.length <= pagenum * pagesize) {
+                    if (filteredItems.length === 0) {
+                        pagenum = 0;
+                    }
+                    else {
+                        pagenum = Math.floor((filteredItems.length - 1) / pagesize);
+                    }
+                }
+                paged = filteredItems.slice(pagesize * pagenum, pagesize * pagenum + pagesize);
+            }
+            else {
+                paged = filteredItems;
+            }
+            return { totalRows: filteredItems.length, rows: paged };
+        }
+        function getRowDiffs(rows, newRows) {
+            var item, r, eitherIsNonData, diff = [];
+            var from = 0, to = newRows.length;
+            if (refreshHints && refreshHints.ignoreDiffsBefore) {
+                from = Math.max(0, Math.min(newRows.length, refreshHints.ignoreDiffsBefore));
+            }
+            if (refreshHints && refreshHints.ignoreDiffsAfter) {
+                to = Math.min(newRows.length, Math.max(0, refreshHints.ignoreDiffsAfter));
+            }
+            for (var i = from, rl = rows.length; i < to; i++) {
+                if (i >= rl) {
+                    diff[diff.length] = i;
+                }
+                else {
+                    item = newRows[i];
+                    r = rows[i];
+                    if ((groupingInfos.length && (eitherIsNonData = (item.__nonDataRow) || (r.__nonDataRow)) &&
+                        item.__group !== r.__group ||
+                        item.__group && !item.equals(r))
+                        || (eitherIsNonData &&
+                            // no good way to compare totals since they are arbitrary DTOs
+                            // deep object comparison is pretty expensive
+                            // always considering them 'dirty' seems easier for the time being
+                            (item.__groupTotals || r.__groupTotals))
+                        || item[idProperty] != r[idProperty]
+                        || (updated && updated[item[idProperty]])) {
+                        diff[diff.length] = i;
+                    }
+                }
+            }
+            return diff;
+        }
+        function recalc(_items) {
+            rowsById = null;
+            if (refreshHints.isFilterNarrowing != prevRefreshHints.isFilterNarrowing ||
+                refreshHints.isFilterExpanding != prevRefreshHints.isFilterExpanding) {
+                filterCache = [];
+            }
+            var filteredItems = getFilteredAndPagedItems(_items);
+            totalRows = filteredItems.totalRows;
+            var newRows = filteredItems.rows;
+            groups = [];
+            if (groupingInfos.length) {
+                groups = extractGroups(newRows);
+                if (groups.length) {
+                    addTotals(groups);
+                    newRows = flattenGroupedRows(groups);
+                }
+            }
+            var diff = getRowDiffs(rows, newRows);
+            rows = newRows;
+            return diff;
+        }
+        function refresh() {
+            if (suspend) {
+                return;
+            }
+            var countBefore = rows.length;
+            var totalRowsBefore = totalRows;
+            var diff = recalc(items, filter); // pass as direct refs to avoid closure perf hit
+            // if the current page is no longer valid, go to last page and recalc
+            // we suffer a performance penalty here, but the main loop (recalc) remains highly optimized
+            if (pagesize && totalRows < pagenum * pagesize) {
+                pagenum = Math.max(0, Math.ceil(totalRows / pagesize) - 1);
+                diff = recalc(items, filter);
+            }
+            updated = null;
+            prevRefreshHints = refreshHints;
+            refreshHints = {};
+            if (totalRowsBefore !== totalRows) {
+                onPagingInfoChanged.notify(getPagingInfo(), null, self);
+            }
+            if (countBefore !== rows.length) {
+                onRowCountChanged.notify({ previous: countBefore, current: rows.length, dataView: self }, null, self);
+            }
+            if (diff.length > 0) {
+                onRowsChanged.notify({ rows: diff, dataView: self }, null, self);
+            }
+        }
+        /***
+         * Wires the grid and the DataView together to keep row selection tied to item ids.
+         * This is useful since, without it, the grid only knows about rows, so if the items
+         * move around, the same rows stay selected instead of the selection moving along
+         * with the items.
+         *
+         * NOTE:  This doesn't work with cell selection model.
+         *
+         * @param grid {Slick.Grid} The grid to sync selection with.
+         * @param preserveHidden {Boolean} Whether to keep selected items that go out of the
+         *     view due to them getting filtered out.
+         * @param preserveHiddenOnSelectionChange {Boolean} Whether to keep selected items
+         *     that are currently out of the view (see preserveHidden) as selected when selection
+         *     changes.
+         * @return {Slick.Event} An event that notifies when an internal list of selected row ids
+         *     changes.  This is useful since, in combination with the above two options, it allows
+         *     access to the full list selected row ids, and not just the ones visible to the grid.
+         * @method syncGridSelection
+         */
+        function syncGridSelection(grid, preserveHidden, preserveHiddenOnSelectionChange) {
+            var self = this;
+            var inHandler;
+            var selectedRowIds = self.mapRowsToIds(grid.getSelectedRows());
+            var onSelectedRowIdsChanged = new Slick.Event();
+            function setSelectedRowIds(rowIds) {
+                if (selectedRowIds.join(",") == rowIds.join(",")) {
+                    return;
+                }
+                selectedRowIds = rowIds;
+                onSelectedRowIdsChanged.notify({
+                    "grid": grid,
+                    "ids": selectedRowIds,
+                    "dataView": self
+                }, new Slick.EventData(), self);
+            }
+            function update() {
+                if (selectedRowIds.length > 0) {
+                    inHandler = true;
+                    var selectedRows = self.mapIdsToRows(selectedRowIds);
+                    if (!preserveHidden) {
+                        setSelectedRowIds(self.mapRowsToIds(selectedRows));
+                    }
+                    grid.setSelectedRows(selectedRows);
+                    inHandler = false;
+                }
+            }
+            grid.onSelectedRowsChanged.subscribe(function (e, args) {
+                if (inHandler) {
+                    return;
+                }
+                var newSelectedRowIds = self.mapRowsToIds(grid.getSelectedRows());
+                if (!preserveHiddenOnSelectionChange || !grid.getOptions().multiSelect) {
+                    setSelectedRowIds(newSelectedRowIds);
+                }
+                else {
+                    // keep the ones that are hidden
+                    var existing = $.grep(selectedRowIds, function (id) { return self.getRowById(id) === undefined; });
+                    // add the newly selected ones
+                    setSelectedRowIds(existing.concat(newSelectedRowIds));
+                }
+            });
+            this.onRowsChanged.subscribe(update);
+            this.onRowCountChanged.subscribe(update);
+            return onSelectedRowIdsChanged;
+        }
+        function syncGridCellCssStyles(grid, key) {
+            var hashById;
+            var inHandler;
+            // since this method can be called after the cell styles have been set,
+            // get the existing ones right away
+            storeCellCssStyles(grid.getCellCssStyles(key));
+            function storeCellCssStyles(hash) {
+                hashById = {};
+                for (var row in hash) {
+                    var id = rows[row][idProperty];
+                    hashById[id] = hash[row];
+                }
+            }
+            function update() {
+                if (hashById) {
+                    inHandler = true;
+                    ensureRowsByIdCache();
+                    var newHash = {};
+                    for (var id in hashById) {
+                        var row = rowsById[id];
+                        if (row != undefined) {
+                            newHash[row] = hashById[id];
+                        }
+                    }
+                    grid.setCellCssStyles(key, newHash);
+                    inHandler = false;
+                }
+            }
+            grid.onCellCssStylesChanged.subscribe(function (e, args) {
+                if (inHandler) {
+                    return;
+                }
+                if (key != args.key) {
+                    return;
+                }
+                if (args.hash) {
+                    storeCellCssStyles(args.hash);
+                }
+                else {
+                    grid.onCellCssStylesChanged.unsubscribe(styleChanged);
+                    self.onRowsChanged.unsubscribe(update);
+                    self.onRowCountChanged.unsubscribe(update);
+                }
+            });
+            this.onRowsChanged.subscribe(update);
+            this.onRowCountChanged.subscribe(update);
+        }
+        $.extend(this, {
+            // methods
+            "beginUpdate": beginUpdate,
+            "endUpdate": endUpdate,
+            "setPagingOptions": setPagingOptions,
+            "getPagingInfo": getPagingInfo,
+            "getItems": getItems,
+            "setItems": setItems,
+            "setFilter": setFilter,
+            "getFilter": getFilter,
+            "getFilteredItems": getFilteredItems,
+            "sort": sort,
+            "fastSort": fastSort,
+            "reSort": reSort,
+            "setGrouping": setGrouping,
+            "getGrouping": getGrouping,
+            "groupBy": groupBy,
+            "setAggregators": setAggregators,
+            "collapseAllGroups": collapseAllGroups,
+            "expandAllGroups": expandAllGroups,
+            "collapseGroup": collapseGroup,
+            "expandGroup": expandGroup,
+            "getGroups": getGroups,
+            "getIdxById": getIdxById,
+            "getRowByItem": getRowByItem,
+            "getRowById": getRowById,
+            "getItemById": getItemById,
+            "getItemByIdx": getItemByIdx,
+            "mapItemsToRows": mapItemsToRows,
+            "mapRowsToIds": mapRowsToIds,
+            "mapIdsToRows": mapIdsToRows,
+            "setRefreshHints": setRefreshHints,
+            "setFilterArgs": setFilterArgs,
+            "refresh": refresh,
+            "updateItem": updateItem,
+            "insertItem": insertItem,
+            "addItem": addItem,
+            "deleteItem": deleteItem,
+            "sortedAddItem": sortedAddItem,
+            "sortedUpdateItem": sortedUpdateItem,
+            "syncGridSelection": syncGridSelection,
+            "syncGridCellCssStyles": syncGridCellCssStyles,
+            // data provider methods
+            "getLength": getLength,
+            "getItem": getItem,
+            "getItemMetadata": getItemMetadata,
+            // events
+            "onRowCountChanged": onRowCountChanged,
+            "onRowsChanged": onRowsChanged,
+            "onPagingInfoChanged": onPagingInfoChanged
+        });
+    }
+    function AvgAggregator(field) {
+        this.field_ = field;
+        this.init = function () {
+            this.count_ = 0;
+            this.nonNullCount_ = 0;
+            this.sum_ = 0;
+        };
+        this.accumulate = function (item) {
+            var val = item[this.field_];
+            this.count_++;
+            if (val != null && val !== "" && !isNaN(val)) {
+                this.nonNullCount_++;
+                this.sum_ += parseFloat(val);
+            }
+        };
+        this.storeResult = function (groupTotals) {
+            if (!groupTotals.avg) {
+                groupTotals.avg = {};
+            }
+            if (this.nonNullCount_ != 0) {
+                groupTotals.avg[this.field_] = this.sum_ / this.nonNullCount_;
+            }
+        };
+    }
+    function MinAggregator(field) {
+        this.field_ = field;
+        this.init = function () {
+            this.min_ = null;
+        };
+        this.accumulate = function (item) {
+            var val = item[this.field_];
+            if (val != null && val !== "" && !isNaN(val)) {
+                if (this.min_ == null || val < this.min_) {
+                    this.min_ = val;
+                }
+            }
+        };
+        this.storeResult = function (groupTotals) {
+            if (!groupTotals.min) {
+                groupTotals.min = {};
+            }
+            groupTotals.min[this.field_] = this.min_;
+        };
+    }
+    function MaxAggregator(field) {
+        this.field_ = field;
+        this.init = function () {
+            this.max_ = null;
+        };
+        this.accumulate = function (item) {
+            var val = item[this.field_];
+            if (val != null && val !== "" && !isNaN(val)) {
+                if (this.max_ == null || val > this.max_) {
+                    this.max_ = val;
+                }
+            }
+        };
+        this.storeResult = function (groupTotals) {
+            if (!groupTotals.max) {
+                groupTotals.max = {};
+            }
+            groupTotals.max[this.field_] = this.max_;
+        };
+    }
+    function SumAggregator(field) {
+        this.field_ = field;
+        this.init = function () {
+            this.sum_ = null;
+        };
+        this.accumulate = function (item) {
+            var val = item[this.field_];
+            if (val != null && val !== "" && !isNaN(val)) {
+                this.sum_ += parseFloat(val);
+            }
+        };
+        this.storeResult = function (groupTotals) {
+            if (!groupTotals.sum) {
+                groupTotals.sum = {};
+            }
+            groupTotals.sum[this.field_] = this.sum_;
+        };
+    }
+    // TODO:  add more built-in aggregators
+    // TODO:  merge common aggregators in one to prevent needles iterating
+    var Aggregators = {
+        Avg: AvgAggregator,
+        Min: MinAggregator,
+        Max: MaxAggregator,
+        Sum: SumAggregator
+    };
+    module.exports = {
+        DataView: DataView,
+        Aggregators: Aggregators,
+        Data: { Aggregators: Aggregators },
+    };
+},
+529: /* slickgrid/slick.editors.js */ function _(require, module, exports) {
+    var $ = require(519) /* ./slick.jquery */;
+    var Slick = require(521) /* ./slick.core */;
+    /***
+     * Contains basic SlickGrid editors.
+     * @module Editors
+     * @namespace Slick
+     */
+    function TextEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
+            $input = $("<INPUT type=text class='editor-text' />")
+                .appendTo(args.container)
+                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
+                .focus()
+                .select();
+        };
+        this.destroy = function () {
+            $input.remove();
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        this.getValue = function () {
+            return $input.val();
+        };
+        this.setValue = function (val) {
+            $input.val(val);
+        };
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field] || "";
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+        this.serializeValue = function () {
+            return $input.val();
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    function IntegerEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
+            $input = $("<INPUT type=text class='editor-text' />")
+                .appendTo(args.container)
+                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
+                .focus()
+                .select();
+        };
+        this.destroy = function () {
+            $input.remove();
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+        this.serializeValue = function () {
+            return parseInt($input.val(), 10) || 0;
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+        this.validate = function () {
+            if (isNaN($input.val())) {
+                return {
+                    valid: false,
+                    msg: "Please enter a valid integer"
+                };
+            }
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    function FloatEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
+            $input = $("<INPUT type=text class='editor-text' />")
+                .appendTo(args.container)
+                .on("keydown.nav", navOnLR ? handleKeydownLRNav : handleKeydownLRNoNav)
+                .focus()
+                .select();
+        };
+        this.destroy = function () {
+            $input.remove();
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        function getDecimalPlaces() {
+            // returns the number of fixed decimal places or null
+            var rtn = args.column.editorFixedDecimalPlaces;
+            if (typeof rtn == 'undefined') {
+                rtn = FloatEditor.DefaultDecimalPlaces;
+            }
+            return (!rtn && rtn !== 0 ? null : rtn);
+        }
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            var decPlaces = getDecimalPlaces();
+            if (decPlaces !== null
+                && (defaultValue || defaultValue === 0)
+                && defaultValue.toFixed) {
+                defaultValue = defaultValue.toFixed(decPlaces);
+            }
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+        this.serializeValue = function () {
+            var rtn = parseFloat($input.val());
+            if (FloatEditor.AllowEmptyValue) {
+                if (!rtn && rtn !== 0) {
+                    rtn = '';
+                }
+            }
+            else {
+                rtn = rtn || 0;
+            }
+            var decPlaces = getDecimalPlaces();
+            if (decPlaces !== null
+                && (rtn || rtn === 0)
+                && rtn.toFixed) {
+                rtn = parseFloat(rtn.toFixed(decPlaces));
+            }
+            return rtn;
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+        this.validate = function () {
+            if (isNaN($input.val())) {
+                return {
+                    valid: false,
+                    msg: "Please enter a valid number"
+                };
+            }
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    FloatEditor.DefaultDecimalPlaces = null;
+    FloatEditor.AllowEmptyValue = false;
+    function DateEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        var calendarOpen = false;
+        this.init = function () {
+            $input = $("<INPUT type=text class='editor-text' />");
+            $input.appendTo(args.container);
+            $input.focus().select();
+            $input.datepicker({
+                showOn: "button",
+                buttonImageOnly: true,
+                beforeShow: function () {
+                    calendarOpen = true;
+                },
+                onClose: function () {
+                    calendarOpen = false;
+                }
+            });
+            $input.width($input.width() - 18);
+        };
+        this.destroy = function () {
+            $.datepicker.dpDiv.stop(true, true);
+            $input.datepicker("hide");
+            $input.datepicker("destroy");
+            $input.remove();
+        };
+        this.show = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).show();
+            }
+        };
+        this.hide = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).hide();
+            }
+        };
+        this.position = function (position) {
+            if (!calendarOpen) {
+                return;
+            }
+            $.datepicker.dpDiv
+                .css("top", position.top + 30)
+                .css("left", position.left);
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+        this.serializeValue = function () {
+            return $input.val();
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    function YesNoSelectEditor(args) {
+        var $select;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            $select = $("<SELECT tabIndex='0' class='editor-yesno'><OPTION value='yes'>Yes</OPTION><OPTION value='no'>No</OPTION></SELECT>");
+            $select.appendTo(args.container);
+            $select.focus();
+        };
+        this.destroy = function () {
+            $select.remove();
+        };
+        this.focus = function () {
+            $select.focus();
+        };
+        this.loadValue = function (item) {
+            $select.val((defaultValue = item[args.column.field]) ? "yes" : "no");
+            $select.select();
+        };
+        this.serializeValue = function () {
+            return ($select.val() == "yes");
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return ($select.val() != defaultValue);
+        };
+        this.validate = function () {
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    function CheckboxEditor(args) {
+        var $select;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            $select = $("<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>");
+            $select.appendTo(args.container);
+            $select.focus();
+        };
+        this.destroy = function () {
+            $select.remove();
+        };
+        this.focus = function () {
+            $select.focus();
+        };
+        this.loadValue = function (item) {
+            defaultValue = !!item[args.column.field];
+            if (defaultValue) {
+                $select.prop('checked', true);
+            }
+            else {
+                $select.prop('checked', false);
+            }
+        };
+        this.preClick = function () {
+            $select.prop('checked', !$select.prop('checked'));
+        };
+        this.serializeValue = function () {
+            return $select.prop('checked');
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (this.serializeValue() !== defaultValue);
+        };
+        this.validate = function () {
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    function PercentCompleteEditor(args) {
+        var $input, $picker;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            $input = $("<INPUT type=text class='editor-percentcomplete' />");
+            $input.width($(args.container).innerWidth() - 25);
+            $input.appendTo(args.container);
+            $picker = $("<div class='editor-percentcomplete-picker' />").appendTo(args.container);
+            $picker.append("<div class='editor-percentcomplete-helper'><div class='editor-percentcomplete-wrapper'><div class='editor-percentcomplete-slider' /><div class='editor-percentcomplete-buttons' /></div></div>");
+            $picker.find(".editor-percentcomplete-buttons").append("<button val=0>Not started</button><br/><button val=50>In Progress</button><br/><button val=100>Complete</button>");
+            $input.focus().select();
+            $picker.find(".editor-percentcomplete-slider").slider({
+                orientation: "vertical",
+                range: "min",
+                value: defaultValue,
+                slide: function (event, ui) {
+                    $input.val(ui.value);
+                }
+            });
+            $picker.find(".editor-percentcomplete-buttons button").on("click", function (e) {
+                $input.val($(this).attr("val"));
+                $picker.find(".editor-percentcomplete-slider").slider("value", $(this).attr("val"));
+            });
+        };
+        this.destroy = function () {
+            $input.remove();
+            $picker.remove();
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        this.loadValue = function (item) {
+            $input.val(defaultValue = item[args.column.field]);
+            $input.select();
+        };
+        this.serializeValue = function () {
+            return parseInt($input.val(), 10) || 0;
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ((parseInt($input.val(), 10) || 0) != defaultValue);
+        };
+        this.validate = function () {
+            if (isNaN(parseInt($input.val(), 10))) {
+                return {
+                    valid: false,
+                    msg: "Please enter a valid positive number"
+                };
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    /*
+     * An example of a "detached" editor.
+     * The UI is added onto document BODY and .position(), .show() and .hide() are implemented.
+     * KeyDown events are also handled to provide handling for Tab, Shift-Tab, Esc and Ctrl-Enter.
+     */
+    function LongTextEditor(args) {
+        var $input, $wrapper;
+        var defaultValue;
+        var scope = this;
+        this.init = function () {
+            var $container = $("body");
+            var navOnLR = args.grid.getOptions().editorCellNavOnLRKeys;
+            $wrapper = $("<DIV style='z-index:10000;position:absolute;background:white;padding:5px;border:3px solid gray; -moz-border-radius:10px; border-radius:10px;'/>")
+                .appendTo($container);
+            $input = $("<TEXTAREA hidefocus rows=5 style='background:white;width:250px;height:80px;border:0;outline:0'>")
+                .appendTo($wrapper);
+            $("<DIV style='text-align:right'><BUTTON>Save</BUTTON><BUTTON>Cancel</BUTTON></DIV>")
+                .appendTo($wrapper);
+            $wrapper.find("button:first").on("click", this.save);
+            $wrapper.find("button:last").on("click", this.cancel);
+            $input.on("keydown", this.handleKeyDown);
+            scope.position(args.position);
+            $input.focus().select();
+        };
+        this.handleKeyDown = function (e) {
+            if (e.which == Slick.keyCode.ENTER && e.ctrlKey) {
+                scope.save();
+            }
+            else if (e.which == Slick.keyCode.ESCAPE) {
+                e.preventDefault();
+                scope.cancel();
+            }
+            else if (e.which == Slick.keyCode.TAB && e.shiftKey) {
+                e.preventDefault();
+                args.grid.navigatePrev();
+            }
+            else if (e.which == Slick.keyCode.TAB) {
+                e.preventDefault();
+                args.grid.navigateNext();
+            }
+            else if (e.which == $.ui.keyCode.LEFT || e.which == $.ui.keyCode.RIGHT) {
+                if (args.grid.getOptions().editorCellNavOnLRKeys) {
+                    var cursorPosition = this.selectionStart;
+                    var textLength = this.value.length;
+                    if (e.keyCode === $.ui.keyCode.LEFT && cursorPosition === 0) {
+                        args.grid.navigatePrev();
+                    }
+                    if (e.keyCode === $.ui.keyCode.RIGHT && cursorPosition >= textLength - 1) {
+                        args.grid.navigateNext();
+                    }
+                }
+            }
+        };
+        this.save = function () {
+            args.commitChanges();
+        };
+        this.cancel = function () {
+            $input.val(defaultValue);
+            args.cancelChanges();
+        };
+        this.hide = function () {
+            $wrapper.hide();
+        };
+        this.show = function () {
+            $wrapper.show();
+        };
+        this.position = function (position) {
+            $wrapper
+                .css("top", position.top - 5)
+                .css("left", position.left - 5);
+        };
+        this.destroy = function () {
+            $wrapper.remove();
+        };
+        this.focus = function () {
+            $input.focus();
+        };
+        this.loadValue = function (item) {
+            $input.val(defaultValue = item[args.column.field]);
+            $input.select();
+        };
+        this.serializeValue = function () {
+            return $input.val();
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+    /*
+     * Depending on the value of Grid option 'editorCellNavOnLRKeys', us
+     * Navigate to the cell on the left if the cursor is at the beginning of the input string
+     * and to the right cell if it's at the end. Otherwise, move the cursor within the text
+     */
+    function handleKeydownLRNav(e) {
+        var cursorPosition = this.selectionStart;
+        var textLength = this.value.length;
+        if ((e.keyCode === $.ui.keyCode.LEFT && cursorPosition > 0) ||
+            e.keyCode === $.ui.keyCode.RIGHT && cursorPosition < textLength - 1) {
+            e.stopImmediatePropagation();
+        }
+    }
+    function handleKeydownLRNoNav(e) {
+        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+            e.stopImmediatePropagation();
+        }
+    }
+    module.exports = {
+        Editors: {
+            Text: TextEditor,
+            Integer: IntegerEditor,
+            Float: FloatEditor,
+            Date: DateEditor,
+            YesNoSelect: YesNoSelectEditor,
+            Checkbox: CheckboxEditor,
+            PercentComplete: PercentCompleteEditor,
+            LongText: LongTextEditor
+        }
+    };
+},
+530: /* slickgrid/slick.formatters.js */ function _(require, module, exports) {
+    var Slick = require(521) /* ./slick.core */;
+    /***
+     * Contains basic SlickGrid formatters.
+     *
+     * NOTE:  These are merely examples.  You will most likely need to implement something more
+     *        robust/extensible/localizable/etc. for your use!
+     *
+     * @module Formatters
+     * @namespace Slick
+     */
+    function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "") {
+            return "-";
+        }
+        else if (value < 50) {
+            return "<span style='color:red;font-weight:bold;'>" + value + "%</span>";
+        }
+        else {
+            return "<span style='color:green'>" + value + "%</span>";
+        }
+    }
+    function PercentCompleteBarFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "") {
+            return "";
+        }
+        var color;
+        if (value < 30) {
+            color = "red";
+        }
+        else if (value < 70) {
+            color = "silver";
+        }
+        else {
+            color = "green";
+        }
+        return "<span class='percent-complete-bar' style='background:" + color + ";width:" + value + "%'></span>";
+    }
+    function YesNoFormatter(row, cell, value, columnDef, dataContext) {
+        return value ? "Yes" : "No";
+    }
+    function CheckboxFormatter(row, cell, value, columnDef, dataContext) {
+        return '<img class="slick-edit-preclick" src="../images/' + (value ? "CheckboxY" : "CheckboxN") + '.png">';
+    }
+    function CheckmarkFormatter(row, cell, value, columnDef, dataContext) {
+        return value ? "<img src='../images/tick.png'>" : "";
+    }
+    module.exports = {
+        Formatters: {
+            PercentComplete: PercentCompleteFormatter,
+            PercentCompleteBar: PercentCompleteBarFormatter,
+            YesNo: YesNoFormatter,
+            Checkmark: CheckmarkFormatter,
+            Checkbox: CheckboxFormatter
+        }
+    };
+},
+531: /* slickgrid/slick.remotemodel.js */ function _(require, module, exports) {
+    var $ = require(519) /* ./slick.jquery */;
+    var Slick = require(521) /* ./slick.core */;
+    /***
+     * A sample AJAX data store implementation.
+     * Right now, it's hooked up to load search results from Octopart, but can
+     * easily be extended to support any JSONP-compatible backend that accepts paging parameters.
+     */
+    function RemoteModel() {
+        // private
+        var PAGESIZE = 50;
+        var data = { length: 0 };
+        var searchstr = "";
+        var sortcol = null;
+        var sortdir = 1;
+        var h_request = null;
+        var req = null; // ajax request
+        // events
+        var onDataLoading = new Slick.Event();
+        var onDataLoaded = new Slick.Event();
+        function init() {
+        }
+        function isDataLoaded(from, to) {
+            for (var i = from; i <= to; i++) {
+                if (data[i] == undefined || data[i] == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        function clear() {
+            for (var key in data) {
+                delete data[key];
+            }
+            data.length = 0;
+        }
+        function ensureData(from, to) {
+            if (req) {
+                req.abort();
+                for (var i = req.fromPage; i <= req.toPage; i++)
+                    data[i * PAGESIZE] = undefined;
+            }
+            if (from < 0) {
+                from = 0;
+            }
+            if (data.length > 0) {
+                to = Math.min(to, data.length - 1);
+            }
+            var fromPage = Math.floor(from / PAGESIZE);
+            var toPage = Math.floor(to / PAGESIZE);
+            while (data[fromPage * PAGESIZE] !== undefined && fromPage < toPage)
+                fromPage++;
+            while (data[toPage * PAGESIZE] !== undefined && fromPage < toPage)
+                toPage--;
+            if (fromPage > toPage || ((fromPage == toPage) && data[fromPage * PAGESIZE] !== undefined)) {
+                // TODO:  look-ahead
+                onDataLoaded.notify({ from: from, to: to });
+                return;
+            }
+            var url = "http://octopart.com/api/v3/parts/search?apikey=68b25f31&include[]=short_description&show[]=uid&show[]=manufacturer&show[]=mpn&show[]=brand&show[]=octopart_url&show[]=short_description&q=" + searchstr + "&start=" + (fromPage * PAGESIZE) + "&limit=" + (((toPage - fromPage) * PAGESIZE) + PAGESIZE);
+            if (sortcol != null) {
+                url += ("&sortby=" + sortcol + ((sortdir > 0) ? "+asc" : "+desc"));
+            }
+            if (h_request != null) {
+                clearTimeout(h_request);
+            }
+            h_request = setTimeout(function () {
+                for (var i = fromPage; i <= toPage; i++)
+                    data[i * PAGESIZE] = null; // null indicates a 'requested but not available yet'
+                onDataLoading.notify({ from: from, to: to });
+                req = $.jsonp({
+                    url: url,
+                    callbackParameter: "callback",
+                    cache: true,
+                    success: onSuccess,
+                    error: function () {
+                        onError(fromPage, toPage);
+                    }
+                });
+                req.fromPage = fromPage;
+                req.toPage = toPage;
+            }, 50);
+        }
+        function onError(fromPage, toPage) {
+            alert("error loading pages " + fromPage + " to " + toPage);
+        }
+        function onSuccess(resp) {
+            var from = resp.request.start, to = from + resp.results.length;
+            data.length = Math.min(parseInt(resp.hits), 1000); // limitation of the API
+            for (var i = 0; i < resp.results.length; i++) {
+                var item = resp.results[i].item;
+                data[from + i] = item;
+                data[from + i].index = from + i;
+            }
+            req = null;
+            onDataLoaded.notify({ from: from, to: to });
+        }
+        function reloadData(from, to) {
+            for (var i = from; i <= to; i++)
+                delete data[i];
+            ensureData(from, to);
+        }
+        function setSort(column, dir) {
+            sortcol = column;
+            sortdir = dir;
+            clear();
+        }
+        function setSearch(str) {
+            searchstr = str;
+            clear();
+        }
+        init();
+        return {
+            // properties
+            "data": data,
+            // methods
+            "clear": clear,
+            "isDataLoaded": isDataLoaded,
+            "ensureData": ensureData,
+            "reloadData": reloadData,
+            "setSort": setSort,
+            "setSearch": setSearch,
+            // events
+            "onDataLoading": onDataLoading,
+            "onDataLoaded": onDataLoaded
+        };
+    }
+    module.exports = {
+        RemoteModel: RemoteModel
+    };
+},
+532: /* slickgrid/slick.groupitemmetadataprovider.js */ function _(require, module, exports) {
+    var $ = require(519) /* ./slick.jquery */;
+    var Slick = require(521) /* ./slick.core */;
     /***
      * Provides item metadata for group (Slick.Group) and totals (Slick.Totals) rows produced by the DataView.
      * This metadata overrides the default behavior and formatting of those rows so that they appear and function
@@ -17131,146 +16545,286 @@
     module.exports = {
         GroupItemMetadataProvider: GroupItemMetadataProvider
     };
-}
-,
-503: /* slickgrid/slick.jquery */ function _(require, module, exports) {
-    module.exports = (typeof $ !== "undefined") ? $ : require(490) /* jquery */;
-}
-,
-504: /* slickgrid/slick.remotemodel */ function _(require, module, exports) {
-    var $ = require(503) /* ./slick.jquery */;
-    var Slick = require(497) /* ./slick.core */;
-    /***
-     * A sample AJAX data store implementation.
-     * Right now, it's hooked up to load search results from Octopart, but can
-     * easily be extended to support any JSONP-compatible backend that accepts paging parameters.
-     */
-    function RemoteModel() {
-        // private
-        var PAGESIZE = 50;
-        var data = { length: 0 };
-        var searchstr = "";
-        var sortcol = null;
-        var sortdir = 1;
-        var h_request = null;
-        var req = null; // ajax request
-        // events
-        var onDataLoading = new Slick.Event();
-        var onDataLoaded = new Slick.Event();
-        function init() {
+},
+533: /* models/widgets/tables/table_widget.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var widget_1 = require(534) /* ../widget */;
+    var cds_view_1 = require(191) /* ../../sources/cds_view */;
+    var p = require(121) /* ../../../core/properties */;
+    var TableWidget = /** @class */ (function (_super) {
+        tslib_1.__extends(TableWidget, _super);
+        function TableWidget(attrs) {
+            return _super.call(this, attrs) || this;
         }
-        function isDataLoaded(from, to) {
-            for (var i = from; i <= to; i++) {
-                if (data[i] == undefined || data[i] == null) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        function clear() {
-            for (var key in data) {
-                delete data[key];
-            }
-            data.length = 0;
-        }
-        function ensureData(from, to) {
-            if (req) {
-                req.abort();
-                for (var i = req.fromPage; i <= req.toPage; i++)
-                    data[i * PAGESIZE] = undefined;
-            }
-            if (from < 0) {
-                from = 0;
-            }
-            if (data.length > 0) {
-                to = Math.min(to, data.length - 1);
-            }
-            var fromPage = Math.floor(from / PAGESIZE);
-            var toPage = Math.floor(to / PAGESIZE);
-            while (data[fromPage * PAGESIZE] !== undefined && fromPage < toPage)
-                fromPage++;
-            while (data[toPage * PAGESIZE] !== undefined && fromPage < toPage)
-                toPage--;
-            if (fromPage > toPage || ((fromPage == toPage) && data[fromPage * PAGESIZE] !== undefined)) {
-                // TODO:  look-ahead
-                onDataLoaded.notify({ from: from, to: to });
-                return;
-            }
-            var url = "http://octopart.com/api/v3/parts/search?apikey=68b25f31&include[]=short_description&show[]=uid&show[]=manufacturer&show[]=mpn&show[]=brand&show[]=octopart_url&show[]=short_description&q=" + searchstr + "&start=" + (fromPage * PAGESIZE) + "&limit=" + (((toPage - fromPage) * PAGESIZE) + PAGESIZE);
-            if (sortcol != null) {
-                url += ("&sortby=" + sortcol + ((sortdir > 0) ? "+asc" : "+desc"));
-            }
-            if (h_request != null) {
-                clearTimeout(h_request);
-            }
-            h_request = setTimeout(function () {
-                for (var i = fromPage; i <= toPage; i++)
-                    data[i * PAGESIZE] = null; // null indicates a 'requested but not available yet'
-                onDataLoading.notify({ from: from, to: to });
-                req = $.jsonp({
-                    url: url,
-                    callbackParameter: "callback",
-                    cache: true,
-                    success: onSuccess,
-                    error: function () {
-                        onError(fromPage, toPage);
-                    }
-                });
-                req.fromPage = fromPage;
-                req.toPage = toPage;
-            }, 50);
-        }
-        function onError(fromPage, toPage) {
-            alert("error loading pages " + fromPage + " to " + toPage);
-        }
-        function onSuccess(resp) {
-            var from = resp.request.start, to = from + resp.results.length;
-            data.length = Math.min(parseInt(resp.hits), 1000); // limitation of the API
-            for (var i = 0; i < resp.results.length; i++) {
-                var item = resp.results[i].item;
-                data[from + i] = item;
-                data[from + i].index = from + i;
-            }
-            req = null;
-            onDataLoaded.notify({ from: from, to: to });
-        }
-        function reloadData(from, to) {
-            for (var i = from; i <= to; i++)
-                delete data[i];
-            ensureData(from, to);
-        }
-        function setSort(column, dir) {
-            sortcol = column;
-            sortdir = dir;
-            clear();
-        }
-        function setSearch(str) {
-            searchstr = str;
-            clear();
-        }
-        init();
-        return {
-            // properties
-            "data": data,
-            // methods
-            "clear": clear,
-            "isDataLoaded": isDataLoaded,
-            "ensureData": ensureData,
-            "reloadData": reloadData,
-            "setSort": setSort,
-            "setSearch": setSearch,
-            // events
-            "onDataLoading": onDataLoading,
-            "onDataLoaded": onDataLoaded
+        TableWidget.init_TableWidget = function () {
+            this.define({
+                source: [p.Instance],
+                view: [p.Instance, function () { return new cds_view_1.CDSView(); }],
+            });
         };
-    }
-    module.exports = {
-        RemoteModel: RemoteModel
-    };
-}
-,
-505: /* underscore.template/lib/index */ function _(require, module, exports) {
-    var _ = require(506) /* ./underscore.template */;
+        TableWidget.prototype.initialize = function () {
+            _super.prototype.initialize.call(this);
+            if (this.view.source == null) {
+                this.view.source = this.source;
+                this.view.compute_indices();
+            }
+        };
+        return TableWidget;
+    }(widget_1.Widget));
+    exports.TableWidget = TableWidget;
+    TableWidget.__name__ = "TableWidget";
+    TableWidget.init_TableWidget();
+},
+534: /* models/widgets/widget.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var html_box_1 = require(342) /* ../layouts/html_box */;
+    var p = require(121) /* ../../core/properties */;
+    var WidgetView = /** @class */ (function (_super) {
+        tslib_1.__extends(WidgetView, _super);
+        function WidgetView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        WidgetView.prototype._width_policy = function () {
+            return this.model.orientation == "horizontal" ? _super.prototype._width_policy.call(this) : "fixed";
+        };
+        WidgetView.prototype._height_policy = function () {
+            return this.model.orientation == "horizontal" ? "fixed" : _super.prototype._height_policy.call(this);
+        };
+        WidgetView.prototype.box_sizing = function () {
+            var sizing = _super.prototype.box_sizing.call(this);
+            if (this.model.orientation == "horizontal") {
+                if (sizing.width == null)
+                    sizing.width = this.model.default_size;
+            }
+            else {
+                if (sizing.height == null)
+                    sizing.height = this.model.default_size;
+            }
+            return sizing;
+        };
+        return WidgetView;
+    }(html_box_1.HTMLBoxView));
+    exports.WidgetView = WidgetView;
+    WidgetView.__name__ = "WidgetView";
+    var Widget = /** @class */ (function (_super) {
+        tslib_1.__extends(Widget, _super);
+        function Widget(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Widget.init_Widget = function () {
+            this.define({
+                orientation: [p.Orientation, "horizontal"],
+                default_size: [p.Number, 300],
+            });
+            this.override({
+                margin: [5, 5, 5, 5],
+            });
+        };
+        return Widget;
+    }(html_box_1.HTMLBox));
+    exports.Widget = Widget;
+    Widget.__name__ = "Widget";
+    Widget.init_Widget();
+},
+535: /* styles/widgets/tables.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    require(536) /* ./slickgrid */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root .bk-data-table {\n  box-sizing: content-box;\n  font-size: 11px;\n}\n.bk-root .bk-data-table input[type=\"checkbox\"] {\n  margin-left: 4px;\n  margin-right: 4px;\n}\n.bk-root .bk-cell-special-defaults {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n}\n.bk-root .bk-cell-select {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n}\n.bk-root .bk-cell-index {\n  border-right-color: silver;\n  border-right-style: solid;\n  background: #f5f5f5;\n  text-align: right;\n  color: gray;\n}\n.bk-root .bk-header-index .slick-column-name {\n  float: right;\n}\n.bk-root .slick-row.selected .bk-cell-index {\n  background-color: transparent;\n}\n.bk-root .slick-cell {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .slick-cell.active {\n  border-style: dashed;\n}\n.bk-root .slick-cell.editable {\n  padding-left: 0;\n  padding-right: 0;\n}\n.bk-root .bk-cell-editor input,\n.bk-root .bk-cell-editor select {\n  width: 100%;\n  height: 100%;\n  border: 0;\n  margin: 0;\n  padding: 0;\n  outline: 0;\n  background: transparent;\n  vertical-align: baseline;\n}\n.bk-root .bk-cell-editor input {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .bk-cell-editor-completion {\n  font-size: 11px;\n}\n");
+    exports.bk_data_table = "bk-data-table";
+    exports.bk_cell_index = "bk-cell-index";
+    exports.bk_header_index = "bk-header-index";
+    exports.bk_cell_editor = "bk-cell-editor";
+    exports.bk_cell_select = "bk-cell-select";
+},
+536: /* styles/widgets/slickgrid.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root {\n  /*\nIMPORTANT:\nIn order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.\nNo built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS\nclasses should alter those!\n*/\n  /*\nIMPORTANT:\nIn order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.\nNo built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS\nclasses should alter those!\n*/\n  /* Menu button */\n  /* Menu */\n  /* Menu items */\n  /* Disabled */\n}\n.bk-root .slick-header.ui-state-default,\n.bk-root .slick-headerrow.ui-state-default,\n.bk-root .slick-footerrow.ui-state-default,\n.bk-root .slick-top-panel-scroller.ui-state-default {\n  width: 100%;\n  overflow: auto;\n  position: relative;\n  border-left: 0px !important;\n}\n.bk-root .slick-header.ui-state-default {\n  overflow: inherit;\n}\n.bk-root .slick-header::-webkit-scrollbar,\n.bk-root .slick-headerrow::-webkit-scrollbar,\n.bk-root .slick-footerrow::-webkit-scrollbar {\n  display: none;\n}\n.bk-root .slick-header-columns,\n.bk-root .slick-headerrow-columns,\n.bk-root .slick-footerrow-columns {\n  position: relative;\n  white-space: nowrap;\n  cursor: default;\n  overflow: hidden;\n}\n.bk-root .slick-header-column.ui-state-default {\n  position: relative;\n  display: inline-block;\n  box-sizing: content-box !important;\n  /* this here only for Firefox! */\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  height: 16px;\n  line-height: 16px;\n  margin: 0;\n  padding: 4px;\n  border-right: 1px solid silver;\n  border-left: 0px !important;\n  border-top: 0px !important;\n  border-bottom: 0px !important;\n  float: left;\n}\n.bk-root .slick-headerrow-column.ui-state-default,\n.bk-root .slick-footerrow-column.ui-state-default {\n  padding: 4px;\n}\n.bk-root .slick-header-column-sorted {\n  font-style: italic;\n}\n.bk-root .slick-sort-indicator {\n  display: inline-block;\n  width: 8px;\n  height: 5px;\n  margin-left: 4px;\n  margin-top: 6px;\n  float: left;\n}\n.bk-root .slick-sort-indicator-numbered {\n  display: inline-block;\n  width: 8px;\n  height: 5px;\n  margin-left: 4px;\n  margin-top: 0;\n  line-height: 20px;\n  float: left;\n  font-family: Arial;\n  font-style: normal;\n  font-weight: bold;\n  color: #6190CD;\n}\n.bk-root .slick-sort-indicator-desc {\n  background: url(images/sort-desc.gif);\n}\n.bk-root .slick-sort-indicator-asc {\n  background: url(images/sort-asc.gif);\n}\n.bk-root .slick-resizable-handle {\n  position: absolute;\n  font-size: 0.1px;\n  display: block;\n  cursor: col-resize;\n  width: 9px;\n  right: -5px;\n  top: 0;\n  height: 100%;\n  z-index: 1;\n}\n.bk-root .slick-sortable-placeholder {\n  background: silver;\n}\n.bk-root .grid-canvas {\n  position: relative;\n  outline: 0;\n}\n.bk-root .slick-row.ui-widget-content,\n.bk-root .slick-row.ui-state-active {\n  position: absolute;\n  border: 0px;\n  width: 100%;\n}\n.bk-root .slick-cell,\n.bk-root .slick-headerrow-column,\n.bk-root .slick-footerrow-column {\n  position: absolute;\n  border: 1px solid transparent;\n  border-right: 1px dotted silver;\n  border-bottom-color: silver;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  vertical-align: middle;\n  z-index: 1;\n  padding: 1px 2px 2px 1px;\n  margin: 0;\n  white-space: nowrap;\n  cursor: default;\n}\n.bk-root .slick-cell,\n.bk-root .slick-headerrow-column {\n  border-bottom-color: silver;\n}\n.bk-root .slick-footerrow-column {\n  border-top-color: silver;\n}\n.bk-root .slick-group-toggle {\n  display: inline-block;\n}\n.bk-root .slick-cell.highlighted {\n  background: lightskyblue;\n  background: rgba(0, 0, 255, 0.2);\n  -webkit-transition: all 0.5s;\n  -moz-transition: all 0.5s;\n  -o-transition: all 0.5s;\n  transition: all 0.5s;\n}\n.bk-root .slick-cell.flashing {\n  border: 1px solid red !important;\n}\n.bk-root .slick-cell.editable {\n  z-index: 11;\n  overflow: visible;\n  background: white;\n  border-color: black;\n  border-style: solid;\n}\n.bk-root .slick-cell:focus {\n  outline: none;\n}\n.bk-root .slick-reorder-proxy {\n  display: inline-block;\n  background: blue;\n  opacity: 0.15;\n  cursor: move;\n}\n.bk-root .slick-reorder-guide {\n  display: inline-block;\n  height: 2px;\n  background: blue;\n  opacity: 0.7;\n}\n.bk-root .slick-selection {\n  z-index: 10;\n  position: absolute;\n  border: 2px dashed black;\n}\n.bk-root .slick-header-columns {\n  background: url('images/header-columns-bg.gif') repeat-x center bottom;\n  border-bottom: 1px solid silver;\n}\n.bk-root .slick-header-column {\n  background: url('images/header-columns-bg.gif') repeat-x center bottom;\n  border-right: 1px solid silver;\n}\n.bk-root .slick-header-column:hover,\n.bk-root .slick-header-column-active {\n  background: white url('images/header-columns-over-bg.gif') repeat-x center bottom;\n}\n.bk-root .slick-headerrow {\n  background: #fafafa;\n}\n.bk-root .slick-headerrow-column {\n  background: #fafafa;\n  border-bottom: 0;\n  height: 100%;\n}\n.bk-root .slick-row.ui-state-active {\n  background: #F5F7D7;\n}\n.bk-root .slick-row {\n  position: absolute;\n  background: white;\n  border: 0px;\n  line-height: 20px;\n}\n.bk-root .slick-row.selected {\n  z-index: 10;\n  background: #DFE8F6;\n}\n.bk-root .slick-cell {\n  padding-left: 4px;\n  padding-right: 4px;\n}\n.bk-root .slick-group {\n  border-bottom: 2px solid silver;\n}\n.bk-root .slick-group-toggle {\n  width: 9px;\n  height: 9px;\n  margin-right: 5px;\n}\n.bk-root .slick-group-toggle.expanded {\n  background: url(images/collapse.gif) no-repeat center center;\n}\n.bk-root .slick-group-toggle.collapsed {\n  background: url(images/expand.gif) no-repeat center center;\n}\n.bk-root .slick-group-totals {\n  color: gray;\n  background: white;\n}\n.bk-root .slick-group-select-checkbox {\n  width: 13px;\n  height: 13px;\n  margin: 3px 10px 0 0;\n  display: inline-block;\n}\n.bk-root .slick-group-select-checkbox.checked {\n  background: url(images/GrpCheckboxY.png) no-repeat center center;\n}\n.bk-root .slick-group-select-checkbox.unchecked {\n  background: url(images/GrpCheckboxN.png) no-repeat center center;\n}\n.bk-root .slick-cell.selected {\n  background-color: beige;\n}\n.bk-root .slick-cell.active {\n  border-color: gray;\n  border-style: solid;\n}\n.bk-root .slick-sortable-placeholder {\n  background: silver !important;\n}\n.bk-root .slick-row.odd {\n  background: #fafafa;\n}\n.bk-root .slick-row.ui-state-active {\n  background: #F5F7D7;\n}\n.bk-root .slick-row.loading {\n  opacity: 0.5;\n}\n.bk-root .slick-cell.invalid {\n  border-color: red;\n  -moz-animation-duration: 0.2s;\n  -webkit-animation-duration: 0.2s;\n  -moz-animation-name: slickgrid-invalid-hilite;\n  -webkit-animation-name: slickgrid-invalid-hilite;\n}\n@-moz-keyframes slickgrid-invalid-hilite {\n  from {\n    box-shadow: 0 0 6px red;\n  }\n  to {\n    box-shadow: none;\n  }\n}\n@-webkit-keyframes slickgrid-invalid-hilite {\n  from {\n    box-shadow: 0 0 6px red;\n  }\n  to {\n    box-shadow: none;\n  }\n}\n.bk-root .slick-column-name,\n.bk-root .slick-sort-indicator {\n  /**\n   * This makes all \"float:right\" elements after it that spill over to the next line\n   * display way below the lower boundary of the column thus hiding them.\n   */\n  display: inline-block;\n  float: left;\n  margin-bottom: 100px;\n}\n.bk-root .slick-header-button {\n  display: inline-block;\n  float: right;\n  vertical-align: top;\n  margin: 1px;\n  /**\n  * This makes all \"float:right\" elements after it that spill over to the next line\n  * display way below the lower boundary of the column thus hiding them.\n  */\n  margin-bottom: 100px;\n  height: 15px;\n  width: 15px;\n  background-repeat: no-repeat;\n  background-position: center center;\n  cursor: pointer;\n}\n.bk-root .slick-header-button-hidden {\n  width: 0;\n  -webkit-transition: 0.2s width;\n  -ms-transition: 0.2s width;\n  transition: 0.2s width;\n}\n.bk-root .slick-header-column:hover > .slick-header-button {\n  width: 15px;\n}\n.bk-root .slick-header-menubutton {\n  position: absolute;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  width: 14px;\n  background-repeat: no-repeat;\n  background-position: left center;\n  background-image: url(../images/down.gif);\n  cursor: pointer;\n  display: none;\n  border-left: thin ridge silver;\n}\n.bk-root .slick-header-column:hover > .slick-header-menubutton,\n.bk-root .slick-header-column-active .slick-header-menubutton {\n  display: inline-block;\n}\n.bk-root .slick-header-menu {\n  position: absolute;\n  display: inline-block;\n  margin: 0;\n  padding: 2px;\n  cursor: default;\n}\n.bk-root .slick-header-menuitem {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n}\n.bk-root .slick-header-menuicon {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  vertical-align: middle;\n  margin-right: 4px;\n  background-repeat: no-repeat;\n  background-position: center center;\n}\n.bk-root .slick-header-menucontent {\n  display: inline-block;\n  vertical-align: middle;\n}\n.bk-root .slick-header-menuitem-disabled {\n  color: silver;\n}\n.bk-root .slick-columnpicker {\n  border: 1px solid #718BB7;\n  background: #f0f0f0;\n  padding: 6px;\n  -moz-box-shadow: 2px 2px 2px silver;\n  -webkit-box-shadow: 2px 2px 2px silver;\n  box-shadow: 2px 2px 2px silver;\n  min-width: 150px;\n  cursor: default;\n  position: absolute;\n  z-index: 20;\n  overflow: auto;\n  resize: both;\n}\n.bk-root .slick-columnpicker > .close {\n  float: right;\n}\n.bk-root .slick-columnpicker .title {\n  font-size: 16px;\n  width: 60%;\n  border-bottom: solid 1px #d6d6d6;\n  margin-bottom: 10px;\n}\n.bk-root .slick-columnpicker li {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  background: none;\n}\n.bk-root .slick-columnpicker input {\n  margin: 4px;\n}\n.bk-root .slick-columnpicker li a {\n  display: block;\n  padding: 4px;\n  font-weight: bold;\n}\n.bk-root .slick-columnpicker li a:hover {\n  background: white;\n}\n.bk-root .slick-pager {\n  width: 100%;\n  height: 26px;\n  border: 1px solid gray;\n  border-top: 0;\n  background: url('../images/header-columns-bg.gif') repeat-x center bottom;\n  vertical-align: middle;\n}\n.bk-root .slick-pager .slick-pager-status {\n  display: inline-block;\n  padding: 6px;\n}\n.bk-root .slick-pager .ui-icon-container {\n  display: inline-block;\n  margin: 2px;\n  border-color: gray;\n}\n.bk-root .slick-pager .slick-pager-nav {\n  display: inline-block;\n  float: left;\n  padding: 2px;\n}\n.bk-root .slick-pager .slick-pager-settings {\n  display: block;\n  float: right;\n  padding: 2px;\n}\n.bk-root .slick-pager .slick-pager-settings * {\n  vertical-align: middle;\n}\n.bk-root .slick-pager .slick-pager-settings a {\n  padding: 2px;\n  text-decoration: underline;\n  cursor: pointer;\n}\n.bk-root .slick-header-columns {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n.bk-root .slick-header-column {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n.bk-root .slick-header-column:hover,\n.bk-root .slick-header-column-active {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAWAIcAAKrM9tno++vz/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABYAAAgUAAUIHEiwoIAACBMqXMhwIQAAAQEAOw==\");\n}\n.bk-root .slick-group-toggle.expanded {\n  background-image: url(\"data:image/gif;base64,R0lGODlhCQAJAPcAAAFGeoCAgNXz/+v5/+v6/+z5/+36//L7//X8//j9/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACQAJAAAIMwADCBxIUIDBgwIEChgwwECBAgQUFjBAkaJCABgxGlB4AGHCAAIQiBypEEECkScJqgwQEAA7\");\n}\n.bk-root .slick-group-toggle.collapsed {\n  background-image: url(\"data:image/gif;base64,R0lGODlhCQAJAPcAAAFGeoCAgNXz/+v5/+v6/+z5/+36//L7//X8//j9/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAACQAJAAAIOAADCBxIUIDBgwIEChgwAECBAgQUFjAAQIABAwoBaNSIMYCAAwIqGlSIAEHFkiQTIBCgkqDLAAEBADs=\");\n}\n.bk-root .slick-group-select-checkbox.checked {\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNkRpr/UAAAEcSURBVChTjdI9S8NQFAbg/raQXVwCRRFE7GK7OXTwD+ikk066VF3a0ja0hQTyQdJrwNq0zrYSQRLEXMSWSlCIb8glqRcFD+9yz3nugXwU4n9XQqMoGjj36uBJsTwuaNo3EwBG4Yy7pe7Gv8YcvhJCGFVsjxsjxujj6OTSGlHv+U2WZUZbPWKOv1ZjT5a7pbIoiptbO5b73mwrjHa1B27l8VlTEIS1damlTnEE+EEN9/P8WrfH81qdAIGeXvTTmzltdCy46sEhxpKUINReZR9NnqZbr9puugxV3NjWh/k74WmmEdWhmUNy2jNmWRc6fZTVADCqao52u+DGWTACYNT3fRxwtatPufTNR4yCIGAUn5hS+vJHhWGY/ANx/A3tvdv+1tZmuwAAAABJRU5ErkJggg==\");\n}\n.bk-root .slick-group-select-checkbox.unchecked {\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNkRpr/UAAACXSURBVChT1dIxC4MwEAXg/v8/VOhQVDBNakV0KA6pxS4JhWRSIYPEJxwdDi1de7wleR+3JIf486w0hKCKRpSvvOhZcCmvNQBRuKqdah03U7UjNNH81rOaBYDo8SQaPX8JANFEaLaGBeAPaaY61rGksiN6TmR5H1j9CSoAosYYHLA7vTxYMvVEZa0liif23r93xjm3/oEYF8PiDn/I2FHCAAAAAElFTkSuQmCC\");\n}\n.bk-root .slick-sort-indicator-desc {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDQAFAIcAAGGQzUD/QOPu+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAMAAAEALAAAAAANAAUAAAgeAAUAGEgQgIAACBEKLHgwYcKFBh1KFNhQosOKEgMCADs=\");\n}\n.bk-root .slick-sort-indicator-asc {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDQAFAIcAAGGQzUD/QOPu+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAMAAAEALAAAAAANAAUAAAgbAAMIDABgoEGDABIeRJhQ4cKGEA8KmEiRosGAADs=\");\n}\n.bk-root .slick-header-menubutton {\n  background-image: url(\"data:image/gif;base64,R0lGODlhDgAOAIABADtKYwAAACH5BAEAAAEALAAAAAAOAA4AAAISjI+py+0PHZgUsGobhTn6DxoFADs=\");\n}\n.bk-root .slick-pager {\n  background-image: url(\"data:image/gif;base64,R0lGODlhAgAYAIcAANDQ0Ovs7uzt7+3u8O7v8e/w8vDx8/Hy9Pn5+QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAP8ALAAAAAACABgAAAghABEIHEiwYMEDCA8YWMiwgMMCBAgMmDhAgIAAGAMAABAQADs=\");\n}\n");
+},
+537: /* models/widgets/tables/cell_formatters.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var Numbro = require(255) /* numbro */;
+    var compile_template = require(538) /* underscore.template */;
+    var tz = require(252) /* timezone */;
+    var p = require(121) /* ../../../core/properties */;
+    var dom_1 = require(163) /* ../../../core/dom */;
+    var types_1 = require(109) /* ../../../core/util/types */;
+    var model_1 = require(166) /* ../../../model */;
+    var CellFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(CellFormatter, _super);
+        function CellFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        CellFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
+            if (value == null)
+                return "";
+            else
+                return (value + "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        };
+        return CellFormatter;
+    }(model_1.Model));
+    exports.CellFormatter = CellFormatter;
+    CellFormatter.__name__ = "CellFormatter";
+    var StringFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(StringFormatter, _super);
+        function StringFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        StringFormatter.init_StringFormatter = function () {
+            this.define({
+                font_style: [p.FontStyle, "normal"],
+                text_align: [p.TextAlign, "left"],
+                text_color: [p.Color],
+            });
+        };
+        StringFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
+            var _a = this, font_style = _a.font_style, text_align = _a.text_align, text_color = _a.text_color;
+            var text = dom_1.div({}, value == null ? "" : "" + value);
+            switch (font_style) {
+                case "bold":
+                    text.style.fontWeight = "bold";
+                    break;
+                case "italic":
+                    text.style.fontStyle = "italic";
+                    break;
+            }
+            if (text_align != null)
+                text.style.textAlign = text_align;
+            if (text_color != null)
+                text.style.color = text_color;
+            return text.outerHTML;
+        };
+        return StringFormatter;
+    }(CellFormatter));
+    exports.StringFormatter = StringFormatter;
+    StringFormatter.__name__ = "StringFormatter";
+    StringFormatter.init_StringFormatter();
+    var NumberFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(NumberFormatter, _super);
+        function NumberFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        NumberFormatter.init_NumberFormatter = function () {
+            this.define({
+                format: [p.String, '0,0'],
+                language: [p.String, 'en'],
+                rounding: [p.RoundingFunction, 'round'],
+            });
+        };
+        NumberFormatter.prototype.doFormat = function (row, cell, value, columnDef, dataContext) {
+            var _this = this;
+            var _a = this, format = _a.format, language = _a.language;
+            var rounding = (function () {
+                switch (_this.rounding) {
+                    case "round":
+                    case "nearest": return Math.round;
+                    case "floor":
+                    case "rounddown": return Math.floor;
+                    case "ceil":
+                    case "roundup": return Math.ceil;
+                }
+            })();
+            value = Numbro.format(value, format, language, rounding);
+            return _super.prototype.doFormat.call(this, row, cell, value, columnDef, dataContext);
+        };
+        return NumberFormatter;
+    }(StringFormatter));
+    exports.NumberFormatter = NumberFormatter;
+    NumberFormatter.__name__ = "NumberFormatter";
+    NumberFormatter.init_NumberFormatter();
+    var BooleanFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(BooleanFormatter, _super);
+        function BooleanFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        BooleanFormatter.init_BooleanFormatter = function () {
+            this.define({
+                icon: [p.String, 'check'],
+            });
+        };
+        BooleanFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, _dataContext) {
+            return !!value ? dom_1.i({ class: this.icon }).outerHTML : "";
+        };
+        return BooleanFormatter;
+    }(CellFormatter));
+    exports.BooleanFormatter = BooleanFormatter;
+    BooleanFormatter.__name__ = "BooleanFormatter";
+    BooleanFormatter.init_BooleanFormatter();
+    var DateFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(DateFormatter, _super);
+        function DateFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        DateFormatter.init_DateFormatter = function () {
+            this.define({
+                format: [p.String, 'ISO-8601'],
+            });
+        };
+        DateFormatter.prototype.getFormat = function () {
+            // using definitions provided here: https://api.jqueryui.com/datepicker/
+            // except not implementing TICKS
+            switch (this.format) {
+                case "ATOM":
+                case "W3C":
+                case "RFC-3339":
+                case "ISO-8601":
+                    return "%Y-%m-%d";
+                case "COOKIE":
+                    return "%a, %d %b %Y";
+                case "RFC-850":
+                    return "%A, %d-%b-%y";
+                case "RFC-1123":
+                case "RFC-2822":
+                    return "%a, %e %b %Y";
+                case "RSS":
+                case "RFC-822":
+                case "RFC-1036":
+                    return "%a, %e %b %y";
+                case "TIMESTAMP":
+                    return undefined;
+                default:
+                    return this.format;
+            }
+        };
+        DateFormatter.prototype.doFormat = function (row, cell, value, columnDef, dataContext) {
+            value = types_1.isString(value) ? parseInt(value, 10) : value;
+            var date = tz(value, this.getFormat());
+            return _super.prototype.doFormat.call(this, row, cell, date, columnDef, dataContext);
+        };
+        return DateFormatter;
+    }(CellFormatter));
+    exports.DateFormatter = DateFormatter;
+    DateFormatter.__name__ = "DateFormatter";
+    DateFormatter.init_DateFormatter();
+    var HTMLTemplateFormatter = /** @class */ (function (_super) {
+        tslib_1.__extends(HTMLTemplateFormatter, _super);
+        function HTMLTemplateFormatter(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        HTMLTemplateFormatter.init_HTMLTemplateFormatter = function () {
+            this.define({
+                template: [p.String, '<%= value %>'],
+            });
+        };
+        HTMLTemplateFormatter.prototype.doFormat = function (_row, _cell, value, _columnDef, dataContext) {
+            var template = this.template;
+            if (value == null)
+                return "";
+            else {
+                var compiled_template = compile_template(template);
+                var context = Object.assign(Object.assign({}, dataContext), { value: value });
+                return compiled_template(context);
+            }
+        };
+        return HTMLTemplateFormatter;
+    }(CellFormatter));
+    exports.HTMLTemplateFormatter = HTMLTemplateFormatter;
+    HTMLTemplateFormatter.__name__ = "HTMLTemplateFormatter";
+    HTMLTemplateFormatter.init_HTMLTemplateFormatter();
+},
+538: /* underscore.template/lib/index.js */ function _(require, module, exports) {
+    var _ = require(539) /* ./underscore.template */;
     var UnderscoreTemplate = _.template;
     function Template(text, data, settings) {
         return UnderscoreTemplate(text, data, settings);
@@ -17287,9 +16841,8 @@
     else if (typeof window !== 'undefined' || typeof navigator !== 'undefined') {
         window.UnderscoreTemplate = Template;
     }
-}
-,
-506: /* underscore.template/lib/underscore.template */ function _(require, module, exports) {
+},
+539: /* underscore.template/lib/underscore.template.js */ function _(require, module, exports) {
     //     Underscore.js 1.5.2
     //     http://underscorejs.org
     //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -17477,9 +17030,412 @@
         return template;
     };
     module.exports = _;
-}
-
-}, {"models/widgets/tables/cell_editors":478,"models/widgets/tables/cell_formatters":479,"models/widgets/tables/data_cube":480,"models/widgets/tables/data_table":481,"models/widgets/tables/index":482,"models/widgets/tables/main":483,"models/widgets/tables/row_aggregators":484,"models/widgets/tables/table_column":485,"models/widgets/tables/table_widget":486,"models/widgets/widget":487,"styles/widgets/slickgrid":488,"styles/widgets/tables":489}, 483, null);
+},
+540: /* models/widgets/tables/table_column.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var cell_formatters_1 = require(537) /* ./cell_formatters */;
+    var cell_editors_1 = require(516) /* ./cell_editors */;
+    var p = require(121) /* ../../../core/properties */;
+    var string_1 = require(127) /* ../../../core/util/string */;
+    var model_1 = require(166) /* ../../../model */;
+    var TableColumn = /** @class */ (function (_super) {
+        tslib_1.__extends(TableColumn, _super);
+        function TableColumn(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        TableColumn.init_TableColumn = function () {
+            this.define({
+                field: [p.String],
+                title: [p.String],
+                width: [p.Number, 300],
+                formatter: [p.Instance, function () { return new cell_formatters_1.StringFormatter(); }],
+                editor: [p.Instance, function () { return new cell_editors_1.StringEditor(); }],
+                sortable: [p.Boolean, true],
+                default_sort: [p.Sort, "ascending"],
+            });
+        };
+        TableColumn.prototype.toColumn = function () {
+            return {
+                id: string_1.uniqueId(),
+                field: this.field,
+                name: this.title,
+                width: this.width,
+                formatter: this.formatter != null ? this.formatter.doFormat.bind(this.formatter) : undefined,
+                model: this.editor,
+                editor: this.editor.default_view,
+                sortable: this.sortable,
+                defaultSortAsc: this.default_sort == "ascending",
+            };
+        };
+        return TableColumn;
+    }(model_1.Model));
+    exports.TableColumn = TableColumn;
+    TableColumn.__name__ = "TableColumn";
+    TableColumn.init_TableColumn();
+},
+541: /* models/widgets/tables/row_aggregators.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var slickgrid_1 = require(524) /* slickgrid */;
+    var _a = slickgrid_1.Data.Aggregators, Avg = _a.Avg, Min = _a.Min, Max = _a.Max, Sum = _a.Sum;
+    var p = require(121) /* ../../../core/properties */;
+    var model_1 = require(166) /* ../../../model */;
+    var RowAggregator = /** @class */ (function (_super) {
+        tslib_1.__extends(RowAggregator, _super);
+        function RowAggregator(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        RowAggregator.init_RowAggregator = function () {
+            this.define({
+                field_: [p.String, ''],
+            });
+        };
+        return RowAggregator;
+    }(model_1.Model));
+    exports.RowAggregator = RowAggregator;
+    RowAggregator.__name__ = "RowAggregator";
+    RowAggregator.init_RowAggregator();
+    var avg = new Avg();
+    var AvgAggregator = /** @class */ (function (_super) {
+        tslib_1.__extends(AvgAggregator, _super);
+        function AvgAggregator() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.key = 'avg';
+            _this.init = avg.init;
+            _this.accumulate = avg.accumulate;
+            _this.storeResult = avg.storeResult;
+            return _this;
+        }
+        return AvgAggregator;
+    }(RowAggregator));
+    exports.AvgAggregator = AvgAggregator;
+    AvgAggregator.__name__ = "AvgAggregator";
+    var min = new Min();
+    var MinAggregator = /** @class */ (function (_super) {
+        tslib_1.__extends(MinAggregator, _super);
+        function MinAggregator() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.key = 'min';
+            _this.init = min.init;
+            _this.accumulate = min.accumulate;
+            _this.storeResult = min.storeResult;
+            return _this;
+        }
+        return MinAggregator;
+    }(RowAggregator));
+    exports.MinAggregator = MinAggregator;
+    MinAggregator.__name__ = "MinAggregator";
+    var max = new Max();
+    var MaxAggregator = /** @class */ (function (_super) {
+        tslib_1.__extends(MaxAggregator, _super);
+        function MaxAggregator() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.key = 'max';
+            _this.init = max.init;
+            _this.accumulate = max.accumulate;
+            _this.storeResult = max.storeResult;
+            return _this;
+        }
+        return MaxAggregator;
+    }(RowAggregator));
+    exports.MaxAggregator = MaxAggregator;
+    MaxAggregator.__name__ = "MaxAggregator";
+    var sum = new Sum();
+    var SumAggregator = /** @class */ (function (_super) {
+        tslib_1.__extends(SumAggregator, _super);
+        function SumAggregator() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.key = 'sum';
+            _this.init = sum.init;
+            _this.accumulate = sum.accumulate;
+            _this.storeResult = sum.storeResult;
+            return _this;
+        }
+        return SumAggregator;
+    }(RowAggregator));
+    exports.SumAggregator = SumAggregator;
+    SumAggregator.__name__ = "SumAggregator";
+},
+542: /* models/widgets/tables/data_cube.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var p = require(121) /* ../../../core/properties */;
+    var dom_1 = require(163) /* ../../../core/dom */;
+    var slickgrid_1 = require(524) /* slickgrid */;
+    var data_table_1 = require(517) /* ./data_table */;
+    var model_1 = require(166) /* ../../../model */;
+    function groupCellFormatter(_row, _cell, _value, _columnDef, dataContext) {
+        var collapsed = dataContext.collapsed, level = dataContext.level, title = dataContext.title;
+        var toggle = dom_1.span({
+            class: "slick-group-toggle " + (collapsed ? 'collapsed' : 'expanded'),
+            style: { 'margin-left': level * 15 + "px" },
+        });
+        var titleElement = dom_1.span({
+            class: 'slick-group-title',
+            level: level,
+        }, title);
+        return "" + toggle.outerHTML + titleElement.outerHTML;
+    }
+    function indentFormatter(formatter, indent) {
+        return function (row, cell, value, columnDef, dataContext) {
+            var spacer = dom_1.span({
+                class: 'slick-group-toggle',
+                style: { 'margin-left': (indent || 0) * 15 + "px" },
+            });
+            var formatted = formatter ? formatter(row, cell, value, columnDef, dataContext) : "" + value;
+            return "" + spacer.outerHTML + (formatted && formatted.replace(/^<div/, '<span').replace(/div>$/, 'span>'));
+        };
+    }
+    function handleGridClick(event, args) {
+        var item = this.getDataItem(args.row);
+        if (item instanceof slickgrid_1.Group && event.target.classList.contains('slick-group-toggle')) {
+            if (item.collapsed) {
+                this.getData().expandGroup(item.groupingKey);
+            }
+            else {
+                this.getData().collapseGroup(item.groupingKey);
+            }
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            this.invalidate();
+            this.render();
+        }
+    }
+    var GroupingInfo = /** @class */ (function (_super) {
+        tslib_1.__extends(GroupingInfo, _super);
+        function GroupingInfo(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        GroupingInfo.init_GroupingInfo = function () {
+            this.define({
+                getter: [p.String, ''],
+                aggregators: [p.Array, []],
+                collapsed: [p.Boolean, false],
+            });
+        };
+        Object.defineProperty(GroupingInfo.prototype, "comparer", {
+            get: function () {
+                return function (a, b) {
+                    return a.value === b.value ? 0 : a.value > b.value ? 1 : -1;
+                };
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return GroupingInfo;
+    }(model_1.Model));
+    exports.GroupingInfo = GroupingInfo;
+    GroupingInfo.__name__ = "GroupingInfo";
+    GroupingInfo.init_GroupingInfo();
+    var DataCubeProvider = /** @class */ (function (_super) {
+        tslib_1.__extends(DataCubeProvider, _super);
+        function DataCubeProvider(source, view, columns, target) {
+            var _this = _super.call(this, source, view) || this;
+            _this.columns = columns;
+            _this.groupingInfos = [];
+            _this.groupingDelimiter = ':|:';
+            _this.target = target;
+            return _this;
+        }
+        DataCubeProvider.prototype.setGrouping = function (groupingInfos) {
+            this.groupingInfos = groupingInfos;
+            this.toggledGroupsByLevel = groupingInfos.map(function () { return ({}); });
+            this.refresh();
+        };
+        DataCubeProvider.prototype.extractGroups = function (rows, parentGroup) {
+            var _this = this;
+            var groups = [];
+            var groupsByValue = new Map();
+            var level = parentGroup ? parentGroup.level + 1 : 0;
+            var _a = this.groupingInfos[level], comparer = _a.comparer, getter = _a.getter;
+            rows.forEach(function (row) {
+                var value = _this.source.data[getter][row];
+                var group = groupsByValue.get(value);
+                if (!group) {
+                    var groupingKey = parentGroup ? "" + parentGroup.groupingKey + _this.groupingDelimiter + value : "" + value;
+                    group = Object.assign(new slickgrid_1.Group(), { value: value, level: level, groupingKey: groupingKey });
+                    groups.push(group);
+                    groupsByValue.set(value, group);
+                }
+                group.rows.push(row);
+            });
+            if (level < this.groupingInfos.length - 1) {
+                groups.forEach(function (group) {
+                    group.groups = _this.extractGroups(group.rows, group);
+                });
+            }
+            groups.sort(comparer);
+            return groups;
+        };
+        DataCubeProvider.prototype.calculateTotals = function (group, aggregators) {
+            var totals = { avg: {}, max: {}, min: {}, sum: {} };
+            var data = this.source.data;
+            var keys = Object.keys(data);
+            var items = group.rows.map(function (i) {
+                return keys.reduce(function (o, c) {
+                    var _a;
+                    return (Object.assign(Object.assign({}, o), (_a = {}, _a[c] = data[c][i], _a)));
+                }, {});
+            });
+            aggregators.forEach(function (aggregator) {
+                aggregator.init();
+                items.forEach(function (item) { return aggregator.accumulate(item); });
+                aggregator.storeResult(totals);
+            });
+            return totals;
+        };
+        DataCubeProvider.prototype.addTotals = function (groups, level) {
+            var _this = this;
+            if (level === void 0) {
+                level = 0;
+            }
+            var _a = this.groupingInfos[level], aggregators = _a.aggregators, groupCollapsed = _a.collapsed;
+            var toggledGroups = this.toggledGroupsByLevel[level];
+            groups.forEach(function (group) {
+                if (group.groups) {
+                    _this.addTotals(group.groups, level + 1);
+                }
+                if (aggregators.length && group.rows.length) {
+                    group.totals = _this.calculateTotals(group, aggregators);
+                }
+                group.collapsed = groupCollapsed !== toggledGroups[group.groupingKey];
+                group.title = group.value ? "" + group.value : "";
+            });
+        };
+        DataCubeProvider.prototype.flattenedGroupedRows = function (groups, level) {
+            var _this = this;
+            if (level === void 0) {
+                level = 0;
+            }
+            var rows = [];
+            groups.forEach(function (group) {
+                rows.push(group);
+                if (!group.collapsed) {
+                    var subRows = group.groups
+                        ? _this.flattenedGroupedRows(group.groups, level + 1)
+                        : group.rows;
+                    rows.push.apply(rows, subRows);
+                }
+            });
+            return rows;
+        };
+        DataCubeProvider.prototype.refresh = function () {
+            var groups = this.extractGroups(this.view.indices);
+            var labels = this.source.data[this.columns[0].field];
+            if (groups.length) {
+                this.addTotals(groups);
+                this.rows = this.flattenedGroupedRows(groups);
+                this.target.data = {
+                    row_indices: this.rows.map(function (value) { return value instanceof slickgrid_1.Group ? value.rows : value; }),
+                    labels: this.rows.map(function (value) { return value instanceof slickgrid_1.Group ? value.title : labels[value]; }),
+                };
+            }
+        };
+        DataCubeProvider.prototype.getLength = function () {
+            return this.rows.length;
+        };
+        DataCubeProvider.prototype.getItem = function (i) {
+            var _a;
+            var item = this.rows[i];
+            var data = this.source.data;
+            return item instanceof slickgrid_1.Group
+                ? item
+                : Object.keys(data)
+                    .reduce(function (o, c) {
+                    var _a;
+                    return (Object.assign(Object.assign({}, o), (_a = {}, _a[c] = data[c][item], _a)));
+                }, (_a = {}, _a[data_table_1.DTINDEX_NAME] = item, _a));
+        };
+        DataCubeProvider.prototype.getItemMetadata = function (i) {
+            var myItem = this.rows[i];
+            var columns = this.columns.slice(1);
+            var aggregators = myItem instanceof slickgrid_1.Group
+                ? this.groupingInfos[myItem.level].aggregators
+                : [];
+            function adapter(column) {
+                var myField = column.field, formatter = column.formatter;
+                var aggregator = aggregators.find(function (_a) {
+                    var field_ = _a.field_;
+                    return field_ === myField;
+                });
+                if (aggregator) {
+                    var key_1 = aggregator.key;
+                    return {
+                        formatter: function (row, cell, _value, columnDef, dataContext) {
+                            return formatter ? formatter(row, cell, dataContext.totals[key_1][myField], columnDef, dataContext) : '';
+                        },
+                    };
+                }
+                return {};
+            }
+            return myItem instanceof slickgrid_1.Group
+                ? {
+                    selectable: false,
+                    focusable: false,
+                    cssClasses: 'slick-group',
+                    columns: tslib_1.__spreadArrays([{ formatter: groupCellFormatter }], columns.map(adapter)),
+                }
+                : {};
+        };
+        DataCubeProvider.prototype.collapseGroup = function (groupingKey) {
+            var level = groupingKey.split(this.groupingDelimiter).length - 1;
+            this.toggledGroupsByLevel[level][groupingKey] = !this.groupingInfos[level].collapsed;
+            this.refresh();
+        };
+        DataCubeProvider.prototype.expandGroup = function (groupingKey) {
+            var level = groupingKey.split(this.groupingDelimiter).length - 1;
+            this.toggledGroupsByLevel[level][groupingKey] = this.groupingInfos[level].collapsed;
+            this.refresh();
+        };
+        return DataCubeProvider;
+    }(data_table_1.TableDataProvider));
+    exports.DataCubeProvider = DataCubeProvider;
+    DataCubeProvider.__name__ = "DataCubeProvider";
+    var DataCubeView = /** @class */ (function (_super) {
+        tslib_1.__extends(DataCubeView, _super);
+        function DataCubeView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        DataCubeView.prototype.render = function () {
+            var options = {
+                enableCellNavigation: this.model.selectable !== false,
+                enableColumnReorder: false,
+                forceFitColumns: this.model.fit_columns,
+                multiColumnSort: false,
+                editable: this.model.editable,
+                autoEdit: false,
+                rowHeight: this.model.row_height,
+            };
+            var columns = this.model.columns.map(function (column) { return column.toColumn(); });
+            columns[0].formatter = indentFormatter(columns[0].formatter, this.model.grouping.length);
+            delete columns[0].editor;
+            this.data = new DataCubeProvider(this.model.source, this.model.view, columns, this.model.target);
+            this.data.setGrouping(this.model.grouping);
+            this.el.style.width = this.model.width + "px";
+            this.grid = new slickgrid_1.Grid(this.el, this.data, columns, options);
+            this.grid.onClick.subscribe(handleGridClick);
+        };
+        return DataCubeView;
+    }(data_table_1.DataTableView));
+    exports.DataCubeView = DataCubeView;
+    DataCubeView.__name__ = "DataCubeView";
+    var DataCube = /** @class */ (function (_super) {
+        tslib_1.__extends(DataCube, _super);
+        function DataCube(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        DataCube.init_DataCube = function () {
+            this.prototype.default_view = DataCubeView;
+            this.define({
+                grouping: [p.Array, []],
+                target: [p.Instance],
+            });
+        };
+        return DataCube;
+    }(data_table_1.DataTable));
+    exports.DataCube = DataCube;
+    DataCube.__name__ = "DataCube";
+    DataCube.init_DataCube();
+},
+}, 514, {"models/widgets/tables/main":514,"models/widgets/tables/index":515,"models/widgets/tables/cell_editors":516,"models/widgets/tables/data_table":517,"models/widgets/tables/table_widget":533,"models/widgets/widget":534,"styles/widgets/tables":535,"styles/widgets/slickgrid":536,"models/widgets/tables/cell_formatters":537,"models/widgets/tables/table_column":540,"models/widgets/tables/row_aggregators":541,"models/widgets/tables/data_cube":542}, {});
 })
 
 //# sourceMappingURL=bokeh-tables.js.map

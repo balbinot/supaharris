@@ -316,5 +316,6 @@ if DEBUG:
         "JQUERY_URL": "",
     }
 
-    # Use None for unlimited persistent connections.
-    DATABASES["default"]["CONN_MAX_AGE"] = None
+    # mariadb:10.4 seems to have wait_timeout = 600 in /etc/mysql/my.cnf
+    # so we set our CONN_MAX_AGE to something smaller than that
+    DATABASES["default"]["CONN_MAX_AGE"] = 60

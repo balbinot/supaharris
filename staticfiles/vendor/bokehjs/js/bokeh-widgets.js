@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2012 - 2018, Anaconda, Inc., and Bokeh Contributors
+ * Copyright (c) 2012 - 2019, Anaconda, Inc., and Bokeh Contributors
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,33 +27,92 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 (function(root, factory) {
-//  if(typeof exports === 'object' && typeof module === 'object')
-//    factory(require("Bokeh"));
-//  else if(typeof define === 'function' && define.amd)
-//    define(["Bokeh"], factory);
-//  else if(typeof exports === 'object')
-//    factory(require("Bokeh"));
-//  else
-    factory(root["Bokeh"]);
+  factory(root["Bokeh"]);
 })(this, function(Bokeh) {
   var define;
-  return (function(modules, aliases, entry) {
+  return (function(modules, entry, aliases, externals) {
     if (Bokeh != null) {
-      return Bokeh.register_plugin(modules, aliases, entry);
+      return Bokeh.register_plugin(modules, entry, aliases, externals);
     } else {
       throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
     }
   })
 ({
-436: /* models/widgets/abstract_button */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var p = require(18) /* ../../core/properties */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var build_views_1 = require(4) /* ../../core/build_views */;
-    var control_1 = require(445) /* ./control */;
-    var buttons_1 = require(304) /* ../../styles/buttons */;
+472: /* models/widgets/main.js */ function _(require, module, exports) {
+    var Widgets = require(473) /* ./index */;
+    exports.Widgets = Widgets;
+    var base_1 = require(108) /* ../../base */;
+    base_1.register_models(Widgets);
+},
+473: /* models/widgets/index.js */ function _(require, module, exports) {
+    var abstract_button_1 = require(474) /* ./abstract_button */;
+    exports.AbstractButton = abstract_button_1.AbstractButton;
+    var abstract_icon_1 = require(477) /* ./abstract_icon */;
+    exports.AbstractIcon = abstract_icon_1.AbstractIcon;
+    var autocomplete_input_1 = require(478) /* ./autocomplete_input */;
+    exports.AutocompleteInput = autocomplete_input_1.AutocompleteInput;
+    var button_1 = require(482) /* ./button */;
+    exports.Button = button_1.Button;
+    var checkbox_button_group_1 = require(483) /* ./checkbox_button_group */;
+    exports.CheckboxButtonGroup = checkbox_button_group_1.CheckboxButtonGroup;
+    var checkbox_group_1 = require(485) /* ./checkbox_group */;
+    exports.CheckboxGroup = checkbox_group_1.CheckboxGroup;
+    var color_picker_1 = require(487) /* ./color_picker */;
+    exports.ColorPicker = color_picker_1.ColorPicker;
+    var date_picker_1 = require(488) /* ./date_picker */;
+    exports.DatePicker = date_picker_1.DatePicker;
+    var date_range_slider_1 = require(491) /* ./date_range_slider */;
+    exports.DateRangeSlider = date_range_slider_1.DateRangeSlider;
+    var date_slider_1 = require(496) /* ./date_slider */;
+    exports.DateSlider = date_slider_1.DateSlider;
+    var div_1 = require(497) /* ./div */;
+    exports.Div = div_1.Div;
+    var dropdown_1 = require(500) /* ./dropdown */;
+    exports.Dropdown = dropdown_1.Dropdown;
+    var file_input_1 = require(501) /* ./file_input */;
+    exports.FileInput = file_input_1.FileInput;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    exports.InputWidget = input_widget_1.InputWidget;
+    var markup_1 = require(498) /* ./markup */;
+    exports.Markup = markup_1.Markup;
+    var multiselect_1 = require(502) /* ./multiselect */;
+    exports.MultiSelect = multiselect_1.MultiSelect;
+    var paragraph_1 = require(503) /* ./paragraph */;
+    exports.Paragraph = paragraph_1.Paragraph;
+    var password_input_1 = require(504) /* ./password_input */;
+    exports.PasswordInput = password_input_1.PasswordInput;
+    var pretext_1 = require(505) /* ./pretext */;
+    exports.PreText = pretext_1.PreText;
+    var radio_button_group_1 = require(506) /* ./radio_button_group */;
+    exports.RadioButtonGroup = radio_button_group_1.RadioButtonGroup;
+    var radio_group_1 = require(507) /* ./radio_group */;
+    exports.RadioGroup = radio_group_1.RadioGroup;
+    var range_slider_1 = require(508) /* ./range_slider */;
+    exports.RangeSlider = range_slider_1.RangeSlider;
+    var selectbox_1 = require(509) /* ./selectbox */;
+    exports.Select = selectbox_1.Select;
+    var slider_1 = require(510) /* ./slider */;
+    exports.Slider = slider_1.Slider;
+    var spinner_1 = require(511) /* ./spinner */;
+    exports.Spinner = spinner_1.Spinner;
+    var text_input_1 = require(479) /* ./text_input */;
+    exports.TextInput = text_input_1.TextInput;
+    var textarea_input_1 = require(512) /* ./textarea_input */;
+    exports.TextAreaInput = textarea_input_1.TextAreaInput;
+    var toggle_1 = require(513) /* ./toggle */;
+    exports.Toggle = toggle_1.Toggle;
+    var widget_1 = require(534) /* ./widget */;
+    exports.Widget = widget_1.Widget;
+},
+474: /* models/widgets/abstract_button.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var p = require(121) /* ../../core/properties */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var build_views_1 = require(194) /* ../../core/build_views */;
+    var control_1 = require(475) /* ./control */;
+    var buttons_1 = require(347) /* ../../styles/buttons */;
     var AbstractButtonView = /** @class */ (function (_super) {
         tslib_1.__extends(AbstractButtonView, _super);
         function AbstractButtonView() {
@@ -77,11 +136,11 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 children[_i] = arguments[_i];
             }
-            return dom_1.button.apply(void 0, [{
+            return dom_1.button.apply(dom_1, tslib_1.__spreadArrays([{
                     type: "button",
                     disabled: this.model.disabled,
                     class: [buttons_1.bk_btn, buttons_1.bk_btn_type(this.model.button_type)],
-                }].concat(children));
+                }], children));
         };
         AbstractButtonView.prototype.render = function () {
             var _this = this;
@@ -102,16 +161,16 @@
             if (this.model.callback != null)
                 this.model.callback.execute(this.model);
         };
-        AbstractButtonView.__name__ = "AbstractButtonView";
         return AbstractButtonView;
     }(control_1.ControlView));
     exports.AbstractButtonView = AbstractButtonView;
+    AbstractButtonView.__name__ = "AbstractButtonView";
     var AbstractButton = /** @class */ (function (_super) {
         tslib_1.__extends(AbstractButton, _super);
         function AbstractButton(attrs) {
             return _super.call(this, attrs) || this;
         }
-        AbstractButton.initClass = function () {
+        AbstractButton.init_AbstractButton = function () {
             this.define({
                 label: [p.String, "Button"],
                 icon: [p.Instance],
@@ -119,349 +178,126 @@
                 callback: [p.Any],
             });
         };
-        AbstractButton.__name__ = "AbstractButton";
         return AbstractButton;
     }(control_1.Control));
     exports.AbstractButton = AbstractButton;
-    AbstractButton.initClass();
-}
-,
-437: /* models/widgets/abstract_icon */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var model_1 = require(62) /* ../../model */;
-    var dom_view_1 = require(6) /* ../../core/dom_view */;
+    AbstractButton.__name__ = "AbstractButton";
+    AbstractButton.init_AbstractButton();
+},
+475: /* models/widgets/control.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var widget_1 = require(534) /* ./widget */;
+    var ControlView = /** @class */ (function (_super) {
+        tslib_1.__extends(ControlView, _super);
+        function ControlView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ControlView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            var p = this.model.properties;
+            this.on_change(p.disabled, function () { return _this.render(); });
+        };
+        return ControlView;
+    }(widget_1.WidgetView));
+    exports.ControlView = ControlView;
+    ControlView.__name__ = "ControlView";
+    var Control = /** @class */ (function (_super) {
+        tslib_1.__extends(Control, _super);
+        function Control(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        return Control;
+    }(widget_1.Widget));
+    exports.Control = Control;
+    Control.__name__ = "Control";
+},
+534: /* models/widgets/widget.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var html_box_1 = require(342) /* ../layouts/html_box */;
+    var p = require(121) /* ../../core/properties */;
+    var WidgetView = /** @class */ (function (_super) {
+        tslib_1.__extends(WidgetView, _super);
+        function WidgetView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        WidgetView.prototype._width_policy = function () {
+            return this.model.orientation == "horizontal" ? _super.prototype._width_policy.call(this) : "fixed";
+        };
+        WidgetView.prototype._height_policy = function () {
+            return this.model.orientation == "horizontal" ? "fixed" : _super.prototype._height_policy.call(this);
+        };
+        WidgetView.prototype.box_sizing = function () {
+            var sizing = _super.prototype.box_sizing.call(this);
+            if (this.model.orientation == "horizontal") {
+                if (sizing.width == null)
+                    sizing.width = this.model.default_size;
+            }
+            else {
+                if (sizing.height == null)
+                    sizing.height = this.model.default_size;
+            }
+            return sizing;
+        };
+        return WidgetView;
+    }(html_box_1.HTMLBoxView));
+    exports.WidgetView = WidgetView;
+    WidgetView.__name__ = "WidgetView";
+    var Widget = /** @class */ (function (_super) {
+        tslib_1.__extends(Widget, _super);
+        function Widget(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Widget.init_Widget = function () {
+            this.define({
+                orientation: [p.Orientation, "horizontal"],
+                default_size: [p.Number, 300],
+            });
+            this.override({
+                margin: [5, 5, 5, 5],
+            });
+        };
+        return Widget;
+    }(html_box_1.HTMLBox));
+    exports.Widget = Widget;
+    Widget.__name__ = "Widget";
+    Widget.init_Widget();
+},
+477: /* models/widgets/abstract_icon.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var model_1 = require(166) /* ../../model */;
+    var dom_view_1 = require(161) /* ../../core/dom_view */;
     var AbstractIconView = /** @class */ (function (_super) {
         tslib_1.__extends(AbstractIconView, _super);
         function AbstractIconView() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        AbstractIconView.__name__ = "AbstractIconView";
         return AbstractIconView;
     }(dom_view_1.DOMView));
     exports.AbstractIconView = AbstractIconView;
+    AbstractIconView.__name__ = "AbstractIconView";
     var AbstractIcon = /** @class */ (function (_super) {
         tslib_1.__extends(AbstractIcon, _super);
         function AbstractIcon(attrs) {
             return _super.call(this, attrs) || this;
         }
-        AbstractIcon.__name__ = "AbstractIcon";
         return AbstractIcon;
     }(model_1.Model));
     exports.AbstractIcon = AbstractIcon;
-}
-,
-438: /* models/widgets/abstract_slider */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var noUiSlider = require(476) /* nouislider */;
-    var p = require(18) /* ../../core/properties */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var array_1 = require(24) /* ../../core/util/array */;
-    var callback_1 = require(28) /* ../../core/util/callback */;
-    var control_1 = require(445) /* ./control */;
-    var sliders_1 = require(475) /* ../../styles/widgets/sliders */;
-    var prefix = 'bk-noUi-';
-    var AbstractBaseSliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(AbstractBaseSliderView, _super);
-        function AbstractBaseSliderView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Object.defineProperty(AbstractBaseSliderView.prototype, "noUiSlider", {
-            get: function () {
-                return this.slider_el.noUiSlider;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        AbstractBaseSliderView.prototype.initialize = function () {
-            _super.prototype.initialize.call(this);
-            this._init_callback();
-        };
-        AbstractBaseSliderView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            var _a = this.model.properties, callback = _a.callback, callback_policy = _a.callback_policy, callback_throttle = _a.callback_throttle;
-            this.on_change([callback, callback_policy, callback_throttle], function () { return _this._init_callback(); });
-            var _b = this.model.properties, start = _b.start, end = _b.end, value = _b.value, step = _b.step, title = _b.title;
-            this.on_change([start, end, value, step], function () {
-                var _a = _this._calc_to(), start = _a.start, end = _a.end, value = _a.value, step = _a.step;
-                _this.noUiSlider.updateOptions({
-                    range: { min: start, max: end },
-                    start: value,
-                    step: step,
-                });
-            });
-            var bar_color = this.model.properties.bar_color;
-            this.on_change(bar_color, function () {
-                _this._set_bar_color();
-            });
-            this.on_change([value, title], function () { return _this._update_title(); });
-        };
-        AbstractBaseSliderView.prototype._init_callback = function () {
-            var _this = this;
-            var callback = this.model.callback;
-            var fn = function () {
-                if (callback != null)
-                    callback.execute(_this.model);
-                _this.model.value_throttled = _this.model.value;
-            };
-            switch (this.model.callback_policy) {
-                case 'continuous': {
-                    this.callback_wrapper = fn;
-                    break;
-                }
-                case 'throttle': {
-                    this.callback_wrapper = callback_1.throttle(fn, this.model.callback_throttle);
-                    break;
-                }
-                default:
-                    this.callback_wrapper = undefined;
-            }
-        };
-        AbstractBaseSliderView.prototype._update_title = function () {
-            var _this = this;
-            dom_1.empty(this.title_el);
-            var hide_header = this.model.title == null || (this.model.title.length == 0 && !this.model.show_value);
-            this.title_el.style.display = hide_header ? "none" : "";
-            if (!hide_header) {
-                if (this.model.title.length != 0)
-                    this.title_el.textContent = this.model.title + ": ";
-                if (this.model.show_value) {
-                    var value = this._calc_to().value;
-                    var pretty = value.map(function (v) { return _this.model.pretty(v); }).join(" .. ");
-                    this.title_el.appendChild(dom_1.span({ class: sliders_1.bk_slider_value }, pretty));
-                }
-            }
-        };
-        AbstractBaseSliderView.prototype._set_bar_color = function () {
-            if (!this.model.disabled) {
-                this.slider_el.querySelector("." + prefix + "connect")
-                    .style
-                    .backgroundColor = this.model.bar_color;
-            }
-        };
-        AbstractBaseSliderView.prototype._keypress_handle = function (e, idx) {
-            if (idx === void 0) {
-                idx = 0;
-            }
-            var _a = this._calc_to(), start = _a.start, value = _a.value, end = _a.end, step = _a.step;
-            var is_range = value.length == 2;
-            var low = start;
-            var high = end;
-            if (is_range && idx == 0) {
-                high = value[1];
-            }
-            else if (is_range && idx == 1) {
-                low = value[0];
-            }
-            switch (e.which) {
-                case 37: {
-                    value[idx] = Math.max(value[idx] - step, low);
-                    break;
-                }
-                case 39: {
-                    value[idx] = Math.min(value[idx] + step, high);
-                    break;
-                }
-                default:
-                    return;
-            }
-            if (is_range) {
-                this.model.value = value;
-                this.model.properties.value.change.emit();
-            }
-            else {
-                this.model.value = value[0];
-            }
-            this.noUiSlider.set(value);
-            if (this.callback_wrapper != null)
-                this.callback_wrapper();
-        };
-        AbstractBaseSliderView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            var _a = this._calc_to(), start = _a.start, end = _a.end, value = _a.value, step = _a.step;
-            var tooltips; // XXX
-            if (this.model.tooltips) {
-                var formatter = {
-                    to: function (value) { return _this.model.pretty(value); },
-                };
-                tooltips = array_1.repeat(formatter, value.length);
-            }
-            else
-                tooltips = false;
-            if (this.slider_el == null) {
-                this.slider_el = dom_1.div();
-                noUiSlider.create(this.slider_el, {
-                    cssPrefix: prefix,
-                    range: { min: start, max: end },
-                    start: value,
-                    step: step,
-                    behaviour: this.model.behaviour,
-                    connect: this.model.connected,
-                    tooltips: tooltips,
-                    orientation: this.model.orientation,
-                    direction: this.model.direction,
-                }); // XXX: bad typings; no cssPrefix
-                this.noUiSlider.on('slide', function (_, __, values) { return _this._slide(values); });
-                this.noUiSlider.on('change', function (_, __, values) { return _this._change(values); });
-                this._set_keypress_handles();
-                var toggleTooltip_1 = function (i, show) {
-                    if (!tooltips)
-                        return;
-                    var handle = _this.slider_el.querySelectorAll("." + prefix + "handle")[i];
-                    var tooltip = handle.querySelector("." + prefix + "tooltip");
-                    tooltip.style.display = show ? 'block' : '';
-                };
-                this.noUiSlider.on('start', function (_, i) { return toggleTooltip_1(i, true); });
-                this.noUiSlider.on('end', function (_, i) { return toggleTooltip_1(i, false); });
-            }
-            else {
-                this.noUiSlider.updateOptions({
-                    range: { min: start, max: end },
-                    start: value,
-                    step: step,
-                });
-            }
-            this._set_bar_color();
-            if (this.model.disabled)
-                this.slider_el.setAttribute('disabled', 'true');
-            else
-                this.slider_el.removeAttribute('disabled');
-            this.title_el = dom_1.div({ class: sliders_1.bk_slider_title });
-            this._update_title();
-            this.group_el = dom_1.div({ class: sliders_1.bk_input_group }, this.title_el, this.slider_el);
-            this.el.appendChild(this.group_el);
-        };
-        AbstractBaseSliderView.prototype._slide = function (values) {
-            this.model.value = this._calc_from(values);
-            if (this.callback_wrapper != null)
-                this.callback_wrapper();
-        };
-        AbstractBaseSliderView.prototype._change = function (values) {
-            this.model.value = this._calc_from(values);
-            this.model.value_throttled = this.model.value;
-            switch (this.model.callback_policy) {
-                case 'mouseup':
-                case 'throttle': {
-                    if (this.model.callback != null)
-                        this.model.callback.execute(this.model);
-                    break;
-                }
-            }
-        };
-        AbstractBaseSliderView.__name__ = "AbstractBaseSliderView";
-        return AbstractBaseSliderView;
-    }(control_1.ControlView));
-    var AbstractSliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(AbstractSliderView, _super);
-        function AbstractSliderView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        AbstractSliderView.prototype._calc_to = function () {
-            return {
-                start: this.model.start,
-                end: this.model.end,
-                value: [this.model.value],
-                step: this.model.step,
-            };
-        };
-        AbstractSliderView.prototype._calc_from = function (_a) {
-            var value = _a[0];
-            if (Number.isInteger(this.model.start) && Number.isInteger(this.model.end) && Number.isInteger(this.model.step))
-                return Math.round(value);
-            else
-                return value;
-        };
-        AbstractSliderView.prototype._set_keypress_handles = function () {
-            var _this = this;
-            // Add single cursor event
-            var handle = this.slider_el.querySelector("." + prefix + "handle");
-            handle.setAttribute('tabindex', '0');
-            handle.addEventListener('keydown', function (e) { return _this._keypress_handle(e); });
-        };
-        AbstractSliderView.__name__ = "AbstractSliderView";
-        return AbstractSliderView;
-    }(AbstractBaseSliderView));
-    exports.AbstractSliderView = AbstractSliderView;
-    var AbstractRangeSliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(AbstractRangeSliderView, _super);
-        function AbstractRangeSliderView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        AbstractRangeSliderView.prototype._calc_to = function () {
-            return {
-                start: this.model.start,
-                end: this.model.end,
-                value: this.model.value,
-                step: this.model.step,
-            };
-        };
-        AbstractRangeSliderView.prototype._calc_from = function (values) {
-            return values;
-        };
-        AbstractRangeSliderView.prototype._set_keypress_handles = function () {
-            var _this = this;
-            var handle_lower = this.slider_el.querySelector("." + prefix + "handle-lower");
-            var handle_upper = this.slider_el.querySelector("." + prefix + "handle-upper");
-            handle_lower.setAttribute('tabindex', '0');
-            handle_lower.addEventListener('keydown', function (e) { return _this._keypress_handle(e, 0); });
-            handle_upper.setAttribute('tabindex', '1');
-            handle_upper.addEventListener('keydown', function (e) { return _this._keypress_handle(e, 1); });
-        };
-        AbstractRangeSliderView.__name__ = "AbstractRangeSliderView";
-        return AbstractRangeSliderView;
-    }(AbstractBaseSliderView));
-    exports.AbstractRangeSliderView = AbstractRangeSliderView;
-    var AbstractSlider = /** @class */ (function (_super) {
-        tslib_1.__extends(AbstractSlider, _super);
-        function AbstractSlider(attrs) {
-            var _this = _super.call(this, attrs) || this;
-            _this.connected = false;
-            return _this;
-        }
-        AbstractSlider.initClass = function () {
-            this.define({
-                title: [p.String, ""],
-                show_value: [p.Boolean, true],
-                start: [p.Any],
-                end: [p.Any],
-                value: [p.Any],
-                value_throttled: [p.Any],
-                step: [p.Number, 1],
-                format: [p.String],
-                direction: [p.Any, "ltr"],
-                tooltips: [p.Boolean, true],
-                callback: [p.Any],
-                callback_throttle: [p.Number, 200],
-                callback_policy: [p.SliderCallbackPolicy, "throttle"],
-                bar_color: [p.Color, "#e6e6e6"],
-            });
-        };
-        AbstractSlider.prototype._formatter = function (value, _format) {
-            return "" + value;
-        };
-        AbstractSlider.prototype.pretty = function (value) {
-            return this._formatter(value, this.format);
-        };
-        AbstractSlider.__name__ = "AbstractSlider";
-        return AbstractSlider;
-    }(control_1.Control));
-    exports.AbstractSlider = AbstractSlider;
-    AbstractSlider.initClass();
-}
-,
-439: /* models/widgets/autocomplete_input */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var text_input_1 = require(467) /* ./text_input */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var math_1 = require(34) /* ../../core/util/math */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var menus_1 = require(308) /* ../../styles/menus */;
+    AbstractIcon.__name__ = "AbstractIcon";
+},
+478: /* models/widgets/autocomplete_input.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var text_input_1 = require(479) /* ./text_input */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var math_1 = require(111) /* ../../core/util/math */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var menus_1 = require(348) /* ../../styles/menus */;
     var AutocompleteInputView = /** @class */ (function (_super) {
         tslib_1.__extends(AutocompleteInputView, _super);
         function AutocompleteInputView() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super.apply(this, arguments) || this;
             _this._open = false;
             _this._last_value = "";
             _this._hover_index = 0;
@@ -582,34 +418,156 @@
                 }
             }
         };
-        AutocompleteInputView.__name__ = "AutocompleteInputView";
         return AutocompleteInputView;
     }(text_input_1.TextInputView));
     exports.AutocompleteInputView = AutocompleteInputView;
+    AutocompleteInputView.__name__ = "AutocompleteInputView";
     var AutocompleteInput = /** @class */ (function (_super) {
         tslib_1.__extends(AutocompleteInput, _super);
         function AutocompleteInput(attrs) {
             return _super.call(this, attrs) || this;
         }
-        AutocompleteInput.initClass = function () {
+        AutocompleteInput.init_AutocompleteInput = function () {
             this.prototype.default_view = AutocompleteInputView;
             this.define({
                 completions: [p.Array, []],
                 min_characters: [p.Int, 2],
             });
         };
-        AutocompleteInput.__name__ = "AutocompleteInput";
         return AutocompleteInput;
     }(text_input_1.TextInput));
     exports.AutocompleteInput = AutocompleteInput;
-    AutocompleteInput.initClass();
-}
-,
-440: /* models/widgets/button */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var abstract_button_1 = require(436) /* ./abstract_button */;
-    var bokeh_events_1 = require(3) /* ../../core/bokeh_events */;
-    var p = require(18) /* ../../core/properties */;
+    AutocompleteInput.__name__ = "AutocompleteInput";
+    AutocompleteInput.init_AutocompleteInput();
+},
+479: /* models/widgets/text_input.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var TextInputView = /** @class */ (function (_super) {
+        tslib_1.__extends(TextInputView, _super);
+        function TextInputView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        TextInputView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.name.change, function () { return _this.input_el.name = _this.model.name || ""; });
+            this.connect(this.model.properties.value.change, function () { return _this.input_el.value = _this.model.value; });
+            this.connect(this.model.properties.value_input.change, function () { return _this.input_el.value = _this.model.value_input; });
+            this.connect(this.model.properties.disabled.change, function () { return _this.input_el.disabled = _this.model.disabled; });
+            this.connect(this.model.properties.placeholder.change, function () { return _this.input_el.placeholder = _this.model.placeholder; });
+        };
+        TextInputView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            this.input_el = dom_1.input({
+                type: "text",
+                class: inputs_1.bk_input,
+                name: this.model.name,
+                value: this.model.value,
+                disabled: this.model.disabled,
+                placeholder: this.model.placeholder,
+            });
+            this.input_el.addEventListener("change", function () { return _this.change_input(); });
+            this.input_el.addEventListener("input", function () { return _this.change_input_oninput(); });
+            this.group_el.appendChild(this.input_el);
+        };
+        TextInputView.prototype.change_input = function () {
+            this.model.value = this.input_el.value;
+            _super.prototype.change_input.call(this);
+        };
+        TextInputView.prototype.change_input_oninput = function () {
+            this.model.value_input = this.input_el.value;
+            _super.prototype.change_input.call(this);
+        };
+        return TextInputView;
+    }(input_widget_1.InputWidgetView));
+    exports.TextInputView = TextInputView;
+    TextInputView.__name__ = "TextInputView";
+    var TextInput = /** @class */ (function (_super) {
+        tslib_1.__extends(TextInput, _super);
+        function TextInput(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        TextInput.init_TextInput = function () {
+            this.prototype.default_view = TextInputView;
+            this.define({
+                value: [p.String, ""],
+                value_input: [p.String, ""],
+                placeholder: [p.String, ""],
+            });
+        };
+        return TextInput;
+    }(input_widget_1.InputWidget));
+    exports.TextInput = TextInput;
+    TextInput.__name__ = "TextInput";
+    TextInput.init_TextInput();
+},
+480: /* models/widgets/input_widget.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var control_1 = require(475) /* ./control */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var InputWidgetView = /** @class */ (function (_super) {
+        tslib_1.__extends(InputWidgetView, _super);
+        function InputWidgetView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        InputWidgetView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.title.change, function () {
+                _this.label_el.textContent = _this.model.title;
+            });
+        };
+        InputWidgetView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            var title = this.model.title;
+            this.label_el = dom_1.label({ style: { display: title.length == 0 ? "none" : "" } }, title);
+            this.group_el = dom_1.div({ class: inputs_1.bk_input_group }, this.label_el);
+            this.el.appendChild(this.group_el);
+        };
+        InputWidgetView.prototype.change_input = function () {
+            if (this.model.callback != null)
+                this.model.callback.execute(this.model);
+        };
+        return InputWidgetView;
+    }(control_1.ControlView));
+    exports.InputWidgetView = InputWidgetView;
+    InputWidgetView.__name__ = "InputWidgetView";
+    var InputWidget = /** @class */ (function (_super) {
+        tslib_1.__extends(InputWidget, _super);
+        function InputWidget(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        InputWidget.init_InputWidget = function () {
+            this.define({
+                title: [p.String, ""],
+                callback: [p.Any],
+            });
+        };
+        return InputWidget;
+    }(control_1.Control));
+    exports.InputWidget = InputWidget;
+    InputWidget.__name__ = "InputWidget";
+    InputWidget.init_InputWidget();
+},
+481: /* styles/widgets/inputs.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root .bk-input {\n  display: inline-block;\n  width: 100%;\n  flex-grow: 1;\n  -webkit-flex-grow: 1;\n  min-height: 31px;\n  padding: 0 12px;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\n.bk-root .bk-input:focus {\n  border-color: #66afe9;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);\n}\n.bk-root .bk-input::placeholder,\n.bk-root .bk-input:-ms-input-placeholder,\n.bk-root .bk-input::-moz-placeholder,\n.bk-root .bk-input::-webkit-input-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.bk-root .bk-input[disabled],\n.bk-root .bk-input[readonly] {\n  cursor: not-allowed;\n  background-color: #eee;\n  opacity: 1;\n}\n.bk-root select[multiple].bk-input,\n.bk-root select[size].bk-input,\n.bk-root textarea.bk-input {\n  height: auto;\n}\n.bk-root .bk-input-group {\n  width: 100%;\n  height: 100%;\n  display: inline-flex;\n  display: -webkit-inline-flex;\n  flex-wrap: nowrap;\n  -webkit-flex-wrap: nowrap;\n  align-items: start;\n  -webkit-align-items: start;\n  flex-direction: column;\n  -webkit-flex-direction: column;\n  white-space: nowrap;\n}\n.bk-root .bk-input-group.bk-inline {\n  flex-direction: row;\n  -webkit-flex-direction: row;\n}\n.bk-root .bk-input-group.bk-inline > *:not(:first-child) {\n  margin-left: 5px;\n}\n.bk-root .bk-input-group input[type=\"checkbox\"] + span,\n.bk-root .bk-input-group input[type=\"radio\"] + span {\n  position: relative;\n  top: -2px;\n  margin-left: 3px;\n}\n");
+    exports.bk_input = "bk-input";
+    exports.bk_input_group = "bk-input-group";
+},
+482: /* models/widgets/button.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var abstract_button_1 = require(474) /* ./abstract_button */;
+    var bokeh_events_1 = require(376) /* ../../core/bokeh_events */;
+    var p = require(121) /* ../../core/properties */;
     var ButtonView = /** @class */ (function (_super) {
         tslib_1.__extends(ButtonView, _super);
         function ButtonView() {
@@ -620,16 +578,16 @@
             this.model.trigger_event(new bokeh_events_1.ButtonClick());
             _super.prototype.click.call(this);
         };
-        ButtonView.__name__ = "ButtonView";
         return ButtonView;
     }(abstract_button_1.AbstractButtonView));
     exports.ButtonView = ButtonView;
+    ButtonView.__name__ = "ButtonView";
     var Button = /** @class */ (function (_super) {
         tslib_1.__extends(Button, _super);
         function Button(attrs) {
             return _super.call(this, attrs) || this;
         }
-        Button.initClass = function () {
+        Button.init_Button = function () {
             this.prototype.default_view = ButtonView;
             this.define({
                 clicks: [p.Number, 0],
@@ -638,19 +596,71 @@
                 label: "Button",
             });
         };
-        Button.__name__ = "Button";
         return Button;
     }(abstract_button_1.AbstractButton));
     exports.Button = Button;
-    Button.initClass();
-}
-,
-441: /* models/widgets/button_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var control_1 = require(445) /* ./control */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var buttons_1 = require(304) /* ../../styles/buttons */;
+    Button.__name__ = "Button";
+    Button.init_Button();
+},
+483: /* models/widgets/checkbox_button_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var button_group_1 = require(484) /* ./button_group */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var data_structures_1 = require(117) /* ../../core/util/data_structures */;
+    var p = require(121) /* ../../core/properties */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var CheckboxButtonGroupView = /** @class */ (function (_super) {
+        tslib_1.__extends(CheckboxButtonGroupView, _super);
+        function CheckboxButtonGroupView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Object.defineProperty(CheckboxButtonGroupView.prototype, "active", {
+            get: function () {
+                return new data_structures_1.Set(this.model.active);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        CheckboxButtonGroupView.prototype.change_active = function (i) {
+            var active = this.active;
+            active.toggle(i);
+            this.model.active = active.values;
+            if (this.model.callback != null)
+                this.model.callback.execute(this.model);
+        };
+        CheckboxButtonGroupView.prototype._update_active = function () {
+            var active = this.active;
+            this._buttons.forEach(function (button, i) {
+                dom_1.classes(button).toggle(mixins_1.bk_active, active.has(i));
+            });
+        };
+        return CheckboxButtonGroupView;
+    }(button_group_1.ButtonGroupView));
+    exports.CheckboxButtonGroupView = CheckboxButtonGroupView;
+    CheckboxButtonGroupView.__name__ = "CheckboxButtonGroupView";
+    var CheckboxButtonGroup = /** @class */ (function (_super) {
+        tslib_1.__extends(CheckboxButtonGroup, _super);
+        function CheckboxButtonGroup(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        CheckboxButtonGroup.init_CheckboxButtonGroup = function () {
+            this.prototype.default_view = CheckboxButtonGroupView;
+            this.define({
+                active: [p.Array, []],
+            });
+        };
+        return CheckboxButtonGroup;
+    }(button_group_1.ButtonGroup));
+    exports.CheckboxButtonGroup = CheckboxButtonGroup;
+    CheckboxButtonGroup.__name__ = "CheckboxButtonGroup";
+    CheckboxButtonGroup.init_CheckboxButtonGroup();
+},
+484: /* models/widgets/button_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var control_1 = require(475) /* ./control */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var buttons_1 = require(347) /* ../../styles/buttons */;
     var ButtonGroupView = /** @class */ (function (_super) {
         tslib_1.__extends(ButtonGroupView, _super);
         function ButtonGroupView() {
@@ -679,92 +689,37 @@
             var group = dom_1.div({ class: buttons_1.bk_btn_group }, this._buttons);
             this.el.appendChild(group);
         };
-        ButtonGroupView.__name__ = "ButtonGroupView";
         return ButtonGroupView;
     }(control_1.ControlView));
     exports.ButtonGroupView = ButtonGroupView;
+    ButtonGroupView.__name__ = "ButtonGroupView";
     var ButtonGroup = /** @class */ (function (_super) {
         tslib_1.__extends(ButtonGroup, _super);
         function ButtonGroup(attrs) {
             return _super.call(this, attrs) || this;
         }
-        ButtonGroup.initClass = function () {
+        ButtonGroup.init_ButtonGroup = function () {
             this.define({
                 labels: [p.Array, []],
                 button_type: [p.ButtonType, "default"],
                 callback: [p.Any],
             });
         };
-        ButtonGroup.__name__ = "ButtonGroup";
         return ButtonGroup;
     }(control_1.Control));
     exports.ButtonGroup = ButtonGroup;
-    ButtonGroup.initClass();
-}
-,
-442: /* models/widgets/checkbox_button_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var button_group_1 = require(441) /* ./button_group */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var data_structures_1 = require(32) /* ../../core/util/data_structures */;
-    var p = require(18) /* ../../core/properties */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var CheckboxButtonGroupView = /** @class */ (function (_super) {
-        tslib_1.__extends(CheckboxButtonGroupView, _super);
-        function CheckboxButtonGroupView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Object.defineProperty(CheckboxButtonGroupView.prototype, "active", {
-            get: function () {
-                return new data_structures_1.Set(this.model.active);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        CheckboxButtonGroupView.prototype.change_active = function (i) {
-            var active = this.active;
-            active.toggle(i);
-            this.model.active = active.values;
-            if (this.model.callback != null)
-                this.model.callback.execute(this.model);
-        };
-        CheckboxButtonGroupView.prototype._update_active = function () {
-            var active = this.active;
-            this._buttons.forEach(function (button, i) {
-                dom_1.classes(button).toggle(mixins_1.bk_active, active.has(i));
-            });
-        };
-        CheckboxButtonGroupView.__name__ = "CheckboxButtonGroupView";
-        return CheckboxButtonGroupView;
-    }(button_group_1.ButtonGroupView));
-    exports.CheckboxButtonGroupView = CheckboxButtonGroupView;
-    var CheckboxButtonGroup = /** @class */ (function (_super) {
-        tslib_1.__extends(CheckboxButtonGroup, _super);
-        function CheckboxButtonGroup(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        CheckboxButtonGroup.initClass = function () {
-            this.prototype.default_view = CheckboxButtonGroupView;
-            this.define({
-                active: [p.Array, []],
-            });
-        };
-        CheckboxButtonGroup.__name__ = "CheckboxButtonGroup";
-        return CheckboxButtonGroup;
-    }(button_group_1.ButtonGroup));
-    exports.CheckboxButtonGroup = CheckboxButtonGroup;
-    CheckboxButtonGroup.initClass();
-}
-,
-443: /* models/widgets/checkbox_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var input_group_1 = require(453) /* ./input_group */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var array_1 = require(24) /* ../../core/util/array */;
-    var data_structures_1 = require(32) /* ../../core/util/data_structures */;
-    var p = require(18) /* ../../core/properties */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
+    ButtonGroup.__name__ = "ButtonGroup";
+    ButtonGroup.init_ButtonGroup();
+},
+485: /* models/widgets/checkbox_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var input_group_1 = require(486) /* ./input_group */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var array_1 = require(110) /* ../../core/util/array */;
+    var data_structures_1 = require(117) /* ../../core/util/data_structures */;
+    var p = require(121) /* ../../core/properties */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
     var CheckboxGroupView = /** @class */ (function (_super) {
         tslib_1.__extends(CheckboxGroupView, _super);
         function CheckboxGroupView() {
@@ -798,16 +753,16 @@
             if (this.model.callback != null)
                 this.model.callback.execute(this.model);
         };
-        CheckboxGroupView.__name__ = "CheckboxGroupView";
         return CheckboxGroupView;
     }(input_group_1.InputGroupView));
     exports.CheckboxGroupView = CheckboxGroupView;
+    CheckboxGroupView.__name__ = "CheckboxGroupView";
     var CheckboxGroup = /** @class */ (function (_super) {
         tslib_1.__extends(CheckboxGroup, _super);
         function CheckboxGroup(attrs) {
             return _super.call(this, attrs) || this;
         }
-        CheckboxGroup.initClass = function () {
+        CheckboxGroup.init_CheckboxGroup = function () {
             this.prototype.default_view = CheckboxGroupView;
             this.define({
                 active: [p.Array, []],
@@ -816,19 +771,45 @@
                 callback: [p.Any],
             });
         };
-        CheckboxGroup.__name__ = "CheckboxGroup";
         return CheckboxGroup;
     }(input_group_1.InputGroup));
     exports.CheckboxGroup = CheckboxGroup;
-    CheckboxGroup.initClass();
-}
-,
-444: /* models/widgets/color_picker */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
+    CheckboxGroup.__name__ = "CheckboxGroup";
+    CheckboxGroup.init_CheckboxGroup();
+},
+486: /* models/widgets/input_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var control_1 = require(475) /* ./control */;
+    var InputGroupView = /** @class */ (function (_super) {
+        tslib_1.__extends(InputGroupView, _super);
+        function InputGroupView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        InputGroupView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.change, function () { return _this.render(); });
+        };
+        return InputGroupView;
+    }(control_1.ControlView));
+    exports.InputGroupView = InputGroupView;
+    InputGroupView.__name__ = "InputGroupView";
+    var InputGroup = /** @class */ (function (_super) {
+        tslib_1.__extends(InputGroup, _super);
+        function InputGroup(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        return InputGroup;
+    }(control_1.Control));
+    exports.InputGroup = InputGroup;
+    InputGroup.__name__ = "InputGroup";
+},
+487: /* models/widgets/color_picker.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
     var ColorPickerView = /** @class */ (function (_super) {
         tslib_1.__extends(ColorPickerView, _super);
         function ColorPickerView() {
@@ -858,65 +839,35 @@
             this.model.color = this.input_el.value;
             _super.prototype.change_input.call(this);
         };
-        ColorPickerView.__name__ = "ColorPickerView";
         return ColorPickerView;
     }(input_widget_1.InputWidgetView));
     exports.ColorPickerView = ColorPickerView;
+    ColorPickerView.__name__ = "ColorPickerView";
     var ColorPicker = /** @class */ (function (_super) {
         tslib_1.__extends(ColorPicker, _super);
         function ColorPicker(attrs) {
             return _super.call(this, attrs) || this;
         }
-        ColorPicker.initClass = function () {
+        ColorPicker.init_ColorPicker = function () {
             this.prototype.default_view = ColorPickerView;
             this.define({
                 color: [p.Color, "#000000"],
             });
         };
-        ColorPicker.__name__ = "ColorPicker";
         return ColorPicker;
     }(input_widget_1.InputWidget));
     exports.ColorPicker = ColorPicker;
-    ColorPicker.initClass();
-}
-,
-445: /* models/widgets/control */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var widget_1 = require(487) /* ./widget */;
-    var ControlView = /** @class */ (function (_super) {
-        tslib_1.__extends(ControlView, _super);
-        function ControlView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ControlView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            var p = this.model.properties;
-            this.on_change(p.disabled, function () { return _this.render(); });
-        };
-        ControlView.__name__ = "ControlView";
-        return ControlView;
-    }(widget_1.WidgetView));
-    exports.ControlView = ControlView;
-    var Control = /** @class */ (function (_super) {
-        tslib_1.__extends(Control, _super);
-        function Control(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Control.__name__ = "Control";
-        return Control;
-    }(widget_1.Widget));
-    exports.Control = Control;
-}
-,
-446: /* models/widgets/date_picker */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var Pikaday = require(477) /* pikaday */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    require(474) /* ../../styles/widgets/pikaday */;
+    ColorPicker.__name__ = "ColorPicker";
+    ColorPicker.init_ColorPicker();
+},
+488: /* models/widgets/date_picker.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var Pikaday = require(489) /* pikaday */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    require(490) /* ../../styles/widgets/pikaday */;
     Pikaday.prototype.adjustPosition = function () {
         if (this._o.container)
             return;
@@ -971,8 +922,11 @@
             this._root_element.appendChild(this._picker.el);
         };
         DatePickerView.prototype._unlocal_date = function (date) {
-            // this sucks but the date comes in as a UTC timestamp and pikaday uses Date's local
-            // timezone-converted representation. We want the date to be as given by the user
+            //Get the UTC offset (in minutes) of date (will be based on the timezone of the user's system).
+            //Then multiply to get the offset in ms.
+            //This way it can be used to recreate the user specified date, agnostic to their local systems's timezone.
+            var timeOffsetInMS = date.getTimezoneOffset() * 60000;
+            date.setTime(date.getTime() - timeOffsetInMS);
             var datestr = date.toISOString().substr(0, 10);
             var tup = datestr.split('-');
             return new Date(Number(tup[0]), Number(tup[1]) - 1, Number(tup[2]));
@@ -985,16 +939,16 @@
             this.model.value = date.toDateString();
             this.change_input();
         };
-        DatePickerView.__name__ = "DatePickerView";
         return DatePickerView;
     }(input_widget_1.InputWidgetView));
     exports.DatePickerView = DatePickerView;
+    DatePickerView.__name__ = "DatePickerView";
     var DatePicker = /** @class */ (function (_super) {
         tslib_1.__extends(DatePicker, _super);
         function DatePicker(attrs) {
             return _super.call(this, attrs) || this;
         }
-        DatePicker.initClass = function () {
+        DatePicker.init_DatePicker = function () {
             this.prototype.default_view = DatePickerView;
             this.define({
                 // TODO (bev) types
@@ -1003,26 +957,959 @@
                 max_date: [p.Any],
             });
         };
-        DatePicker.__name__ = "DatePicker";
         return DatePicker;
     }(input_widget_1.InputWidget));
     exports.DatePicker = DatePicker;
-    DatePicker.initClass();
-}
-,
-447: /* models/widgets/date_range_slider */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var tz = require(425) /* timezone */;
-    var abstract_slider_1 = require(438) /* ./abstract_slider */;
+    DatePicker.__name__ = "DatePicker";
+    DatePicker.init_DatePicker();
+},
+489: /* pikaday/pikaday.js */ function _(require, module, exports) {
+    /**
+     * feature detection and helper functions
+     */
+    var addEvent = function (el, e, callback, capture) {
+        el.addEventListener(e, callback, !!capture);
+    }, removeEvent = function (el, e, callback, capture) {
+        el.removeEventListener(e, callback, !!capture);
+    }, trim = function (str) {
+        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
+    }, hasClass = function (el, cn) {
+        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
+    }, addClass = function (el, cn) {
+        if (!hasClass(el, cn)) {
+            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
+        }
+    }, removeClass = function (el, cn) {
+        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
+    }, isArray = function (obj) {
+        return (/Array/).test(Object.prototype.toString.call(obj));
+    }, isDate = function (obj) {
+        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
+    }, isWeekend = function (date) {
+        var day = date.getDay();
+        return day === 0 || day === 6;
+    }, isLeapYear = function (year) {
+        // solution lifted from date.js (MIT license): https://github.com/datejs/Datejs
+        return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0);
+    }, getDaysInMonth = function (year, month) {
+        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+    }, setToStartOfDay = function (date) {
+        if (isDate(date))
+            date.setHours(0, 0, 0, 0);
+    }, compareDates = function (a, b) {
+        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
+        return a.getTime() === b.getTime();
+    }, extend = function (to, from, overwrite) {
+        var prop, hasProp;
+        for (prop in from) {
+            hasProp = to[prop] !== undefined;
+            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
+                if (isDate(from[prop])) {
+                    if (overwrite) {
+                        to[prop] = new Date(from[prop].getTime());
+                    }
+                }
+                else if (isArray(from[prop])) {
+                    if (overwrite) {
+                        to[prop] = from[prop].slice(0);
+                    }
+                }
+                else {
+                    to[prop] = extend({}, from[prop], overwrite);
+                }
+            }
+            else if (overwrite || !hasProp) {
+                to[prop] = from[prop];
+            }
+        }
+        return to;
+    }, fireEvent = function (el, eventName, data) {
+        var ev;
+        if (document.createEvent) {
+            ev = document.createEvent('HTMLEvents');
+            ev.initEvent(eventName, true, false);
+            ev = extend(ev, data);
+            el.dispatchEvent(ev);
+        }
+        else if (document.createEventObject) {
+            ev = document.createEventObject();
+            ev = extend(ev, data);
+            el.fireEvent('on' + eventName, ev);
+        }
+    }, adjustCalendar = function (calendar) {
+        if (calendar.month < 0) {
+            calendar.year -= Math.ceil(Math.abs(calendar.month) / 12);
+            calendar.month += 12;
+        }
+        if (calendar.month > 11) {
+            calendar.year += Math.floor(Math.abs(calendar.month) / 12);
+            calendar.month -= 12;
+        }
+        return calendar;
+    }, 
+    /**
+     * defaults and localisation
+     */
+    defaults = {
+        // bind the picker to a form field
+        field: null,
+        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
+        bound: undefined,
+        // data-attribute on the input field with an aria assistance tekst (only applied when `bound` is set)
+        ariaLabel: 'Use the arrow keys to pick a date',
+        // position of the datepicker, relative to the field (default to bottom & left)
+        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
+        position: 'bottom left',
+        // automatically fit in the viewport even if it means repositioning from the position option
+        reposition: true,
+        // the default output format for `.toString()` and `field` value
+        format: 'YYYY-MM-DD',
+        // the toString function which gets passed a current date object and format
+        // and returns a string
+        toString: null,
+        // used to create date object from current input string
+        parse: null,
+        // the initial date to view when first opened
+        defaultDate: null,
+        // make the `defaultDate` the initial selected value
+        setDefaultDate: false,
+        // first day of week (0: Sunday, 1: Monday etc)
+        firstDay: 0,
+        // the default flag for moment's strict date parsing
+        formatStrict: false,
+        // the minimum/earliest date that can be selected
+        minDate: null,
+        // the maximum/latest date that can be selected
+        maxDate: null,
+        // number of years either side, or array of upper/lower range
+        yearRange: 10,
+        // show week numbers at head of row
+        showWeekNumber: false,
+        // Week picker mode
+        pickWholeWeek: false,
+        // used internally (don't config outside)
+        minYear: 0,
+        maxYear: 9999,
+        minMonth: undefined,
+        maxMonth: undefined,
+        startRange: null,
+        endRange: null,
+        isRTL: false,
+        // Additional text to append to the year in the calendar title
+        yearSuffix: '',
+        // Render the month after year in the calendar title
+        showMonthAfterYear: false,
+        // Render days of the calendar grid that fall in the next or previous month
+        showDaysInNextAndPreviousMonths: false,
+        // Allows user to select days that fall in the next or previous month
+        enableSelectionDaysInNextAndPreviousMonths: false,
+        // how many months are visible
+        numberOfMonths: 1,
+        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
+        // only used for the first display or when a selected date is not visible
+        mainCalendar: 'left',
+        // Specify a DOM element to render the calendar in
+        container: undefined,
+        // Blur field when date is selected
+        blurFieldOnSelect: true,
+        // internationalization
+        i18n: {
+            previousMonth: 'Previous Month',
+            nextMonth: 'Next Month',
+            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        },
+        // Theme Classname
+        theme: null,
+        // events array
+        events: [],
+        // callback function
+        onSelect: null,
+        onOpen: null,
+        onClose: null,
+        onDraw: null,
+        // Enable keyboard input
+        keyboardInput: true
+    }, 
+    /**
+     * templating functions to abstract HTML rendering
+     */
+    renderDayName = function (opts, day, abbr) {
+        day += opts.firstDay;
+        while (day >= 7) {
+            day -= 7;
+        }
+        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
+    }, renderDay = function (opts) {
+        var arr = [];
+        var ariaSelected = 'false';
+        if (opts.isEmpty) {
+            if (opts.showDaysInNextAndPreviousMonths) {
+                arr.push('is-outside-current-month');
+                if (!opts.enableSelectionDaysInNextAndPreviousMonths) {
+                    arr.push('is-selection-disabled');
+                }
+            }
+            else {
+                return '<td class="is-empty"></td>';
+            }
+        }
+        if (opts.isDisabled) {
+            arr.push('is-disabled');
+        }
+        if (opts.isToday) {
+            arr.push('is-today');
+        }
+        if (opts.isSelected) {
+            arr.push('is-selected');
+            ariaSelected = 'true';
+        }
+        if (opts.hasEvent) {
+            arr.push('has-event');
+        }
+        if (opts.isInRange) {
+            arr.push('is-inrange');
+        }
+        if (opts.isStartRange) {
+            arr.push('is-startrange');
+        }
+        if (opts.isEndRange) {
+            arr.push('is-endrange');
+        }
+        return '<td data-day="' + opts.day + '" class="' + arr.join(' ') + '" aria-selected="' + ariaSelected + '">' +
+            '<button class="pika-button pika-day" type="button" ' +
+            'data-pika-year="' + opts.year + '" data-pika-month="' + opts.month + '" data-pika-day="' + opts.day + '">' +
+            opts.day +
+            '</button>' +
+            '</td>';
+    }, isoWeek = function (date) {
+        // Ensure we're at the start of the day.
+        date.setHours(0, 0, 0, 0);
+        // Thursday in current week decides the year because January 4th
+        // is always in the first week according to ISO8601.
+        var yearDay = date.getDate(), weekDay = date.getDay(), dayInFirstWeek = 4 // January 4th
+        , dayShift = dayInFirstWeek - 1 // counting starts at 0
+        , daysPerWeek = 7, prevWeekDay = function (day) { return (day + daysPerWeek - 1) % daysPerWeek; };
+        // Adjust to Thursday in week 1 and count number of weeks from date to week 1.
+        date.setDate(yearDay + dayShift - prevWeekDay(weekDay));
+        var jan4th = new Date(date.getFullYear(), 0, dayInFirstWeek), msPerDay = 24 * 60 * 60 * 1000, daysBetween = (date.getTime() - jan4th.getTime()) / msPerDay, weekNum = 1 + Math.round((daysBetween - dayShift + prevWeekDay(jan4th.getDay())) / daysPerWeek);
+        return weekNum;
+    }, renderWeek = function (d, m, y) {
+        var date = new Date(y, m, d), week = isoWeek(date);
+        return '<td class="pika-week">' + week + '</td>';
+    }, renderRow = function (days, isRTL, pickWholeWeek, isRowSelected) {
+        return '<tr class="pika-row' + (pickWholeWeek ? ' pick-whole-week' : '') + (isRowSelected ? ' is-selected' : '') + '">' + (isRTL ? days.reverse() : days).join('') + '</tr>';
+    }, renderBody = function (rows) {
+        return '<tbody>' + rows.join('') + '</tbody>';
+    }, renderHead = function (opts) {
+        var i, arr = [];
+        if (opts.showWeekNumber) {
+            arr.push('<th></th>');
+        }
+        for (i = 0; i < 7; i++) {
+            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
+        }
+        return '<thead><tr>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</tr></thead>';
+    }, renderTitle = function (instance, c, year, month, refYear, randId) {
+        var i, j, arr, opts = instance._o, isMinYear = year === opts.minYear, isMaxYear = year === opts.maxYear, html = '<div id="' + randId + '" class="pika-title" role="heading" aria-live="assertive">', monthHtml, yearHtml, prev = true, next = true;
+        for (arr = [], i = 0; i < 12; i++) {
+            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
+                (i === month ? ' selected="selected"' : '') +
+                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? ' disabled="disabled"' : '') + '>' +
+                opts.i18n.months[i] + '</option>');
+        }
+        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month" tabindex="-1">' + arr.join('') + '</select></div>';
+        if (isArray(opts.yearRange)) {
+            i = opts.yearRange[0];
+            j = opts.yearRange[1] + 1;
+        }
+        else {
+            i = year - opts.yearRange;
+            j = 1 + year + opts.yearRange;
+        }
+        for (arr = []; i < j && i <= opts.maxYear; i++) {
+            if (i >= opts.minYear) {
+                arr.push('<option value="' + i + '"' + (i === year ? ' selected="selected"' : '') + '>' + (i) + '</option>');
+            }
+        }
+        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year" tabindex="-1">' + arr.join('') + '</select></div>';
+        if (opts.showMonthAfterYear) {
+            html += yearHtml + monthHtml;
+        }
+        else {
+            html += monthHtml + yearHtml;
+        }
+        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
+            prev = false;
+        }
+        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
+            next = false;
+        }
+        if (c === 0) {
+            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
+        }
+        if (c === (instance._o.numberOfMonths - 1)) {
+            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
+        }
+        return html += '</div>';
+    }, renderTable = function (opts, data, randId) {
+        return '<table cellpadding="0" cellspacing="0" class="pika-table" role="grid" aria-labelledby="' + randId + '">' + renderHead(opts) + renderBody(data) + '</table>';
+    }, 
+    /**
+     * Pikaday constructor
+     */
+    Pikaday = function (options) {
+        var self = this, opts = self.config(options);
+        self._onMouseDown = function (e) {
+            if (!self._v) {
+                return;
+            }
+            e = e || window.event;
+            var target = e.target || e.srcElement;
+            if (!target) {
+                return;
+            }
+            if (!hasClass(target, 'is-disabled')) {
+                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty') && !hasClass(target.parentNode, 'is-disabled')) {
+                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+                    if (opts.bound) {
+                        setTimeout(function () {
+                            self.hide();
+                            if (opts.blurFieldOnSelect && opts.field) {
+                                opts.field.blur();
+                            }
+                        }, 100);
+                    }
+                }
+                else if (hasClass(target, 'pika-prev')) {
+                    self.prevMonth();
+                }
+                else if (hasClass(target, 'pika-next')) {
+                    self.nextMonth();
+                }
+            }
+            if (!hasClass(target, 'pika-select')) {
+                // if this is touch event prevent mouse events emulation
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+                else {
+                    e.returnValue = false;
+                    return false;
+                }
+            }
+            else {
+                self._c = true;
+            }
+        };
+        self._onChange = function (e) {
+            e = e || window.event;
+            var target = e.target || e.srcElement;
+            if (!target) {
+                return;
+            }
+            if (hasClass(target, 'pika-select-month')) {
+                self.gotoMonth(target.value);
+            }
+            else if (hasClass(target, 'pika-select-year')) {
+                self.gotoYear(target.value);
+            }
+        };
+        self._onKeyChange = function (e) {
+            e = e || window.event;
+            if (self.isVisible()) {
+                switch (e.keyCode) {
+                    case 13:
+                    case 27:
+                        if (opts.field) {
+                            opts.field.blur();
+                        }
+                        break;
+                    case 37:
+                        self.adjustDate('subtract', 1);
+                        break;
+                    case 38:
+                        self.adjustDate('subtract', 7);
+                        break;
+                    case 39:
+                        self.adjustDate('add', 1);
+                        break;
+                    case 40:
+                        self.adjustDate('add', 7);
+                        break;
+                    case 8:
+                    case 46:
+                        self.setDate(null);
+                        break;
+                }
+            }
+        };
+        self._parseFieldValue = function () {
+            if (opts.parse) {
+                return opts.parse(opts.field.value, opts.format);
+            }
+            else {
+                return new Date(Date.parse(opts.field.value));
+            }
+        };
+        self._onInputChange = function (e) {
+            var date;
+            if (e.firedBy === self) {
+                return;
+            }
+            date = self._parseFieldValue();
+            if (isDate(date)) {
+                self.setDate(date);
+            }
+            if (!self._v) {
+                self.show();
+            }
+        };
+        self._onInputFocus = function () {
+            self.show();
+        };
+        self._onInputClick = function () {
+            self.show();
+        };
+        self._onInputBlur = function () {
+            // IE allows pika div to gain focus; catch blur the input field
+            var pEl = document.activeElement;
+            do {
+                if (hasClass(pEl, 'pika-single')) {
+                    return;
+                }
+            } while ((pEl = pEl.parentNode));
+            if (!self._c) {
+                self._b = setTimeout(function () {
+                    self.hide();
+                }, 50);
+            }
+            self._c = false;
+        };
+        self._onClick = function (e) {
+            e = e || window.event;
+            var target = e.target || e.srcElement, pEl = target;
+            if (!target) {
+                return;
+            }
+            do {
+                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
+                    return;
+                }
+            } while ((pEl = pEl.parentNode));
+            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
+                self.hide();
+            }
+        };
+        self.el = document.createElement('div');
+        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '') + (opts.theme ? ' ' + opts.theme : '');
+        addEvent(self.el, 'mousedown', self._onMouseDown, true);
+        addEvent(self.el, 'touchend', self._onMouseDown, true);
+        addEvent(self.el, 'change', self._onChange);
+        if (opts.keyboardInput) {
+            addEvent(document, 'keydown', self._onKeyChange);
+        }
+        if (opts.field) {
+            if (opts.container) {
+                opts.container.appendChild(self.el);
+            }
+            else if (opts.bound) {
+                document.body.appendChild(self.el);
+            }
+            else {
+                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
+            }
+            addEvent(opts.field, 'change', self._onInputChange);
+            if (!opts.defaultDate) {
+                opts.defaultDate = self._parseFieldValue();
+                opts.setDefaultDate = true;
+            }
+        }
+        var defDate = opts.defaultDate;
+        if (isDate(defDate)) {
+            if (opts.setDefaultDate) {
+                self.setDate(defDate, true);
+            }
+            else {
+                self.gotoDate(defDate);
+            }
+        }
+        else {
+            self.gotoDate(new Date());
+        }
+        if (opts.bound) {
+            this.hide();
+            self.el.className += ' is-bound';
+            addEvent(opts.trigger, 'click', self._onInputClick);
+            addEvent(opts.trigger, 'focus', self._onInputFocus);
+            addEvent(opts.trigger, 'blur', self._onInputBlur);
+        }
+        else {
+            this.show();
+        }
+    };
+    /**
+     * public Pikaday API
+     */
+    Pikaday.prototype = {
+        /**
+         * configure functionality
+         */
+        config: function (options) {
+            if (!this._o) {
+                this._o = extend({}, defaults, true);
+            }
+            var opts = extend(this._o, options, true);
+            opts.isRTL = !!opts.isRTL;
+            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
+            opts.theme = (typeof opts.theme) === 'string' && opts.theme ? opts.theme : null;
+            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
+            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
+            opts.disableWeekends = !!opts.disableWeekends;
+            opts.disableDayFn = (typeof opts.disableDayFn) === 'function' ? opts.disableDayFn : null;
+            var nom = parseInt(opts.numberOfMonths, 10) || 1;
+            opts.numberOfMonths = nom > 4 ? 4 : nom;
+            if (!isDate(opts.minDate)) {
+                opts.minDate = false;
+            }
+            if (!isDate(opts.maxDate)) {
+                opts.maxDate = false;
+            }
+            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
+                opts.maxDate = opts.minDate = false;
+            }
+            if (opts.minDate) {
+                this.setMinDate(opts.minDate);
+            }
+            if (opts.maxDate) {
+                this.setMaxDate(opts.maxDate);
+            }
+            if (isArray(opts.yearRange)) {
+                var fallback = new Date().getFullYear() - 10;
+                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
+                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
+            }
+            else {
+                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
+                if (opts.yearRange > 100) {
+                    opts.yearRange = 100;
+                }
+            }
+            return opts;
+        },
+        /**
+         * return a formatted string of the current selection (using Moment.js if available)
+         */
+        toString: function (format) {
+            format = format || this._o.format;
+            if (!isDate(this._d)) {
+                return '';
+            }
+            if (this._o.toString) {
+                return this._o.toString(this._d, format);
+            }
+            return this._d.toDateString();
+        },
+        /**
+         * return a Date object of the current selection
+         */
+        getDate: function () {
+            return isDate(this._d) ? new Date(this._d.getTime()) : null;
+        },
+        /**
+         * set the current selection
+         */
+        setDate: function (date, preventOnSelect) {
+            if (!date) {
+                this._d = null;
+                if (this._o.field) {
+                    this._o.field.value = '';
+                    fireEvent(this._o.field, 'change', { firedBy: this });
+                }
+                return this.draw();
+            }
+            if (typeof date === 'string') {
+                date = new Date(Date.parse(date));
+            }
+            if (!isDate(date)) {
+                return;
+            }
+            var min = this._o.minDate, max = this._o.maxDate;
+            if (isDate(min) && date < min) {
+                date = min;
+            }
+            else if (isDate(max) && date > max) {
+                date = max;
+            }
+            this._d = new Date(date.getTime());
+            setToStartOfDay(this._d);
+            this.gotoDate(this._d);
+            if (this._o.field) {
+                this._o.field.value = this.toString();
+                fireEvent(this._o.field, 'change', { firedBy: this });
+            }
+            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
+                this._o.onSelect.call(this, this.getDate());
+            }
+        },
+        /**
+         * clear and reset the date
+         */
+        clear: function () {
+            this.setDate(null);
+        },
+        /**
+         * change view to a specific date
+         */
+        gotoDate: function (date) {
+            var newCalendar = true;
+            if (!isDate(date)) {
+                return;
+            }
+            if (this.calendars) {
+                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1), lastVisibleDate = new Date(this.calendars[this.calendars.length - 1].year, this.calendars[this.calendars.length - 1].month, 1), visibleDate = date.getTime();
+                // get the end of the month
+                lastVisibleDate.setMonth(lastVisibleDate.getMonth() + 1);
+                lastVisibleDate.setDate(lastVisibleDate.getDate() - 1);
+                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
+            }
+            if (newCalendar) {
+                this.calendars = [{
+                        month: date.getMonth(),
+                        year: date.getFullYear()
+                    }];
+                if (this._o.mainCalendar === 'right') {
+                    this.calendars[0].month += 1 - this._o.numberOfMonths;
+                }
+            }
+            this.adjustCalendars();
+        },
+        adjustDate: function (sign, days) {
+            var day = this.getDate() || new Date();
+            var difference = parseInt(days) * 24 * 60 * 60 * 1000;
+            var newDay;
+            if (sign === 'add') {
+                newDay = new Date(day.valueOf() + difference);
+            }
+            else if (sign === 'subtract') {
+                newDay = new Date(day.valueOf() - difference);
+            }
+            this.setDate(newDay);
+        },
+        adjustCalendars: function () {
+            this.calendars[0] = adjustCalendar(this.calendars[0]);
+            for (var c = 1; c < this._o.numberOfMonths; c++) {
+                this.calendars[c] = adjustCalendar({
+                    month: this.calendars[0].month + c,
+                    year: this.calendars[0].year
+                });
+            }
+            this.draw();
+        },
+        gotoToday: function () {
+            this.gotoDate(new Date());
+        },
+        /**
+         * change view to a specific month (zero-index, e.g. 0: January)
+         */
+        gotoMonth: function (month) {
+            if (!isNaN(month)) {
+                this.calendars[0].month = parseInt(month, 10);
+                this.adjustCalendars();
+            }
+        },
+        nextMonth: function () {
+            this.calendars[0].month++;
+            this.adjustCalendars();
+        },
+        prevMonth: function () {
+            this.calendars[0].month--;
+            this.adjustCalendars();
+        },
+        /**
+         * change view to a specific full year (e.g. "2012")
+         */
+        gotoYear: function (year) {
+            if (!isNaN(year)) {
+                this.calendars[0].year = parseInt(year, 10);
+                this.adjustCalendars();
+            }
+        },
+        /**
+         * change the minDate
+         */
+        setMinDate: function (value) {
+            if (value instanceof Date) {
+                setToStartOfDay(value);
+                this._o.minDate = value;
+                this._o.minYear = value.getFullYear();
+                this._o.minMonth = value.getMonth();
+            }
+            else {
+                this._o.minDate = defaults.minDate;
+                this._o.minYear = defaults.minYear;
+                this._o.minMonth = defaults.minMonth;
+                this._o.startRange = defaults.startRange;
+            }
+            this.draw();
+        },
+        /**
+         * change the maxDate
+         */
+        setMaxDate: function (value) {
+            if (value instanceof Date) {
+                setToStartOfDay(value);
+                this._o.maxDate = value;
+                this._o.maxYear = value.getFullYear();
+                this._o.maxMonth = value.getMonth();
+            }
+            else {
+                this._o.maxDate = defaults.maxDate;
+                this._o.maxYear = defaults.maxYear;
+                this._o.maxMonth = defaults.maxMonth;
+                this._o.endRange = defaults.endRange;
+            }
+            this.draw();
+        },
+        setStartRange: function (value) {
+            this._o.startRange = value;
+        },
+        setEndRange: function (value) {
+            this._o.endRange = value;
+        },
+        /**
+         * refresh the HTML
+         */
+        draw: function (force) {
+            if (!this._v && !force) {
+                return;
+            }
+            var opts = this._o, minYear = opts.minYear, maxYear = opts.maxYear, minMonth = opts.minMonth, maxMonth = opts.maxMonth, html = '', randId;
+            if (this._y <= minYear) {
+                this._y = minYear;
+                if (!isNaN(minMonth) && this._m < minMonth) {
+                    this._m = minMonth;
+                }
+            }
+            if (this._y >= maxYear) {
+                this._y = maxYear;
+                if (!isNaN(maxMonth) && this._m > maxMonth) {
+                    this._m = maxMonth;
+                }
+            }
+            for (var c = 0; c < opts.numberOfMonths; c++) {
+                randId = 'pika-title-' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
+                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year, randId) + this.render(this.calendars[c].year, this.calendars[c].month, randId) + '</div>';
+            }
+            this.el.innerHTML = html;
+            if (opts.bound) {
+                if (opts.field.type !== 'hidden') {
+                    setTimeout(function () {
+                        opts.trigger.focus();
+                    }, 1);
+                }
+            }
+            if (typeof this._o.onDraw === 'function') {
+                this._o.onDraw(this);
+            }
+            if (opts.bound) {
+                // let the screen reader user know to use arrow keys
+                opts.field.setAttribute('aria-label', opts.ariaLabel);
+            }
+        },
+        adjustPosition: function () {
+            var field, pEl, width, height, viewportWidth, viewportHeight, scrollTop, left, top, clientRect, leftAligned, bottomAligned;
+            if (this._o.container)
+                return;
+            this.el.style.position = 'absolute';
+            field = this._o.trigger;
+            pEl = field;
+            width = this.el.offsetWidth;
+            height = this.el.offsetHeight;
+            viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+            viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
+            leftAligned = true;
+            bottomAligned = true;
+            if (typeof field.getBoundingClientRect === 'function') {
+                clientRect = field.getBoundingClientRect();
+                left = clientRect.left + window.pageXOffset;
+                top = clientRect.bottom + window.pageYOffset;
+            }
+            else {
+                left = pEl.offsetLeft;
+                top = pEl.offsetTop + pEl.offsetHeight;
+                while ((pEl = pEl.offsetParent)) {
+                    left += pEl.offsetLeft;
+                    top += pEl.offsetTop;
+                }
+            }
+            // default position is bottom & left
+            if ((this._o.reposition && left + width > viewportWidth) ||
+                (this._o.position.indexOf('right') > -1 &&
+                    left - width + field.offsetWidth > 0)) {
+                left = left - width + field.offsetWidth;
+                leftAligned = false;
+            }
+            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
+                (this._o.position.indexOf('top') > -1 &&
+                    top - height - field.offsetHeight > 0)) {
+                top = top - height - field.offsetHeight;
+                bottomAligned = false;
+            }
+            this.el.style.left = left + 'px';
+            this.el.style.top = top + 'px';
+            addClass(this.el, leftAligned ? 'left-aligned' : 'right-aligned');
+            addClass(this.el, bottomAligned ? 'bottom-aligned' : 'top-aligned');
+            removeClass(this.el, !leftAligned ? 'left-aligned' : 'right-aligned');
+            removeClass(this.el, !bottomAligned ? 'bottom-aligned' : 'top-aligned');
+        },
+        /**
+         * render HTML for a particular month
+         */
+        render: function (year, month, randId) {
+            var opts = this._o, now = new Date(), days = getDaysInMonth(year, month), before = new Date(year, month, 1).getDay(), data = [], row = [];
+            setToStartOfDay(now);
+            if (opts.firstDay > 0) {
+                before -= opts.firstDay;
+                if (before < 0) {
+                    before += 7;
+                }
+            }
+            var previousMonth = month === 0 ? 11 : month - 1, nextMonth = month === 11 ? 0 : month + 1, yearOfPreviousMonth = month === 0 ? year - 1 : year, yearOfNextMonth = month === 11 ? year + 1 : year, daysInPreviousMonth = getDaysInMonth(yearOfPreviousMonth, previousMonth);
+            var cells = days + before, after = cells;
+            while (after > 7) {
+                after -= 7;
+            }
+            cells += 7 - after;
+            var isWeekSelected = false;
+            for (var i = 0, r = 0; i < cells; i++) {
+                var day = new Date(year, month, 1 + (i - before)), isSelected = isDate(this._d) ? compareDates(day, this._d) : false, isToday = compareDates(day, now), hasEvent = opts.events.indexOf(day.toDateString()) !== -1 ? true : false, isEmpty = i < before || i >= (days + before), dayNumber = 1 + (i - before), monthNumber = month, yearNumber = year, isStartRange = opts.startRange && compareDates(opts.startRange, day), isEndRange = opts.endRange && compareDates(opts.endRange, day), isInRange = opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange, isDisabled = (opts.minDate && day < opts.minDate) ||
+                    (opts.maxDate && day > opts.maxDate) ||
+                    (opts.disableWeekends && isWeekend(day)) ||
+                    (opts.disableDayFn && opts.disableDayFn(day));
+                if (isEmpty) {
+                    if (i < before) {
+                        dayNumber = daysInPreviousMonth + dayNumber;
+                        monthNumber = previousMonth;
+                        yearNumber = yearOfPreviousMonth;
+                    }
+                    else {
+                        dayNumber = dayNumber - days;
+                        monthNumber = nextMonth;
+                        yearNumber = yearOfNextMonth;
+                    }
+                }
+                var dayConfig = {
+                    day: dayNumber,
+                    month: monthNumber,
+                    year: yearNumber,
+                    hasEvent: hasEvent,
+                    isSelected: isSelected,
+                    isToday: isToday,
+                    isDisabled: isDisabled,
+                    isEmpty: isEmpty,
+                    isStartRange: isStartRange,
+                    isEndRange: isEndRange,
+                    isInRange: isInRange,
+                    showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths,
+                    enableSelectionDaysInNextAndPreviousMonths: opts.enableSelectionDaysInNextAndPreviousMonths
+                };
+                if (opts.pickWholeWeek && isSelected) {
+                    isWeekSelected = true;
+                }
+                row.push(renderDay(dayConfig));
+                if (++r === 7) {
+                    if (opts.showWeekNumber) {
+                        row.unshift(renderWeek(i - before, month, year));
+                    }
+                    data.push(renderRow(row, opts.isRTL, opts.pickWholeWeek, isWeekSelected));
+                    row = [];
+                    r = 0;
+                    isWeekSelected = false;
+                }
+            }
+            return renderTable(opts, data, randId);
+        },
+        isVisible: function () {
+            return this._v;
+        },
+        show: function () {
+            if (!this.isVisible()) {
+                this._v = true;
+                this.draw();
+                removeClass(this.el, 'is-hidden');
+                if (this._o.bound) {
+                    addEvent(document, 'click', this._onClick);
+                    this.adjustPosition();
+                }
+                if (typeof this._o.onOpen === 'function') {
+                    this._o.onOpen.call(this);
+                }
+            }
+        },
+        hide: function () {
+            var v = this._v;
+            if (v !== false) {
+                if (this._o.bound) {
+                    removeEvent(document, 'click', this._onClick);
+                }
+                this.el.style.position = 'static'; // reset
+                this.el.style.left = 'auto';
+                this.el.style.top = 'auto';
+                addClass(this.el, 'is-hidden');
+                this._v = false;
+                if (v !== undefined && typeof this._o.onClose === 'function') {
+                    this._o.onClose.call(this);
+                }
+            }
+        },
+        /**
+         * GAME OVER
+         */
+        destroy: function () {
+            var opts = this._o;
+            this.hide();
+            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
+            removeEvent(this.el, 'touchend', this._onMouseDown, true);
+            removeEvent(this.el, 'change', this._onChange);
+            if (opts.keyboardInput) {
+                removeEvent(document, 'keydown', this._onKeyChange);
+            }
+            if (opts.field) {
+                removeEvent(opts.field, 'change', this._onInputChange);
+                if (opts.bound) {
+                    removeEvent(opts.trigger, 'click', this._onInputClick);
+                    removeEvent(opts.trigger, 'focus', this._onInputFocus);
+                    removeEvent(opts.trigger, 'blur', this._onInputBlur);
+                }
+            }
+            if (this.el.parentNode) {
+                this.el.parentNode.removeChild(this.el);
+            }
+        }
+    };
+    module.exports = Pikaday;
+},
+490: /* styles/widgets/pikaday.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root {\n  @charset \"UTF-8\";\n  /*!\n * Pikaday\n * Copyright \u00A9 2014 David Bushell | BSD & MIT license | https://dbushell.com/\n */\n  /*\nclear child float (pika-lendar), using the famous micro clearfix hack\nhttp://nicolasgallagher.com/micro-clearfix-hack/\n*/\n  /* styling for abbr */\n}\n.bk-root .pika-single {\n  z-index: 9999;\n  display: block;\n  position: relative;\n  color: #333;\n  background: #fff;\n  border: 1px solid #ccc;\n  border-bottom-color: #bbb;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n.bk-root .pika-single:before,\n.bk-root .pika-single:after {\n  content: \" \";\n  display: table;\n}\n.bk-root .pika-single:after {\n  clear: both;\n}\n.bk-root .pika-single.is-hidden {\n  display: none;\n}\n.bk-root .pika-single.is-bound {\n  position: absolute;\n  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);\n}\n.bk-root .pika-lendar {\n  float: left;\n  width: 240px;\n  margin: 8px;\n}\n.bk-root .pika-title {\n  position: relative;\n  text-align: center;\n}\n.bk-root .pika-label {\n  display: inline-block;\n  position: relative;\n  z-index: 9999;\n  overflow: hidden;\n  margin: 0;\n  padding: 5px 3px;\n  font-size: 14px;\n  line-height: 20px;\n  font-weight: bold;\n  background-color: #fff;\n}\n.bk-root .pika-title select {\n  cursor: pointer;\n  position: absolute;\n  z-index: 9998;\n  margin: 0;\n  left: 0;\n  top: 5px;\n  opacity: 0;\n}\n.bk-root .pika-prev,\n.bk-root .pika-next {\n  display: block;\n  cursor: pointer;\n  position: relative;\n  outline: none;\n  border: 0;\n  padding: 0;\n  width: 20px;\n  height: 30px;\n  /* hide text using text-indent trick, using width value (it's enough) */\n  text-indent: 20px;\n  white-space: nowrap;\n  overflow: hidden;\n  background-color: transparent;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: 75% 75%;\n  opacity: 0.5;\n}\n.bk-root .pika-prev:hover,\n.bk-root .pika-next:hover {\n  opacity: 1;\n}\n.bk-root .pika-prev,\n.bk-root .is-rtl .pika-next {\n  float: left;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAUklEQVR42u3VMQoAIBADQf8Pgj+OD9hG2CtONJB2ymQkKe0HbwAP0xucDiQWARITIDEBEnMgMQ8S8+AqBIl6kKgHiXqQqAeJepBo/z38J/U0uAHlaBkBl9I4GwAAAABJRU5ErkJggg==');\n}\n.bk-root .pika-next,\n.bk-root .is-rtl .pika-prev {\n  float: right;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAU0lEQVR42u3VOwoAMAgE0dwfAnNjU26bYkBCFGwfiL9VVWoO+BJ4Gf3gtsEKKoFBNTCoCAYVwaAiGNQGMUHMkjGbgjk2mIONuXo0nC8XnCf1JXgArVIZAQh5TKYAAAAASUVORK5CYII=');\n}\n.bk-root .pika-prev.is-disabled,\n.bk-root .pika-next.is-disabled {\n  cursor: default;\n  opacity: 0.2;\n}\n.bk-root .pika-select {\n  display: inline-block;\n}\n.bk-root .pika-table {\n  width: 100%;\n  border-collapse: collapse;\n  border-spacing: 0;\n  border: 0;\n}\n.bk-root .pika-table th,\n.bk-root .pika-table td {\n  width: 14.28571429%;\n  padding: 0;\n}\n.bk-root .pika-table th {\n  color: #999;\n  font-size: 12px;\n  line-height: 25px;\n  font-weight: bold;\n  text-align: center;\n}\n.bk-root .pika-button {\n  cursor: pointer;\n  display: block;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  outline: none;\n  border: 0;\n  margin: 0;\n  width: 100%;\n  padding: 5px;\n  color: #666;\n  font-size: 12px;\n  line-height: 15px;\n  text-align: right;\n  background: #f5f5f5;\n}\n.bk-root .pika-week {\n  font-size: 11px;\n  color: #999;\n}\n.bk-root .is-today .pika-button {\n  color: #33aaff;\n  font-weight: bold;\n}\n.bk-root .is-selected .pika-button,\n.bk-root .has-event .pika-button {\n  color: #fff;\n  font-weight: bold;\n  background: #33aaff;\n  box-shadow: inset 0 1px 3px #178fe5;\n  border-radius: 3px;\n}\n.bk-root .has-event .pika-button {\n  background: #005da9;\n  box-shadow: inset 0 1px 3px #0076c9;\n}\n.bk-root .is-disabled .pika-button,\n.bk-root .is-inrange .pika-button {\n  background: #D5E9F7;\n}\n.bk-root .is-startrange .pika-button {\n  color: #fff;\n  background: #6CB31D;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .is-endrange .pika-button {\n  color: #fff;\n  background: #33aaff;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .is-disabled .pika-button {\n  pointer-events: none;\n  cursor: default;\n  color: #999;\n  opacity: 0.3;\n}\n.bk-root .is-outside-current-month .pika-button {\n  color: #999;\n  opacity: 0.3;\n}\n.bk-root .is-selection-disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.bk-root .pika-button:hover,\n.bk-root .pika-row.pick-whole-week:hover .pika-button {\n  color: #fff;\n  background: #ff8000;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .pika-table abbr {\n  border-bottom: none;\n  cursor: help;\n}\n");
+},
+491: /* models/widgets/date_range_slider.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var tz = require(252) /* timezone */;
+    var abstract_slider_1 = require(492) /* ./abstract_slider */;
     var DateRangeSliderView = /** @class */ (function (_super) {
         tslib_1.__extends(DateRangeSliderView, _super);
         function DateRangeSliderView() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        DateRangeSliderView.__name__ = "DateRangeSliderView";
         return DateRangeSliderView;
     }(abstract_slider_1.AbstractRangeSliderView));
     exports.DateRangeSliderView = DateRangeSliderView;
+    DateRangeSliderView.__name__ = "DateRangeSliderView";
     var DateRangeSlider = /** @class */ (function (_super) {
         tslib_1.__extends(DateRangeSlider, _super);
         function DateRangeSlider(attrs) {
@@ -1031,7 +1918,7 @@
             _this.connected = [false, true, false];
             return _this;
         }
-        DateRangeSlider.initClass = function () {
+        DateRangeSlider.init_DateRangeSlider = function () {
             this.prototype.default_view = DateRangeSliderView;
             this.override({
                 format: "%d %b %Y",
@@ -1040,1327 +1927,311 @@
         DateRangeSlider.prototype._formatter = function (value, format) {
             return tz(value, format);
         };
-        DateRangeSlider.__name__ = "DateRangeSlider";
         return DateRangeSlider;
     }(abstract_slider_1.AbstractSlider));
     exports.DateRangeSlider = DateRangeSlider;
-    DateRangeSlider.initClass();
-}
-,
-448: /* models/widgets/date_slider */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var tz = require(425) /* timezone */;
-    var abstract_slider_1 = require(438) /* ./abstract_slider */;
-    var DateSliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(DateSliderView, _super);
-        function DateSliderView() {
+    DateRangeSlider.__name__ = "DateRangeSlider";
+    DateRangeSlider.init_DateRangeSlider();
+},
+492: /* models/widgets/abstract_slider.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var noUiSlider = require(493) /* nouislider */;
+    var p = require(121) /* ../../core/properties */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var array_1 = require(110) /* ../../core/util/array */;
+    var callback_1 = require(119) /* ../../core/util/callback */;
+    var control_1 = require(475) /* ./control */;
+    var sliders_1 = require(494) /* ../../styles/widgets/sliders */;
+    var prefix = 'bk-noUi-';
+    var AbstractBaseSliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(AbstractBaseSliderView, _super);
+        function AbstractBaseSliderView() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        DateSliderView.__name__ = "DateSliderView";
-        return DateSliderView;
-    }(abstract_slider_1.AbstractSliderView));
-    exports.DateSliderView = DateSliderView;
-    var DateSlider = /** @class */ (function (_super) {
-        tslib_1.__extends(DateSlider, _super);
-        function DateSlider(attrs) {
-            var _this = _super.call(this, attrs) || this;
-            _this.behaviour = "tap";
-            _this.connected = [true, false];
-            return _this;
-        }
-        DateSlider.initClass = function () {
-            this.prototype.default_view = DateSliderView;
-            this.override({
-                format: "%d %b %Y",
-            });
-        };
-        DateSlider.prototype._formatter = function (value, format) {
-            return tz(value, format);
-        };
-        DateSlider.__name__ = "DateSlider";
-        return DateSlider;
-    }(abstract_slider_1.AbstractSlider));
-    exports.DateSlider = DateSlider;
-    DateSlider.initClass();
-}
-,
-449: /* models/widgets/div */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var markup_1 = require(456) /* ./markup */;
-    var p = require(18) /* ../../core/properties */;
-    var DivView = /** @class */ (function (_super) {
-        tslib_1.__extends(DivView, _super);
-        function DivView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DivView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            if (this.model.render_as_text)
-                this.markup_el.textContent = this.model.text;
-            else
-                this.markup_el.innerHTML = this.model.text;
-        };
-        DivView.__name__ = "DivView";
-        return DivView;
-    }(markup_1.MarkupView));
-    exports.DivView = DivView;
-    var Div = /** @class */ (function (_super) {
-        tslib_1.__extends(Div, _super);
-        function Div(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Div.initClass = function () {
-            this.prototype.default_view = DivView;
-            this.define({
-                render_as_text: [p.Boolean, false],
-            });
-        };
-        Div.__name__ = "Div";
-        return Div;
-    }(markup_1.Markup));
-    exports.Div = Div;
-    Div.initClass();
-}
-,
-450: /* models/widgets/dropdown */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var abstract_button_1 = require(436) /* ./abstract_button */;
-    var bokeh_events_1 = require(3) /* ../../core/bokeh_events */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var types_1 = require(46) /* ../../core/util/types */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var buttons_1 = require(304) /* ../../styles/buttons */;
-    var menus_1 = require(308) /* ../../styles/menus */;
-    var DropdownView = /** @class */ (function (_super) {
-        tslib_1.__extends(DropdownView, _super);
-        function DropdownView() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this._open = false;
-            return _this;
-        }
-        DropdownView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            var caret = dom_1.div({ class: [menus_1.bk_caret, mixins_1.bk_down] });
-            if (!this.model.is_split)
-                this.button_el.appendChild(caret);
-            else {
-                var toggle = this._render_button(caret);
-                toggle.classList.add(buttons_1.bk_dropdown_toggle);
-                toggle.addEventListener("click", function () { return _this._toggle_menu(); });
-                this.group_el.appendChild(toggle);
-            }
-            var items = this.model.menu.map(function (item, i) {
-                if (item == null)
-                    return dom_1.div({ class: menus_1.bk_divider });
-                else {
-                    var label = types_1.isString(item) ? item : item[0];
-                    var el = dom_1.div({}, label);
-                    el.addEventListener("click", function () { return _this._item_click(i); });
-                    return el;
-                }
-            });
-            this.menu = dom_1.div({ class: [menus_1.bk_menu, mixins_1.bk_below] }, items);
-            this.el.appendChild(this.menu);
-            dom_1.undisplay(this.menu);
-        };
-        DropdownView.prototype._show_menu = function () {
-            var _this = this;
-            if (!this._open) {
-                this._open = true;
-                dom_1.display(this.menu);
-                var listener_1 = function (event) {
-                    var target = event.target;
-                    if (target instanceof HTMLElement && !_this.el.contains(target)) {
-                        document.removeEventListener("click", listener_1);
-                        _this._hide_menu();
-                    }
-                };
-                document.addEventListener("click", listener_1);
-            }
-        };
-        DropdownView.prototype._hide_menu = function () {
-            if (this._open) {
-                this._open = false;
-                dom_1.undisplay(this.menu);
-            }
-        };
-        DropdownView.prototype._toggle_menu = function () {
-            if (this._open)
-                this._hide_menu();
-            else
-                this._show_menu();
-        };
-        DropdownView.prototype.click = function () {
-            if (!this.model.is_split)
-                this._toggle_menu();
-            else {
-                this._hide_menu();
-                this.model.trigger_event(new bokeh_events_1.ButtonClick());
-                this.model.value = this.model.default_value;
-                if (this.model.callback != null)
-                    this.model.callback.execute(this.model);
-                _super.prototype.click.call(this);
-            }
-        };
-        DropdownView.prototype._item_click = function (i) {
-            this._hide_menu();
-            var item = this.model.menu[i];
-            if (item != null) {
-                var value_or_callback = types_1.isString(item) ? item : item[1];
-                if (types_1.isString(value_or_callback)) {
-                    this.model.trigger_event(new bokeh_events_1.MenuItemClick(value_or_callback));
-                    this.model.value = value_or_callback;
-                    if (this.model.callback != null)
-                        this.model.callback.execute(this.model); // XXX: {index: i, item: value_or_callback})
-                }
-                else {
-                    value_or_callback.execute(this.model, { index: i }); // TODO
-                    if (this.model.callback != null)
-                        this.model.callback.execute(this.model); // XXX: {index: i})
-                }
-            }
-        };
-        DropdownView.__name__ = "DropdownView";
-        return DropdownView;
-    }(abstract_button_1.AbstractButtonView));
-    exports.DropdownView = DropdownView;
-    var Dropdown = /** @class */ (function (_super) {
-        tslib_1.__extends(Dropdown, _super);
-        function Dropdown(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Dropdown.initClass = function () {
-            this.prototype.default_view = DropdownView;
-            this.define({
-                split: [p.Boolean, false],
-                menu: [p.Array, []],
-                value: [p.String,],
-                default_value: [p.String,],
-            });
-            this.override({
-                label: "Dropdown",
-            });
-        };
-        Object.defineProperty(Dropdown.prototype, "is_split", {
+        Object.defineProperty(AbstractBaseSliderView.prototype, "noUiSlider", {
             get: function () {
-                return this.split || this.default_value != null;
+                return this.slider_el.noUiSlider;
             },
             enumerable: true,
             configurable: true
         });
-        Dropdown.__name__ = "Dropdown";
-        return Dropdown;
-    }(abstract_button_1.AbstractButton));
-    exports.Dropdown = Dropdown;
-    Dropdown.initClass();
-}
-,
-451: /* models/widgets/file_input */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var p = require(18) /* ../../core/properties */;
-    var widget_1 = require(487) /* ./widget */;
-    var FileInputView = /** @class */ (function (_super) {
-        tslib_1.__extends(FileInputView, _super);
-        function FileInputView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        FileInputView.prototype.connect_signals = function () {
+        AbstractBaseSliderView.prototype.initialize = function () {
+            _super.prototype.initialize.call(this);
+            this._init_callback();
+        };
+        AbstractBaseSliderView.prototype.connect_signals = function () {
             var _this = this;
             _super.prototype.connect_signals.call(this);
-            this.connect(this.model.change, function () { return _this.render(); });
-            this.connect(this.model.properties.width.change, function () { return _this.render(); });
+            var _a = this.model.properties, callback = _a.callback, callback_policy = _a.callback_policy, callback_throttle = _a.callback_throttle;
+            this.on_change([callback, callback_policy, callback_throttle], function () { return _this._init_callback(); });
+            var _b = this.model.properties, start = _b.start, end = _b.end, value = _b.value, step = _b.step, title = _b.title;
+            this.on_change([start, end, value, step], function () {
+                var _a = _this._calc_to(), start = _a.start, end = _a.end, value = _a.value, step = _a.step;
+                _this.noUiSlider.updateOptions({
+                    range: { min: start, max: end },
+                    start: value,
+                    step: step,
+                });
+            });
+            var bar_color = this.model.properties.bar_color;
+            this.on_change(bar_color, function () {
+                _this._set_bar_color();
+            });
+            this.on_change([value, title], function () { return _this._update_title(); });
         };
-        FileInputView.prototype.render = function () {
+        AbstractBaseSliderView.prototype._init_callback = function () {
             var _this = this;
-            if (this.dialogEl) {
-                return;
-            }
-            this.dialogEl = document.createElement('input');
-            this.dialogEl.type = "file";
-            this.dialogEl.multiple = false;
-            if (this.model.accept != null && this.model.accept != '')
-                this.dialogEl.accept = this.model.accept;
-            this.dialogEl.style.width = "{this.model.width}px";
-            this.dialogEl.onchange = function (e) { return _this.load_file(e); };
-            this.el.appendChild(this.dialogEl);
-        };
-        FileInputView.prototype.load_file = function (e) {
-            var _this = this;
-            var reader = new FileReader();
-            this.model.filename = e.target.files[0].name;
-            reader.onload = function (e) { return _this.file(e); };
-            reader.readAsDataURL(e.target.files[0]);
-        };
-        FileInputView.prototype.file = function (e) {
-            var file = e.target.result;
-            var file_arr = file.split(",");
-            var content = file_arr[1];
-            var header = file_arr[0].split(":")[1].split(";")[0];
-            this.model.value = content;
-            this.model.mime_type = header;
-        };
-        FileInputView.__name__ = "FileInputView";
-        return FileInputView;
-    }(widget_1.WidgetView));
-    exports.FileInputView = FileInputView;
-    var FileInput = /** @class */ (function (_super) {
-        tslib_1.__extends(FileInput, _super);
-        function FileInput(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        FileInput.initClass = function () {
-            this.prototype.type = "FileInput";
-            this.prototype.default_view = FileInputView;
-            this.define({
-                value: [p.String, ''],
-                mime_type: [p.String, ''],
-                filename: [p.String, ''],
-                accept: [p.String, ''],
-            });
-        };
-        FileInput.__name__ = "FileInput";
-        return FileInput;
-    }(widget_1.Widget));
-    exports.FileInput = FileInput;
-    FileInput.initClass();
-}
-,
-452: /* models/widgets/index */ function _(require, module, exports) {
-    var abstract_button_1 = require(436) /* ./abstract_button */;
-    exports.AbstractButton = abstract_button_1.AbstractButton;
-    var abstract_icon_1 = require(437) /* ./abstract_icon */;
-    exports.AbstractIcon = abstract_icon_1.AbstractIcon;
-    var autocomplete_input_1 = require(439) /* ./autocomplete_input */;
-    exports.AutocompleteInput = autocomplete_input_1.AutocompleteInput;
-    var button_1 = require(440) /* ./button */;
-    exports.Button = button_1.Button;
-    var checkbox_button_group_1 = require(442) /* ./checkbox_button_group */;
-    exports.CheckboxButtonGroup = checkbox_button_group_1.CheckboxButtonGroup;
-    var checkbox_group_1 = require(443) /* ./checkbox_group */;
-    exports.CheckboxGroup = checkbox_group_1.CheckboxGroup;
-    var color_picker_1 = require(444) /* ./color_picker */;
-    exports.ColorPicker = color_picker_1.ColorPicker;
-    var date_picker_1 = require(446) /* ./date_picker */;
-    exports.DatePicker = date_picker_1.DatePicker;
-    var date_range_slider_1 = require(447) /* ./date_range_slider */;
-    exports.DateRangeSlider = date_range_slider_1.DateRangeSlider;
-    var date_slider_1 = require(448) /* ./date_slider */;
-    exports.DateSlider = date_slider_1.DateSlider;
-    var div_1 = require(449) /* ./div */;
-    exports.Div = div_1.Div;
-    var dropdown_1 = require(450) /* ./dropdown */;
-    exports.Dropdown = dropdown_1.Dropdown;
-    var file_input_1 = require(451) /* ./file_input */;
-    exports.FileInput = file_input_1.FileInput;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    exports.InputWidget = input_widget_1.InputWidget;
-    var markup_1 = require(456) /* ./markup */;
-    exports.Markup = markup_1.Markup;
-    var multiselect_1 = require(457) /* ./multiselect */;
-    exports.MultiSelect = multiselect_1.MultiSelect;
-    var paragraph_1 = require(458) /* ./paragraph */;
-    exports.Paragraph = paragraph_1.Paragraph;
-    var password_input_1 = require(459) /* ./password_input */;
-    exports.PasswordInput = password_input_1.PasswordInput;
-    var pretext_1 = require(460) /* ./pretext */;
-    exports.PreText = pretext_1.PreText;
-    var radio_button_group_1 = require(461) /* ./radio_button_group */;
-    exports.RadioButtonGroup = radio_button_group_1.RadioButtonGroup;
-    var radio_group_1 = require(462) /* ./radio_group */;
-    exports.RadioGroup = radio_group_1.RadioGroup;
-    var range_slider_1 = require(463) /* ./range_slider */;
-    exports.RangeSlider = range_slider_1.RangeSlider;
-    var selectbox_1 = require(464) /* ./selectbox */;
-    exports.Select = selectbox_1.Select;
-    var slider_1 = require(465) /* ./slider */;
-    exports.Slider = slider_1.Slider;
-    var spinner_1 = require(466) /* ./spinner */;
-    exports.Spinner = spinner_1.Spinner;
-    var text_input_1 = require(467) /* ./text_input */;
-    exports.TextInput = text_input_1.TextInput;
-    var textarea_input_1 = require(468) /* ./textarea_input */;
-    exports.TextAreaInput = textarea_input_1.TextAreaInput;
-    var toggle_1 = require(469) /* ./toggle */;
-    exports.Toggle = toggle_1.Toggle;
-    var widget_1 = require(487) /* ./widget */;
-    exports.Widget = widget_1.Widget;
-}
-,
-453: /* models/widgets/input_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var control_1 = require(445) /* ./control */;
-    var InputGroupView = /** @class */ (function (_super) {
-        tslib_1.__extends(InputGroupView, _super);
-        function InputGroupView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        InputGroupView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.change, function () { return _this.render(); });
-        };
-        InputGroupView.__name__ = "InputGroupView";
-        return InputGroupView;
-    }(control_1.ControlView));
-    exports.InputGroupView = InputGroupView;
-    var InputGroup = /** @class */ (function (_super) {
-        tslib_1.__extends(InputGroup, _super);
-        function InputGroup(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        InputGroup.__name__ = "InputGroup";
-        return InputGroup;
-    }(control_1.Control));
-    exports.InputGroup = InputGroup;
-}
-,
-454: /* models/widgets/input_widget */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var control_1 = require(445) /* ./control */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var InputWidgetView = /** @class */ (function (_super) {
-        tslib_1.__extends(InputWidgetView, _super);
-        function InputWidgetView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        InputWidgetView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.title.change, function () {
-                _this.label_el.textContent = _this.model.title;
-            });
-        };
-        InputWidgetView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            var title = this.model.title;
-            this.label_el = dom_1.label({ style: { display: title.length == 0 ? "none" : "" } }, title);
-            this.group_el = dom_1.div({ class: inputs_1.bk_input_group }, this.label_el);
-            this.el.appendChild(this.group_el);
-        };
-        InputWidgetView.prototype.change_input = function () {
-            if (this.model.callback != null)
-                this.model.callback.execute(this.model);
-        };
-        InputWidgetView.__name__ = "InputWidgetView";
-        return InputWidgetView;
-    }(control_1.ControlView));
-    exports.InputWidgetView = InputWidgetView;
-    var InputWidget = /** @class */ (function (_super) {
-        tslib_1.__extends(InputWidget, _super);
-        function InputWidget(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        InputWidget.initClass = function () {
-            this.define({
-                title: [p.String, ""],
-                callback: [p.Any],
-            });
-        };
-        InputWidget.__name__ = "InputWidget";
-        return InputWidget;
-    }(control_1.Control));
-    exports.InputWidget = InputWidget;
-    InputWidget.initClass();
-}
-,
-455: /* models/widgets/main */ function _(require, module, exports) {
-    var Widgets = require(452) /* ./index */;
-    exports.Widgets = Widgets;
-    var base_1 = require(0) /* ../../base */;
-    base_1.register_models(Widgets);
-}
-,
-456: /* models/widgets/markup */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var layout_1 = require(13) /* ../../core/layout */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var widget_1 = require(487) /* ./widget */;
-    var clearfix_1 = require(471) /* ../../styles/clearfix */;
-    var MarkupView = /** @class */ (function (_super) {
-        tslib_1.__extends(MarkupView, _super);
-        function MarkupView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        MarkupView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.change, function () {
-                _this.render();
-                _this.root.compute_layout(); // XXX: invalidate_layout?
-            });
-        };
-        MarkupView.prototype._update_layout = function () {
-            this.layout = new layout_1.VariadicBox(this.el);
-            this.layout.set_sizing(this.box_sizing());
-        };
-        MarkupView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            var style = tslib_1.__assign({}, this.model.style, { display: "inline-block" });
-            this.markup_el = dom_1.div({ class: clearfix_1.bk_clearfix, style: style });
-            this.el.appendChild(this.markup_el);
-        };
-        MarkupView.__name__ = "MarkupView";
-        return MarkupView;
-    }(widget_1.WidgetView));
-    exports.MarkupView = MarkupView;
-    var Markup = /** @class */ (function (_super) {
-        tslib_1.__extends(Markup, _super);
-        function Markup(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Markup.initClass = function () {
-            this.define({
-                text: [p.String, ''],
-                style: [p.Any, {}],
-            });
-        };
-        Markup.__name__ = "Markup";
-        return Markup;
-    }(widget_1.Widget));
-    exports.Markup = Markup;
-    Markup.initClass();
-}
-,
-457: /* models/widgets/multiselect */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var types_1 = require(46) /* ../../core/util/types */;
-    var data_structures_1 = require(32) /* ../../core/util/data_structures */;
-    var p = require(18) /* ../../core/properties */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var MultiSelectView = /** @class */ (function (_super) {
-        tslib_1.__extends(MultiSelectView, _super);
-        function MultiSelectView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        MultiSelectView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.value.change, function () { return _this.render_selection(); });
-            this.connect(this.model.properties.options.change, function () { return _this.render(); });
-            this.connect(this.model.properties.name.change, function () { return _this.render(); });
-            this.connect(this.model.properties.title.change, function () { return _this.render(); });
-            this.connect(this.model.properties.size.change, function () { return _this.render(); });
-            this.connect(this.model.properties.disabled.change, function () { return _this.render(); });
-        };
-        MultiSelectView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            var options = this.model.options.map(function (opt) {
-                var value, _label;
-                if (types_1.isString(opt))
-                    value = _label = opt;
-                else
-                    value = opt[0], _label = opt[1];
-                return dom_1.option({ value: value }, _label);
-            });
-            this.select_el = dom_1.select({
-                multiple: true,
-                class: inputs_1.bk_input,
-                name: this.model.name,
-                disabled: this.model.disabled,
-            }, options);
-            this.select_el.addEventListener("change", function () { return _this.change_input(); });
-            this.group_el.appendChild(this.select_el);
-            this.render_selection();
-        };
-        MultiSelectView.prototype.render_selection = function () {
-            var selected = new data_structures_1.Set(this.model.value);
-            for (var _i = 0, _a = Array.from(this.el.querySelectorAll('option')); _i < _a.length; _i++) {
-                var el = _a[_i];
-                el.selected = selected.has(el.value);
-            }
-            // Note that some browser implementations might not reduce
-            // the number of visible options for size <= 3.
-            this.select_el.size = this.model.size;
-        };
-        MultiSelectView.prototype.change_input = function () {
-            var is_focused = this.el.querySelector('select:focus') != null;
-            var values = [];
-            for (var _i = 0, _a = Array.from(this.el.querySelectorAll('option')); _i < _a.length; _i++) {
-                var el = _a[_i];
-                if (el.selected)
-                    values.push(el.value);
-            }
-            this.model.value = values;
-            _super.prototype.change_input.call(this);
-            // Restore focus back to the <select> afterwards,
-            // so that even if python on_change callback is invoked,
-            // focus remains on <select> and one can seamlessly scroll
-            // up/down.
-            if (is_focused)
-                this.select_el.focus();
-        };
-        MultiSelectView.__name__ = "MultiSelectView";
-        return MultiSelectView;
-    }(input_widget_1.InputWidgetView));
-    exports.MultiSelectView = MultiSelectView;
-    var MultiSelect = /** @class */ (function (_super) {
-        tslib_1.__extends(MultiSelect, _super);
-        function MultiSelect(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        MultiSelect.initClass = function () {
-            this.prototype.default_view = MultiSelectView;
-            this.define({
-                value: [p.Array, []],
-                options: [p.Array, []],
-                size: [p.Number, 4],
-            });
-        };
-        MultiSelect.__name__ = "MultiSelect";
-        return MultiSelect;
-    }(input_widget_1.InputWidget));
-    exports.MultiSelect = MultiSelect;
-    MultiSelect.initClass();
-}
-,
-458: /* models/widgets/paragraph */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var markup_1 = require(456) /* ./markup */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var ParagraphView = /** @class */ (function (_super) {
-        tslib_1.__extends(ParagraphView, _super);
-        function ParagraphView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ParagraphView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            // This overrides default user-agent styling and helps layout work
-            var content = dom_1.p({ style: { margin: 0 } }, this.model.text);
-            this.markup_el.appendChild(content);
-        };
-        ParagraphView.__name__ = "ParagraphView";
-        return ParagraphView;
-    }(markup_1.MarkupView));
-    exports.ParagraphView = ParagraphView;
-    var Paragraph = /** @class */ (function (_super) {
-        tslib_1.__extends(Paragraph, _super);
-        function Paragraph(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Paragraph.initClass = function () {
-            this.prototype.default_view = ParagraphView;
-        };
-        Paragraph.__name__ = "Paragraph";
-        return Paragraph;
-    }(markup_1.Markup));
-    exports.Paragraph = Paragraph;
-    Paragraph.initClass();
-}
-,
-459: /* models/widgets/password_input */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var text_input_1 = require(467) /* ./text_input */;
-    var PasswordInputView = /** @class */ (function (_super) {
-        tslib_1.__extends(PasswordInputView, _super);
-        function PasswordInputView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PasswordInputView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            this.input_el.type = "password";
-        };
-        PasswordInputView.__name__ = "PasswordInputView";
-        return PasswordInputView;
-    }(text_input_1.TextInputView));
-    exports.PasswordInputView = PasswordInputView;
-    var PasswordInput = /** @class */ (function (_super) {
-        tslib_1.__extends(PasswordInput, _super);
-        function PasswordInput(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        PasswordInput.initClass = function () {
-            this.prototype.default_view = PasswordInputView;
-        };
-        PasswordInput.__name__ = "PasswordInput";
-        return PasswordInput;
-    }(text_input_1.TextInput));
-    exports.PasswordInput = PasswordInput;
-    PasswordInput.initClass();
-}
-,
-460: /* models/widgets/pretext */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var markup_1 = require(456) /* ./markup */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var PreTextView = /** @class */ (function (_super) {
-        tslib_1.__extends(PreTextView, _super);
-        function PreTextView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PreTextView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            var content = dom_1.pre({ style: { overflow: "auto" } }, this.model.text);
-            this.markup_el.appendChild(content);
-        };
-        PreTextView.__name__ = "PreTextView";
-        return PreTextView;
-    }(markup_1.MarkupView));
-    exports.PreTextView = PreTextView;
-    var PreText = /** @class */ (function (_super) {
-        tslib_1.__extends(PreText, _super);
-        function PreText(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        PreText.initClass = function () {
-            this.prototype.default_view = PreTextView;
-        };
-        PreText.__name__ = "PreText";
-        return PreText;
-    }(markup_1.Markup));
-    exports.PreText = PreText;
-    PreText.initClass();
-}
-,
-461: /* models/widgets/radio_button_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var button_group_1 = require(441) /* ./button_group */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var RadioButtonGroupView = /** @class */ (function (_super) {
-        tslib_1.__extends(RadioButtonGroupView, _super);
-        function RadioButtonGroupView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        RadioButtonGroupView.prototype.change_active = function (i) {
-            if (this.model.active !== i) {
-                this.model.active = i;
-                if (this.model.callback != null)
-                    this.model.callback.execute(this.model);
-            }
-        };
-        RadioButtonGroupView.prototype._update_active = function () {
-            var active = this.model.active;
-            this._buttons.forEach(function (button, i) {
-                dom_1.classes(button).toggle(mixins_1.bk_active, active === i);
-            });
-        };
-        RadioButtonGroupView.__name__ = "RadioButtonGroupView";
-        return RadioButtonGroupView;
-    }(button_group_1.ButtonGroupView));
-    exports.RadioButtonGroupView = RadioButtonGroupView;
-    var RadioButtonGroup = /** @class */ (function (_super) {
-        tslib_1.__extends(RadioButtonGroup, _super);
-        function RadioButtonGroup(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        RadioButtonGroup.initClass = function () {
-            this.prototype.default_view = RadioButtonGroupView;
-            this.define({
-                active: [p.Any, null],
-            });
-        };
-        RadioButtonGroup.__name__ = "RadioButtonGroup";
-        return RadioButtonGroup;
-    }(button_group_1.ButtonGroup));
-    exports.RadioButtonGroup = RadioButtonGroup;
-    RadioButtonGroup.initClass();
-}
-,
-462: /* models/widgets/radio_group */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var string_1 = require(40) /* ../../core/util/string */;
-    var p = require(18) /* ../../core/properties */;
-    var input_group_1 = require(453) /* ./input_group */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var RadioGroupView = /** @class */ (function (_super) {
-        tslib_1.__extends(RadioGroupView, _super);
-        function RadioGroupView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        RadioGroupView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            var group = dom_1.div({ class: [inputs_1.bk_input_group, this.model.inline ? mixins_1.bk_inline : null] });
-            this.el.appendChild(group);
-            var name = string_1.uniqueId();
-            var _a = this.model, active = _a.active, labels = _a.labels;
-            var _loop_1 = function (i) {
-                var radio = dom_1.input({ type: "radio", name: name, value: "" + i });
-                radio.addEventListener("change", function () { return _this.change_active(i); });
-                if (this_1.model.disabled)
-                    radio.disabled = true;
-                if (i == active)
-                    radio.checked = true;
-                var label_el = dom_1.label({}, radio, dom_1.span({}, labels[i]));
-                group.appendChild(label_el);
+            var callback = this.model.callback;
+            var fn = function () {
+                if (callback != null)
+                    callback.execute(_this.model);
+                _this.model.value_throttled = _this.model.value;
             };
-            var this_1 = this;
-            for (var i = 0; i < labels.length; i++) {
-                _loop_1(i);
+            switch (this.model.callback_policy) {
+                case 'continuous': {
+                    this.callback_wrapper = fn;
+                    break;
+                }
+                case 'throttle': {
+                    this.callback_wrapper = callback_1.throttle(fn, this.model.callback_throttle);
+                    break;
+                }
+                default:
+                    this.callback_wrapper = undefined;
             }
         };
-        RadioGroupView.prototype.change_active = function (i) {
-            this.model.active = i;
-            if (this.model.callback != null)
-                this.model.callback.execute(this.model);
-        };
-        RadioGroupView.__name__ = "RadioGroupView";
-        return RadioGroupView;
-    }(input_group_1.InputGroupView));
-    exports.RadioGroupView = RadioGroupView;
-    var RadioGroup = /** @class */ (function (_super) {
-        tslib_1.__extends(RadioGroup, _super);
-        function RadioGroup(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        RadioGroup.initClass = function () {
-            this.prototype.default_view = RadioGroupView;
-            this.define({
-                active: [p.Number,],
-                labels: [p.Array, []],
-                inline: [p.Boolean, false],
-                callback: [p.Any],
-            });
-        };
-        RadioGroup.__name__ = "RadioGroup";
-        return RadioGroup;
-    }(input_group_1.InputGroup));
-    exports.RadioGroup = RadioGroup;
-    RadioGroup.initClass();
-}
-,
-463: /* models/widgets/range_slider */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var numbro = require(396) /* numbro */;
-    var abstract_slider_1 = require(438) /* ./abstract_slider */;
-    var RangeSliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(RangeSliderView, _super);
-        function RangeSliderView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        RangeSliderView.__name__ = "RangeSliderView";
-        return RangeSliderView;
-    }(abstract_slider_1.AbstractRangeSliderView));
-    exports.RangeSliderView = RangeSliderView;
-    var RangeSlider = /** @class */ (function (_super) {
-        tslib_1.__extends(RangeSlider, _super);
-        function RangeSlider(attrs) {
-            var _this = _super.call(this, attrs) || this;
-            _this.behaviour = "drag";
-            _this.connected = [false, true, false];
-            return _this;
-        }
-        RangeSlider.initClass = function () {
-            this.prototype.default_view = RangeSliderView;
-            this.override({
-                format: "0[.]00",
-            });
-        };
-        RangeSlider.prototype._formatter = function (value, format) {
-            return numbro.format(value, format);
-        };
-        RangeSlider.__name__ = "RangeSlider";
-        return RangeSlider;
-    }(abstract_slider_1.AbstractSlider));
-    exports.RangeSlider = RangeSlider;
-    RangeSlider.initClass();
-}
-,
-464: /* models/widgets/selectbox */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var types_1 = require(46) /* ../../core/util/types */;
-    var logging_1 = require(17) /* ../../core/logging */;
-    var p = require(18) /* ../../core/properties */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var SelectView = /** @class */ (function (_super) {
-        tslib_1.__extends(SelectView, _super);
-        function SelectView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        SelectView.prototype.connect_signals = function () {
+        AbstractBaseSliderView.prototype._update_title = function () {
             var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.change, function () { return _this.render(); });
-        };
-        SelectView.prototype.build_options = function (values) {
-            var _this = this;
-            return values.map(function (el) {
-                var value, _label;
-                if (types_1.isString(el))
-                    value = _label = el;
-                else
-                    value = el[0], _label = el[1];
-                var selected = _this.model.value == value;
-                return dom_1.option({ selected: selected, value: value }, _label);
-            });
-        };
-        SelectView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            var contents;
-            if (types_1.isArray(this.model.options))
-                contents = this.build_options(this.model.options);
-            else {
-                contents = [];
-                var options = this.model.options;
-                for (var key in options) {
-                    var value = options[key];
-                    contents.push(dom_1.optgroup({ label: key }, this.build_options(value)));
+            dom_1.empty(this.title_el);
+            var hide_header = this.model.title == null || (this.model.title.length == 0 && !this.model.show_value);
+            this.title_el.style.display = hide_header ? "none" : "";
+            if (!hide_header) {
+                if (this.model.title.length != 0)
+                    this.title_el.textContent = this.model.title + ": ";
+                if (this.model.show_value) {
+                    var value = this._calc_to().value;
+                    var pretty = value.map(function (v) { return _this.model.pretty(v); }).join(" .. ");
+                    this.title_el.appendChild(dom_1.span({ class: sliders_1.bk_slider_value }, pretty));
                 }
             }
-            this.select_el = dom_1.select({
-                class: inputs_1.bk_input,
-                id: this.model.id,
-                name: this.model.name,
-                disabled: this.model.disabled
-            }, contents);
-            this.select_el.addEventListener("change", function () { return _this.change_input(); });
-            this.group_el.appendChild(this.select_el);
         };
-        SelectView.prototype.change_input = function () {
-            var value = this.select_el.value;
-            logging_1.logger.debug("selectbox: value = " + value);
-            this.model.value = value;
-            _super.prototype.change_input.call(this);
-        };
-        SelectView.__name__ = "SelectView";
-        return SelectView;
-    }(input_widget_1.InputWidgetView));
-    exports.SelectView = SelectView;
-    var Select = /** @class */ (function (_super) {
-        tslib_1.__extends(Select, _super);
-        function Select(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Select.initClass = function () {
-            this.prototype.default_view = SelectView;
-            this.define({
-                value: [p.String, ''],
-                options: [p.Any, []],
-            });
-        };
-        Select.__name__ = "Select";
-        return Select;
-    }(input_widget_1.InputWidget));
-    exports.Select = Select;
-    Select.initClass();
-}
-,
-465: /* models/widgets/slider */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var numbro = require(396) /* numbro */;
-    var abstract_slider_1 = require(438) /* ./abstract_slider */;
-    var SliderView = /** @class */ (function (_super) {
-        tslib_1.__extends(SliderView, _super);
-        function SliderView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        SliderView.__name__ = "SliderView";
-        return SliderView;
-    }(abstract_slider_1.AbstractSliderView));
-    exports.SliderView = SliderView;
-    var Slider = /** @class */ (function (_super) {
-        tslib_1.__extends(Slider, _super);
-        function Slider(attrs) {
-            var _this = _super.call(this, attrs) || this;
-            _this.behaviour = "tap";
-            _this.connected = [true, false];
-            return _this;
-        }
-        Slider.initClass = function () {
-            this.prototype.default_view = SliderView;
-            this.override({
-                format: "0[.]00",
-            });
-        };
-        Slider.prototype._formatter = function (value, format) {
-            return numbro.format(value, format);
-        };
-        Slider.__name__ = "Slider";
-        return Slider;
-    }(abstract_slider_1.AbstractSlider));
-    exports.Slider = Slider;
-    Slider.initClass();
-}
-,
-466: /* models/widgets/spinner */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var abs = Math.abs, floor = Math.floor, log10 = Math.log10;
-    function _get_sig_dig(num) {
-        var x = abs(Number(String(num).replace(".", ""))); // remove decimal and make positive
-        if (x == 0)
-            return 0;
-        while (x != 0 && (x % 10 == 0))
-            x /= 10; // kill the 0s at the end of n
-        return floor(log10(x)) + 1; // get number of digits
-    }
-    var SpinnerView = /** @class */ (function (_super) {
-        tslib_1.__extends(SpinnerView, _super);
-        function SpinnerView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        SpinnerView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.low.change, function () {
-                var low = _this.model.low;
-                if (low != null)
-                    _this.input_el.min = low.toFixed(16);
-            });
-            this.connect(this.model.properties.high.change, function () {
-                var high = _this.model.high;
-                if (high != null)
-                    _this.input_el.max = high.toFixed(16);
-            });
-            this.connect(this.model.properties.step.change, function () {
-                var step = _this.model.step;
-                _this.input_el.step = step.toFixed(16);
-            });
-            this.connect(this.model.properties.value.change, function () {
-                var _a = _this.model, value = _a.value, step = _a.step;
-                _this.input_el.value = value.toFixed(_get_sig_dig(step));
-            });
-            this.connect(this.model.properties.disabled.change, function () {
-                _this.input_el.disabled = _this.model.disabled;
-            });
-        };
-        SpinnerView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            this.input_el = dom_1.input({
-                type: "number",
-                class: inputs_1.bk_input,
-                name: this.model.name,
-                min: this.model.low,
-                max: this.model.high,
-                value: this.model.value,
-                step: this.model.step,
-                disabled: this.model.disabled,
-            });
-            this.input_el.addEventListener("change", function () { return _this.change_input(); });
-            //this.input_el.addEventListener("input", () => this.change_input())
-            this.group_el.appendChild(this.input_el);
-        };
-        SpinnerView.prototype.change_input = function () {
-            var step = this.model.step;
-            var new_value = Number(this.input_el.value);
-            this.model.value = Number(new_value.toFixed(_get_sig_dig(step)));
-            if (this.model.value != new_value) {
-                // this is needed when the current value in the input is already at bounded value
-                // and we enter a value outside these bounds. We emit a model change to update
-                // the input text value.
-                this.model.change.emit();
+        AbstractBaseSliderView.prototype._set_bar_color = function () {
+            if (!this.model.disabled) {
+                var connect_el = this.slider_el.querySelector("." + prefix + "connect");
+                connect_el.style.backgroundColor = this.model.bar_color;
             }
-            _super.prototype.change_input.call(this);
         };
-        SpinnerView.__name__ = "SpinnerView";
-        return SpinnerView;
-    }(input_widget_1.InputWidgetView));
-    exports.SpinnerView = SpinnerView;
-    var Spinner = /** @class */ (function (_super) {
-        tslib_1.__extends(Spinner, _super);
-        function Spinner(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Spinner.initClass = function () {
-            this.prototype.default_view = SpinnerView;
-            this.define({
-                value: [p.Number, 0],
-                low: [p.Number, null],
-                high: [p.Number, null],
-                step: [p.Number, 1],
-            });
-        };
-        Spinner.__name__ = "Spinner";
-        return Spinner;
-    }(input_widget_1.InputWidget));
-    exports.Spinner = Spinner;
-    Spinner.initClass();
-}
-,
-467: /* models/widgets/text_input */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var TextInputView = /** @class */ (function (_super) {
-        tslib_1.__extends(TextInputView, _super);
-        function TextInputView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        TextInputView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.name.change, function () { return _this.input_el.name = _this.model.name || ""; });
-            this.connect(this.model.properties.value.change, function () { return _this.input_el.value = _this.model.value; });
-            this.connect(this.model.properties.value_input.change, function () { return _this.input_el.value = _this.model.value_input; });
-            this.connect(this.model.properties.disabled.change, function () { return _this.input_el.disabled = _this.model.disabled; });
-            this.connect(this.model.properties.placeholder.change, function () { return _this.input_el.placeholder = _this.model.placeholder; });
-        };
-        TextInputView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            this.input_el = dom_1.input({
-                type: "text",
-                class: inputs_1.bk_input,
-                name: this.model.name,
-                value: this.model.value,
-                disabled: this.model.disabled,
-                placeholder: this.model.placeholder,
-            });
-            this.input_el.addEventListener("change", function () { return _this.change_input(); });
-            this.input_el.addEventListener("input", function () { return _this.change_input_oninput(); });
-            this.group_el.appendChild(this.input_el);
-        };
-        TextInputView.prototype.change_input = function () {
-            this.model.value = this.input_el.value;
-            _super.prototype.change_input.call(this);
-        };
-        TextInputView.prototype.change_input_oninput = function () {
-            this.model.value_input = this.input_el.value;
-            _super.prototype.change_input.call(this);
-        };
-        TextInputView.__name__ = "TextInputView";
-        return TextInputView;
-    }(input_widget_1.InputWidgetView));
-    exports.TextInputView = TextInputView;
-    var TextInput = /** @class */ (function (_super) {
-        tslib_1.__extends(TextInput, _super);
-        function TextInput(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        TextInput.initClass = function () {
-            this.prototype.default_view = TextInputView;
-            this.define({
-                value: [p.String, ""],
-                value_input: [p.String, ""],
-                placeholder: [p.String, ""],
-            });
-        };
-        TextInput.__name__ = "TextInput";
-        return TextInput;
-    }(input_widget_1.InputWidget));
-    exports.TextInput = TextInput;
-    TextInput.initClass();
-}
-,
-468: /* models/widgets/textarea_input */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var text_input_1 = require(467) /* ./text_input */;
-    var input_widget_1 = require(454) /* ./input_widget */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var inputs_1 = require(472) /* ../../styles/widgets/inputs */;
-    var TextAreaInputView = /** @class */ (function (_super) {
-        tslib_1.__extends(TextAreaInputView, _super);
-        function TextAreaInputView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        TextAreaInputView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.name.change, function () { return _this.input_el.name = _this.model.name || ""; });
-            this.connect(this.model.properties.value.change, function () { return _this.input_el.value = _this.model.value; });
-            this.connect(this.model.properties.disabled.change, function () { return _this.input_el.disabled = _this.model.disabled; });
-            this.connect(this.model.properties.placeholder.change, function () { return _this.input_el.placeholder = _this.model.placeholder; });
-            this.connect(this.model.properties.rows.change, function () { return _this.input_el.rows = _this.model.rows; });
-            this.connect(this.model.properties.cols.change, function () { return _this.input_el.cols = _this.model.cols; });
-            this.connect(this.model.properties.max_length.change, function () { return _this.input_el.maxLength = _this.model.max_length; });
-        };
-        TextAreaInputView.prototype.render = function () {
-            var _this = this;
-            _super.prototype.render.call(this);
-            this.input_el = dom_1.textarea({
-                class: inputs_1.bk_input,
-                name: this.model.name,
-                disabled: this.model.disabled,
-                placeholder: this.model.placeholder,
-                cols: this.model.cols,
-                rows: this.model.rows,
-                maxLength: this.model.max_length,
-            });
-            this.input_el.textContent = this.model.value;
-            this.input_el.addEventListener("change", function () { return _this.change_input(); });
-            this.group_el.appendChild(this.input_el);
-        };
-        TextAreaInputView.prototype.change_input = function () {
-            this.model.value = this.input_el.value;
-            _super.prototype.change_input.call(this);
-        };
-        TextAreaInputView.__name__ = "TextAreaInputView";
-        return TextAreaInputView;
-    }(input_widget_1.InputWidgetView));
-    exports.TextAreaInputView = TextAreaInputView;
-    var TextAreaInput = /** @class */ (function (_super) {
-        tslib_1.__extends(TextAreaInput, _super);
-        function TextAreaInput(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        TextAreaInput.initClass = function () {
-            this.prototype.default_view = TextAreaInputView;
-            this.define({
-                cols: [p.Number, 20],
-                rows: [p.Number, 2],
-                max_length: [p.Number, 500],
-            });
-        };
-        TextAreaInput.__name__ = "TextAreaInput";
-        return TextAreaInput;
-    }(text_input_1.TextInput));
-    exports.TextAreaInput = TextAreaInput;
-    TextAreaInput.initClass();
-}
-,
-469: /* models/widgets/toggle */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var abstract_button_1 = require(436) /* ./abstract_button */;
-    var dom_1 = require(5) /* ../../core/dom */;
-    var p = require(18) /* ../../core/properties */;
-    var mixins_1 = require(309) /* ../../styles/mixins */;
-    var ToggleView = /** @class */ (function (_super) {
-        tslib_1.__extends(ToggleView, _super);
-        function ToggleView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ToggleView.prototype.connect_signals = function () {
-            var _this = this;
-            _super.prototype.connect_signals.call(this);
-            this.connect(this.model.properties.active.change, function () { return _this._update_active(); });
-        };
-        ToggleView.prototype.render = function () {
-            _super.prototype.render.call(this);
-            this._update_active();
-        };
-        ToggleView.prototype.click = function () {
-            this.model.active = !this.model.active;
-            _super.prototype.click.call(this);
-        };
-        ToggleView.prototype._update_active = function () {
-            dom_1.classes(this.button_el).toggle(mixins_1.bk_active, this.model.active);
-        };
-        ToggleView.__name__ = "ToggleView";
-        return ToggleView;
-    }(abstract_button_1.AbstractButtonView));
-    exports.ToggleView = ToggleView;
-    var Toggle = /** @class */ (function (_super) {
-        tslib_1.__extends(Toggle, _super);
-        function Toggle(attrs) {
-            return _super.call(this, attrs) || this;
-        }
-        Toggle.initClass = function () {
-            this.prototype.default_view = ToggleView;
-            this.define({
-                active: [p.Boolean, false],
-            });
-            this.override({
-                label: "Toggle",
-            });
-        };
-        Toggle.__name__ = "Toggle";
-        return Toggle;
-    }(abstract_button_1.AbstractButton));
-    exports.Toggle = Toggle;
-    Toggle.initClass();
-}
-,
-487: /* models/widgets/widget */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var html_box_1 = require(164) /* ../layouts/html_box */;
-    var p = require(18) /* ../../core/properties */;
-    var WidgetView = /** @class */ (function (_super) {
-        tslib_1.__extends(WidgetView, _super);
-        function WidgetView() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        WidgetView.prototype._width_policy = function () {
-            return this.model.orientation == "horizontal" ? _super.prototype._width_policy.call(this) : "fixed";
-        };
-        WidgetView.prototype._height_policy = function () {
-            return this.model.orientation == "horizontal" ? "fixed" : _super.prototype._height_policy.call(this);
-        };
-        WidgetView.prototype.box_sizing = function () {
-            var sizing = _super.prototype.box_sizing.call(this);
-            if (this.model.orientation == "horizontal") {
-                if (sizing.width == null)
-                    sizing.width = this.model.default_size;
+        AbstractBaseSliderView.prototype._keypress_handle = function (e, idx) {
+            if (idx === void 0) {
+                idx = 0;
+            }
+            var _a = this._calc_to(), start = _a.start, value = _a.value, end = _a.end, step = _a.step;
+            var is_range = value.length == 2;
+            var low = start;
+            var high = end;
+            if (is_range && idx == 0) {
+                high = value[1];
+            }
+            else if (is_range && idx == 1) {
+                low = value[0];
+            }
+            switch (e.which) {
+                case 37: {
+                    value[idx] = Math.max(value[idx] - step, low);
+                    break;
+                }
+                case 39: {
+                    value[idx] = Math.min(value[idx] + step, high);
+                    break;
+                }
+                default:
+                    return;
+            }
+            if (is_range) {
+                this.model.value = value;
+                this.model.properties.value.change.emit();
             }
             else {
-                if (sizing.height == null)
-                    sizing.height = this.model.default_size;
+                this.model.value = value[0];
             }
-            return sizing;
+            this.noUiSlider.set(value);
+            if (this.callback_wrapper != null)
+                this.callback_wrapper();
         };
-        WidgetView.__name__ = "WidgetView";
-        return WidgetView;
-    }(html_box_1.HTMLBoxView));
-    exports.WidgetView = WidgetView;
-    var Widget = /** @class */ (function (_super) {
-        tslib_1.__extends(Widget, _super);
-        function Widget(attrs) {
-            return _super.call(this, attrs) || this;
+        AbstractBaseSliderView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            var _a = this._calc_to(), start = _a.start, end = _a.end, value = _a.value, step = _a.step;
+            var tooltips; // XXX
+            if (this.model.tooltips) {
+                var formatter = {
+                    to: function (value) { return _this.model.pretty(value); },
+                };
+                tooltips = array_1.repeat(formatter, value.length);
+            }
+            else
+                tooltips = false;
+            if (this.slider_el == null) {
+                this.slider_el = dom_1.div();
+                noUiSlider.create(this.slider_el, {
+                    cssPrefix: prefix,
+                    range: { min: start, max: end },
+                    start: value,
+                    step: step,
+                    behaviour: this.model.behaviour,
+                    connect: this.model.connected,
+                    tooltips: tooltips,
+                    orientation: this.model.orientation,
+                    direction: this.model.direction,
+                }); // XXX: bad typings; no cssPrefix
+                this.noUiSlider.on('slide', function (_, __, values) { return _this._slide(values); });
+                this.noUiSlider.on('change', function (_, __, values) { return _this._change(values); });
+                this._set_keypress_handles();
+                var toggleTooltip_1 = function (i, show) {
+                    if (!tooltips)
+                        return;
+                    var handle = _this.slider_el.querySelectorAll("." + prefix + "handle")[i];
+                    var tooltip = handle.querySelector("." + prefix + "tooltip");
+                    tooltip.style.display = show ? 'block' : '';
+                };
+                this.noUiSlider.on('start', function (_, i) { return toggleTooltip_1(i, true); });
+                this.noUiSlider.on('end', function (_, i) { return toggleTooltip_1(i, false); });
+            }
+            else {
+                this.noUiSlider.updateOptions({
+                    range: { min: start, max: end },
+                    start: value,
+                    step: step,
+                });
+            }
+            this._set_bar_color();
+            if (this.model.disabled)
+                this.slider_el.setAttribute('disabled', 'true');
+            else
+                this.slider_el.removeAttribute('disabled');
+            this.title_el = dom_1.div({ class: sliders_1.bk_slider_title });
+            this._update_title();
+            this.group_el = dom_1.div({ class: sliders_1.bk_input_group }, this.title_el, this.slider_el);
+            this.el.appendChild(this.group_el);
+        };
+        AbstractBaseSliderView.prototype._slide = function (values) {
+            this.model.value = this._calc_from(values);
+            if (this.callback_wrapper != null)
+                this.callback_wrapper();
+        };
+        AbstractBaseSliderView.prototype._change = function (values) {
+            this.model.value = this._calc_from(values);
+            this.model.value_throttled = this.model.value;
+            switch (this.model.callback_policy) {
+                case 'mouseup':
+                case 'throttle': {
+                    if (this.model.callback != null)
+                        this.model.callback.execute(this.model);
+                    break;
+                }
+            }
+        };
+        return AbstractBaseSliderView;
+    }(control_1.ControlView));
+    AbstractBaseSliderView.__name__ = "AbstractBaseSliderView";
+    var AbstractSliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(AbstractSliderView, _super);
+        function AbstractSliderView() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-        Widget.initClass = function () {
+        AbstractSliderView.prototype._calc_to = function () {
+            return {
+                start: this.model.start,
+                end: this.model.end,
+                value: [this.model.value],
+                step: this.model.step,
+            };
+        };
+        AbstractSliderView.prototype._calc_from = function (_a) {
+            var value = _a[0];
+            if (Number.isInteger(this.model.start) && Number.isInteger(this.model.end) && Number.isInteger(this.model.step))
+                return Math.round(value);
+            else
+                return value;
+        };
+        AbstractSliderView.prototype._set_keypress_handles = function () {
+            var _this = this;
+            // Add single cursor event
+            var handle = this.slider_el.querySelector("." + prefix + "handle");
+            handle.setAttribute('tabindex', '0');
+            handle.addEventListener('keydown', function (e) { return _this._keypress_handle(e); });
+        };
+        return AbstractSliderView;
+    }(AbstractBaseSliderView));
+    exports.AbstractSliderView = AbstractSliderView;
+    AbstractSliderView.__name__ = "AbstractSliderView";
+    var AbstractRangeSliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(AbstractRangeSliderView, _super);
+        function AbstractRangeSliderView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        AbstractRangeSliderView.prototype._calc_to = function () {
+            return {
+                start: this.model.start,
+                end: this.model.end,
+                value: this.model.value,
+                step: this.model.step,
+            };
+        };
+        AbstractRangeSliderView.prototype._calc_from = function (values) {
+            return values;
+        };
+        AbstractRangeSliderView.prototype._set_keypress_handles = function () {
+            var _this = this;
+            var handle_lower = this.slider_el.querySelector("." + prefix + "handle-lower");
+            var handle_upper = this.slider_el.querySelector("." + prefix + "handle-upper");
+            handle_lower.setAttribute('tabindex', '0');
+            handle_lower.addEventListener('keydown', function (e) { return _this._keypress_handle(e, 0); });
+            handle_upper.setAttribute('tabindex', '1');
+            handle_upper.addEventListener('keydown', function (e) { return _this._keypress_handle(e, 1); });
+        };
+        return AbstractRangeSliderView;
+    }(AbstractBaseSliderView));
+    exports.AbstractRangeSliderView = AbstractRangeSliderView;
+    AbstractRangeSliderView.__name__ = "AbstractRangeSliderView";
+    var AbstractSlider = /** @class */ (function (_super) {
+        tslib_1.__extends(AbstractSlider, _super);
+        function AbstractSlider(attrs) {
+            var _this = _super.call(this, attrs) || this;
+            _this.connected = false;
+            return _this;
+        }
+        AbstractSlider.init_AbstractSlider = function () {
             this.define({
-                orientation: [p.Orientation, "horizontal"],
-                default_size: [p.Number, 300],
-            });
-            this.override({
-                margin: [5, 5, 5, 5],
+                title: [p.String, ""],
+                show_value: [p.Boolean, true],
+                start: [p.Any],
+                end: [p.Any],
+                value: [p.Any],
+                value_throttled: [p.Any],
+                step: [p.Number, 1],
+                format: [p.String],
+                direction: [p.Any, "ltr"],
+                tooltips: [p.Boolean, true],
+                callback: [p.Any],
+                callback_throttle: [p.Number, 200],
+                callback_policy: [p.SliderCallbackPolicy, "throttle"],
+                bar_color: [p.Color, "#e6e6e6"],
             });
         };
-        Widget.__name__ = "Widget";
-        return Widget;
-    }(html_box_1.HTMLBox));
-    exports.Widget = Widget;
-    Widget.initClass();
-}
-,
-471: /* styles/clearfix */ function _(require, module, exports) {
-    require(311) /* ./root */;
-    var _a = require(5) /* ../core/dom */;
-    _a.styles.append(".bk-root .bk-clearfix:before,\n.bk-root .bk-clearfix:after {\n  content: \"\";\n  display: table;\n}\n.bk-root .bk-clearfix:after {\n  clear: both;\n}\n");
-    exports.bk_clearfix = "bk-clearfix";
-}
-,
-472: /* styles/widgets/inputs */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root .bk-input {\n  display: inline-block;\n  width: 100%;\n  flex-grow: 1;\n  -webkit-flex-grow: 1;\n  min-height: 31px;\n  padding: 0 12px;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\n.bk-root .bk-input:focus {\n  border-color: #66afe9;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);\n}\n.bk-root .bk-input::placeholder,\n.bk-root .bk-input:-ms-input-placeholder,\n.bk-root .bk-input::-moz-placeholder,\n.bk-root .bk-input::-webkit-input-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.bk-root .bk-input[disabled],\n.bk-root .bk-input[readonly] {\n  cursor: not-allowed;\n  background-color: #eee;\n  opacity: 1;\n}\n.bk-root select[multiple].bk-input,\n.bk-root select[size].bk-input,\n.bk-root textarea.bk-input {\n  height: auto;\n}\n.bk-root .bk-input-group {\n  width: 100%;\n  height: 100%;\n  display: inline-flex;\n  display: -webkit-inline-flex;\n  flex-wrap: nowrap;\n  -webkit-flex-wrap: nowrap;\n  align-items: start;\n  -webkit-align-items: start;\n  flex-direction: column;\n  -webkit-flex-direction: column;\n  white-space: nowrap;\n}\n.bk-root .bk-input-group.bk-inline {\n  flex-direction: row;\n  -webkit-flex-direction: row;\n}\n.bk-root .bk-input-group.bk-inline > *:not(:first-child) {\n  margin-left: 5px;\n}\n.bk-root .bk-input-group input[type=\"checkbox\"] + span,\n.bk-root .bk-input-group input[type=\"radio\"] + span {\n  position: relative;\n  top: -2px;\n  margin-left: 3px;\n}\n");
-    exports.bk_input = "bk-input";
-    exports.bk_input_group = "bk-input-group";
-}
-,
-473: /* styles/widgets/nouislider */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root {\n  /* Functional styling;\n * These styles are required for noUiSlider to function.\n * You don't need to change these rules to apply your design.\n */\n  /* Painting and performance;\n * Browsers can paint handles in their own layer.\n */\n  /* Slider size and handle placement;\n */\n  /* Styling;\n */\n  /* Handles and cursors;\n */\n  /* Handle stripes;\n */\n  /* Disabled state;\n */\n  /* Base;\n *\n */\n  /* Values;\n *\n */\n  /* Markings;\n *\n */\n  /* Horizontal layout;\n *\n */\n  /* Vertical layout;\n *\n */\n}\n.bk-root .bk-noUi-target,\n.bk-root .bk-noUi-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n.bk-root .bk-noUi-target {\n  position: relative;\n  direction: ltr;\n}\n.bk-root .bk-noUi-base {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n  /* Fix 401 */\n}\n.bk-root .bk-noUi-connect {\n  position: absolute;\n  right: 0;\n  top: 0;\n  left: 0;\n  bottom: 0;\n}\n.bk-root .bk-noUi-origin {\n  position: absolute;\n  height: 0;\n  width: 0;\n}\n.bk-root .bk-noUi-handle {\n  position: relative;\n  z-index: 1;\n}\n.bk-root .bk-noUi-state-tap .bk-noUi-connect,\n.bk-root .bk-noUi-state-tap .bk-noUi-origin {\n  -webkit-transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;\n  transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;\n}\n.bk-root .bk-noUi-state-drag * {\n  cursor: inherit !important;\n}\n.bk-root .bk-noUi-base,\n.bk-root .bk-noUi-handle {\n  -webkit-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n}\n.bk-root .bk-noUi-horizontal {\n  height: 18px;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-handle {\n  width: 34px;\n  height: 28px;\n  left: -17px;\n  top: -6px;\n}\n.bk-root .bk-noUi-vertical {\n  width: 18px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle {\n  width: 28px;\n  height: 34px;\n  left: -6px;\n  top: -17px;\n}\n.bk-root .bk-noUi-target {\n  background: #FAFAFA;\n  border-radius: 4px;\n  border: 1px solid #D3D3D3;\n  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;\n}\n.bk-root .bk-noUi-connect {\n  background: #3FB8AF;\n  border-radius: 4px;\n  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45);\n  -webkit-transition: background 450ms;\n  transition: background 450ms;\n}\n.bk-root .bk-noUi-draggable {\n  cursor: ew-resize;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-draggable {\n  cursor: ns-resize;\n}\n.bk-root .bk-noUi-handle {\n  border: 1px solid #D9D9D9;\n  border-radius: 3px;\n  background: #FFF;\n  cursor: default;\n  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;\n}\n.bk-root .bk-noUi-active {\n  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB;\n}\n.bk-root .bk-noUi-handle:before,\n.bk-root .bk-noUi-handle:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 14px;\n  width: 1px;\n  background: #E8E7E6;\n  left: 14px;\n  top: 6px;\n}\n.bk-root .bk-noUi-handle:after {\n  left: 17px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle:before,\n.bk-root .bk-noUi-vertical .bk-noUi-handle:after {\n  width: 14px;\n  height: 1px;\n  left: 6px;\n  top: 14px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle:after {\n  top: 17px;\n}\n.bk-root [disabled] .bk-noUi-connect {\n  background: #B8B8B8;\n}\n.bk-root [disabled].bk-noUi-target,\n.bk-root [disabled].bk-noUi-handle,\n.bk-root [disabled] .bk-noUi-handle {\n  cursor: not-allowed;\n}\n.bk-root .bk-noUi-pips,\n.bk-root .bk-noUi-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n.bk-root .bk-noUi-pips {\n  position: absolute;\n  color: #999;\n}\n.bk-root .bk-noUi-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n.bk-root .bk-noUi-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n.bk-root .bk-noUi-marker {\n  position: absolute;\n  background: #CCC;\n}\n.bk-root .bk-noUi-marker-sub {\n  background: #AAA;\n}\n.bk-root .bk-noUi-marker-large {\n  background: #AAA;\n}\n.bk-root .bk-noUi-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n.bk-root .bk-noUi-value-horizontal {\n  -webkit-transform: translate3d(-50%, 50%, 0);\n  transform: translate3d(-50%, 50%, 0);\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker-sub {\n  height: 10px;\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker-large {\n  height: 15px;\n}\n.bk-root .bk-noUi-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n.bk-root .bk-noUi-value-vertical {\n  -webkit-transform: translate3d(0, 50%, 0);\n  transform: translate3d(0, 50%, 0);\n  padding-left: 25px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker-sub {\n  width: 10px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker-large {\n  width: 15px;\n}\n.bk-root .bk-noUi-tooltip {\n  display: block;\n  position: absolute;\n  border: 1px solid #D9D9D9;\n  border-radius: 3px;\n  background: #fff;\n  color: #000;\n  padding: 5px;\n  text-align: center;\n  white-space: nowrap;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 120%;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 120%;\n}\n.bk-root .bk-noUi-handle {\n  cursor: grab;\n  cursor: -webkit-grab;\n}\n.bk-root .bk-noUi-handle.bk-noUi-active {\n  cursor: grabbing;\n  cursor: -webkit-grabbing;\n}\n.bk-root .bk-noUi-tooltip {\n  display: none;\n  white-space: nowrap;\n}\n.bk-root .bk-noUi-handle:hover .bk-noUi-tooltip {\n  display: block;\n}\n.bk-root .bk-noUi-horizontal {\n  width: 100%;\n  height: 10px;\n}\n.bk-root .bk-noUi-horizontal.bk-noUi-target {\n  margin: 5px 0px;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-handle {\n  width: 14px;\n  height: 18px;\n  left: -7px;\n  top: -5px;\n}\n.bk-root .bk-noUi-vertical {\n  width: 10px;\n  height: 100%;\n}\n.bk-root .bk-noUi-vertical.bk-noUi-target {\n  margin: 0px 5px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle {\n  width: 18px;\n  height: 14px;\n  left: -5px;\n  top: -7px;\n}\n.bk-root .bk-noUi-handle:after,\n.bk-root .bk-noUi-handle:before {\n  display: none;\n}\n.bk-root .bk-noUi-connect {\n  box-shadow: none;\n}\n");
-}
-,
-474: /* styles/widgets/pikaday */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root {\n  @charset \"UTF-8\";\n  /*!\n * Pikaday\n * Copyright \u00A9 2014 David Bushell | BSD & MIT license | https://dbushell.com/\n */\n  /*\nclear child float (pika-lendar), using the famous micro clearfix hack\nhttp://nicolasgallagher.com/micro-clearfix-hack/\n*/\n  /* styling for abbr */\n}\n.bk-root .pika-single {\n  z-index: 9999;\n  display: block;\n  position: relative;\n  color: #333;\n  background: #fff;\n  border: 1px solid #ccc;\n  border-bottom-color: #bbb;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n.bk-root .pika-single:before,\n.bk-root .pika-single:after {\n  content: \" \";\n  display: table;\n}\n.bk-root .pika-single:after {\n  clear: both;\n}\n.bk-root .pika-single.is-hidden {\n  display: none;\n}\n.bk-root .pika-single.is-bound {\n  position: absolute;\n  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);\n}\n.bk-root .pika-lendar {\n  float: left;\n  width: 240px;\n  margin: 8px;\n}\n.bk-root .pika-title {\n  position: relative;\n  text-align: center;\n}\n.bk-root .pika-label {\n  display: inline-block;\n  position: relative;\n  z-index: 9999;\n  overflow: hidden;\n  margin: 0;\n  padding: 5px 3px;\n  font-size: 14px;\n  line-height: 20px;\n  font-weight: bold;\n  background-color: #fff;\n}\n.bk-root .pika-title select {\n  cursor: pointer;\n  position: absolute;\n  z-index: 9998;\n  margin: 0;\n  left: 0;\n  top: 5px;\n  opacity: 0;\n}\n.bk-root .pika-prev,\n.bk-root .pika-next {\n  display: block;\n  cursor: pointer;\n  position: relative;\n  outline: none;\n  border: 0;\n  padding: 0;\n  width: 20px;\n  height: 30px;\n  /* hide text using text-indent trick, using width value (it's enough) */\n  text-indent: 20px;\n  white-space: nowrap;\n  overflow: hidden;\n  background-color: transparent;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: 75% 75%;\n  opacity: 0.5;\n}\n.bk-root .pika-prev:hover,\n.bk-root .pika-next:hover {\n  opacity: 1;\n}\n.bk-root .pika-prev,\n.bk-root .is-rtl .pika-next {\n  float: left;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAUklEQVR42u3VMQoAIBADQf8Pgj+OD9hG2CtONJB2ymQkKe0HbwAP0xucDiQWARITIDEBEnMgMQ8S8+AqBIl6kKgHiXqQqAeJepBo/z38J/U0uAHlaBkBl9I4GwAAAABJRU5ErkJggg==');\n}\n.bk-root .pika-next,\n.bk-root .is-rtl .pika-prev {\n  float: right;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAU0lEQVR42u3VOwoAMAgE0dwfAnNjU26bYkBCFGwfiL9VVWoO+BJ4Gf3gtsEKKoFBNTCoCAYVwaAiGNQGMUHMkjGbgjk2mIONuXo0nC8XnCf1JXgArVIZAQh5TKYAAAAASUVORK5CYII=');\n}\n.bk-root .pika-prev.is-disabled,\n.bk-root .pika-next.is-disabled {\n  cursor: default;\n  opacity: 0.2;\n}\n.bk-root .pika-select {\n  display: inline-block;\n}\n.bk-root .pika-table {\n  width: 100%;\n  border-collapse: collapse;\n  border-spacing: 0;\n  border: 0;\n}\n.bk-root .pika-table th,\n.bk-root .pika-table td {\n  width: 14.28571429%;\n  padding: 0;\n}\n.bk-root .pika-table th {\n  color: #999;\n  font-size: 12px;\n  line-height: 25px;\n  font-weight: bold;\n  text-align: center;\n}\n.bk-root .pika-button {\n  cursor: pointer;\n  display: block;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  outline: none;\n  border: 0;\n  margin: 0;\n  width: 100%;\n  padding: 5px;\n  color: #666;\n  font-size: 12px;\n  line-height: 15px;\n  text-align: right;\n  background: #f5f5f5;\n}\n.bk-root .pika-week {\n  font-size: 11px;\n  color: #999;\n}\n.bk-root .is-today .pika-button {\n  color: #33aaff;\n  font-weight: bold;\n}\n.bk-root .is-selected .pika-button,\n.bk-root .has-event .pika-button {\n  color: #fff;\n  font-weight: bold;\n  background: #33aaff;\n  box-shadow: inset 0 1px 3px #178fe5;\n  border-radius: 3px;\n}\n.bk-root .has-event .pika-button {\n  background: #005da9;\n  box-shadow: inset 0 1px 3px #0076c9;\n}\n.bk-root .is-disabled .pika-button,\n.bk-root .is-inrange .pika-button {\n  background: #D5E9F7;\n}\n.bk-root .is-startrange .pika-button {\n  color: #fff;\n  background: #6CB31D;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .is-endrange .pika-button {\n  color: #fff;\n  background: #33aaff;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .is-disabled .pika-button {\n  pointer-events: none;\n  cursor: default;\n  color: #999;\n  opacity: 0.3;\n}\n.bk-root .is-outside-current-month .pika-button {\n  color: #999;\n  opacity: 0.3;\n}\n.bk-root .is-selection-disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.bk-root .pika-button:hover,\n.bk-root .pika-row.pick-whole-week:hover .pika-button {\n  color: #fff;\n  background: #ff8000;\n  box-shadow: none;\n  border-radius: 3px;\n}\n.bk-root .pika-table abbr {\n  border-bottom: none;\n  cursor: help;\n}\n");
-}
-,
-475: /* styles/widgets/sliders */ function _(require, module, exports) {
-    require(311) /* ../root */;
-    require(473) /* ./nouislider */;
-    var _a = require(5) /* ../../core/dom */;
-    _a.styles.append(".bk-root .bk-slider-title {\n  white-space: nowrap;\n}\n.bk-root .bk-slider-value {\n  font-weight: 600;\n}\n");
-    exports.bk_slider_value = "bk-slider-value";
-    exports.bk_slider_title = "bk-slider-title";
-    exports.bk_input_group = "bk-input-group";
-}
-,
-476: /* nouislider/distribute/nouislider */ function _(require, module, exports) {
+        AbstractSlider.prototype._formatter = function (value, _format) {
+            return "" + value;
+        };
+        AbstractSlider.prototype.pretty = function (value) {
+            return this._formatter(value, this.format);
+        };
+        return AbstractSlider;
+    }(control_1.Control));
+    exports.AbstractSlider = AbstractSlider;
+    AbstractSlider.__name__ = "AbstractSlider";
+    AbstractSlider.init_AbstractSlider();
+},
+493: /* nouislider/distribute/nouislider.js */ function _(require, module, exports) {
     /*! nouislider - 10.1.0 - 2017-07-28 17:11:18 */
     (function (factory) {
         if (typeof define === 'function' && define.amd) {
@@ -4140,939 +4011,1017 @@
             create: initialize
         };
     }));
-}
-,
-477: /* pikaday/pikaday */ function _(require, module, exports) {
-    /**
-     * feature detection and helper functions
-     */
-    var addEvent = function (el, e, callback, capture) {
-        el.addEventListener(e, callback, !!capture);
-    }, removeEvent = function (el, e, callback, capture) {
-        el.removeEventListener(e, callback, !!capture);
-    }, trim = function (str) {
-        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
-    }, hasClass = function (el, cn) {
-        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
-    }, addClass = function (el, cn) {
-        if (!hasClass(el, cn)) {
-            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
+},
+494: /* styles/widgets/sliders.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    require(495) /* ./nouislider */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root .bk-slider-title {\n  white-space: nowrap;\n}\n.bk-root .bk-slider-value {\n  font-weight: 600;\n}\n");
+    exports.bk_slider_value = "bk-slider-value";
+    exports.bk_slider_title = "bk-slider-title";
+    exports.bk_input_group = "bk-input-group";
+},
+495: /* styles/widgets/nouislider.js */ function _(require, module, exports) {
+    require(164) /* ../root */;
+    var _a = require(163) /* ../../core/dom */;
+    _a.styles.append(".bk-root {\n  /* Functional styling;\n * These styles are required for noUiSlider to function.\n * You don't need to change these rules to apply your design.\n */\n  /* Painting and performance;\n * Browsers can paint handles in their own layer.\n */\n  /* Slider size and handle placement;\n */\n  /* Styling;\n */\n  /* Handles and cursors;\n */\n  /* Handle stripes;\n */\n  /* Disabled state;\n */\n  /* Base;\n *\n */\n  /* Values;\n *\n */\n  /* Markings;\n *\n */\n  /* Horizontal layout;\n *\n */\n  /* Vertical layout;\n *\n */\n}\n.bk-root .bk-noUi-target,\n.bk-root .bk-noUi-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n.bk-root .bk-noUi-target {\n  position: relative;\n  direction: ltr;\n}\n.bk-root .bk-noUi-base {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n  /* Fix 401 */\n}\n.bk-root .bk-noUi-connect {\n  position: absolute;\n  right: 0;\n  top: 0;\n  left: 0;\n  bottom: 0;\n}\n.bk-root .bk-noUi-origin {\n  position: absolute;\n  height: 0;\n  width: 0;\n}\n.bk-root .bk-noUi-handle {\n  position: relative;\n  z-index: 1;\n}\n.bk-root .bk-noUi-state-tap .bk-noUi-connect,\n.bk-root .bk-noUi-state-tap .bk-noUi-origin {\n  -webkit-transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;\n  transition: top 0.3s, right 0.3s, bottom 0.3s, left 0.3s;\n}\n.bk-root .bk-noUi-state-drag * {\n  cursor: inherit !important;\n}\n.bk-root .bk-noUi-base,\n.bk-root .bk-noUi-handle {\n  -webkit-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n}\n.bk-root .bk-noUi-horizontal {\n  height: 18px;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-handle {\n  width: 34px;\n  height: 28px;\n  left: -17px;\n  top: -6px;\n}\n.bk-root .bk-noUi-vertical {\n  width: 18px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle {\n  width: 28px;\n  height: 34px;\n  left: -6px;\n  top: -17px;\n}\n.bk-root .bk-noUi-target {\n  background: #FAFAFA;\n  border-radius: 4px;\n  border: 1px solid #D3D3D3;\n  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;\n}\n.bk-root .bk-noUi-connect {\n  background: #3FB8AF;\n  border-radius: 4px;\n  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45);\n  -webkit-transition: background 450ms;\n  transition: background 450ms;\n}\n.bk-root .bk-noUi-draggable {\n  cursor: ew-resize;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-draggable {\n  cursor: ns-resize;\n}\n.bk-root .bk-noUi-handle {\n  border: 1px solid #D9D9D9;\n  border-radius: 3px;\n  background: #FFF;\n  cursor: default;\n  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;\n}\n.bk-root .bk-noUi-active {\n  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB;\n}\n.bk-root .bk-noUi-handle:before,\n.bk-root .bk-noUi-handle:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 14px;\n  width: 1px;\n  background: #E8E7E6;\n  left: 14px;\n  top: 6px;\n}\n.bk-root .bk-noUi-handle:after {\n  left: 17px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle:before,\n.bk-root .bk-noUi-vertical .bk-noUi-handle:after {\n  width: 14px;\n  height: 1px;\n  left: 6px;\n  top: 14px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle:after {\n  top: 17px;\n}\n.bk-root [disabled] .bk-noUi-connect {\n  background: #B8B8B8;\n}\n.bk-root [disabled].bk-noUi-target,\n.bk-root [disabled].bk-noUi-handle,\n.bk-root [disabled] .bk-noUi-handle {\n  cursor: not-allowed;\n}\n.bk-root .bk-noUi-pips,\n.bk-root .bk-noUi-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n.bk-root .bk-noUi-pips {\n  position: absolute;\n  color: #999;\n}\n.bk-root .bk-noUi-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n.bk-root .bk-noUi-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n.bk-root .bk-noUi-marker {\n  position: absolute;\n  background: #CCC;\n}\n.bk-root .bk-noUi-marker-sub {\n  background: #AAA;\n}\n.bk-root .bk-noUi-marker-large {\n  background: #AAA;\n}\n.bk-root .bk-noUi-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n.bk-root .bk-noUi-value-horizontal {\n  -webkit-transform: translate3d(-50%, 50%, 0);\n  transform: translate3d(-50%, 50%, 0);\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker-sub {\n  height: 10px;\n}\n.bk-root .bk-noUi-marker-horizontal.bk-noUi-marker-large {\n  height: 15px;\n}\n.bk-root .bk-noUi-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n.bk-root .bk-noUi-value-vertical {\n  -webkit-transform: translate3d(0, 50%, 0);\n  transform: translate3d(0, 50%, 0);\n  padding-left: 25px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker-sub {\n  width: 10px;\n}\n.bk-root .bk-noUi-marker-vertical.bk-noUi-marker-large {\n  width: 15px;\n}\n.bk-root .bk-noUi-tooltip {\n  display: block;\n  position: absolute;\n  border: 1px solid #D9D9D9;\n  border-radius: 3px;\n  background: #fff;\n  color: #000;\n  padding: 5px;\n  text-align: center;\n  white-space: nowrap;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 120%;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 120%;\n}\n.bk-root .bk-noUi-handle {\n  cursor: grab;\n  cursor: -webkit-grab;\n}\n.bk-root .bk-noUi-handle.bk-noUi-active {\n  cursor: grabbing;\n  cursor: -webkit-grabbing;\n}\n.bk-root .bk-noUi-tooltip {\n  display: none;\n  white-space: nowrap;\n}\n.bk-root .bk-noUi-handle:hover .bk-noUi-tooltip {\n  display: block;\n}\n.bk-root .bk-noUi-horizontal {\n  width: 100%;\n  height: 10px;\n}\n.bk-root .bk-noUi-horizontal.bk-noUi-target {\n  margin: 5px 0px;\n}\n.bk-root .bk-noUi-horizontal .bk-noUi-handle {\n  width: 14px;\n  height: 18px;\n  left: -7px;\n  top: -5px;\n}\n.bk-root .bk-noUi-vertical {\n  width: 10px;\n  height: 100%;\n}\n.bk-root .bk-noUi-vertical.bk-noUi-target {\n  margin: 0px 5px;\n}\n.bk-root .bk-noUi-vertical .bk-noUi-handle {\n  width: 18px;\n  height: 14px;\n  left: -5px;\n  top: -7px;\n}\n.bk-root .bk-noUi-handle:after,\n.bk-root .bk-noUi-handle:before {\n  display: none;\n}\n.bk-root .bk-noUi-connect {\n  box-shadow: none;\n}\n");
+},
+496: /* models/widgets/date_slider.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var tz = require(252) /* timezone */;
+    var abstract_slider_1 = require(492) /* ./abstract_slider */;
+    var DateSliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(DateSliderView, _super);
+        function DateSliderView() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-    }, removeClass = function (el, cn) {
-        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
-    }, isArray = function (obj) {
-        return (/Array/).test(Object.prototype.toString.call(obj));
-    }, isDate = function (obj) {
-        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
-    }, isWeekend = function (date) {
-        var day = date.getDay();
-        return day === 0 || day === 6;
-    }, isLeapYear = function (year) {
-        // solution lifted from date.js (MIT license): https://github.com/datejs/Datejs
-        return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0);
-    }, getDaysInMonth = function (year, month) {
-        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-    }, setToStartOfDay = function (date) {
-        if (isDate(date))
-            date.setHours(0, 0, 0, 0);
-    }, compareDates = function (a, b) {
-        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
-        return a.getTime() === b.getTime();
-    }, extend = function (to, from, overwrite) {
-        var prop, hasProp;
-        for (prop in from) {
-            hasProp = to[prop] !== undefined;
-            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
-                if (isDate(from[prop])) {
-                    if (overwrite) {
-                        to[prop] = new Date(from[prop].getTime());
-                    }
-                }
-                else if (isArray(from[prop])) {
-                    if (overwrite) {
-                        to[prop] = from[prop].slice(0);
-                    }
-                }
+        return DateSliderView;
+    }(abstract_slider_1.AbstractSliderView));
+    exports.DateSliderView = DateSliderView;
+    DateSliderView.__name__ = "DateSliderView";
+    var DateSlider = /** @class */ (function (_super) {
+        tslib_1.__extends(DateSlider, _super);
+        function DateSlider(attrs) {
+            var _this = _super.call(this, attrs) || this;
+            _this.behaviour = "tap";
+            _this.connected = [true, false];
+            return _this;
+        }
+        DateSlider.init_DateSlider = function () {
+            this.prototype.default_view = DateSliderView;
+            this.override({
+                format: "%d %b %Y",
+            });
+        };
+        DateSlider.prototype._formatter = function (value, format) {
+            return tz(value, format);
+        };
+        return DateSlider;
+    }(abstract_slider_1.AbstractSlider));
+    exports.DateSlider = DateSlider;
+    DateSlider.__name__ = "DateSlider";
+    DateSlider.init_DateSlider();
+},
+497: /* models/widgets/div.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var markup_1 = require(498) /* ./markup */;
+    var p = require(121) /* ../../core/properties */;
+    var DivView = /** @class */ (function (_super) {
+        tslib_1.__extends(DivView, _super);
+        function DivView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        DivView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            if (this.model.render_as_text)
+                this.markup_el.textContent = this.model.text;
+            else
+                this.markup_el.innerHTML = this.model.text;
+        };
+        return DivView;
+    }(markup_1.MarkupView));
+    exports.DivView = DivView;
+    DivView.__name__ = "DivView";
+    var Div = /** @class */ (function (_super) {
+        tslib_1.__extends(Div, _super);
+        function Div(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Div.init_Div = function () {
+            this.prototype.default_view = DivView;
+            this.define({
+                render_as_text: [p.Boolean, false],
+            });
+        };
+        return Div;
+    }(markup_1.Markup));
+    exports.Div = Div;
+    Div.__name__ = "Div";
+    Div.init_Div();
+},
+498: /* models/widgets/markup.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var layout_1 = require(282) /* ../../core/layout */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var widget_1 = require(534) /* ./widget */;
+    var clearfix_1 = require(499) /* ../../styles/clearfix */;
+    var MarkupView = /** @class */ (function (_super) {
+        tslib_1.__extends(MarkupView, _super);
+        function MarkupView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        MarkupView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.change, function () {
+                _this.render();
+                _this.root.compute_layout(); // XXX: invalidate_layout?
+            });
+        };
+        MarkupView.prototype._update_layout = function () {
+            this.layout = new layout_1.VariadicBox(this.el);
+            this.layout.set_sizing(this.box_sizing());
+        };
+        MarkupView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            var style = Object.assign(Object.assign({}, this.model.style), { display: "inline-block" });
+            this.markup_el = dom_1.div({ class: clearfix_1.bk_clearfix, style: style });
+            this.el.appendChild(this.markup_el);
+        };
+        return MarkupView;
+    }(widget_1.WidgetView));
+    exports.MarkupView = MarkupView;
+    MarkupView.__name__ = "MarkupView";
+    var Markup = /** @class */ (function (_super) {
+        tslib_1.__extends(Markup, _super);
+        function Markup(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Markup.init_Markup = function () {
+            this.define({
+                text: [p.String, ''],
+                style: [p.Any, {}],
+            });
+        };
+        return Markup;
+    }(widget_1.Widget));
+    exports.Markup = Markup;
+    Markup.__name__ = "Markup";
+    Markup.init_Markup();
+},
+499: /* styles/clearfix.js */ function _(require, module, exports) {
+    require(164) /* ./root */;
+    var _a = require(163) /* ../core/dom */;
+    _a.styles.append(".bk-root .bk-clearfix:before,\n.bk-root .bk-clearfix:after {\n  content: \"\";\n  display: table;\n}\n.bk-root .bk-clearfix:after {\n  clear: both;\n}\n");
+    exports.bk_clearfix = "bk-clearfix";
+},
+500: /* models/widgets/dropdown.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var abstract_button_1 = require(474) /* ./abstract_button */;
+    var bokeh_events_1 = require(376) /* ../../core/bokeh_events */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var types_1 = require(109) /* ../../core/util/types */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var buttons_1 = require(347) /* ../../styles/buttons */;
+    var menus_1 = require(348) /* ../../styles/menus */;
+    var DropdownView = /** @class */ (function (_super) {
+        tslib_1.__extends(DropdownView, _super);
+        function DropdownView() {
+            var _this = _super.apply(this, arguments) || this;
+            _this._open = false;
+            return _this;
+        }
+        DropdownView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            var caret = dom_1.div({ class: [menus_1.bk_caret, mixins_1.bk_down] });
+            if (!this.model.is_split)
+                this.button_el.appendChild(caret);
+            else {
+                var toggle = this._render_button(caret);
+                toggle.classList.add(buttons_1.bk_dropdown_toggle);
+                toggle.addEventListener("click", function () { return _this._toggle_menu(); });
+                this.group_el.appendChild(toggle);
+            }
+            var items = this.model.menu.map(function (item, i) {
+                if (item == null)
+                    return dom_1.div({ class: menus_1.bk_divider });
                 else {
-                    to[prop] = extend({}, from[prop], overwrite);
+                    var label = types_1.isString(item) ? item : item[0];
+                    var el = dom_1.div({}, label);
+                    el.addEventListener("click", function () { return _this._item_click(i); });
+                    return el;
                 }
-            }
-            else if (overwrite || !hasProp) {
-                to[prop] = from[prop];
-            }
-        }
-        return to;
-    }, fireEvent = function (el, eventName, data) {
-        var ev;
-        if (document.createEvent) {
-            ev = document.createEvent('HTMLEvents');
-            ev.initEvent(eventName, true, false);
-            ev = extend(ev, data);
-            el.dispatchEvent(ev);
-        }
-        else if (document.createEventObject) {
-            ev = document.createEventObject();
-            ev = extend(ev, data);
-            el.fireEvent('on' + eventName, ev);
-        }
-    }, adjustCalendar = function (calendar) {
-        if (calendar.month < 0) {
-            calendar.year -= Math.ceil(Math.abs(calendar.month) / 12);
-            calendar.month += 12;
-        }
-        if (calendar.month > 11) {
-            calendar.year += Math.floor(Math.abs(calendar.month) / 12);
-            calendar.month -= 12;
-        }
-        return calendar;
-    }, 
-    /**
-     * defaults and localisation
-     */
-    defaults = {
-        // bind the picker to a form field
-        field: null,
-        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
-        bound: undefined,
-        // data-attribute on the input field with an aria assistance tekst (only applied when `bound` is set)
-        ariaLabel: 'Use the arrow keys to pick a date',
-        // position of the datepicker, relative to the field (default to bottom & left)
-        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
-        position: 'bottom left',
-        // automatically fit in the viewport even if it means repositioning from the position option
-        reposition: true,
-        // the default output format for `.toString()` and `field` value
-        format: 'YYYY-MM-DD',
-        // the toString function which gets passed a current date object and format
-        // and returns a string
-        toString: null,
-        // used to create date object from current input string
-        parse: null,
-        // the initial date to view when first opened
-        defaultDate: null,
-        // make the `defaultDate` the initial selected value
-        setDefaultDate: false,
-        // first day of week (0: Sunday, 1: Monday etc)
-        firstDay: 0,
-        // the default flag for moment's strict date parsing
-        formatStrict: false,
-        // the minimum/earliest date that can be selected
-        minDate: null,
-        // the maximum/latest date that can be selected
-        maxDate: null,
-        // number of years either side, or array of upper/lower range
-        yearRange: 10,
-        // show week numbers at head of row
-        showWeekNumber: false,
-        // Week picker mode
-        pickWholeWeek: false,
-        // used internally (don't config outside)
-        minYear: 0,
-        maxYear: 9999,
-        minMonth: undefined,
-        maxMonth: undefined,
-        startRange: null,
-        endRange: null,
-        isRTL: false,
-        // Additional text to append to the year in the calendar title
-        yearSuffix: '',
-        // Render the month after year in the calendar title
-        showMonthAfterYear: false,
-        // Render days of the calendar grid that fall in the next or previous month
-        showDaysInNextAndPreviousMonths: false,
-        // Allows user to select days that fall in the next or previous month
-        enableSelectionDaysInNextAndPreviousMonths: false,
-        // how many months are visible
-        numberOfMonths: 1,
-        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
-        // only used for the first display or when a selected date is not visible
-        mainCalendar: 'left',
-        // Specify a DOM element to render the calendar in
-        container: undefined,
-        // Blur field when date is selected
-        blurFieldOnSelect: true,
-        // internationalization
-        i18n: {
-            previousMonth: 'Previous Month',
-            nextMonth: 'Next Month',
-            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-        },
-        // Theme Classname
-        theme: null,
-        // events array
-        events: [],
-        // callback function
-        onSelect: null,
-        onOpen: null,
-        onClose: null,
-        onDraw: null,
-        // Enable keyboard input
-        keyboardInput: true
-    }, 
-    /**
-     * templating functions to abstract HTML rendering
-     */
-    renderDayName = function (opts, day, abbr) {
-        day += opts.firstDay;
-        while (day >= 7) {
-            day -= 7;
-        }
-        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
-    }, renderDay = function (opts) {
-        var arr = [];
-        var ariaSelected = 'false';
-        if (opts.isEmpty) {
-            if (opts.showDaysInNextAndPreviousMonths) {
-                arr.push('is-outside-current-month');
-                if (!opts.enableSelectionDaysInNextAndPreviousMonths) {
-                    arr.push('is-selection-disabled');
-                }
-            }
-            else {
-                return '<td class="is-empty"></td>';
-            }
-        }
-        if (opts.isDisabled) {
-            arr.push('is-disabled');
-        }
-        if (opts.isToday) {
-            arr.push('is-today');
-        }
-        if (opts.isSelected) {
-            arr.push('is-selected');
-            ariaSelected = 'true';
-        }
-        if (opts.hasEvent) {
-            arr.push('has-event');
-        }
-        if (opts.isInRange) {
-            arr.push('is-inrange');
-        }
-        if (opts.isStartRange) {
-            arr.push('is-startrange');
-        }
-        if (opts.isEndRange) {
-            arr.push('is-endrange');
-        }
-        return '<td data-day="' + opts.day + '" class="' + arr.join(' ') + '" aria-selected="' + ariaSelected + '">' +
-            '<button class="pika-button pika-day" type="button" ' +
-            'data-pika-year="' + opts.year + '" data-pika-month="' + opts.month + '" data-pika-day="' + opts.day + '">' +
-            opts.day +
-            '</button>' +
-            '</td>';
-    }, isoWeek = function (date) {
-        // Ensure we're at the start of the day.
-        date.setHours(0, 0, 0, 0);
-        // Thursday in current week decides the year because January 4th
-        // is always in the first week according to ISO8601.
-        var yearDay = date.getDate(), weekDay = date.getDay(), dayInFirstWeek = 4 // January 4th
-        , dayShift = dayInFirstWeek - 1 // counting starts at 0
-        , daysPerWeek = 7, prevWeekDay = function (day) { return (day + daysPerWeek - 1) % daysPerWeek; };
-        // Adjust to Thursday in week 1 and count number of weeks from date to week 1.
-        date.setDate(yearDay + dayShift - prevWeekDay(weekDay));
-        var jan4th = new Date(date.getFullYear(), 0, dayInFirstWeek), msPerDay = 24 * 60 * 60 * 1000, daysBetween = (date.getTime() - jan4th.getTime()) / msPerDay, weekNum = 1 + Math.round((daysBetween - dayShift + prevWeekDay(jan4th.getDay())) / daysPerWeek);
-        return weekNum;
-    }, renderWeek = function (d, m, y) {
-        var date = new Date(y, m, d), week = isoWeek(date);
-        return '<td class="pika-week">' + week + '</td>';
-    }, renderRow = function (days, isRTL, pickWholeWeek, isRowSelected) {
-        return '<tr class="pika-row' + (pickWholeWeek ? ' pick-whole-week' : '') + (isRowSelected ? ' is-selected' : '') + '">' + (isRTL ? days.reverse() : days).join('') + '</tr>';
-    }, renderBody = function (rows) {
-        return '<tbody>' + rows.join('') + '</tbody>';
-    }, renderHead = function (opts) {
-        var i, arr = [];
-        if (opts.showWeekNumber) {
-            arr.push('<th></th>');
-        }
-        for (i = 0; i < 7; i++) {
-            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
-        }
-        return '<thead><tr>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</tr></thead>';
-    }, renderTitle = function (instance, c, year, month, refYear, randId) {
-        var i, j, arr, opts = instance._o, isMinYear = year === opts.minYear, isMaxYear = year === opts.maxYear, html = '<div id="' + randId + '" class="pika-title" role="heading" aria-live="assertive">', monthHtml, yearHtml, prev = true, next = true;
-        for (arr = [], i = 0; i < 12; i++) {
-            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
-                (i === month ? ' selected="selected"' : '') +
-                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? ' disabled="disabled"' : '') + '>' +
-                opts.i18n.months[i] + '</option>');
-        }
-        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month" tabindex="-1">' + arr.join('') + '</select></div>';
-        if (isArray(opts.yearRange)) {
-            i = opts.yearRange[0];
-            j = opts.yearRange[1] + 1;
-        }
-        else {
-            i = year - opts.yearRange;
-            j = 1 + year + opts.yearRange;
-        }
-        for (arr = []; i < j && i <= opts.maxYear; i++) {
-            if (i >= opts.minYear) {
-                arr.push('<option value="' + i + '"' + (i === year ? ' selected="selected"' : '') + '>' + (i) + '</option>');
-            }
-        }
-        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year" tabindex="-1">' + arr.join('') + '</select></div>';
-        if (opts.showMonthAfterYear) {
-            html += yearHtml + monthHtml;
-        }
-        else {
-            html += monthHtml + yearHtml;
-        }
-        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
-            prev = false;
-        }
-        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
-            next = false;
-        }
-        if (c === 0) {
-            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
-        }
-        if (c === (instance._o.numberOfMonths - 1)) {
-            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
-        }
-        return html += '</div>';
-    }, renderTable = function (opts, data, randId) {
-        return '<table cellpadding="0" cellspacing="0" class="pika-table" role="grid" aria-labelledby="' + randId + '">' + renderHead(opts) + renderBody(data) + '</table>';
-    }, 
-    /**
-     * Pikaday constructor
-     */
-    Pikaday = function (options) {
-        var self = this, opts = self.config(options);
-        self._onMouseDown = function (e) {
-            if (!self._v) {
-                return;
-            }
-            e = e || window.event;
-            var target = e.target || e.srcElement;
-            if (!target) {
-                return;
-            }
-            if (!hasClass(target, 'is-disabled')) {
-                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty') && !hasClass(target.parentNode, 'is-disabled')) {
-                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
-                    if (opts.bound) {
-                        setTimeout(function () {
-                            self.hide();
-                            if (opts.blurFieldOnSelect && opts.field) {
-                                opts.field.blur();
-                            }
-                        }, 100);
+            });
+            this.menu = dom_1.div({ class: [menus_1.bk_menu, mixins_1.bk_below] }, items);
+            this.el.appendChild(this.menu);
+            dom_1.undisplay(this.menu);
+        };
+        DropdownView.prototype._show_menu = function () {
+            var _this = this;
+            if (!this._open) {
+                this._open = true;
+                dom_1.display(this.menu);
+                var listener_1 = function (event) {
+                    var target = event.target;
+                    if (target instanceof HTMLElement && !_this.el.contains(target)) {
+                        document.removeEventListener("click", listener_1);
+                        _this._hide_menu();
                     }
-                }
-                else if (hasClass(target, 'pika-prev')) {
-                    self.prevMonth();
-                }
-                else if (hasClass(target, 'pika-next')) {
-                    self.nextMonth();
-                }
-            }
-            if (!hasClass(target, 'pika-select')) {
-                // if this is touch event prevent mouse events emulation
-                if (e.preventDefault) {
-                    e.preventDefault();
-                }
-                else {
-                    e.returnValue = false;
-                    return false;
-                }
-            }
-            else {
-                self._c = true;
-            }
-        };
-        self._onChange = function (e) {
-            e = e || window.event;
-            var target = e.target || e.srcElement;
-            if (!target) {
-                return;
-            }
-            if (hasClass(target, 'pika-select-month')) {
-                self.gotoMonth(target.value);
-            }
-            else if (hasClass(target, 'pika-select-year')) {
-                self.gotoYear(target.value);
-            }
-        };
-        self._onKeyChange = function (e) {
-            e = e || window.event;
-            if (self.isVisible()) {
-                switch (e.keyCode) {
-                    case 13:
-                    case 27:
-                        if (opts.field) {
-                            opts.field.blur();
-                        }
-                        break;
-                    case 37:
-                        self.adjustDate('subtract', 1);
-                        break;
-                    case 38:
-                        self.adjustDate('subtract', 7);
-                        break;
-                    case 39:
-                        self.adjustDate('add', 1);
-                        break;
-                    case 40:
-                        self.adjustDate('add', 7);
-                        break;
-                    case 8:
-                    case 46:
-                        self.setDate(null);
-                        break;
-                }
-            }
-        };
-        self._parseFieldValue = function () {
-            if (opts.parse) {
-                return opts.parse(opts.field.value, opts.format);
-            }
-            else {
-                return new Date(Date.parse(opts.field.value));
-            }
-        };
-        self._onInputChange = function (e) {
-            var date;
-            if (e.firedBy === self) {
-                return;
-            }
-            date = self._parseFieldValue();
-            if (isDate(date)) {
-                self.setDate(date);
-            }
-            if (!self._v) {
-                self.show();
-            }
-        };
-        self._onInputFocus = function () {
-            self.show();
-        };
-        self._onInputClick = function () {
-            self.show();
-        };
-        self._onInputBlur = function () {
-            // IE allows pika div to gain focus; catch blur the input field
-            var pEl = document.activeElement;
-            do {
-                if (hasClass(pEl, 'pika-single')) {
-                    return;
-                }
-            } while ((pEl = pEl.parentNode));
-            if (!self._c) {
-                self._b = setTimeout(function () {
-                    self.hide();
-                }, 50);
-            }
-            self._c = false;
-        };
-        self._onClick = function (e) {
-            e = e || window.event;
-            var target = e.target || e.srcElement, pEl = target;
-            if (!target) {
-                return;
-            }
-            do {
-                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
-                    return;
-                }
-            } while ((pEl = pEl.parentNode));
-            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
-                self.hide();
-            }
-        };
-        self.el = document.createElement('div');
-        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '') + (opts.theme ? ' ' + opts.theme : '');
-        addEvent(self.el, 'mousedown', self._onMouseDown, true);
-        addEvent(self.el, 'touchend', self._onMouseDown, true);
-        addEvent(self.el, 'change', self._onChange);
-        if (opts.keyboardInput) {
-            addEvent(document, 'keydown', self._onKeyChange);
-        }
-        if (opts.field) {
-            if (opts.container) {
-                opts.container.appendChild(self.el);
-            }
-            else if (opts.bound) {
-                document.body.appendChild(self.el);
-            }
-            else {
-                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
-            }
-            addEvent(opts.field, 'change', self._onInputChange);
-            if (!opts.defaultDate) {
-                opts.defaultDate = self._parseFieldValue();
-                opts.setDefaultDate = true;
-            }
-        }
-        var defDate = opts.defaultDate;
-        if (isDate(defDate)) {
-            if (opts.setDefaultDate) {
-                self.setDate(defDate, true);
-            }
-            else {
-                self.gotoDate(defDate);
-            }
-        }
-        else {
-            self.gotoDate(new Date());
-        }
-        if (opts.bound) {
-            this.hide();
-            self.el.className += ' is-bound';
-            addEvent(opts.trigger, 'click', self._onInputClick);
-            addEvent(opts.trigger, 'focus', self._onInputFocus);
-            addEvent(opts.trigger, 'blur', self._onInputBlur);
-        }
-        else {
-            this.show();
-        }
-    };
-    /**
-     * public Pikaday API
-     */
-    Pikaday.prototype = {
-        /**
-         * configure functionality
-         */
-        config: function (options) {
-            if (!this._o) {
-                this._o = extend({}, defaults, true);
-            }
-            var opts = extend(this._o, options, true);
-            opts.isRTL = !!opts.isRTL;
-            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
-            opts.theme = (typeof opts.theme) === 'string' && opts.theme ? opts.theme : null;
-            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
-            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
-            opts.disableWeekends = !!opts.disableWeekends;
-            opts.disableDayFn = (typeof opts.disableDayFn) === 'function' ? opts.disableDayFn : null;
-            var nom = parseInt(opts.numberOfMonths, 10) || 1;
-            opts.numberOfMonths = nom > 4 ? 4 : nom;
-            if (!isDate(opts.minDate)) {
-                opts.minDate = false;
-            }
-            if (!isDate(opts.maxDate)) {
-                opts.maxDate = false;
-            }
-            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
-                opts.maxDate = opts.minDate = false;
-            }
-            if (opts.minDate) {
-                this.setMinDate(opts.minDate);
-            }
-            if (opts.maxDate) {
-                this.setMaxDate(opts.maxDate);
-            }
-            if (isArray(opts.yearRange)) {
-                var fallback = new Date().getFullYear() - 10;
-                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
-                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
-            }
-            else {
-                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
-                if (opts.yearRange > 100) {
-                    opts.yearRange = 100;
-                }
-            }
-            return opts;
-        },
-        /**
-         * return a formatted string of the current selection (using Moment.js if available)
-         */
-        toString: function (format) {
-            format = format || this._o.format;
-            if (!isDate(this._d)) {
-                return '';
-            }
-            if (this._o.toString) {
-                return this._o.toString(this._d, format);
-            }
-            return this._d.toDateString();
-        },
-        /**
-         * return a Date object of the current selection
-         */
-        getDate: function () {
-            return isDate(this._d) ? new Date(this._d.getTime()) : null;
-        },
-        /**
-         * set the current selection
-         */
-        setDate: function (date, preventOnSelect) {
-            if (!date) {
-                this._d = null;
-                if (this._o.field) {
-                    this._o.field.value = '';
-                    fireEvent(this._o.field, 'change', { firedBy: this });
-                }
-                return this.draw();
-            }
-            if (typeof date === 'string') {
-                date = new Date(Date.parse(date));
-            }
-            if (!isDate(date)) {
-                return;
-            }
-            var min = this._o.minDate, max = this._o.maxDate;
-            if (isDate(min) && date < min) {
-                date = min;
-            }
-            else if (isDate(max) && date > max) {
-                date = max;
-            }
-            this._d = new Date(date.getTime());
-            setToStartOfDay(this._d);
-            this.gotoDate(this._d);
-            if (this._o.field) {
-                this._o.field.value = this.toString();
-                fireEvent(this._o.field, 'change', { firedBy: this });
-            }
-            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
-                this._o.onSelect.call(this, this.getDate());
-            }
-        },
-        /**
-         * clear and reset the date
-         */
-        clear: function () {
-            this.setDate(null);
-        },
-        /**
-         * change view to a specific date
-         */
-        gotoDate: function (date) {
-            var newCalendar = true;
-            if (!isDate(date)) {
-                return;
-            }
-            if (this.calendars) {
-                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1), lastVisibleDate = new Date(this.calendars[this.calendars.length - 1].year, this.calendars[this.calendars.length - 1].month, 1), visibleDate = date.getTime();
-                // get the end of the month
-                lastVisibleDate.setMonth(lastVisibleDate.getMonth() + 1);
-                lastVisibleDate.setDate(lastVisibleDate.getDate() - 1);
-                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
-            }
-            if (newCalendar) {
-                this.calendars = [{
-                        month: date.getMonth(),
-                        year: date.getFullYear()
-                    }];
-                if (this._o.mainCalendar === 'right') {
-                    this.calendars[0].month += 1 - this._o.numberOfMonths;
-                }
-            }
-            this.adjustCalendars();
-        },
-        adjustDate: function (sign, days) {
-            var day = this.getDate() || new Date();
-            var difference = parseInt(days) * 24 * 60 * 60 * 1000;
-            var newDay;
-            if (sign === 'add') {
-                newDay = new Date(day.valueOf() + difference);
-            }
-            else if (sign === 'subtract') {
-                newDay = new Date(day.valueOf() - difference);
-            }
-            this.setDate(newDay);
-        },
-        adjustCalendars: function () {
-            this.calendars[0] = adjustCalendar(this.calendars[0]);
-            for (var c = 1; c < this._o.numberOfMonths; c++) {
-                this.calendars[c] = adjustCalendar({
-                    month: this.calendars[0].month + c,
-                    year: this.calendars[0].year
-                });
-            }
-            this.draw();
-        },
-        gotoToday: function () {
-            this.gotoDate(new Date());
-        },
-        /**
-         * change view to a specific month (zero-index, e.g. 0: January)
-         */
-        gotoMonth: function (month) {
-            if (!isNaN(month)) {
-                this.calendars[0].month = parseInt(month, 10);
-                this.adjustCalendars();
-            }
-        },
-        nextMonth: function () {
-            this.calendars[0].month++;
-            this.adjustCalendars();
-        },
-        prevMonth: function () {
-            this.calendars[0].month--;
-            this.adjustCalendars();
-        },
-        /**
-         * change view to a specific full year (e.g. "2012")
-         */
-        gotoYear: function (year) {
-            if (!isNaN(year)) {
-                this.calendars[0].year = parseInt(year, 10);
-                this.adjustCalendars();
-            }
-        },
-        /**
-         * change the minDate
-         */
-        setMinDate: function (value) {
-            if (value instanceof Date) {
-                setToStartOfDay(value);
-                this._o.minDate = value;
-                this._o.minYear = value.getFullYear();
-                this._o.minMonth = value.getMonth();
-            }
-            else {
-                this._o.minDate = defaults.minDate;
-                this._o.minYear = defaults.minYear;
-                this._o.minMonth = defaults.minMonth;
-                this._o.startRange = defaults.startRange;
-            }
-            this.draw();
-        },
-        /**
-         * change the maxDate
-         */
-        setMaxDate: function (value) {
-            if (value instanceof Date) {
-                setToStartOfDay(value);
-                this._o.maxDate = value;
-                this._o.maxYear = value.getFullYear();
-                this._o.maxMonth = value.getMonth();
-            }
-            else {
-                this._o.maxDate = defaults.maxDate;
-                this._o.maxYear = defaults.maxYear;
-                this._o.maxMonth = defaults.maxMonth;
-                this._o.endRange = defaults.endRange;
-            }
-            this.draw();
-        },
-        setStartRange: function (value) {
-            this._o.startRange = value;
-        },
-        setEndRange: function (value) {
-            this._o.endRange = value;
-        },
-        /**
-         * refresh the HTML
-         */
-        draw: function (force) {
-            if (!this._v && !force) {
-                return;
-            }
-            var opts = this._o, minYear = opts.minYear, maxYear = opts.maxYear, minMonth = opts.minMonth, maxMonth = opts.maxMonth, html = '', randId;
-            if (this._y <= minYear) {
-                this._y = minYear;
-                if (!isNaN(minMonth) && this._m < minMonth) {
-                    this._m = minMonth;
-                }
-            }
-            if (this._y >= maxYear) {
-                this._y = maxYear;
-                if (!isNaN(maxMonth) && this._m > maxMonth) {
-                    this._m = maxMonth;
-                }
-            }
-            for (var c = 0; c < opts.numberOfMonths; c++) {
-                randId = 'pika-title-' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
-                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year, randId) + this.render(this.calendars[c].year, this.calendars[c].month, randId) + '</div>';
-            }
-            this.el.innerHTML = html;
-            if (opts.bound) {
-                if (opts.field.type !== 'hidden') {
-                    setTimeout(function () {
-                        opts.trigger.focus();
-                    }, 1);
-                }
-            }
-            if (typeof this._o.onDraw === 'function') {
-                this._o.onDraw(this);
-            }
-            if (opts.bound) {
-                // let the screen reader user know to use arrow keys
-                opts.field.setAttribute('aria-label', opts.ariaLabel);
-            }
-        },
-        adjustPosition: function () {
-            var field, pEl, width, height, viewportWidth, viewportHeight, scrollTop, left, top, clientRect, leftAligned, bottomAligned;
-            if (this._o.container)
-                return;
-            this.el.style.position = 'absolute';
-            field = this._o.trigger;
-            pEl = field;
-            width = this.el.offsetWidth;
-            height = this.el.offsetHeight;
-            viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-            viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
-            leftAligned = true;
-            bottomAligned = true;
-            if (typeof field.getBoundingClientRect === 'function') {
-                clientRect = field.getBoundingClientRect();
-                left = clientRect.left + window.pageXOffset;
-                top = clientRect.bottom + window.pageYOffset;
-            }
-            else {
-                left = pEl.offsetLeft;
-                top = pEl.offsetTop + pEl.offsetHeight;
-                while ((pEl = pEl.offsetParent)) {
-                    left += pEl.offsetLeft;
-                    top += pEl.offsetTop;
-                }
-            }
-            // default position is bottom & left
-            if ((this._o.reposition && left + width > viewportWidth) ||
-                (this._o.position.indexOf('right') > -1 &&
-                    left - width + field.offsetWidth > 0)) {
-                left = left - width + field.offsetWidth;
-                leftAligned = false;
-            }
-            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
-                (this._o.position.indexOf('top') > -1 &&
-                    top - height - field.offsetHeight > 0)) {
-                top = top - height - field.offsetHeight;
-                bottomAligned = false;
-            }
-            this.el.style.left = left + 'px';
-            this.el.style.top = top + 'px';
-            addClass(this.el, leftAligned ? 'left-aligned' : 'right-aligned');
-            addClass(this.el, bottomAligned ? 'bottom-aligned' : 'top-aligned');
-            removeClass(this.el, !leftAligned ? 'left-aligned' : 'right-aligned');
-            removeClass(this.el, !bottomAligned ? 'bottom-aligned' : 'top-aligned');
-        },
-        /**
-         * render HTML for a particular month
-         */
-        render: function (year, month, randId) {
-            var opts = this._o, now = new Date(), days = getDaysInMonth(year, month), before = new Date(year, month, 1).getDay(), data = [], row = [];
-            setToStartOfDay(now);
-            if (opts.firstDay > 0) {
-                before -= opts.firstDay;
-                if (before < 0) {
-                    before += 7;
-                }
-            }
-            var previousMonth = month === 0 ? 11 : month - 1, nextMonth = month === 11 ? 0 : month + 1, yearOfPreviousMonth = month === 0 ? year - 1 : year, yearOfNextMonth = month === 11 ? year + 1 : year, daysInPreviousMonth = getDaysInMonth(yearOfPreviousMonth, previousMonth);
-            var cells = days + before, after = cells;
-            while (after > 7) {
-                after -= 7;
-            }
-            cells += 7 - after;
-            var isWeekSelected = false;
-            for (var i = 0, r = 0; i < cells; i++) {
-                var day = new Date(year, month, 1 + (i - before)), isSelected = isDate(this._d) ? compareDates(day, this._d) : false, isToday = compareDates(day, now), hasEvent = opts.events.indexOf(day.toDateString()) !== -1 ? true : false, isEmpty = i < before || i >= (days + before), dayNumber = 1 + (i - before), monthNumber = month, yearNumber = year, isStartRange = opts.startRange && compareDates(opts.startRange, day), isEndRange = opts.endRange && compareDates(opts.endRange, day), isInRange = opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange, isDisabled = (opts.minDate && day < opts.minDate) ||
-                    (opts.maxDate && day > opts.maxDate) ||
-                    (opts.disableWeekends && isWeekend(day)) ||
-                    (opts.disableDayFn && opts.disableDayFn(day));
-                if (isEmpty) {
-                    if (i < before) {
-                        dayNumber = daysInPreviousMonth + dayNumber;
-                        monthNumber = previousMonth;
-                        yearNumber = yearOfPreviousMonth;
-                    }
-                    else {
-                        dayNumber = dayNumber - days;
-                        monthNumber = nextMonth;
-                        yearNumber = yearOfNextMonth;
-                    }
-                }
-                var dayConfig = {
-                    day: dayNumber,
-                    month: monthNumber,
-                    year: yearNumber,
-                    hasEvent: hasEvent,
-                    isSelected: isSelected,
-                    isToday: isToday,
-                    isDisabled: isDisabled,
-                    isEmpty: isEmpty,
-                    isStartRange: isStartRange,
-                    isEndRange: isEndRange,
-                    isInRange: isInRange,
-                    showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths,
-                    enableSelectionDaysInNextAndPreviousMonths: opts.enableSelectionDaysInNextAndPreviousMonths
                 };
-                if (opts.pickWholeWeek && isSelected) {
-                    isWeekSelected = true;
+                document.addEventListener("click", listener_1);
+            }
+        };
+        DropdownView.prototype._hide_menu = function () {
+            if (this._open) {
+                this._open = false;
+                dom_1.undisplay(this.menu);
+            }
+        };
+        DropdownView.prototype._toggle_menu = function () {
+            if (this._open)
+                this._hide_menu();
+            else
+                this._show_menu();
+        };
+        DropdownView.prototype.click = function () {
+            if (!this.model.is_split)
+                this._toggle_menu();
+            else {
+                this._hide_menu();
+                this.model.trigger_event(new bokeh_events_1.ButtonClick());
+                this.model.value = this.model.default_value;
+                if (this.model.callback != null)
+                    this.model.callback.execute(this.model);
+                _super.prototype.click.call(this);
+            }
+        };
+        DropdownView.prototype._item_click = function (i) {
+            this._hide_menu();
+            var item = this.model.menu[i];
+            if (item != null) {
+                var value_or_callback = types_1.isString(item) ? item : item[1];
+                if (types_1.isString(value_or_callback)) {
+                    this.model.trigger_event(new bokeh_events_1.MenuItemClick(value_or_callback));
+                    this.model.value = value_or_callback;
+                    if (this.model.callback != null)
+                        this.model.callback.execute(this.model); // XXX: {index: i, item: value_or_callback})
                 }
-                row.push(renderDay(dayConfig));
-                if (++r === 7) {
-                    if (opts.showWeekNumber) {
-                        row.unshift(renderWeek(i - before, month, year));
-                    }
-                    data.push(renderRow(row, opts.isRTL, opts.pickWholeWeek, isWeekSelected));
-                    row = [];
-                    r = 0;
-                    isWeekSelected = false;
+                else {
+                    value_or_callback.execute(this.model, { index: i }); // TODO
+                    if (this.model.callback != null)
+                        this.model.callback.execute(this.model); // XXX: {index: i})
                 }
             }
-            return renderTable(opts, data, randId);
-        },
-        isVisible: function () {
-            return this._v;
-        },
-        show: function () {
-            if (!this.isVisible()) {
-                this._v = true;
-                this.draw();
-                removeClass(this.el, 'is-hidden');
-                if (this._o.bound) {
-                    addEvent(document, 'click', this._onClick);
-                    this.adjustPosition();
-                }
-                if (typeof this._o.onOpen === 'function') {
-                    this._o.onOpen.call(this);
-                }
-            }
-        },
-        hide: function () {
-            var v = this._v;
-            if (v !== false) {
-                if (this._o.bound) {
-                    removeEvent(document, 'click', this._onClick);
-                }
-                this.el.style.position = 'static'; // reset
-                this.el.style.left = 'auto';
-                this.el.style.top = 'auto';
-                addClass(this.el, 'is-hidden');
-                this._v = false;
-                if (v !== undefined && typeof this._o.onClose === 'function') {
-                    this._o.onClose.call(this);
-                }
-            }
-        },
-        /**
-         * GAME OVER
-         */
-        destroy: function () {
-            var opts = this._o;
-            this.hide();
-            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
-            removeEvent(this.el, 'touchend', this._onMouseDown, true);
-            removeEvent(this.el, 'change', this._onChange);
-            if (opts.keyboardInput) {
-                removeEvent(document, 'keydown', this._onKeyChange);
-            }
-            if (opts.field) {
-                removeEvent(opts.field, 'change', this._onInputChange);
-                if (opts.bound) {
-                    removeEvent(opts.trigger, 'click', this._onInputClick);
-                    removeEvent(opts.trigger, 'focus', this._onInputFocus);
-                    removeEvent(opts.trigger, 'blur', this._onInputBlur);
-                }
-            }
-            if (this.el.parentNode) {
-                this.el.parentNode.removeChild(this.el);
-            }
+        };
+        return DropdownView;
+    }(abstract_button_1.AbstractButtonView));
+    exports.DropdownView = DropdownView;
+    DropdownView.__name__ = "DropdownView";
+    var Dropdown = /** @class */ (function (_super) {
+        tslib_1.__extends(Dropdown, _super);
+        function Dropdown(attrs) {
+            return _super.call(this, attrs) || this;
         }
-    };
-    module.exports = Pikaday;
-}
-
-}, {"models/widgets/abstract_button":436,"models/widgets/abstract_icon":437,"models/widgets/abstract_slider":438,"models/widgets/autocomplete_input":439,"models/widgets/button":440,"models/widgets/button_group":441,"models/widgets/checkbox_button_group":442,"models/widgets/checkbox_group":443,"models/widgets/color_picker":444,"models/widgets/control":445,"models/widgets/date_picker":446,"models/widgets/date_range_slider":447,"models/widgets/date_slider":448,"models/widgets/div":449,"models/widgets/dropdown":450,"models/widgets/file_input":451,"models/widgets/index":452,"models/widgets/input_group":453,"models/widgets/input_widget":454,"models/widgets/main":455,"models/widgets/markup":456,"models/widgets/multiselect":457,"models/widgets/paragraph":458,"models/widgets/password_input":459,"models/widgets/pretext":460,"models/widgets/radio_button_group":461,"models/widgets/radio_group":462,"models/widgets/range_slider":463,"models/widgets/selectbox":464,"models/widgets/slider":465,"models/widgets/spinner":466,"models/widgets/text_input":467,"models/widgets/textarea_input":468,"models/widgets/toggle":469,"models/widgets/widget":487,"styles/clearfix":471,"styles/widgets/inputs":472,"styles/widgets/nouislider":473,"styles/widgets/pikaday":474,"styles/widgets/sliders":475}, 455, null);
+        Dropdown.init_Dropdown = function () {
+            this.prototype.default_view = DropdownView;
+            this.define({
+                split: [p.Boolean, false],
+                menu: [p.Array, []],
+                value: [p.String],
+                default_value: [p.String],
+            });
+            this.override({
+                label: "Dropdown",
+            });
+        };
+        Object.defineProperty(Dropdown.prototype, "is_split", {
+            get: function () {
+                return this.split || this.default_value != null;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Dropdown;
+    }(abstract_button_1.AbstractButton));
+    exports.Dropdown = Dropdown;
+    Dropdown.__name__ = "Dropdown";
+    Dropdown.init_Dropdown();
+},
+501: /* models/widgets/file_input.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var p = require(121) /* ../../core/properties */;
+    var widget_1 = require(534) /* ./widget */;
+    var FileInputView = /** @class */ (function (_super) {
+        tslib_1.__extends(FileInputView, _super);
+        function FileInputView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        FileInputView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.change, function () { return _this.render(); });
+            this.connect(this.model.properties.width.change, function () { return _this.render(); });
+        };
+        FileInputView.prototype.render = function () {
+            var _this = this;
+            if (this.dialogEl) {
+                return;
+            }
+            this.dialogEl = document.createElement('input');
+            this.dialogEl.type = "file";
+            this.dialogEl.multiple = false;
+            if (this.model.accept != null && this.model.accept != '')
+                this.dialogEl.accept = this.model.accept;
+            this.dialogEl.style.width = "{this.model.width}px";
+            this.dialogEl.onchange = function (e) { return _this.load_file(e); };
+            this.el.appendChild(this.dialogEl);
+        };
+        FileInputView.prototype.load_file = function (e) {
+            var _this = this;
+            var reader = new FileReader();
+            this.model.filename = e.target.files[0].name;
+            reader.onload = function (e) { return _this.file(e); };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+        FileInputView.prototype.file = function (e) {
+            var file = e.target.result;
+            var file_arr = file.split(",");
+            var content = file_arr[1];
+            var header = file_arr[0].split(":")[1].split(";")[0];
+            this.model.value = content;
+            this.model.mime_type = header;
+        };
+        return FileInputView;
+    }(widget_1.WidgetView));
+    exports.FileInputView = FileInputView;
+    FileInputView.__name__ = "FileInputView";
+    var FileInput = /** @class */ (function (_super) {
+        tslib_1.__extends(FileInput, _super);
+        function FileInput(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        FileInput.init_FileInput = function () {
+            this.prototype.default_view = FileInputView;
+            this.define({
+                value: [p.String, ''],
+                mime_type: [p.String, ''],
+                filename: [p.String, ''],
+                accept: [p.String, ''],
+            });
+        };
+        return FileInput;
+    }(widget_1.Widget));
+    exports.FileInput = FileInput;
+    FileInput.__name__ = "FileInput";
+    FileInput.init_FileInput();
+},
+502: /* models/widgets/multiselect.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var types_1 = require(109) /* ../../core/util/types */;
+    var data_structures_1 = require(117) /* ../../core/util/data_structures */;
+    var p = require(121) /* ../../core/properties */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var MultiSelectView = /** @class */ (function (_super) {
+        tslib_1.__extends(MultiSelectView, _super);
+        function MultiSelectView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        MultiSelectView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.value.change, function () { return _this.render_selection(); });
+            this.connect(this.model.properties.options.change, function () { return _this.render(); });
+            this.connect(this.model.properties.name.change, function () { return _this.render(); });
+            this.connect(this.model.properties.title.change, function () { return _this.render(); });
+            this.connect(this.model.properties.size.change, function () { return _this.render(); });
+            this.connect(this.model.properties.disabled.change, function () { return _this.render(); });
+        };
+        MultiSelectView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            var options = this.model.options.map(function (opt) {
+                var value, _label;
+                if (types_1.isString(opt))
+                    value = _label = opt;
+                else
+                    value = opt[0], _label = opt[1];
+                return dom_1.option({ value: value }, _label);
+            });
+            this.select_el = dom_1.select({
+                multiple: true,
+                class: inputs_1.bk_input,
+                name: this.model.name,
+                disabled: this.model.disabled,
+            }, options);
+            this.select_el.addEventListener("change", function () { return _this.change_input(); });
+            this.group_el.appendChild(this.select_el);
+            this.render_selection();
+        };
+        MultiSelectView.prototype.render_selection = function () {
+            var selected = new data_structures_1.Set(this.model.value);
+            for (var _i = 0, _a = Array.from(this.el.querySelectorAll('option')); _i < _a.length; _i++) {
+                var el = _a[_i];
+                el.selected = selected.has(el.value);
+            }
+            // Note that some browser implementations might not reduce
+            // the number of visible options for size <= 3.
+            this.select_el.size = this.model.size;
+        };
+        MultiSelectView.prototype.change_input = function () {
+            var is_focused = this.el.querySelector('select:focus') != null;
+            var values = [];
+            for (var _i = 0, _a = Array.from(this.el.querySelectorAll('option')); _i < _a.length; _i++) {
+                var el = _a[_i];
+                if (el.selected)
+                    values.push(el.value);
+            }
+            this.model.value = values;
+            _super.prototype.change_input.call(this);
+            // Restore focus back to the <select> afterwards,
+            // so that even if python on_change callback is invoked,
+            // focus remains on <select> and one can seamlessly scroll
+            // up/down.
+            if (is_focused)
+                this.select_el.focus();
+        };
+        return MultiSelectView;
+    }(input_widget_1.InputWidgetView));
+    exports.MultiSelectView = MultiSelectView;
+    MultiSelectView.__name__ = "MultiSelectView";
+    var MultiSelect = /** @class */ (function (_super) {
+        tslib_1.__extends(MultiSelect, _super);
+        function MultiSelect(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        MultiSelect.init_MultiSelect = function () {
+            this.prototype.default_view = MultiSelectView;
+            this.define({
+                value: [p.Array, []],
+                options: [p.Array, []],
+                size: [p.Number, 4],
+            });
+        };
+        return MultiSelect;
+    }(input_widget_1.InputWidget));
+    exports.MultiSelect = MultiSelect;
+    MultiSelect.__name__ = "MultiSelect";
+    MultiSelect.init_MultiSelect();
+},
+503: /* models/widgets/paragraph.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var markup_1 = require(498) /* ./markup */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var ParagraphView = /** @class */ (function (_super) {
+        tslib_1.__extends(ParagraphView, _super);
+        function ParagraphView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ParagraphView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            // This overrides default user-agent styling and helps layout work
+            var content = dom_1.p({ style: { margin: 0 } }, this.model.text);
+            this.markup_el.appendChild(content);
+        };
+        return ParagraphView;
+    }(markup_1.MarkupView));
+    exports.ParagraphView = ParagraphView;
+    ParagraphView.__name__ = "ParagraphView";
+    var Paragraph = /** @class */ (function (_super) {
+        tslib_1.__extends(Paragraph, _super);
+        function Paragraph(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Paragraph.init_Paragraph = function () {
+            this.prototype.default_view = ParagraphView;
+        };
+        return Paragraph;
+    }(markup_1.Markup));
+    exports.Paragraph = Paragraph;
+    Paragraph.__name__ = "Paragraph";
+    Paragraph.init_Paragraph();
+},
+504: /* models/widgets/password_input.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var text_input_1 = require(479) /* ./text_input */;
+    var PasswordInputView = /** @class */ (function (_super) {
+        tslib_1.__extends(PasswordInputView, _super);
+        function PasswordInputView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PasswordInputView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            this.input_el.type = "password";
+        };
+        return PasswordInputView;
+    }(text_input_1.TextInputView));
+    exports.PasswordInputView = PasswordInputView;
+    PasswordInputView.__name__ = "PasswordInputView";
+    var PasswordInput = /** @class */ (function (_super) {
+        tslib_1.__extends(PasswordInput, _super);
+        function PasswordInput(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        PasswordInput.init_PasswordInput = function () {
+            this.prototype.default_view = PasswordInputView;
+        };
+        return PasswordInput;
+    }(text_input_1.TextInput));
+    exports.PasswordInput = PasswordInput;
+    PasswordInput.__name__ = "PasswordInput";
+    PasswordInput.init_PasswordInput();
+},
+505: /* models/widgets/pretext.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var markup_1 = require(498) /* ./markup */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var PreTextView = /** @class */ (function (_super) {
+        tslib_1.__extends(PreTextView, _super);
+        function PreTextView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PreTextView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            var content = dom_1.pre({ style: { overflow: "auto" } }, this.model.text);
+            this.markup_el.appendChild(content);
+        };
+        return PreTextView;
+    }(markup_1.MarkupView));
+    exports.PreTextView = PreTextView;
+    PreTextView.__name__ = "PreTextView";
+    var PreText = /** @class */ (function (_super) {
+        tslib_1.__extends(PreText, _super);
+        function PreText(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        PreText.init_PreText = function () {
+            this.prototype.default_view = PreTextView;
+        };
+        return PreText;
+    }(markup_1.Markup));
+    exports.PreText = PreText;
+    PreText.__name__ = "PreText";
+    PreText.init_PreText();
+},
+506: /* models/widgets/radio_button_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var button_group_1 = require(484) /* ./button_group */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var RadioButtonGroupView = /** @class */ (function (_super) {
+        tslib_1.__extends(RadioButtonGroupView, _super);
+        function RadioButtonGroupView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RadioButtonGroupView.prototype.change_active = function (i) {
+            if (this.model.active !== i) {
+                this.model.active = i;
+                if (this.model.callback != null)
+                    this.model.callback.execute(this.model);
+            }
+        };
+        RadioButtonGroupView.prototype._update_active = function () {
+            var active = this.model.active;
+            this._buttons.forEach(function (button, i) {
+                dom_1.classes(button).toggle(mixins_1.bk_active, active === i);
+            });
+        };
+        return RadioButtonGroupView;
+    }(button_group_1.ButtonGroupView));
+    exports.RadioButtonGroupView = RadioButtonGroupView;
+    RadioButtonGroupView.__name__ = "RadioButtonGroupView";
+    var RadioButtonGroup = /** @class */ (function (_super) {
+        tslib_1.__extends(RadioButtonGroup, _super);
+        function RadioButtonGroup(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        RadioButtonGroup.init_RadioButtonGroup = function () {
+            this.prototype.default_view = RadioButtonGroupView;
+            this.define({
+                active: [p.Any, null],
+            });
+        };
+        return RadioButtonGroup;
+    }(button_group_1.ButtonGroup));
+    exports.RadioButtonGroup = RadioButtonGroup;
+    RadioButtonGroup.__name__ = "RadioButtonGroup";
+    RadioButtonGroup.init_RadioButtonGroup();
+},
+507: /* models/widgets/radio_group.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var string_1 = require(127) /* ../../core/util/string */;
+    var p = require(121) /* ../../core/properties */;
+    var input_group_1 = require(486) /* ./input_group */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var RadioGroupView = /** @class */ (function (_super) {
+        tslib_1.__extends(RadioGroupView, _super);
+        function RadioGroupView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RadioGroupView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            var group = dom_1.div({ class: [inputs_1.bk_input_group, this.model.inline ? mixins_1.bk_inline : null] });
+            this.el.appendChild(group);
+            var name = string_1.uniqueId();
+            var _a = this.model, active = _a.active, labels = _a.labels;
+            var _loop_1 = function (i) {
+                var radio = dom_1.input({ type: "radio", name: name, value: "" + i });
+                radio.addEventListener("change", function () { return _this.change_active(i); });
+                if (this_1.model.disabled)
+                    radio.disabled = true;
+                if (i == active)
+                    radio.checked = true;
+                var label_el = dom_1.label({}, radio, dom_1.span({}, labels[i]));
+                group.appendChild(label_el);
+            };
+            var this_1 = this;
+            for (var i = 0; i < labels.length; i++) {
+                _loop_1(i);
+            }
+        };
+        RadioGroupView.prototype.change_active = function (i) {
+            this.model.active = i;
+            if (this.model.callback != null)
+                this.model.callback.execute(this.model);
+        };
+        return RadioGroupView;
+    }(input_group_1.InputGroupView));
+    exports.RadioGroupView = RadioGroupView;
+    RadioGroupView.__name__ = "RadioGroupView";
+    var RadioGroup = /** @class */ (function (_super) {
+        tslib_1.__extends(RadioGroup, _super);
+        function RadioGroup(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        RadioGroup.init_RadioGroup = function () {
+            this.prototype.default_view = RadioGroupView;
+            this.define({
+                active: [p.Number],
+                labels: [p.Array, []],
+                inline: [p.Boolean, false],
+                callback: [p.Any],
+            });
+        };
+        return RadioGroup;
+    }(input_group_1.InputGroup));
+    exports.RadioGroup = RadioGroup;
+    RadioGroup.__name__ = "RadioGroup";
+    RadioGroup.init_RadioGroup();
+},
+508: /* models/widgets/range_slider.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var numbro = require(255) /* numbro */;
+    var abstract_slider_1 = require(492) /* ./abstract_slider */;
+    var RangeSliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(RangeSliderView, _super);
+        function RangeSliderView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return RangeSliderView;
+    }(abstract_slider_1.AbstractRangeSliderView));
+    exports.RangeSliderView = RangeSliderView;
+    RangeSliderView.__name__ = "RangeSliderView";
+    var RangeSlider = /** @class */ (function (_super) {
+        tslib_1.__extends(RangeSlider, _super);
+        function RangeSlider(attrs) {
+            var _this = _super.call(this, attrs) || this;
+            _this.behaviour = "drag";
+            _this.connected = [false, true, false];
+            return _this;
+        }
+        RangeSlider.init_RangeSlider = function () {
+            this.prototype.default_view = RangeSliderView;
+            this.override({
+                format: "0[.]00",
+            });
+        };
+        RangeSlider.prototype._formatter = function (value, format) {
+            return numbro.format(value, format);
+        };
+        return RangeSlider;
+    }(abstract_slider_1.AbstractSlider));
+    exports.RangeSlider = RangeSlider;
+    RangeSlider.__name__ = "RangeSlider";
+    RangeSlider.init_RangeSlider();
+},
+509: /* models/widgets/selectbox.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var types_1 = require(109) /* ../../core/util/types */;
+    var logging_1 = require(167) /* ../../core/logging */;
+    var p = require(121) /* ../../core/properties */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var SelectView = /** @class */ (function (_super) {
+        tslib_1.__extends(SelectView, _super);
+        function SelectView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        SelectView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.change, function () { return _this.render(); });
+        };
+        SelectView.prototype.build_options = function (values) {
+            var _this = this;
+            return values.map(function (el) {
+                var value, _label;
+                if (types_1.isString(el))
+                    value = _label = el;
+                else
+                    value = el[0], _label = el[1];
+                var selected = _this.model.value == value;
+                return dom_1.option({ selected: selected, value: value }, _label);
+            });
+        };
+        SelectView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            var contents;
+            if (types_1.isArray(this.model.options))
+                contents = this.build_options(this.model.options);
+            else {
+                contents = [];
+                var options = this.model.options;
+                for (var key in options) {
+                    var value = options[key];
+                    contents.push(dom_1.optgroup({ label: key }, this.build_options(value)));
+                }
+            }
+            this.select_el = dom_1.select({
+                class: inputs_1.bk_input,
+                id: this.model.id,
+                name: this.model.name,
+                disabled: this.model.disabled
+            }, contents);
+            this.select_el.addEventListener("change", function () { return _this.change_input(); });
+            this.group_el.appendChild(this.select_el);
+        };
+        SelectView.prototype.change_input = function () {
+            var value = this.select_el.value;
+            logging_1.logger.debug("selectbox: value = " + value);
+            this.model.value = value;
+            _super.prototype.change_input.call(this);
+        };
+        return SelectView;
+    }(input_widget_1.InputWidgetView));
+    exports.SelectView = SelectView;
+    SelectView.__name__ = "SelectView";
+    var Select = /** @class */ (function (_super) {
+        tslib_1.__extends(Select, _super);
+        function Select(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Select.init_Select = function () {
+            this.prototype.default_view = SelectView;
+            this.define({
+                value: [p.String, ''],
+                options: [p.Any, []],
+            });
+        };
+        return Select;
+    }(input_widget_1.InputWidget));
+    exports.Select = Select;
+    Select.__name__ = "Select";
+    Select.init_Select();
+},
+510: /* models/widgets/slider.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var numbro = require(255) /* numbro */;
+    var abstract_slider_1 = require(492) /* ./abstract_slider */;
+    var SliderView = /** @class */ (function (_super) {
+        tslib_1.__extends(SliderView, _super);
+        function SliderView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return SliderView;
+    }(abstract_slider_1.AbstractSliderView));
+    exports.SliderView = SliderView;
+    SliderView.__name__ = "SliderView";
+    var Slider = /** @class */ (function (_super) {
+        tslib_1.__extends(Slider, _super);
+        function Slider(attrs) {
+            var _this = _super.call(this, attrs) || this;
+            _this.behaviour = "tap";
+            _this.connected = [true, false];
+            return _this;
+        }
+        Slider.init_Slider = function () {
+            this.prototype.default_view = SliderView;
+            this.override({
+                format: "0[.]00",
+            });
+        };
+        Slider.prototype._formatter = function (value, format) {
+            return numbro.format(value, format);
+        };
+        return Slider;
+    }(abstract_slider_1.AbstractSlider));
+    exports.Slider = Slider;
+    Slider.__name__ = "Slider";
+    Slider.init_Slider();
+},
+511: /* models/widgets/spinner.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var floor = Math.floor, max = Math.max, min = Math.min;
+    function _get_sig_dig(num) {
+        if (floor(num) !== num)
+            return num.toString().replace('/0+$/', '').split(".")[1].length;
+        return 0;
+    }
+    var SpinnerView = /** @class */ (function (_super) {
+        tslib_1.__extends(SpinnerView, _super);
+        function SpinnerView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        SpinnerView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.low.change, function () {
+                var low = _this.model.low;
+                if (low != null)
+                    _this.input_el.min = low.toFixed(16);
+            });
+            this.connect(this.model.properties.high.change, function () {
+                var high = _this.model.high;
+                if (high != null)
+                    _this.input_el.max = high.toFixed(16);
+            });
+            this.connect(this.model.properties.step.change, function () {
+                var step = _this.model.step;
+                _this.input_el.step = step.toFixed(16);
+            });
+            this.connect(this.model.properties.value.change, function () {
+                var _a = _this.model, value = _a.value, step = _a.step;
+                _this.input_el.value = value.toFixed(_get_sig_dig(step)).replace(/(\.[0-9]*[1-9])0+$|\.0*$/, '$1'); //trim last 0
+            });
+            this.connect(this.model.properties.disabled.change, function () {
+                _this.input_el.disabled = _this.model.disabled;
+            });
+        };
+        SpinnerView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            this.input_el = dom_1.input({
+                type: "number",
+                class: inputs_1.bk_input,
+                name: this.model.name,
+                min: this.model.low,
+                max: this.model.high,
+                value: this.model.value,
+                step: this.model.step,
+                disabled: this.model.disabled,
+            });
+            this.input_el.addEventListener("change", function () { return _this.change_input(); });
+            //this.input_el.addEventListener("input", () => this.change_input())
+            this.group_el.appendChild(this.input_el);
+        };
+        SpinnerView.prototype.change_input = function () {
+            if (this.input_el.value) { //if input is empty skip update
+                var step = this.model.step;
+                var new_value = Number(this.input_el.value);
+                if (this.model.low != null)
+                    new_value = max(new_value, this.model.low);
+                if (this.model.high != null)
+                    new_value = min(new_value, this.model.high);
+                this.model.value = Number(new_value.toFixed(_get_sig_dig(step)));
+                _super.prototype.change_input.call(this);
+            }
+        };
+        return SpinnerView;
+    }(input_widget_1.InputWidgetView));
+    exports.SpinnerView = SpinnerView;
+    SpinnerView.__name__ = "SpinnerView";
+    var Spinner = /** @class */ (function (_super) {
+        tslib_1.__extends(Spinner, _super);
+        function Spinner(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Spinner.init_Spinner = function () {
+            this.prototype.default_view = SpinnerView;
+            this.define({
+                value: [p.Number, 0],
+                low: [p.Number, null],
+                high: [p.Number, null],
+                step: [p.Number, 1],
+            });
+        };
+        return Spinner;
+    }(input_widget_1.InputWidget));
+    exports.Spinner = Spinner;
+    Spinner.__name__ = "Spinner";
+    Spinner.init_Spinner();
+},
+512: /* models/widgets/textarea_input.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var text_input_1 = require(479) /* ./text_input */;
+    var input_widget_1 = require(480) /* ./input_widget */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var inputs_1 = require(481) /* ../../styles/widgets/inputs */;
+    var TextAreaInputView = /** @class */ (function (_super) {
+        tslib_1.__extends(TextAreaInputView, _super);
+        function TextAreaInputView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        TextAreaInputView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.name.change, function () { return _this.input_el.name = _this.model.name || ""; });
+            this.connect(this.model.properties.value.change, function () { return _this.input_el.value = _this.model.value; });
+            this.connect(this.model.properties.disabled.change, function () { return _this.input_el.disabled = _this.model.disabled; });
+            this.connect(this.model.properties.placeholder.change, function () { return _this.input_el.placeholder = _this.model.placeholder; });
+            this.connect(this.model.properties.rows.change, function () { return _this.input_el.rows = _this.model.rows; });
+            this.connect(this.model.properties.cols.change, function () { return _this.input_el.cols = _this.model.cols; });
+            this.connect(this.model.properties.max_length.change, function () { return _this.input_el.maxLength = _this.model.max_length; });
+        };
+        TextAreaInputView.prototype.render = function () {
+            var _this = this;
+            _super.prototype.render.call(this);
+            this.input_el = dom_1.textarea({
+                class: inputs_1.bk_input,
+                name: this.model.name,
+                disabled: this.model.disabled,
+                placeholder: this.model.placeholder,
+                cols: this.model.cols,
+                rows: this.model.rows,
+                maxLength: this.model.max_length,
+            });
+            this.input_el.textContent = this.model.value;
+            this.input_el.addEventListener("change", function () { return _this.change_input(); });
+            this.group_el.appendChild(this.input_el);
+        };
+        TextAreaInputView.prototype.change_input = function () {
+            this.model.value = this.input_el.value;
+            _super.prototype.change_input.call(this);
+        };
+        return TextAreaInputView;
+    }(input_widget_1.InputWidgetView));
+    exports.TextAreaInputView = TextAreaInputView;
+    TextAreaInputView.__name__ = "TextAreaInputView";
+    var TextAreaInput = /** @class */ (function (_super) {
+        tslib_1.__extends(TextAreaInput, _super);
+        function TextAreaInput(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        TextAreaInput.init_TextAreaInput = function () {
+            this.prototype.default_view = TextAreaInputView;
+            this.define({
+                cols: [p.Number, 20],
+                rows: [p.Number, 2],
+                max_length: [p.Number, 500],
+            });
+        };
+        return TextAreaInput;
+    }(text_input_1.TextInput));
+    exports.TextAreaInput = TextAreaInput;
+    TextAreaInput.__name__ = "TextAreaInput";
+    TextAreaInput.init_TextAreaInput();
+},
+513: /* models/widgets/toggle.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var abstract_button_1 = require(474) /* ./abstract_button */;
+    var dom_1 = require(163) /* ../../core/dom */;
+    var p = require(121) /* ../../core/properties */;
+    var mixins_1 = require(240) /* ../../styles/mixins */;
+    var ToggleView = /** @class */ (function (_super) {
+        tslib_1.__extends(ToggleView, _super);
+        function ToggleView() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ToggleView.prototype.connect_signals = function () {
+            var _this = this;
+            _super.prototype.connect_signals.call(this);
+            this.connect(this.model.properties.active.change, function () { return _this._update_active(); });
+        };
+        ToggleView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            this._update_active();
+        };
+        ToggleView.prototype.click = function () {
+            this.model.active = !this.model.active;
+            _super.prototype.click.call(this);
+        };
+        ToggleView.prototype._update_active = function () {
+            dom_1.classes(this.button_el).toggle(mixins_1.bk_active, this.model.active);
+        };
+        return ToggleView;
+    }(abstract_button_1.AbstractButtonView));
+    exports.ToggleView = ToggleView;
+    ToggleView.__name__ = "ToggleView";
+    var Toggle = /** @class */ (function (_super) {
+        tslib_1.__extends(Toggle, _super);
+        function Toggle(attrs) {
+            return _super.call(this, attrs) || this;
+        }
+        Toggle.init_Toggle = function () {
+            this.prototype.default_view = ToggleView;
+            this.define({
+                active: [p.Boolean, false],
+            });
+            this.override({
+                label: "Toggle",
+            });
+        };
+        return Toggle;
+    }(abstract_button_1.AbstractButton));
+    exports.Toggle = Toggle;
+    Toggle.__name__ = "Toggle";
+    Toggle.init_Toggle();
+},
+}, 472, {"models/widgets/main":472,"models/widgets/index":473,"models/widgets/abstract_button":474,"models/widgets/control":475,"models/widgets/widget":534,"models/widgets/abstract_icon":477,"models/widgets/autocomplete_input":478,"models/widgets/text_input":479,"models/widgets/input_widget":480,"styles/widgets/inputs":481,"models/widgets/button":482,"models/widgets/checkbox_button_group":483,"models/widgets/button_group":484,"models/widgets/checkbox_group":485,"models/widgets/input_group":486,"models/widgets/color_picker":487,"models/widgets/date_picker":488,"styles/widgets/pikaday":490,"models/widgets/date_range_slider":491,"models/widgets/abstract_slider":492,"styles/widgets/sliders":494,"styles/widgets/nouislider":495,"models/widgets/date_slider":496,"models/widgets/div":497,"models/widgets/markup":498,"styles/clearfix":499,"models/widgets/dropdown":500,"models/widgets/file_input":501,"models/widgets/multiselect":502,"models/widgets/paragraph":503,"models/widgets/password_input":504,"models/widgets/pretext":505,"models/widgets/radio_button_group":506,"models/widgets/radio_group":507,"models/widgets/range_slider":508,"models/widgets/selectbox":509,"models/widgets/slider":510,"models/widgets/spinner":511,"models/widgets/textarea_input":512,"models/widgets/toggle":513}, {});
 })
 
 //# sourceMappingURL=bokeh-widgets.js.map

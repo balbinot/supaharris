@@ -25,7 +25,7 @@ class ParameterFactory(factory.DjangoModelFactory):
         model = Parameter
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestParameter {0}".format(n))
     description = factory.LazyAttribute(lambda _: faker.text(
         max_nb_chars=faker.random_int(min=42, max=255)
     ))
@@ -60,7 +60,7 @@ class ReferenceFactory(factory.DjangoModelFactory):
         model = Reference
 
     title = factory.LazyAttribute(lambda _: faker.sentence())
-    first_author = factory.LazyAttribute(lambda _: faker.last_name())
+    first_author = factory.Sequence(lambda n: "TestReference {0}".format(n))
     journal = factory.LazyAttribute(lambda _:
         faker.random_int(min=0, max=len(Reference.JOURNALS)-1)
     )
@@ -102,7 +102,7 @@ class AstroObjectClassificationFactory(factory.DjangoModelFactory):
         model = AstroObjectClassification
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestClassification {0}".format(n))
     abbreviation = factory.LazyAttribute(lambda _: faker.name())
 
 
@@ -111,7 +111,7 @@ class AstroObjectFactory(factory.DjangoModelFactory):
         model = AstroObject
         django_get_or_create = ("name",)
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.Sequence(lambda n: "TestObject {0}".format(n))
 
     @factory.post_generation
     def classifications(self, create, extracted, **kwargs):
@@ -133,13 +133,13 @@ class ProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
 
-    profile_type = factory.LazyAttribute(lambda _: faker.name())
     reference = factory.SubFactory(ReferenceFactory)
     astro_object = factory.SubFactory(AstroObjectFactory)
-    # profile_type
-    # profile
-    # model_parameters
-    # model_flavour
+
+    x = list(range(0, 10, 1))
+    y = factory.LazyAttribute(lambda _: [i**2 for i in _.x])
+    x_description = factory.Sequence(lambda n: "x{0}".format(n))
+    y_description = factory.Sequence(lambda n: "y{0}".format(n))
 
 
 class AuxiliaryFactory(factory.DjangoModelFactory):

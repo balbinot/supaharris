@@ -331,11 +331,12 @@ class Profile(models.Model):
         AstroObject, related_name="profiles", on_delete=models.CASCADE
     )
 
-    # TODO: restrict options of profile_type?
-    profile_type = models.CharField(max_length=256, null=True, blank=True)
-    profile = JSONField()
-    model_parameters = JSONField()
-    model_flavour = models.CharField(max_length=256, null=True, blank=True)
+    x = JSONField()
+    y = JSONField()
+    y_sigma_up = JSONField(null=True, blank=True)
+    y_sigma_down = JSONField(null=True, blank=True)
+    x_description = models.TextField(max_length=256, null=True, blank=True)
+    y_description = models.TextField(max_length=256, null=True, blank=True)
 
     # Time stamps, and logging of who changed user info
     last_updated_by = models.ForeignKey(UserModel,
@@ -349,7 +350,10 @@ class Profile(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return  "{} - Ref: {}".format(self.astro_object.name, self.reference)
+        return "{}. Ref: {}. {} vs {}".format(
+            str(self.astro_object.name), str(self.reference),
+            self.y_description, self.x_description
+        )
 
 
 class Auxiliary(models.Model):
@@ -361,7 +365,8 @@ class Auxiliary(models.Model):
         AstroObject, related_name="auxiliaries", on_delete=models.CASCADE
     )
 
-    path = models.FilePathField(path="{0}".format(settings.STATIC_ROOT), blank=True, null=True)
+    description = models.TextField(max_length=256, null=True, blank=True)
+    file = models.FileField(upload_to="aux/", blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
     # Time stamps, and logging of who changed user info

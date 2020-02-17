@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2012 - 2018, Anaconda, Inc., and Bokeh Contributors
+ * Copyright (c) 2012 - 2019, Anaconda, Inc., and Bokeh Contributors
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,213 +27,53 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 (function(root, factory) {
-//  if(typeof exports === 'object' && typeof module === 'object')
-//    factory(require("Bokeh"));
-//  else if(typeof define === 'function' && define.amd)
-//    define(["Bokeh"], factory);
-//  else if(typeof exports === 'object')
-//    factory(require("Bokeh"));
-//  else
-    factory(root["Bokeh"]);
+  factory(root["Bokeh"]);
 })(this, function(Bokeh) {
   var define;
-  return (function(modules, aliases, entry) {
+  return (function(modules, entry, aliases, externals) {
     if (Bokeh != null) {
-      return Bokeh.register_plugin(modules, aliases, entry);
+      return Bokeh.register_plugin(modules, entry, aliases, externals);
     } else {
       throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
     }
   })
 ({
-507: /* models/glyphs/webgl/base */ function _(require, module, exports) {
-    var color_1 = require(30) /* ../../../core/util/color */;
-    var logging_1 = require(17) /* ../../../core/logging */;
-    var BaseGLGlyph = /** @class */ (function () {
-        function BaseGLGlyph(gl, glyph) {
-            this.gl = gl;
-            this.glyph = glyph;
-            this.nvertices = 0;
-            this.size_changed = false;
-            this.data_changed = false;
-            this.visuals_changed = false;
-            this.init();
-        }
-        BaseGLGlyph.prototype.set_data_changed = function (n) {
-            if (n != this.nvertices) {
-                this.nvertices = n;
-                this.size_changed = true;
-            }
-            this.data_changed = true;
-        };
-        BaseGLGlyph.prototype.set_visuals_changed = function () {
-            this.visuals_changed = true;
-        };
-        BaseGLGlyph.prototype.render = function (_ctx, indices, mainglyph) {
-            var _a;
-            // Get transform
-            var _b = [0, 1, 2], a = _b[0], b = _b[1], c = _b[2];
-            var wx = 1; // Weights to scale our vectors
-            var wy = 1;
-            var _c = this.glyph.renderer.map_to_screen([a * wx, b * wx, c * wx], [a * wy, b * wy, c * wy]), dx = _c[0], dy = _c[1];
-            if (isNaN(dx[0] + dx[1] + dx[2] + dy[0] + dy[1] + dy[2])) {
-                logging_1.logger.warn("WebGL backend (" + this.glyph.model.type + "): falling back to canvas rendering");
-                return false;
-            }
-            // Try again, but with weighs so we're looking at ~100 in screen coordinates
-            wx = 100 / Math.min(Math.max(Math.abs(dx[1] - dx[0]), 1e-12), 1e12);
-            wy = 100 / Math.min(Math.max(Math.abs(dy[1] - dy[0]), 1e-12), 1e12);
-            _a = this.glyph.renderer.map_to_screen([a * wx, b * wx, c * wx], [a * wy, b * wy, c * wy]), dx = _a[0], dy = _a[1];
-            // Test how linear it is
-            if ((Math.abs((dx[1] - dx[0]) - (dx[2] - dx[1])) > 1e-6) ||
-                (Math.abs((dy[1] - dy[0]) - (dy[2] - dy[1])) > 1e-6)) {
-                logging_1.logger.warn("WebGL backend (" + this.glyph.model.type + "): falling back to canvas rendering");
-                return false;
-            }
-            var _d = [(dx[1] - dx[0]) / wx, (dy[1] - dy[0]) / wy], sx = _d[0], sy = _d[1];
-            var _e = this.glyph.renderer.plot_view.gl.canvas, width = _e.width, height = _e.height;
-            var trans = {
-                pixel_ratio: this.glyph.renderer.plot_view.canvas.pixel_ratio,
-                width: width, height: height,
-                dx: dx[0] / sx, dy: dy[0] / sy, sx: sx, sy: sy,
-            };
-            this.draw(indices, mainglyph, trans);
-            return true;
-        };
-        BaseGLGlyph.__name__ = "BaseGLGlyph";
-        return BaseGLGlyph;
-    }());
-    exports.BaseGLGlyph = BaseGLGlyph;
-    function line_width(width) {
-        // Increase small values to make it more similar to canvas
-        if (width < 2) {
-            width = Math.sqrt(width * 2);
-        }
-        return width;
+453: /* models/glyphs/webgl/main.js */ function _(require, module, exports) {
+    require(454) /* ./index */;
+},
+454: /* models/glyphs/webgl/index.js */ function _(require, module, exports) {
+    /*
+    Copyright notice: many of the awesome techniques and  GLSL code contained in
+    this module are based on work by Nicolas Rougier as part of the Glumpy and
+    Vispy projects. The algorithms are published in
+    http://jcgt.org/published/0003/04/01/ and http://jcgt.org/published/0002/02/08/
+    
+    This module contains all gl-specific code to add gl support for the glyphs.
+    By implementing it separetely, the GL functionality can be spun off in a
+    separate library.
+    Other locations where we work with GL, or prepare for GL-rendering:
+    - canvas.ts
+    - plot.ts
+    - glyph.ts
+    - glyph_renderer.ts
+    */
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
     }
-    exports.line_width = line_width;
-    function fill_array_with_float(n, val) {
-        var a = new Float32Array(n);
-        for (var i = 0, end = n; i < end; i++) {
-            a[i] = val;
-        }
-        return a;
-    }
-    exports.fill_array_with_float = fill_array_with_float;
-    function fill_array_with_vec(n, m, val) {
-        var a = new Float32Array(n * m);
-        for (var i = 0; i < n; i++) {
-            for (var j = 0; j < m; j++) {
-                a[i * m + j] = val[j];
-            }
-        }
-        return a;
-    }
-    exports.fill_array_with_vec = fill_array_with_vec;
-    function visual_prop_is_singular(visual, propname) {
-        // This touches the internals of the visual, so we limit use in this function
-        // See renderer.ts:cache_select() for similar code
-        return visual[propname].spec.value !== undefined;
-    }
-    exports.visual_prop_is_singular = visual_prop_is_singular;
-    function attach_float(prog, vbo, att_name, n, visual, name) {
-        // Attach a float attribute to the program. Use singleton value if we can,
-        // otherwise use VBO to apply array.
-        if (!visual.doit) {
-            vbo.used = false;
-            prog.set_attribute(att_name, 'float', [0]);
-        }
-        else if (visual_prop_is_singular(visual, name)) {
-            vbo.used = false;
-            prog.set_attribute(att_name, 'float', visual[name].value());
-        }
-        else {
-            vbo.used = true;
-            var a = new Float32Array(visual.cache[name + '_array']);
-            vbo.set_size(n * 4);
-            vbo.set_data(0, a);
-            prog.set_attribute(att_name, 'float', vbo);
-        }
-    }
-    exports.attach_float = attach_float;
-    function attach_color(prog, vbo, att_name, n, visual, prefix) {
-        // Attach the color attribute to the program. If there's just one color,
-        // then use this single color for all vertices (no VBO). Otherwise we
-        // create an array and upload that to the VBO, which we attahce to the prog.
-        var rgba;
-        var m = 4;
-        var colorname = prefix + '_color';
-        var alphaname = prefix + '_alpha';
-        if (!visual.doit) {
-            // Don't draw (draw transparent)
-            vbo.used = false;
-            prog.set_attribute(att_name, 'vec4', [0, 0, 0, 0]);
-        }
-        else if (visual_prop_is_singular(visual, colorname) && visual_prop_is_singular(visual, alphaname)) {
-            // Nice and simple; both color and alpha are singular
-            vbo.used = false;
-            rgba = color_1.color2rgba(visual[colorname].value(), visual[alphaname].value());
-            prog.set_attribute(att_name, 'vec4', rgba);
-        }
-        else {
-            // Use vbo; we need an array for both the color and the alpha
-            var alphas = void 0, colors = void 0;
-            vbo.used = true;
-            // Get array of colors
-            if (visual_prop_is_singular(visual, colorname)) {
-                colors = ((function () {
-                    var result = [];
-                    for (var i = 0, end = n; i < end; i++) {
-                        result.push(visual[colorname].value());
-                    }
-                    return result;
-                })());
-            }
-            else {
-                colors = visual.cache[colorname + '_array'];
-            }
-            // Get array of alphas
-            if (visual_prop_is_singular(visual, alphaname)) {
-                alphas = fill_array_with_float(n, visual[alphaname].value());
-            }
-            else {
-                alphas = visual.cache[alphaname + '_array'];
-            }
-            // Create array of rgbs
-            var a = new Float32Array(n * m);
-            for (var i = 0, end = n; i < end; i++) {
-                rgba = color_1.color2rgba(colors[i], alphas[i]);
-                for (var j = 0, endj = m; j < endj; j++) {
-                    a[(i * m) + j] = rgba[j];
-                }
-            }
-            // Attach vbo
-            vbo.set_size(n * m * 4);
-            vbo.set_data(0, a);
-            prog.set_attribute(att_name, 'vec4', vbo);
-        }
-    }
-    exports.attach_color = attach_color;
-}
-,
-508: /* models/glyphs/webgl/index */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    tslib_1.__exportStar(require(510) /* ./line */, exports);
-    tslib_1.__exportStar(require(514) /* ./markers */, exports);
-}
-,
-509: /* models/glyphs/webgl/line.frag */ function _(require, module, exports) {
-    exports.fragment_shader = "\nprecision mediump float;\n\nconst float PI = 3.14159265358979323846264;\nconst float THETA = 15.0 * 3.14159265358979323846264/180.0;\n\nuniform sampler2D u_dash_atlas;\n\nuniform vec2 u_linecaps;\nuniform float u_miter_limit;\nuniform float u_linejoin;\nuniform float u_antialias;\nuniform float u_dash_phase;\nuniform float u_dash_period;\nuniform float u_dash_index;\nuniform vec2 u_dash_caps;\nuniform float u_closed;\n\nvarying vec4  v_color;\nvarying vec2  v_segment;\nvarying vec2  v_angles;\nvarying vec2  v_texcoord;\nvarying vec2  v_miter;\nvarying float v_length;\nvarying float v_linewidth;\n\n// Compute distance to cap ----------------------------------------------------\nfloat cap( int type, float dx, float dy, float t, float linewidth )\n{\n    float d = 0.0;\n    dx = abs(dx);\n    dy = abs(dy);\n    if      (type == 0)  discard;  // None\n    else if (type == 1)  d = sqrt(dx*dx+dy*dy);  // Round\n    else if (type == 3)  d = (dx+abs(dy));  // Triangle in\n    else if (type == 2)  d = max(abs(dy),(t+dx-abs(dy)));  // Triangle out\n    else if (type == 4)  d = max(dx,dy);  // Square\n    else if (type == 5)  d = max(dx+t,dy);  // Butt\n    return d;\n}\n\n// Compute distance to join -------------------------------------------------\nfloat join( in int type, in float d, in vec2 segment, in vec2 texcoord, in vec2 miter,\n           in float linewidth )\n{\n    // texcoord.x is distance from start\n    // texcoord.y is distance from centerline\n    // segment.x and y indicate the limits (as for texcoord.x) for this segment\n\n    float dx = texcoord.x;\n\n    // Round join\n    if( type == 1 ) {\n        if (dx < segment.x) {\n            d = max(d,length( texcoord - vec2(segment.x,0.0)));\n            //d = length( texcoord - vec2(segment.x,0.0));\n        } else if (dx > segment.y) {\n            d = max(d,length( texcoord - vec2(segment.y,0.0)));\n            //d = length( texcoord - vec2(segment.y,0.0));\n        }\n    }\n    // Bevel join\n    else if ( type == 2 ) {\n        if (dx < segment.x) {\n            vec2 x = texcoord - vec2(segment.x,0.0);\n            d = max(d, max(abs(x.x), abs(x.y)));\n\n        } else if (dx > segment.y) {\n            vec2 x = texcoord - vec2(segment.y,0.0);\n            d = max(d, max(abs(x.x), abs(x.y)));\n        }\n        /*  Original code for bevel which does not work for us\n        if( (dx < segment.x) ||  (dx > segment.y) )\n            d = max(d, min(abs(x.x),abs(x.y)));\n        */\n    }\n\n    return d;\n}\n\nvoid main()\n{\n    // If color is fully transparent we just discard the fragment\n    if( v_color.a <= 0.0 ) {\n        discard;\n    }\n\n    // Test if dash pattern is the solid one (0)\n    bool solid =  (u_dash_index == 0.0);\n\n    // Test if path is closed\n    bool closed = (u_closed > 0.0);\n\n    vec4 color = v_color;\n    float dx = v_texcoord.x;\n    float dy = v_texcoord.y;\n    float t = v_linewidth/2.0-u_antialias;\n    float width = 1.0;  //v_linewidth; original code had dashes scale with line width, we do not\n    float d = 0.0;\n\n    vec2 linecaps = u_linecaps;\n    vec2 dash_caps = u_dash_caps;\n    float line_start = 0.0;\n    float line_stop = v_length;\n\n    // Apply miter limit; fragments too far into the miter are simply discarded\n    if( (dx < v_segment.x) || (dx > v_segment.y) ) {\n        float into_miter = max(v_segment.x - dx, dx - v_segment.y);\n        if (into_miter > u_miter_limit*v_linewidth/2.0)\n          discard;\n    }\n\n    // Solid line --------------------------------------------------------------\n    if( solid ) {\n        d = abs(dy);\n        if( (!closed) && (dx < line_start) ) {\n            d = cap( int(u_linecaps.x), abs(dx), abs(dy), t, v_linewidth );\n        }\n        else if( (!closed) &&  (dx > line_stop) ) {\n            d = cap( int(u_linecaps.y), abs(dx)-line_stop, abs(dy), t, v_linewidth );\n        }\n        else {\n            d = join( int(u_linejoin), abs(dy), v_segment, v_texcoord, v_miter, v_linewidth );\n        }\n\n    // Dash line --------------------------------------------------------------\n    } else {\n        float segment_start = v_segment.x;\n        float segment_stop  = v_segment.y;\n        float segment_center= (segment_start+segment_stop)/2.0;\n        float freq          = u_dash_period*width;\n        float u = mod( dx + u_dash_phase*width, freq);\n        vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n        float dash_center= tex.x * width;\n        float dash_type  = tex.y;\n        float _start = tex.z * width;\n        float _stop  = tex.a * width;\n        float dash_start = dx - u + _start;\n        float dash_stop  = dx - u + _stop;\n\n        // Compute extents of the first dash (the one relative to v_segment.x)\n        // Note: this could be computed in the vertex shader\n        if( (dash_stop < segment_start) && (dash_caps.x != 5.0) ) {\n            float u = mod(segment_start + u_dash_phase*width, freq);\n            vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n            dash_center= tex.x * width;\n            //dash_type  = tex.y;\n            float _start = tex.z * width;\n            float _stop  = tex.a * width;\n            dash_start = segment_start - u + _start;\n            dash_stop = segment_start - u + _stop;\n        }\n\n        // Compute extents of the last dash (the one relatives to v_segment.y)\n        // Note: This could be computed in the vertex shader\n        else if( (dash_start > segment_stop)  && (dash_caps.y != 5.0) ) {\n            float u = mod(segment_stop + u_dash_phase*width, freq);\n            vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n            dash_center= tex.x * width;\n            //dash_type  = tex.y;\n            float _start = tex.z * width;\n            float _stop  = tex.a * width;\n            dash_start = segment_stop - u + _start;\n            dash_stop  = segment_stop - u + _stop;\n        }\n\n        // This test if the we are dealing with a discontinuous angle\n        bool discontinuous = ((dx <  segment_center) && abs(v_angles.x) > THETA) ||\n                             ((dx >= segment_center) && abs(v_angles.y) > THETA);\n        //if( dx < line_start) discontinuous = false;\n        //if( dx > line_stop)  discontinuous = false;\n\n        float d_join = join( int(u_linejoin), abs(dy),\n                            v_segment, v_texcoord, v_miter, v_linewidth );\n\n        // When path is closed, we do not have room for linecaps, so we make room\n        // by shortening the total length\n        if (closed) {\n             line_start += v_linewidth/2.0;\n             line_stop  -= v_linewidth/2.0;\n        }\n\n        // We also need to take antialias area into account\n        //line_start += u_antialias;\n        //line_stop  -= u_antialias;\n\n        // Check is dash stop is before line start\n        if( dash_stop <= line_start ) {\n            discard;\n        }\n        // Check is dash start is beyond line stop\n        if( dash_start >= line_stop ) {\n            discard;\n        }\n\n        // Check if current dash start is beyond segment stop\n        if( discontinuous ) {\n            // Dash start is beyond segment, we discard\n            if( (dash_start > segment_stop) ) {\n                discard;\n                //gl_FragColor = vec4(1.0,0.0,0.0,.25); return;\n            }\n\n            // Dash stop is before segment, we discard\n            if( (dash_stop < segment_start) ) {\n                discard;  //gl_FragColor = vec4(0.0,1.0,0.0,.25); return;\n            }\n\n            // Special case for round caps (nicer with this)\n            if( dash_caps.x == 1.0 ) {\n                if( (u > _stop) && (dash_stop > segment_stop )  && (abs(v_angles.y) < PI/2.0)) {\n                    discard;\n                }\n            }\n\n            // Special case for round caps  (nicer with this)\n            if( dash_caps.y == 1.0 ) {\n                if( (u < _start) && (dash_start < segment_start )  && (abs(v_angles.x) < PI/2.0)) {\n                    discard;\n                }\n            }\n\n            // Special case for triangle caps (in & out) and square\n            // We make sure the cap stop at crossing frontier\n            if( (dash_caps.x != 1.0) && (dash_caps.x != 5.0) ) {\n                if( (dash_start < segment_start )  && (abs(v_angles.x) < PI/2.0) ) {\n                    float a = v_angles.x/2.0;\n                    float x = (segment_start-dx)*cos(a) - dy*sin(a);\n                    float y = (segment_start-dx)*sin(a) + dy*cos(a);\n                    if( x > 0.0 ) discard;\n                    // We transform the cap into square to avoid holes\n                    dash_caps.x = 4.0;\n                }\n            }\n\n            // Special case for triangle caps (in & out) and square\n            // We make sure the cap stop at crossing frontier\n            if( (dash_caps.y != 1.0) && (dash_caps.y != 5.0) ) {\n                if( (dash_stop > segment_stop )  && (abs(v_angles.y) < PI/2.0) ) {\n                    float a = v_angles.y/2.0;\n                    float x = (dx-segment_stop)*cos(a) - dy*sin(a);\n                    float y = (dx-segment_stop)*sin(a) + dy*cos(a);\n                    if( x > 0.0 ) discard;\n                    // We transform the caps into square to avoid holes\n                    dash_caps.y = 4.0;\n                }\n            }\n        }\n\n        // Line cap at start\n        if( (dx < line_start) && (dash_start < line_start) && (dash_stop > line_start) ) {\n            d = cap( int(linecaps.x), dx-line_start, dy, t, v_linewidth);\n        }\n        // Line cap at stop\n        else if( (dx > line_stop) && (dash_stop > line_stop) && (dash_start < line_stop) ) {\n            d = cap( int(linecaps.y), dx-line_stop, dy, t, v_linewidth);\n        }\n        // Dash cap left - dash_type = -1, 0 or 1, but there may be roundoff errors\n        else if( dash_type < -0.5 ) {\n            d = cap( int(dash_caps.y), abs(u-dash_center), dy, t, v_linewidth);\n            if( (dx > line_start) && (dx < line_stop) )\n                d = max(d,d_join);\n        }\n        // Dash cap right\n        else if( dash_type > 0.5 ) {\n            d = cap( int(dash_caps.x), abs(dash_center-u), dy, t, v_linewidth);\n            if( (dx > line_start) && (dx < line_stop) )\n                d = max(d,d_join);\n        }\n        // Dash body (plain)\n        else {// if( dash_type > -0.5 &&  dash_type < 0.5) {\n            d = abs(dy);\n        }\n\n        // Line join\n        if( (dx > line_start) && (dx < line_stop)) {\n            if( (dx <= segment_start) && (dash_start <= segment_start)\n                && (dash_stop >= segment_start) ) {\n                d = d_join;\n                // Antialias at outer border\n                float angle = PI/2.+v_angles.x;\n                float f = abs( (segment_start - dx)*cos(angle) - dy*sin(angle));\n                d = max(f,d);\n            }\n            else if( (dx > segment_stop) && (dash_start <= segment_stop)\n                     && (dash_stop >= segment_stop) ) {\n                d = d_join;\n                // Antialias at outer border\n                float angle = PI/2.+v_angles.y;\n                float f = abs((dx - segment_stop)*cos(angle) - dy*sin(angle));\n                d = max(f,d);\n            }\n            else if( dx < (segment_start - v_linewidth/2.)) {\n                discard;\n            }\n            else if( dx > (segment_stop + v_linewidth/2.)) {\n                discard;\n            }\n        }\n        else if( dx < (segment_start - v_linewidth/2.)) {\n            discard;\n        }\n        else if( dx > (segment_stop + v_linewidth/2.)) {\n            discard;\n        }\n    }\n\n    // Distance to border ------------------------------------------------------\n    d = d - t;\n    if( d < 0.0 ) {\n        gl_FragColor = color;\n    } else {\n        d /= u_antialias;\n        gl_FragColor = vec4(color.rgb, exp(-d*d)*color.a);\n    }\n}\n";
-}
-,
-510: /* models/glyphs/webgl/line */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var gloo2_1 = require(516) /* gloo2 */;
-    var base_1 = require(507) /* ./base */;
-    var line_vert_1 = require(511) /* ./line.vert */;
-    var line_frag_1 = require(509) /* ./line.frag */;
-    var color_1 = require(30) /* ../../../core/util/color */;
+    __export(require(455) /* ./line */);
+    __export(require(460) /* ./markers */);
+},
+455: /* models/glyphs/webgl/line.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var gloo2_1 = require(456) /* gloo2 */;
+    var base_1 = require(457) /* ./base */;
+    var line_vert_1 = require(458) /* ./line.vert */;
+    var line_frag_1 = require(459) /* ./line.frag */;
+    var color_1 = require(123) /* ../../../core/util/color */;
     var DashAtlas = /** @class */ (function () {
         function DashAtlas(gl) {
             this._atlas = {};
@@ -314,9 +154,9 @@
             }
             return [Z, period];
         };
-        DashAtlas.__name__ = "DashAtlas";
         return DashAtlas;
     }());
+    DashAtlas.__name__ = "DashAtlas";
     var joins = { miter: 0, round: 1, bevel: 2 };
     var caps = {
         '': 0, none: 0, '.': 0,
@@ -608,249 +448,12 @@
             this.vbo_segment.set_size(this.V_segment.length * 4);
             this.vbo_segment.set_data(0, this.V_segment);
         };
-        LineGLGlyph.__name__ = "LineGLGlyph";
         return LineGLGlyph;
     }(base_1.BaseGLGlyph));
     exports.LineGLGlyph = LineGLGlyph;
-}
-,
-511: /* models/glyphs/webgl/line.vert */ function _(require, module, exports) {
-    exports.vertex_shader = "\nprecision mediump float;\n\nconst float PI = 3.14159265358979323846264;\nconst float THETA = 15.0 * 3.14159265358979323846264/180.0;\n\nuniform float u_pixel_ratio;\nuniform vec2 u_canvas_size, u_offset;\nuniform vec2 u_scale_aspect;\nuniform float u_scale_length;\n\nuniform vec4 u_color;\nuniform float u_antialias;\nuniform float u_length;\nuniform float u_linewidth;\nuniform float u_dash_index;\nuniform float u_closed;\n\nattribute vec2 a_position;\nattribute vec4 a_tangents;\nattribute vec2 a_segment;\nattribute vec2 a_angles;\nattribute vec2 a_texcoord;\n\nvarying vec4  v_color;\nvarying vec2  v_segment;\nvarying vec2  v_angles;\nvarying vec2  v_texcoord;\nvarying vec2  v_miter;\nvarying float v_length;\nvarying float v_linewidth;\n\nfloat cross(in vec2 v1, in vec2 v2)\n{\n    return v1.x*v2.y - v1.y*v2.x;\n}\n\nfloat signed_distance(in vec2 v1, in vec2 v2, in vec2 v3)\n{\n    return cross(v2-v1,v1-v3) / length(v2-v1);\n}\n\nvoid rotate( in vec2 v, in float alpha, out vec2 result )\n{\n    float c = cos(alpha);\n    float s = sin(alpha);\n    result = vec2( c*v.x - s*v.y,\n                   s*v.x + c*v.y );\n}\n\nvoid main()\n{\n    bool closed = (u_closed > 0.0);\n\n    // Attributes and uniforms to varyings\n    v_color = u_color;\n    v_linewidth = u_linewidth;\n    v_segment = a_segment * u_scale_length;\n    v_length = u_length * u_scale_length;\n\n    // Scale to map to pixel coordinates. The original algorithm from the paper\n    // assumed isotropic scale. We obviously do not have this.\n    vec2 abs_scale_aspect = abs(u_scale_aspect);\n    vec2 abs_scale = u_scale_length * abs_scale_aspect;\n\n    // Correct angles for aspect ratio\n    vec2 av;\n    av = vec2(1.0, tan(a_angles.x)) / abs_scale_aspect;\n    v_angles.x = atan(av.y, av.x);\n    av = vec2(1.0, tan(a_angles.y)) / abs_scale_aspect;\n    v_angles.y = atan(av.y, av.x);\n\n    // Thickness below 1 pixel are represented using a 1 pixel thickness\n    // and a modified alpha\n    v_color.a = min(v_linewidth, v_color.a);\n    v_linewidth = max(v_linewidth, 1.0);\n\n    // If color is fully transparent we just will discard the fragment anyway\n    if( v_color.a <= 0.0 ) {\n        gl_Position = vec4(0.0,0.0,0.0,1.0);\n        return;\n    }\n\n    // This is the actual half width of the line\n    float w = ceil(u_antialias+v_linewidth)/2.0;\n\n    vec2 position = (a_position + u_offset) * abs_scale;\n\n    vec2 t1 = normalize(a_tangents.xy * abs_scale_aspect);  // note the scaling for aspect ratio here\n    vec2 t2 = normalize(a_tangents.zw * abs_scale_aspect);\n    float u = a_texcoord.x;\n    float v = a_texcoord.y;\n    vec2 o1 = vec2( +t1.y, -t1.x);\n    vec2 o2 = vec2( +t2.y, -t2.x);\n\n    // This is a join\n    // ----------------------------------------------------------------\n    if( t1 != t2 ) {\n        float angle = atan (t1.x*t2.y-t1.y*t2.x, t1.x*t2.x+t1.y*t2.y);  // Angle needs recalculation for some reason\n        vec2 t  = normalize(t1+t2);\n        vec2 o  = vec2( + t.y, - t.x);\n\n        if ( u_dash_index > 0.0 )\n        {\n            // Broken angle\n            // ----------------------------------------------------------------\n            if( (abs(angle) > THETA) ) {\n                position += v * w * o / cos(angle/2.0);\n                float s = sign(angle);\n                if( angle < 0.0 ) {\n                    if( u == +1.0 ) {\n                        u = v_segment.y + v * w * tan(angle/2.0);\n                        if( v == 1.0 ) {\n                            position -= 2.0 * w * t1 / sin(angle);\n                            u -= 2.0 * w / sin(angle);\n                        }\n                    } else {\n                        u = v_segment.x - v * w * tan(angle/2.0);\n                        if( v == 1.0 ) {\n                            position += 2.0 * w * t2 / sin(angle);\n                            u += 2.0*w / sin(angle);\n                        }\n                    }\n                } else {\n                    if( u == +1.0 ) {\n                        u = v_segment.y + v * w * tan(angle/2.0);\n                        if( v == -1.0 ) {\n                            position += 2.0 * w * t1 / sin(angle);\n                            u += 2.0 * w / sin(angle);\n                        }\n                    } else {\n                        u = v_segment.x - v * w * tan(angle/2.0);\n                        if( v == -1.0 ) {\n                            position -= 2.0 * w * t2 / sin(angle);\n                            u -= 2.0*w / sin(angle);\n                        }\n                    }\n                }\n                // Continuous angle\n                // ------------------------------------------------------------\n            } else {\n                position += v * w * o / cos(angle/2.0);\n                if( u == +1.0 ) u = v_segment.y;\n                else            u = v_segment.x;\n            }\n        }\n\n        // Solid line\n        // --------------------------------------------------------------------\n        else\n        {\n            position.xy += v * w * o / cos(angle/2.0);\n            if( angle < 0.0 ) {\n                if( u == +1.0 ) {\n                    u = v_segment.y + v * w * tan(angle/2.0);\n                } else {\n                    u = v_segment.x - v * w * tan(angle/2.0);\n                }\n            } else {\n                if( u == +1.0 ) {\n                    u = v_segment.y + v * w * tan(angle/2.0);\n                } else {\n                    u = v_segment.x - v * w * tan(angle/2.0);\n                }\n            }\n        }\n\n    // This is a line start or end (t1 == t2)\n    // ------------------------------------------------------------------------\n    } else {\n        position += v * w * o1;\n        if( u == -1.0 ) {\n            u = v_segment.x - w;\n            position -= w * t1;\n        } else {\n            u = v_segment.y + w;\n            position += w * t2;\n        }\n    }\n\n    // Miter distance\n    // ------------------------------------------------------------------------\n    vec2 t;\n    vec2 curr = a_position * abs_scale;\n    if( a_texcoord.x < 0.0 ) {\n        vec2 next = curr + t2*(v_segment.y-v_segment.x);\n\n        rotate( t1, +v_angles.x/2.0, t);\n        v_miter.x = signed_distance(curr, curr+t, position);\n\n        rotate( t2, +v_angles.y/2.0, t);\n        v_miter.y = signed_distance(next, next+t, position);\n    } else {\n        vec2 prev = curr - t1*(v_segment.y-v_segment.x);\n\n        rotate( t1, -v_angles.x/2.0,t);\n        v_miter.x = signed_distance(prev, prev+t, position);\n\n        rotate( t2, -v_angles.y/2.0,t);\n        v_miter.y = signed_distance(curr, curr+t, position);\n    }\n\n    if (!closed && v_segment.x <= 0.0) {\n        v_miter.x = 1e10;\n    }\n    if (!closed && v_segment.y >= v_length)\n    {\n        v_miter.y = 1e10;\n    }\n\n    v_texcoord = vec2( u, v*w );\n\n    // Calculate position in device coordinates. Note that we\n    // already scaled with abs scale above.\n    vec2 normpos = position * sign(u_scale_aspect);\n    normpos += 0.5;  // make up for Bokeh's offset\n    normpos /= u_canvas_size / u_pixel_ratio;  // in 0..1\n    gl_Position = vec4(normpos*2.0-1.0, 0.0, 1.0);\n    gl_Position.y *= -1.0;\n}\n";
-}
-,
-512: /* models/glyphs/webgl/main */ function _(require, module, exports) {
-    require(508) /* ./index */;
-}
-,
-513: /* models/glyphs/webgl/markers.frag */ function _(require, module, exports) {
-    exports.fragment_shader = function (marker_code) { return "\nprecision mediump float;\nconst float SQRT_2 = 1.4142135623730951;\nconst float PI = 3.14159265358979323846264;\n//\nuniform float u_antialias;\n//\nvarying vec4  v_fg_color;\nvarying vec4  v_bg_color;\nvarying float v_linewidth;\nvarying float v_size;\nvarying vec2  v_rotation;\n\n" + marker_code + "\n\nvec4 outline(float distance, float linewidth, float antialias, vec4 fg_color, vec4 bg_color)\n{\n    vec4 frag_color;\n    float t = linewidth/2.0 - antialias;\n    float signed_distance = distance;\n    float border_distance = abs(signed_distance) - t;\n    float alpha = border_distance/antialias;\n    alpha = exp(-alpha*alpha);\n\n    // If fg alpha is zero, it probably means no outline. To avoid a dark outline\n    // shining through due to aa, we set the fg color to the bg color. Avoid if (i.e. branching).\n    float select = float(bool(fg_color.a));\n    fg_color.rgb = select * fg_color.rgb + (1.0  - select) * bg_color.rgb;\n    // Similarly, if we want a transparent bg\n    select = float(bool(bg_color.a));\n    bg_color.rgb = select * bg_color.rgb + (1.0  - select) * fg_color.rgb;\n\n    if( border_distance < 0.0)\n        frag_color = fg_color;\n    else if( signed_distance < 0.0 ) {\n        frag_color = mix(bg_color, fg_color, sqrt(alpha));\n    } else {\n        if( abs(signed_distance) < (linewidth/2.0 + antialias) ) {\n            frag_color = vec4(fg_color.rgb, fg_color.a * alpha);\n        } else {\n            discard;\n        }\n    }\n    return frag_color;\n}\n\nvoid main()\n{\n    vec2 P = gl_PointCoord.xy - vec2(0.5, 0.5);\n    P = vec2(v_rotation.x*P.x - v_rotation.y*P.y,\n             v_rotation.y*P.x + v_rotation.x*P.y);\n    float point_size = SQRT_2*v_size  + 2.0 * (v_linewidth + 1.5*u_antialias);\n    float distance = marker(P*point_size, v_size);\n    gl_FragColor = outline(distance, v_linewidth, u_antialias, v_fg_color, v_bg_color);\n    //gl_FragColor.rgb *= gl_FragColor.a;  // pre-multiply alpha\n}\n"; };
-    exports.circle = "\nfloat marker(vec2 P, float size)\n{\n    return length(P) - size/2.0;\n}\n";
-    exports.square = "\nfloat marker(vec2 P, float size)\n{\n    return max(abs(P.x), abs(P.y)) - size/2.0;\n}\n";
-    exports.diamond = "\nfloat marker(vec2 P, float size)\n{\n    float x = SQRT_2 / 2.0 * (P.x * 1.5 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.5 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / (2.0 * SQRT_2);\n    return r1 / SQRT_2;\n}\n";
-    exports.hex = "\nfloat marker(vec2 P, float size)\n{\n    vec2 q = abs(P);\n    return max(q.y * 0.57735 + q.x - 1.0 * size/2.0, q.y - 0.866 * size/2.0);\n}\n";
-    exports.triangle = "\nfloat marker(vec2 P, float size)\n{\n    P.y -= size * 0.3;\n    float x = SQRT_2 / 2.0 * (P.x * 1.7 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.7 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / 1.6;\n    float r2 = P.y;\n    return max(r1 / SQRT_2, r2);  // Intersect diamond with rectangle\n}\n";
-    exports.invertedtriangle = "\nfloat marker(vec2 P, float size)\n{\n    P.y += size * 0.3;\n    float x = SQRT_2 / 2.0 * (P.x * 1.7 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.7 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / 1.6;\n    float r2 = - P.y;\n    return max(r1 / SQRT_2, r2);  // Intersect diamond with rectangle\n}\n";
-    exports.cross = "\nfloat marker(vec2 P, float size)\n{\n    float square = max(abs(P.x), abs(P.y)) - size / 2.5;   // 2.5 is a tweak\n    float cross = min(abs(P.x), abs(P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return max(square, cross);\n}\n";
-    exports.circlecross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float circle = length(P) - size/2.0;\n    float c1 = max(circle, s1);\n    float c2 = max(circle, s2);\n    float c3 = max(circle, s3);\n    float c4 = max(circle, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
-    exports.squarecross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float square = max(abs(P.x), abs(P.y)) - size/2.0;\n    float c1 = max(square, s1);\n    float c2 = max(square, s2);\n    float c3 = max(square, s3);\n    float c4 = max(square, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
-    exports.diamondcross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float x = SQRT_2 / 2.0 * (P.x * 1.5 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.5 + P.y);\n    float diamond = max(abs(x), abs(y)) - size / (2.0 * SQRT_2);\n    diamond /= SQRT_2;\n    float c1 = max(diamond, s1);\n    float c2 = max(diamond, s2);\n    float c3 = max(diamond, s3);\n    float c4 = max(diamond, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
-    exports.x = "\nfloat marker(vec2 P, float size)\n{\n    float circle = length(P) - size / 1.6;\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return max(circle, X);\n}\n";
-    exports.circlex = "\nfloat marker(vec2 P, float size)\n{\n    float x = P.x - P.y;\n    float y = P.x + P.y;\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(x - qs), abs(y - qs)) - qs;\n    float s2 = max(abs(x + qs), abs(y - qs)) - qs;\n    float s3 = max(abs(x - qs), abs(y + qs)) - qs;\n    float s4 = max(abs(x + qs), abs(y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float circle = length(P) - size/2.0;\n    float c1 = max(circle, s1);\n    float c2 = max(circle, s2);\n    float c3 = max(circle, s3);\n    float c4 = max(circle, s4);\n    // Union\n    float almost = min(min(min(c1, c2), c3), c4);\n    // In this case, the X is also outside of the main shape\n    float Xmask = length(P) - size / 1.6;  // a circle\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return min(max(X, Xmask), almost);\n}\n";
-    exports.squarex = "\nfloat marker(vec2 P, float size)\n{\n    float x = P.x - P.y;\n    float y = P.x + P.y;\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(x - qs), abs(y - qs)) - qs;\n    float s2 = max(abs(x + qs), abs(y - qs)) - qs;\n    float s3 = max(abs(x - qs), abs(y + qs)) - qs;\n    float s4 = max(abs(x + qs), abs(y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float square = max(abs(P.x), abs(P.y)) - size/2.0;\n    float c1 = max(square, s1);\n    float c2 = max(square, s2);\n    float c3 = max(square, s3);\n    float c4 = max(square, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
-    exports.asterisk = "\nfloat marker(vec2 P, float size)\n{\n    // Masks\n    float diamond = max(abs(SQRT_2 / 2.0 * (P.x - P.y)), abs(SQRT_2 / 2.0 * (P.x + P.y))) - size / (2.0 * SQRT_2);\n    float square = max(abs(P.x), abs(P.y)) - size / (2.0 * SQRT_2);\n    // Shapes\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    float cross = min(abs(P.x), abs(P.y)) - size / 100.0;  // bit of \"width\" for aa\n    // Result is union of masked shapes\n    return min(max(X, diamond), max(cross, square));\n}\n";
-}
-,
-514: /* models/glyphs/webgl/markers */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var gloo2_1 = require(516) /* gloo2 */;
-    var base_1 = require(507) /* ./base */;
-    var markers_vert_1 = require(515) /* ./markers.vert */;
-    var markers_frag_1 = require(513) /* ./markers.frag */;
-    var circle_1 = require(124) /* ../circle */;
-    var arrayable_1 = require(25) /* ../../../core/util/arrayable */;
-    var logging_1 = require(17) /* ../../../core/logging */;
-    // Base class for markers. All markers share the same GLSL, except for one
-    // function that defines the marker geometry.
-    var MarkerGLGlyph = /** @class */ (function (_super) {
-        tslib_1.__extends(MarkerGLGlyph, _super);
-        function MarkerGLGlyph() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        MarkerGLGlyph.prototype.init = function () {
-            var gl = this.gl;
-            var vert = markers_vert_1.vertex_shader;
-            var frag = markers_frag_1.fragment_shader(this._marker_code);
-            // The program
-            this.prog = new gloo2_1.Program(gl);
-            this.prog.set_shaders(vert, frag);
-            // Real attributes
-            this.vbo_x = new gloo2_1.VertexBuffer(gl);
-            this.prog.set_attribute('a_x', 'float', this.vbo_x);
-            this.vbo_y = new gloo2_1.VertexBuffer(gl);
-            this.prog.set_attribute('a_y', 'float', this.vbo_y);
-            this.vbo_s = new gloo2_1.VertexBuffer(gl);
-            this.prog.set_attribute('a_size', 'float', this.vbo_s);
-            this.vbo_a = new gloo2_1.VertexBuffer(gl);
-            this.prog.set_attribute('a_angle', 'float', this.vbo_a);
-            // VBO's for attributes (they may not be used if value is singleton)
-            this.vbo_linewidth = new gloo2_1.VertexBuffer(gl);
-            this.vbo_fg_color = new gloo2_1.VertexBuffer(gl);
-            this.vbo_bg_color = new gloo2_1.VertexBuffer(gl);
-            this.index_buffer = new gloo2_1.IndexBuffer(gl);
-        };
-        MarkerGLGlyph.prototype.draw = function (indices, mainGlyph, trans) {
-            // The main glyph has the data, *this* glyph has the visuals.
-            var mainGlGlyph = mainGlyph.glglyph;
-            var nvertices = mainGlGlyph.nvertices;
-            // Upload data if we must. Only happens for main glyph.
-            if (mainGlGlyph.data_changed) {
-                if (!(isFinite(trans.dx) && isFinite(trans.dy))) {
-                    return; // not sure why, but it happens on init sometimes (#4367)
-                }
-                mainGlGlyph._baked_offset = [trans.dx, trans.dy]; // float32 precision workaround; used in _set_data() and below
-                mainGlGlyph._set_data(nvertices);
-                mainGlGlyph.data_changed = false;
-            }
-            else if (this.glyph instanceof circle_1.CircleView && this.glyph._radius != null &&
-                (this.last_trans == null || trans.sx != this.last_trans.sx || trans.sy != this.last_trans.sy)) {
-                // Keep screen radius up-to-date for circle glyph. Only happens when a radius is given
-                this.last_trans = trans;
-                this.vbo_s.set_data(0, new Float32Array(arrayable_1.map(this.glyph.sradius, function (s) { return s * 2; })));
-            }
-            // Update visuals if we must. Can happen for all glyphs.
-            if (this.visuals_changed) {
-                this._set_visuals(nvertices);
-                this.visuals_changed = false;
-            }
-            // Handle transformation to device coordinates
-            // Note the baked-in offset to avoid float32 precision problems
-            var baked_offset = mainGlGlyph._baked_offset;
-            this.prog.set_uniform('u_pixel_ratio', 'float', [trans.pixel_ratio]);
-            this.prog.set_uniform('u_canvas_size', 'vec2', [trans.width, trans.height]);
-            this.prog.set_uniform('u_offset', 'vec2', [trans.dx - baked_offset[0], trans.dy - baked_offset[1]]);
-            this.prog.set_uniform('u_scale', 'vec2', [trans.sx, trans.sy]);
-            // Select buffers from main glyph
-            // (which may be this glyph but maybe not if this is a (non)selection glyph)
-            this.prog.set_attribute('a_x', 'float', mainGlGlyph.vbo_x);
-            this.prog.set_attribute('a_y', 'float', mainGlGlyph.vbo_y);
-            this.prog.set_attribute('a_size', 'float', mainGlGlyph.vbo_s);
-            this.prog.set_attribute('a_angle', 'float', mainGlGlyph.vbo_a);
-            // Draw directly or using indices. Do not handle indices if they do not
-            // fit in a uint16; WebGL 1.0 does not support uint32.
-            if (indices.length == 0)
-                return;
-            else if (indices.length === nvertices)
-                this.prog.draw(this.gl.POINTS, [0, nvertices]);
-            else if (nvertices < 65535) {
-                // On IE the marker size is reduced to 1 px when using an index buffer
-                // A MS Edge dev on Twitter said on 24-04-2014: "gl_PointSize > 1.0 works
-                // in DrawArrays; gl_PointSize > 1.0 in DrawElements is coming soon in the
-                // next renderer update.
-                var ua = window.navigator.userAgent;
-                if ((ua.indexOf("MSIE ") + ua.indexOf("Trident/") + ua.indexOf("Edge/")) > 0) {
-                    logging_1.logger.warn('WebGL warning: IE is known to produce 1px sprites whith selections.');
-                }
-                this.index_buffer.set_size(indices.length * 2);
-                this.index_buffer.set_data(0, new Uint16Array(indices));
-                this.prog.draw(this.gl.POINTS, this.index_buffer);
-            }
-            else {
-                // Work around the limit that the indexbuffer must be uint16. We draw in chunks.
-                // First collect indices in chunks
-                var chunksize = 64000; // 65536
-                var chunks = [];
-                for (var i = 0, end = Math.ceil(nvertices / chunksize); i < end; i++) {
-                    chunks.push([]);
-                }
-                for (var i = 0, end = indices.length; i < end; i++) {
-                    var uint16_index = indices[i] % chunksize;
-                    var chunk = Math.floor(indices[i] / chunksize);
-                    chunks[chunk].push(uint16_index);
-                }
-                // Then draw each chunk
-                for (var chunk = 0, end = chunks.length; chunk < end; chunk++) {
-                    var these_indices = new Uint16Array(chunks[chunk]);
-                    var offset = chunk * chunksize * 4;
-                    if (these_indices.length === 0) {
-                        continue;
-                    }
-                    this.prog.set_attribute('a_x', 'float', mainGlGlyph.vbo_x, 0, offset);
-                    this.prog.set_attribute('a_y', 'float', mainGlGlyph.vbo_y, 0, offset);
-                    this.prog.set_attribute('a_size', 'float', mainGlGlyph.vbo_s, 0, offset);
-                    this.prog.set_attribute('a_angle', 'float', mainGlGlyph.vbo_a, 0, offset);
-                    if (this.vbo_linewidth.used) {
-                        this.prog.set_attribute('a_linewidth', 'float', this.vbo_linewidth, 0, offset);
-                    }
-                    if (this.vbo_fg_color.used) {
-                        this.prog.set_attribute('a_fg_color', 'vec4', this.vbo_fg_color, 0, offset * 4);
-                    }
-                    if (this.vbo_bg_color.used) {
-                        this.prog.set_attribute('a_bg_color', 'vec4', this.vbo_bg_color, 0, offset * 4);
-                    }
-                    // The actual drawing
-                    this.index_buffer.set_size(these_indices.length * 2);
-                    this.index_buffer.set_data(0, these_indices);
-                    this.prog.draw(this.gl.POINTS, this.index_buffer);
-                }
-            }
-        };
-        MarkerGLGlyph.prototype._set_data = function (nvertices) {
-            var n = nvertices * 4; // in bytes
-            // Set buffer size
-            this.vbo_x.set_size(n);
-            this.vbo_y.set_size(n);
-            this.vbo_a.set_size(n);
-            this.vbo_s.set_size(n);
-            // Upload data for x and y, apply a baked-in offset for float32 precision (issue #3795)
-            // The exact value for the baked_offset does not matter, as long as it brings the data to less extreme values
-            var xx = new Float64Array(this.glyph._x);
-            var yy = new Float64Array(this.glyph._y);
-            for (var i = 0, end = nvertices; i < end; i++) {
-                xx[i] += this._baked_offset[0];
-                yy[i] += this._baked_offset[1];
-            }
-            this.vbo_x.set_data(0, new Float32Array(xx));
-            this.vbo_y.set_data(0, new Float32Array(yy));
-            // Angle if available; circle does not have angle. If we don't set data, angle is default 0 in glsl
-            if (this.glyph._angle != null) {
-                this.vbo_a.set_data(0, new Float32Array(this.glyph._angle));
-            }
-            // Radius is special; some markes allow radius in data-coords instead of screen coords
-            // @radius tells us that radius is in units, sradius is the pre-calculated screen radius
-            if (this.glyph instanceof circle_1.CircleView && this.glyph._radius != null)
-                this.vbo_s.set_data(0, new Float32Array(arrayable_1.map(this.glyph.sradius, function (s) { return s * 2; })));
-            else
-                this.vbo_s.set_data(0, new Float32Array(this.glyph._size));
-        };
-        MarkerGLGlyph.prototype._set_visuals = function (nvertices) {
-            base_1.attach_float(this.prog, this.vbo_linewidth, 'a_linewidth', nvertices, this.glyph.visuals.line, 'line_width');
-            base_1.attach_color(this.prog, this.vbo_fg_color, 'a_fg_color', nvertices, this.glyph.visuals.line, 'line');
-            base_1.attach_color(this.prog, this.vbo_bg_color, 'a_bg_color', nvertices, this.glyph.visuals.fill, 'fill');
-            // Static value for antialias. Smaller aa-region to obtain crisper images
-            this.prog.set_uniform('u_antialias', 'float', [0.8]);
-        };
-        MarkerGLGlyph.__name__ = "MarkerGLGlyph";
-        return MarkerGLGlyph;
-    }(base_1.BaseGLGlyph));
-    exports.MarkerGLGlyph = MarkerGLGlyph;
-    function mk_marker(code) {
-        return /** @class */ (function (_super) {
-            tslib_1.__extends(class_1, _super);
-            function class_1() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            Object.defineProperty(class_1.prototype, "_marker_code", {
-                get: function () {
-                    return code;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return class_1;
-        }(MarkerGLGlyph));
-    }
-    var glsl = require(513) /* ./markers.frag */;
-    exports.CircleGLGlyph = mk_marker(glsl.circle);
-    exports.SquareGLGlyph = mk_marker(glsl.square);
-    exports.DiamondGLGlyph = mk_marker(glsl.diamond);
-    exports.TriangleGLGlyph = mk_marker(glsl.triangle);
-    exports.InvertedTriangleGLGlyph = mk_marker(glsl.invertedtriangle);
-    exports.HexGLGlyph = mk_marker(glsl.hex);
-    exports.CrossGLGlyph = mk_marker(glsl.cross);
-    exports.CircleCrossGLGlyph = mk_marker(glsl.circlecross);
-    exports.SquareCrossGLGlyph = mk_marker(glsl.squarecross);
-    exports.DiamondCrossGLGlyph = mk_marker(glsl.diamondcross);
-    exports.XGLGlyph = mk_marker(glsl.x);
-    exports.CircleXGLGlyph = mk_marker(glsl.circlex);
-    exports.SquareXGLGlyph = mk_marker(glsl.squarex);
-    exports.AsteriskGLGlyph = mk_marker(glsl.asterisk);
-}
-,
-515: /* models/glyphs/webgl/markers.vert */ function _(require, module, exports) {
-    exports.vertex_shader = "\nprecision mediump float;\nconst float SQRT_2 = 1.4142135623730951;\n//\nuniform float u_pixel_ratio;\nuniform vec2 u_canvas_size;\nuniform vec2 u_offset;\nuniform vec2 u_scale;\nuniform float u_antialias;\n//\nattribute float a_x;\nattribute float a_y;\nattribute float a_size;\nattribute float a_angle;  // in radians\nattribute float a_linewidth;\nattribute vec4  a_fg_color;\nattribute vec4  a_bg_color;\n//\nvarying float v_linewidth;\nvarying float v_size;\nvarying vec4  v_fg_color;\nvarying vec4  v_bg_color;\nvarying vec2  v_rotation;\n\nvoid main (void)\n{\n    v_size = a_size * u_pixel_ratio;\n    v_linewidth = a_linewidth * u_pixel_ratio;\n    v_fg_color = a_fg_color;\n    v_bg_color = a_bg_color;\n    v_rotation = vec2(cos(-a_angle), sin(-a_angle));\n    // Calculate position - the -0.5 is to correct for canvas origin\n    vec2 pos = (vec2(a_x, a_y) + u_offset) * u_scale; // in pixels\n    pos += 0.5;  // make up for Bokeh's offset\n    pos /= u_canvas_size / u_pixel_ratio;  // in 0..1\n    gl_Position = vec4(pos*2.0-1.0, 0.0, 1.0);\n    gl_Position.y *= -1.0;\n    gl_PointSize = SQRT_2 * v_size + 2.0 * (v_linewidth + 1.5*u_antialias);\n}\n";
-}
-,
-516: /* gloo2/gloo2 */ function _(require, module, exports) {
+    LineGLGlyph.__name__ = "LineGLGlyph";
+},
+456: /* gloo2/gloo2.js */ function _(require, module, exports) {
     /* Do not edit, autogenerated by flexx.pyscript */
     var _pyfunc_add = function (a, b) {
         if (Array.isArray(a) && Array.isArray(b)) {
@@ -1229,21 +832,35 @@
                 this.locations[name] = getLocation.call(gl, this.handle, name);
             }
         }
-        return _pyfunc_add(((function list_comprehenson() { var res = []; var v, iter0, i0; iter0 = attributes; if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
-            iter0 = Object.keys(iter0);
-        } for (i0 = 0; i0 < iter0.length; i0++) {
-            v = iter0[i0];
-            {
-                res.push(v[0]);
+        return _pyfunc_add(((function list_comprehenson() {
+            var res = [];
+            var v, iter0, i0;
+            iter0 = attributes;
+            if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
+                iter0 = Object.keys(iter0);
             }
-        } return res; }).apply(this)), ((function list_comprehenson() { var res = []; var v, iter0, i0; iter0 = uniforms; if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
-            iter0 = Object.keys(iter0);
-        } for (i0 = 0; i0 < iter0.length; i0++) {
-            v = iter0[i0];
-            {
-                res.push(v[0]);
+            for (i0 = 0; i0 < iter0.length; i0++) {
+                v = iter0[i0];
+                {
+                    res.push(v[0]);
+                }
             }
-        } return res; }).apply(this)));
+            return res;
+        }).apply(this)), ((function list_comprehenson() {
+            var res = [];
+            var v, iter0, i0;
+            iter0 = uniforms;
+            if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
+                iter0 = Object.keys(iter0);
+            }
+            for (i0 = 0; i0 < iter0.length; i0++) {
+                v = iter0[i0];
+                {
+                    res.push(v[0]);
+                }
+            }
+            return res;
+        }).apply(this)));
     };
     Program.prototype.set_texture = function (name, value) {
         var err_3, handle, unit;
@@ -1782,14 +1399,21 @@
         if (_pyfunc_equals(shape.length, 3)) {
             shape = [shape[0], shape[1], shape[2], 1];
         }
-        if ((!(_pyfunc_all(((function list_comprehenson() { var res = []; var i, iter0, i0; iter0 = offset; if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
-            iter0 = Object.keys(iter0);
-        } for (i0 = 0; i0 < iter0.length; i0++) {
-            i = iter0[i0];
-            {
-                res.push(_pyfunc_equals(i, 0));
+        if ((!(_pyfunc_all(((function list_comprehenson() {
+            var res = [];
+            var i, iter0, i0;
+            iter0 = offset;
+            if ((typeof iter0 === "object") && (!Array.isArray(iter0))) {
+                iter0 = Object.keys(iter0);
             }
-        } return res; }).apply(this)))))) {
+            for (i0 = 0; i0 < iter0.length; i0++) {
+                i = iter0[i0];
+                {
+                    res.push(_pyfunc_equals(i, 0));
+                }
+            }
+            return res;
+        }).apply(this)))))) {
             err_3 = new Error('ValueError:' + "Texture3DLike does not support nonzero offset (for now)");
             err_3.name = "ValueError";
             throw err_3;
@@ -1827,9 +1451,408 @@
         "check_error": check_error,
         "console": console
     };
-}
-
-}, {"models/glyphs/webgl/base":507,"models/glyphs/webgl/index":508,"models/glyphs/webgl/line.frag":509,"models/glyphs/webgl/line":510,"models/glyphs/webgl/line.vert":511,"models/glyphs/webgl/main":512,"models/glyphs/webgl/markers.frag":513,"models/glyphs/webgl/markers":514,"models/glyphs/webgl/markers.vert":515}, 512, null);
+},
+457: /* models/glyphs/webgl/base.js */ function _(require, module, exports) {
+    var color_1 = require(123) /* ../../../core/util/color */;
+    var logging_1 = require(167) /* ../../../core/logging */;
+    var BaseGLGlyph = /** @class */ (function () {
+        function BaseGLGlyph(gl, glyph) {
+            this.gl = gl;
+            this.glyph = glyph;
+            this.nvertices = 0;
+            this.size_changed = false;
+            this.data_changed = false;
+            this.visuals_changed = false;
+            this.init();
+        }
+        BaseGLGlyph.prototype.set_data_changed = function (n) {
+            if (n != this.nvertices) {
+                this.nvertices = n;
+                this.size_changed = true;
+            }
+            this.data_changed = true;
+        };
+        BaseGLGlyph.prototype.set_visuals_changed = function () {
+            this.visuals_changed = true;
+        };
+        BaseGLGlyph.prototype.render = function (_ctx, indices, mainglyph) {
+            var _a;
+            // Get transform
+            var _b = [0, 1, 2], a = _b[0], b = _b[1], c = _b[2];
+            var wx = 1; // Weights to scale our vectors
+            var wy = 1;
+            var _c = this.glyph.renderer.map_to_screen([a * wx, b * wx, c * wx], [a * wy, b * wy, c * wy]), dx = _c[0], dy = _c[1];
+            if (isNaN(dx[0] + dx[1] + dx[2] + dy[0] + dy[1] + dy[2])) {
+                logging_1.logger.warn("WebGL backend (" + this.glyph.model.type + "): falling back to canvas rendering");
+                return false;
+            }
+            // Try again, but with weighs so we're looking at ~100 in screen coordinates
+            wx = 100 / Math.min(Math.max(Math.abs(dx[1] - dx[0]), 1e-12), 1e12);
+            wy = 100 / Math.min(Math.max(Math.abs(dy[1] - dy[0]), 1e-12), 1e12);
+            _a = this.glyph.renderer.map_to_screen([a * wx, b * wx, c * wx], [a * wy, b * wy, c * wy]), dx = _a[0], dy = _a[1];
+            // Test how linear it is
+            if ((Math.abs((dx[1] - dx[0]) - (dx[2] - dx[1])) > 1e-6) ||
+                (Math.abs((dy[1] - dy[0]) - (dy[2] - dy[1])) > 1e-6)) {
+                logging_1.logger.warn("WebGL backend (" + this.glyph.model.type + "): falling back to canvas rendering");
+                return false;
+            }
+            var _d = [(dx[1] - dx[0]) / wx, (dy[1] - dy[0]) / wy], sx = _d[0], sy = _d[1];
+            var _e = this.glyph.renderer.plot_view.gl.canvas, width = _e.width, height = _e.height;
+            var trans = {
+                pixel_ratio: this.glyph.renderer.plot_view.canvas.pixel_ratio,
+                width: width, height: height,
+                dx: dx[0] / sx, dy: dy[0] / sy, sx: sx, sy: sy,
+            };
+            this.draw(indices, mainglyph, trans);
+            return true;
+        };
+        return BaseGLGlyph;
+    }());
+    exports.BaseGLGlyph = BaseGLGlyph;
+    BaseGLGlyph.__name__ = "BaseGLGlyph";
+    function line_width(width) {
+        // Increase small values to make it more similar to canvas
+        if (width < 2) {
+            width = Math.sqrt(width * 2);
+        }
+        return width;
+    }
+    exports.line_width = line_width;
+    function fill_array_with_float(n, val) {
+        var a = new Float32Array(n);
+        for (var i = 0, end = n; i < end; i++) {
+            a[i] = val;
+        }
+        return a;
+    }
+    exports.fill_array_with_float = fill_array_with_float;
+    function fill_array_with_vec(n, m, val) {
+        var a = new Float32Array(n * m);
+        for (var i = 0; i < n; i++) {
+            for (var j = 0; j < m; j++) {
+                a[i * m + j] = val[j];
+            }
+        }
+        return a;
+    }
+    exports.fill_array_with_vec = fill_array_with_vec;
+    function visual_prop_is_singular(visual, propname) {
+        // This touches the internals of the visual, so we limit use in this function
+        // See renderer.ts:cache_select() for similar code
+        return visual[propname].spec.value !== undefined;
+    }
+    exports.visual_prop_is_singular = visual_prop_is_singular;
+    function attach_float(prog, vbo, att_name, n, visual, name) {
+        // Attach a float attribute to the program. Use singleton value if we can,
+        // otherwise use VBO to apply array.
+        if (!visual.doit) {
+            vbo.used = false;
+            prog.set_attribute(att_name, 'float', [0]);
+        }
+        else if (visual_prop_is_singular(visual, name)) {
+            vbo.used = false;
+            prog.set_attribute(att_name, 'float', visual[name].value());
+        }
+        else {
+            vbo.used = true;
+            var a = new Float32Array(visual.cache[name + '_array']);
+            vbo.set_size(n * 4);
+            vbo.set_data(0, a);
+            prog.set_attribute(att_name, 'float', vbo);
+        }
+    }
+    exports.attach_float = attach_float;
+    function attach_color(prog, vbo, att_name, n, visual, prefix) {
+        // Attach the color attribute to the program. If there's just one color,
+        // then use this single color for all vertices (no VBO). Otherwise we
+        // create an array and upload that to the VBO, which we attahce to the prog.
+        var rgba;
+        var m = 4;
+        var colorname = prefix + '_color';
+        var alphaname = prefix + '_alpha';
+        if (!visual.doit) {
+            // Don't draw (draw transparent)
+            vbo.used = false;
+            prog.set_attribute(att_name, 'vec4', [0, 0, 0, 0]);
+        }
+        else if (visual_prop_is_singular(visual, colorname) && visual_prop_is_singular(visual, alphaname)) {
+            // Nice and simple; both color and alpha are singular
+            vbo.used = false;
+            rgba = color_1.color2rgba(visual[colorname].value(), visual[alphaname].value());
+            prog.set_attribute(att_name, 'vec4', rgba);
+        }
+        else {
+            // Use vbo; we need an array for both the color and the alpha
+            var alphas = void 0, colors = void 0;
+            vbo.used = true;
+            // Get array of colors
+            if (visual_prop_is_singular(visual, colorname)) {
+                colors = ((function () {
+                    var result = [];
+                    for (var i = 0, end = n; i < end; i++) {
+                        result.push(visual[colorname].value());
+                    }
+                    return result;
+                })());
+            }
+            else {
+                colors = visual.cache[colorname + '_array'];
+            }
+            // Get array of alphas
+            if (visual_prop_is_singular(visual, alphaname)) {
+                alphas = fill_array_with_float(n, visual[alphaname].value());
+            }
+            else {
+                alphas = visual.cache[alphaname + '_array'];
+            }
+            // Create array of rgbs
+            var a = new Float32Array(n * m);
+            for (var i = 0, end = n; i < end; i++) {
+                rgba = color_1.color2rgba(colors[i], alphas[i]);
+                for (var j = 0, endj = m; j < endj; j++) {
+                    a[(i * m) + j] = rgba[j];
+                }
+            }
+            // Attach vbo
+            vbo.set_size(n * m * 4);
+            vbo.set_data(0, a);
+            prog.set_attribute(att_name, 'vec4', vbo);
+        }
+    }
+    exports.attach_color = attach_color;
+},
+458: /* models/glyphs/webgl/line.vert.js */ function _(require, module, exports) {
+    exports.vertex_shader = "\nprecision mediump float;\n\nconst float PI = 3.14159265358979323846264;\nconst float THETA = 15.0 * 3.14159265358979323846264/180.0;\n\nuniform float u_pixel_ratio;\nuniform vec2 u_canvas_size, u_offset;\nuniform vec2 u_scale_aspect;\nuniform float u_scale_length;\n\nuniform vec4 u_color;\nuniform float u_antialias;\nuniform float u_length;\nuniform float u_linewidth;\nuniform float u_dash_index;\nuniform float u_closed;\n\nattribute vec2 a_position;\nattribute vec4 a_tangents;\nattribute vec2 a_segment;\nattribute vec2 a_angles;\nattribute vec2 a_texcoord;\n\nvarying vec4  v_color;\nvarying vec2  v_segment;\nvarying vec2  v_angles;\nvarying vec2  v_texcoord;\nvarying vec2  v_miter;\nvarying float v_length;\nvarying float v_linewidth;\n\nfloat cross(in vec2 v1, in vec2 v2)\n{\n    return v1.x*v2.y - v1.y*v2.x;\n}\n\nfloat signed_distance(in vec2 v1, in vec2 v2, in vec2 v3)\n{\n    return cross(v2-v1,v1-v3) / length(v2-v1);\n}\n\nvoid rotate( in vec2 v, in float alpha, out vec2 result )\n{\n    float c = cos(alpha);\n    float s = sin(alpha);\n    result = vec2( c*v.x - s*v.y,\n                   s*v.x + c*v.y );\n}\n\nvoid main()\n{\n    bool closed = (u_closed > 0.0);\n\n    // Attributes and uniforms to varyings\n    v_color = u_color;\n    v_linewidth = u_linewidth;\n    v_segment = a_segment * u_scale_length;\n    v_length = u_length * u_scale_length;\n\n    // Scale to map to pixel coordinates. The original algorithm from the paper\n    // assumed isotropic scale. We obviously do not have this.\n    vec2 abs_scale_aspect = abs(u_scale_aspect);\n    vec2 abs_scale = u_scale_length * abs_scale_aspect;\n\n    // Correct angles for aspect ratio\n    vec2 av;\n    av = vec2(1.0, tan(a_angles.x)) / abs_scale_aspect;\n    v_angles.x = atan(av.y, av.x);\n    av = vec2(1.0, tan(a_angles.y)) / abs_scale_aspect;\n    v_angles.y = atan(av.y, av.x);\n\n    // Thickness below 1 pixel are represented using a 1 pixel thickness\n    // and a modified alpha\n    v_color.a = min(v_linewidth, v_color.a);\n    v_linewidth = max(v_linewidth, 1.0);\n\n    // If color is fully transparent we just will discard the fragment anyway\n    if( v_color.a <= 0.0 ) {\n        gl_Position = vec4(0.0,0.0,0.0,1.0);\n        return;\n    }\n\n    // This is the actual half width of the line\n    float w = ceil(u_antialias+v_linewidth)/2.0;\n\n    vec2 position = (a_position + u_offset) * abs_scale;\n\n    vec2 t1 = normalize(a_tangents.xy * abs_scale_aspect);  // note the scaling for aspect ratio here\n    vec2 t2 = normalize(a_tangents.zw * abs_scale_aspect);\n    float u = a_texcoord.x;\n    float v = a_texcoord.y;\n    vec2 o1 = vec2( +t1.y, -t1.x);\n    vec2 o2 = vec2( +t2.y, -t2.x);\n\n    // This is a join\n    // ----------------------------------------------------------------\n    if( t1 != t2 ) {\n        float angle = atan (t1.x*t2.y-t1.y*t2.x, t1.x*t2.x+t1.y*t2.y);  // Angle needs recalculation for some reason\n        vec2 t  = normalize(t1+t2);\n        vec2 o  = vec2( + t.y, - t.x);\n\n        if ( u_dash_index > 0.0 )\n        {\n            // Broken angle\n            // ----------------------------------------------------------------\n            if( (abs(angle) > THETA) ) {\n                position += v * w * o / cos(angle/2.0);\n                float s = sign(angle);\n                if( angle < 0.0 ) {\n                    if( u == +1.0 ) {\n                        u = v_segment.y + v * w * tan(angle/2.0);\n                        if( v == 1.0 ) {\n                            position -= 2.0 * w * t1 / sin(angle);\n                            u -= 2.0 * w / sin(angle);\n                        }\n                    } else {\n                        u = v_segment.x - v * w * tan(angle/2.0);\n                        if( v == 1.0 ) {\n                            position += 2.0 * w * t2 / sin(angle);\n                            u += 2.0*w / sin(angle);\n                        }\n                    }\n                } else {\n                    if( u == +1.0 ) {\n                        u = v_segment.y + v * w * tan(angle/2.0);\n                        if( v == -1.0 ) {\n                            position += 2.0 * w * t1 / sin(angle);\n                            u += 2.0 * w / sin(angle);\n                        }\n                    } else {\n                        u = v_segment.x - v * w * tan(angle/2.0);\n                        if( v == -1.0 ) {\n                            position -= 2.0 * w * t2 / sin(angle);\n                            u -= 2.0*w / sin(angle);\n                        }\n                    }\n                }\n                // Continuous angle\n                // ------------------------------------------------------------\n            } else {\n                position += v * w * o / cos(angle/2.0);\n                if( u == +1.0 ) u = v_segment.y;\n                else            u = v_segment.x;\n            }\n        }\n\n        // Solid line\n        // --------------------------------------------------------------------\n        else\n        {\n            position.xy += v * w * o / cos(angle/2.0);\n            if( angle < 0.0 ) {\n                if( u == +1.0 ) {\n                    u = v_segment.y + v * w * tan(angle/2.0);\n                } else {\n                    u = v_segment.x - v * w * tan(angle/2.0);\n                }\n            } else {\n                if( u == +1.0 ) {\n                    u = v_segment.y + v * w * tan(angle/2.0);\n                } else {\n                    u = v_segment.x - v * w * tan(angle/2.0);\n                }\n            }\n        }\n\n    // This is a line start or end (t1 == t2)\n    // ------------------------------------------------------------------------\n    } else {\n        position += v * w * o1;\n        if( u == -1.0 ) {\n            u = v_segment.x - w;\n            position -= w * t1;\n        } else {\n            u = v_segment.y + w;\n            position += w * t2;\n        }\n    }\n\n    // Miter distance\n    // ------------------------------------------------------------------------\n    vec2 t;\n    vec2 curr = a_position * abs_scale;\n    if( a_texcoord.x < 0.0 ) {\n        vec2 next = curr + t2*(v_segment.y-v_segment.x);\n\n        rotate( t1, +v_angles.x/2.0, t);\n        v_miter.x = signed_distance(curr, curr+t, position);\n\n        rotate( t2, +v_angles.y/2.0, t);\n        v_miter.y = signed_distance(next, next+t, position);\n    } else {\n        vec2 prev = curr - t1*(v_segment.y-v_segment.x);\n\n        rotate( t1, -v_angles.x/2.0,t);\n        v_miter.x = signed_distance(prev, prev+t, position);\n\n        rotate( t2, -v_angles.y/2.0,t);\n        v_miter.y = signed_distance(curr, curr+t, position);\n    }\n\n    if (!closed && v_segment.x <= 0.0) {\n        v_miter.x = 1e10;\n    }\n    if (!closed && v_segment.y >= v_length)\n    {\n        v_miter.y = 1e10;\n    }\n\n    v_texcoord = vec2( u, v*w );\n\n    // Calculate position in device coordinates. Note that we\n    // already scaled with abs scale above.\n    vec2 normpos = position * sign(u_scale_aspect);\n    normpos += 0.5;  // make up for Bokeh's offset\n    normpos /= u_canvas_size / u_pixel_ratio;  // in 0..1\n    gl_Position = vec4(normpos*2.0-1.0, 0.0, 1.0);\n    gl_Position.y *= -1.0;\n}\n";
+},
+459: /* models/glyphs/webgl/line.frag.js */ function _(require, module, exports) {
+    exports.fragment_shader = "\nprecision mediump float;\n\nconst float PI = 3.14159265358979323846264;\nconst float THETA = 15.0 * 3.14159265358979323846264/180.0;\n\nuniform sampler2D u_dash_atlas;\n\nuniform vec2 u_linecaps;\nuniform float u_miter_limit;\nuniform float u_linejoin;\nuniform float u_antialias;\nuniform float u_dash_phase;\nuniform float u_dash_period;\nuniform float u_dash_index;\nuniform vec2 u_dash_caps;\nuniform float u_closed;\n\nvarying vec4  v_color;\nvarying vec2  v_segment;\nvarying vec2  v_angles;\nvarying vec2  v_texcoord;\nvarying vec2  v_miter;\nvarying float v_length;\nvarying float v_linewidth;\n\n// Compute distance to cap ----------------------------------------------------\nfloat cap( int type, float dx, float dy, float t, float linewidth )\n{\n    float d = 0.0;\n    dx = abs(dx);\n    dy = abs(dy);\n    if      (type == 0)  discard;  // None\n    else if (type == 1)  d = sqrt(dx*dx+dy*dy);  // Round\n    else if (type == 3)  d = (dx+abs(dy));  // Triangle in\n    else if (type == 2)  d = max(abs(dy),(t+dx-abs(dy)));  // Triangle out\n    else if (type == 4)  d = max(dx,dy);  // Square\n    else if (type == 5)  d = max(dx+t,dy);  // Butt\n    return d;\n}\n\n// Compute distance to join -------------------------------------------------\nfloat join( in int type, in float d, in vec2 segment, in vec2 texcoord, in vec2 miter,\n           in float linewidth )\n{\n    // texcoord.x is distance from start\n    // texcoord.y is distance from centerline\n    // segment.x and y indicate the limits (as for texcoord.x) for this segment\n\n    float dx = texcoord.x;\n\n    // Round join\n    if( type == 1 ) {\n        if (dx < segment.x) {\n            d = max(d,length( texcoord - vec2(segment.x,0.0)));\n            //d = length( texcoord - vec2(segment.x,0.0));\n        } else if (dx > segment.y) {\n            d = max(d,length( texcoord - vec2(segment.y,0.0)));\n            //d = length( texcoord - vec2(segment.y,0.0));\n        }\n    }\n    // Bevel join\n    else if ( type == 2 ) {\n        if (dx < segment.x) {\n            vec2 x = texcoord - vec2(segment.x,0.0);\n            d = max(d, max(abs(x.x), abs(x.y)));\n\n        } else if (dx > segment.y) {\n            vec2 x = texcoord - vec2(segment.y,0.0);\n            d = max(d, max(abs(x.x), abs(x.y)));\n        }\n        /*  Original code for bevel which does not work for us\n        if( (dx < segment.x) ||  (dx > segment.y) )\n            d = max(d, min(abs(x.x),abs(x.y)));\n        */\n    }\n\n    return d;\n}\n\nvoid main()\n{\n    // If color is fully transparent we just discard the fragment\n    if( v_color.a <= 0.0 ) {\n        discard;\n    }\n\n    // Test if dash pattern is the solid one (0)\n    bool solid =  (u_dash_index == 0.0);\n\n    // Test if path is closed\n    bool closed = (u_closed > 0.0);\n\n    vec4 color = v_color;\n    float dx = v_texcoord.x;\n    float dy = v_texcoord.y;\n    float t = v_linewidth/2.0-u_antialias;\n    float width = 1.0;  //v_linewidth; original code had dashes scale with line width, we do not\n    float d = 0.0;\n\n    vec2 linecaps = u_linecaps;\n    vec2 dash_caps = u_dash_caps;\n    float line_start = 0.0;\n    float line_stop = v_length;\n\n    // Apply miter limit; fragments too far into the miter are simply discarded\n    if( (dx < v_segment.x) || (dx > v_segment.y) ) {\n        float into_miter = max(v_segment.x - dx, dx - v_segment.y);\n        if (into_miter > u_miter_limit*v_linewidth/2.0)\n          discard;\n    }\n\n    // Solid line --------------------------------------------------------------\n    if( solid ) {\n        d = abs(dy);\n        if( (!closed) && (dx < line_start) ) {\n            d = cap( int(u_linecaps.x), abs(dx), abs(dy), t, v_linewidth );\n        }\n        else if( (!closed) &&  (dx > line_stop) ) {\n            d = cap( int(u_linecaps.y), abs(dx)-line_stop, abs(dy), t, v_linewidth );\n        }\n        else {\n            d = join( int(u_linejoin), abs(dy), v_segment, v_texcoord, v_miter, v_linewidth );\n        }\n\n    // Dash line --------------------------------------------------------------\n    } else {\n        float segment_start = v_segment.x;\n        float segment_stop  = v_segment.y;\n        float segment_center= (segment_start+segment_stop)/2.0;\n        float freq          = u_dash_period*width;\n        float u = mod( dx + u_dash_phase*width, freq);\n        vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n        float dash_center= tex.x * width;\n        float dash_type  = tex.y;\n        float _start = tex.z * width;\n        float _stop  = tex.a * width;\n        float dash_start = dx - u + _start;\n        float dash_stop  = dx - u + _stop;\n\n        // Compute extents of the first dash (the one relative to v_segment.x)\n        // Note: this could be computed in the vertex shader\n        if( (dash_stop < segment_start) && (dash_caps.x != 5.0) ) {\n            float u = mod(segment_start + u_dash_phase*width, freq);\n            vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n            dash_center= tex.x * width;\n            //dash_type  = tex.y;\n            float _start = tex.z * width;\n            float _stop  = tex.a * width;\n            dash_start = segment_start - u + _start;\n            dash_stop = segment_start - u + _stop;\n        }\n\n        // Compute extents of the last dash (the one relatives to v_segment.y)\n        // Note: This could be computed in the vertex shader\n        else if( (dash_start > segment_stop)  && (dash_caps.y != 5.0) ) {\n            float u = mod(segment_stop + u_dash_phase*width, freq);\n            vec4 tex = texture2D(u_dash_atlas, vec2(u/freq, u_dash_index)) * 255.0 -10.0;  // conversion to int-like\n            dash_center= tex.x * width;\n            //dash_type  = tex.y;\n            float _start = tex.z * width;\n            float _stop  = tex.a * width;\n            dash_start = segment_stop - u + _start;\n            dash_stop  = segment_stop - u + _stop;\n        }\n\n        // This test if the we are dealing with a discontinuous angle\n        bool discontinuous = ((dx <  segment_center) && abs(v_angles.x) > THETA) ||\n                             ((dx >= segment_center) && abs(v_angles.y) > THETA);\n        //if( dx < line_start) discontinuous = false;\n        //if( dx > line_stop)  discontinuous = false;\n\n        float d_join = join( int(u_linejoin), abs(dy),\n                            v_segment, v_texcoord, v_miter, v_linewidth );\n\n        // When path is closed, we do not have room for linecaps, so we make room\n        // by shortening the total length\n        if (closed) {\n             line_start += v_linewidth/2.0;\n             line_stop  -= v_linewidth/2.0;\n        }\n\n        // We also need to take antialias area into account\n        //line_start += u_antialias;\n        //line_stop  -= u_antialias;\n\n        // Check is dash stop is before line start\n        if( dash_stop <= line_start ) {\n            discard;\n        }\n        // Check is dash start is beyond line stop\n        if( dash_start >= line_stop ) {\n            discard;\n        }\n\n        // Check if current dash start is beyond segment stop\n        if( discontinuous ) {\n            // Dash start is beyond segment, we discard\n            if( (dash_start > segment_stop) ) {\n                discard;\n                //gl_FragColor = vec4(1.0,0.0,0.0,.25); return;\n            }\n\n            // Dash stop is before segment, we discard\n            if( (dash_stop < segment_start) ) {\n                discard;  //gl_FragColor = vec4(0.0,1.0,0.0,.25); return;\n            }\n\n            // Special case for round caps (nicer with this)\n            if( dash_caps.x == 1.0 ) {\n                if( (u > _stop) && (dash_stop > segment_stop )  && (abs(v_angles.y) < PI/2.0)) {\n                    discard;\n                }\n            }\n\n            // Special case for round caps  (nicer with this)\n            if( dash_caps.y == 1.0 ) {\n                if( (u < _start) && (dash_start < segment_start )  && (abs(v_angles.x) < PI/2.0)) {\n                    discard;\n                }\n            }\n\n            // Special case for triangle caps (in & out) and square\n            // We make sure the cap stop at crossing frontier\n            if( (dash_caps.x != 1.0) && (dash_caps.x != 5.0) ) {\n                if( (dash_start < segment_start )  && (abs(v_angles.x) < PI/2.0) ) {\n                    float a = v_angles.x/2.0;\n                    float x = (segment_start-dx)*cos(a) - dy*sin(a);\n                    float y = (segment_start-dx)*sin(a) + dy*cos(a);\n                    if( x > 0.0 ) discard;\n                    // We transform the cap into square to avoid holes\n                    dash_caps.x = 4.0;\n                }\n            }\n\n            // Special case for triangle caps (in & out) and square\n            // We make sure the cap stop at crossing frontier\n            if( (dash_caps.y != 1.0) && (dash_caps.y != 5.0) ) {\n                if( (dash_stop > segment_stop )  && (abs(v_angles.y) < PI/2.0) ) {\n                    float a = v_angles.y/2.0;\n                    float x = (dx-segment_stop)*cos(a) - dy*sin(a);\n                    float y = (dx-segment_stop)*sin(a) + dy*cos(a);\n                    if( x > 0.0 ) discard;\n                    // We transform the caps into square to avoid holes\n                    dash_caps.y = 4.0;\n                }\n            }\n        }\n\n        // Line cap at start\n        if( (dx < line_start) && (dash_start < line_start) && (dash_stop > line_start) ) {\n            d = cap( int(linecaps.x), dx-line_start, dy, t, v_linewidth);\n        }\n        // Line cap at stop\n        else if( (dx > line_stop) && (dash_stop > line_stop) && (dash_start < line_stop) ) {\n            d = cap( int(linecaps.y), dx-line_stop, dy, t, v_linewidth);\n        }\n        // Dash cap left - dash_type = -1, 0 or 1, but there may be roundoff errors\n        else if( dash_type < -0.5 ) {\n            d = cap( int(dash_caps.y), abs(u-dash_center), dy, t, v_linewidth);\n            if( (dx > line_start) && (dx < line_stop) )\n                d = max(d,d_join);\n        }\n        // Dash cap right\n        else if( dash_type > 0.5 ) {\n            d = cap( int(dash_caps.x), abs(dash_center-u), dy, t, v_linewidth);\n            if( (dx > line_start) && (dx < line_stop) )\n                d = max(d,d_join);\n        }\n        // Dash body (plain)\n        else {// if( dash_type > -0.5 &&  dash_type < 0.5) {\n            d = abs(dy);\n        }\n\n        // Line join\n        if( (dx > line_start) && (dx < line_stop)) {\n            if( (dx <= segment_start) && (dash_start <= segment_start)\n                && (dash_stop >= segment_start) ) {\n                d = d_join;\n                // Antialias at outer border\n                float angle = PI/2.+v_angles.x;\n                float f = abs( (segment_start - dx)*cos(angle) - dy*sin(angle));\n                d = max(f,d);\n            }\n            else if( (dx > segment_stop) && (dash_start <= segment_stop)\n                     && (dash_stop >= segment_stop) ) {\n                d = d_join;\n                // Antialias at outer border\n                float angle = PI/2.+v_angles.y;\n                float f = abs((dx - segment_stop)*cos(angle) - dy*sin(angle));\n                d = max(f,d);\n            }\n            else if( dx < (segment_start - v_linewidth/2.)) {\n                discard;\n            }\n            else if( dx > (segment_stop + v_linewidth/2.)) {\n                discard;\n            }\n        }\n        else if( dx < (segment_start - v_linewidth/2.)) {\n            discard;\n        }\n        else if( dx > (segment_stop + v_linewidth/2.)) {\n            discard;\n        }\n    }\n\n    // Distance to border ------------------------------------------------------\n    d = d - t;\n    if( d < 0.0 ) {\n        gl_FragColor = color;\n    } else {\n        d /= u_antialias;\n        gl_FragColor = vec4(color.rgb, exp(-d*d)*color.a);\n    }\n}\n";
+},
+460: /* models/glyphs/webgl/markers.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var gloo2_1 = require(456) /* gloo2 */;
+    var base_1 = require(457) /* ./base */;
+    var markers_vert_1 = require(461) /* ./markers.vert */;
+    var markers_frag_1 = require(462) /* ./markers.frag */;
+    var circle_1 = require(307) /* ../circle */;
+    var arrayable_1 = require(114) /* ../../../core/util/arrayable */;
+    var logging_1 = require(167) /* ../../../core/logging */;
+    // Base class for markers. All markers share the same GLSL, except for one
+    // function that defines the marker geometry.
+    var MarkerGLGlyph = /** @class */ (function (_super) {
+        tslib_1.__extends(MarkerGLGlyph, _super);
+        function MarkerGLGlyph() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        MarkerGLGlyph.prototype.init = function () {
+            var gl = this.gl;
+            var vert = markers_vert_1.vertex_shader;
+            var frag = markers_frag_1.fragment_shader(this._marker_code);
+            // The program
+            this.prog = new gloo2_1.Program(gl);
+            this.prog.set_shaders(vert, frag);
+            // Real attributes
+            this.vbo_x = new gloo2_1.VertexBuffer(gl);
+            this.prog.set_attribute('a_x', 'float', this.vbo_x);
+            this.vbo_y = new gloo2_1.VertexBuffer(gl);
+            this.prog.set_attribute('a_y', 'float', this.vbo_y);
+            this.vbo_s = new gloo2_1.VertexBuffer(gl);
+            this.prog.set_attribute('a_size', 'float', this.vbo_s);
+            this.vbo_a = new gloo2_1.VertexBuffer(gl);
+            this.prog.set_attribute('a_angle', 'float', this.vbo_a);
+            // VBO's for attributes (they may not be used if value is singleton)
+            this.vbo_linewidth = new gloo2_1.VertexBuffer(gl);
+            this.vbo_fg_color = new gloo2_1.VertexBuffer(gl);
+            this.vbo_bg_color = new gloo2_1.VertexBuffer(gl);
+            this.index_buffer = new gloo2_1.IndexBuffer(gl);
+        };
+        MarkerGLGlyph.prototype.draw = function (indices, mainGlyph, trans) {
+            // The main glyph has the data, *this* glyph has the visuals.
+            var mainGlGlyph = mainGlyph.glglyph;
+            var nvertices = mainGlGlyph.nvertices;
+            // Upload data if we must. Only happens for main glyph.
+            if (mainGlGlyph.data_changed) {
+                if (!(isFinite(trans.dx) && isFinite(trans.dy))) {
+                    return; // not sure why, but it happens on init sometimes (#4367)
+                }
+                mainGlGlyph._baked_offset = [trans.dx, trans.dy]; // float32 precision workaround; used in _set_data() and below
+                mainGlGlyph._set_data(nvertices);
+                mainGlGlyph.data_changed = false;
+            }
+            else if (this.glyph instanceof circle_1.CircleView && this.glyph._radius != null &&
+                (this.last_trans == null || trans.sx != this.last_trans.sx || trans.sy != this.last_trans.sy)) {
+                // Keep screen radius up-to-date for circle glyph. Only happens when a radius is given
+                this.last_trans = trans;
+                this.vbo_s.set_data(0, new Float32Array(arrayable_1.map(this.glyph.sradius, function (s) { return s * 2; })));
+            }
+            // Update visuals if we must. Can happen for all glyphs.
+            if (this.visuals_changed) {
+                this._set_visuals(nvertices);
+                this.visuals_changed = false;
+            }
+            // Handle transformation to device coordinates
+            // Note the baked-in offset to avoid float32 precision problems
+            var baked_offset = mainGlGlyph._baked_offset;
+            this.prog.set_uniform('u_pixel_ratio', 'float', [trans.pixel_ratio]);
+            this.prog.set_uniform('u_canvas_size', 'vec2', [trans.width, trans.height]);
+            this.prog.set_uniform('u_offset', 'vec2', [trans.dx - baked_offset[0], trans.dy - baked_offset[1]]);
+            this.prog.set_uniform('u_scale', 'vec2', [trans.sx, trans.sy]);
+            // Select buffers from main glyph
+            // (which may be this glyph but maybe not if this is a (non)selection glyph)
+            this.prog.set_attribute('a_x', 'float', mainGlGlyph.vbo_x);
+            this.prog.set_attribute('a_y', 'float', mainGlGlyph.vbo_y);
+            this.prog.set_attribute('a_size', 'float', mainGlGlyph.vbo_s);
+            this.prog.set_attribute('a_angle', 'float', mainGlGlyph.vbo_a);
+            // Draw directly or using indices. Do not handle indices if they do not
+            // fit in a uint16; WebGL 1.0 does not support uint32.
+            if (indices.length == 0)
+                return;
+            else if (indices.length === nvertices)
+                this.prog.draw(this.gl.POINTS, [0, nvertices]);
+            else if (nvertices < 65535) {
+                // On IE the marker size is reduced to 1 px when using an index buffer
+                // A MS Edge dev on Twitter said on 24-04-2014: "gl_PointSize > 1.0 works
+                // in DrawArrays; gl_PointSize > 1.0 in DrawElements is coming soon in the
+                // next renderer update.
+                var ua = window.navigator.userAgent;
+                if ((ua.indexOf("MSIE ") + ua.indexOf("Trident/") + ua.indexOf("Edge/")) > 0) {
+                    logging_1.logger.warn('WebGL warning: IE is known to produce 1px sprites whith selections.');
+                }
+                this.index_buffer.set_size(indices.length * 2);
+                this.index_buffer.set_data(0, new Uint16Array(indices));
+                this.prog.draw(this.gl.POINTS, this.index_buffer);
+            }
+            else {
+                // Work around the limit that the indexbuffer must be uint16. We draw in chunks.
+                // First collect indices in chunks
+                var chunksize = 64000; // 65536
+                var chunks = [];
+                for (var i = 0, end = Math.ceil(nvertices / chunksize); i < end; i++) {
+                    chunks.push([]);
+                }
+                for (var i = 0, end = indices.length; i < end; i++) {
+                    var uint16_index = indices[i] % chunksize;
+                    var chunk = Math.floor(indices[i] / chunksize);
+                    chunks[chunk].push(uint16_index);
+                }
+                // Then draw each chunk
+                for (var chunk = 0, end = chunks.length; chunk < end; chunk++) {
+                    var these_indices = new Uint16Array(chunks[chunk]);
+                    var offset = chunk * chunksize * 4;
+                    if (these_indices.length === 0) {
+                        continue;
+                    }
+                    this.prog.set_attribute('a_x', 'float', mainGlGlyph.vbo_x, 0, offset);
+                    this.prog.set_attribute('a_y', 'float', mainGlGlyph.vbo_y, 0, offset);
+                    this.prog.set_attribute('a_size', 'float', mainGlGlyph.vbo_s, 0, offset);
+                    this.prog.set_attribute('a_angle', 'float', mainGlGlyph.vbo_a, 0, offset);
+                    if (this.vbo_linewidth.used) {
+                        this.prog.set_attribute('a_linewidth', 'float', this.vbo_linewidth, 0, offset);
+                    }
+                    if (this.vbo_fg_color.used) {
+                        this.prog.set_attribute('a_fg_color', 'vec4', this.vbo_fg_color, 0, offset * 4);
+                    }
+                    if (this.vbo_bg_color.used) {
+                        this.prog.set_attribute('a_bg_color', 'vec4', this.vbo_bg_color, 0, offset * 4);
+                    }
+                    // The actual drawing
+                    this.index_buffer.set_size(these_indices.length * 2);
+                    this.index_buffer.set_data(0, these_indices);
+                    this.prog.draw(this.gl.POINTS, this.index_buffer);
+                }
+            }
+        };
+        MarkerGLGlyph.prototype._set_data = function (nvertices) {
+            var n = nvertices * 4; // in bytes
+            // Set buffer size
+            this.vbo_x.set_size(n);
+            this.vbo_y.set_size(n);
+            this.vbo_a.set_size(n);
+            this.vbo_s.set_size(n);
+            // Upload data for x and y, apply a baked-in offset for float32 precision (issue #3795)
+            // The exact value for the baked_offset does not matter, as long as it brings the data to less extreme values
+            var xx = new Float64Array(this.glyph._x);
+            var yy = new Float64Array(this.glyph._y);
+            for (var i = 0, end = nvertices; i < end; i++) {
+                xx[i] += this._baked_offset[0];
+                yy[i] += this._baked_offset[1];
+            }
+            this.vbo_x.set_data(0, new Float32Array(xx));
+            this.vbo_y.set_data(0, new Float32Array(yy));
+            // Angle if available; circle does not have angle. If we don't set data, angle is default 0 in glsl
+            if (this.glyph._angle != null) {
+                this.vbo_a.set_data(0, new Float32Array(this.glyph._angle));
+            }
+            // Radius is special; some markers allow radius in data-coords instead of screen coords
+            // @radius tells us that radius is in units, sradius is the pre-calculated screen radius
+            if (this.glyph instanceof circle_1.CircleView && this.glyph._radius != null)
+                this.vbo_s.set_data(0, new Float32Array(arrayable_1.map(this.glyph.sradius, function (s) { return s * 2; })));
+            else
+                this.vbo_s.set_data(0, new Float32Array(this.glyph._size));
+        };
+        MarkerGLGlyph.prototype._set_visuals = function (nvertices) {
+            base_1.attach_float(this.prog, this.vbo_linewidth, 'a_linewidth', nvertices, this.glyph.visuals.line, 'line_width');
+            base_1.attach_color(this.prog, this.vbo_fg_color, 'a_fg_color', nvertices, this.glyph.visuals.line, 'line');
+            base_1.attach_color(this.prog, this.vbo_bg_color, 'a_bg_color', nvertices, this.glyph.visuals.fill, 'fill');
+            // Static value for antialias. Smaller aa-region to obtain crisper images
+            this.prog.set_uniform('u_antialias', 'float', [0.8]);
+        };
+        return MarkerGLGlyph;
+    }(base_1.BaseGLGlyph));
+    exports.MarkerGLGlyph = MarkerGLGlyph;
+    MarkerGLGlyph.__name__ = "MarkerGLGlyph";
+    function mk_marker(code) {
+        return /** @class */ (function (_super) {
+            tslib_1.__extends(class_1, _super);
+            function class_1() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            Object.defineProperty(class_1.prototype, "_marker_code", {
+                get: function () {
+                    return code;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return class_1;
+        }(MarkerGLGlyph));
+    }
+    var glsl = require(462) /* ./markers.frag */;
+    exports.CircleGLGlyph = mk_marker(glsl.circle);
+    exports.SquareGLGlyph = mk_marker(glsl.square);
+    exports.DiamondGLGlyph = mk_marker(glsl.diamond);
+    exports.TriangleGLGlyph = mk_marker(glsl.triangle);
+    exports.InvertedTriangleGLGlyph = mk_marker(glsl.invertedtriangle);
+    exports.HexGLGlyph = mk_marker(glsl.hex);
+    exports.CrossGLGlyph = mk_marker(glsl.cross);
+    exports.CircleCrossGLGlyph = mk_marker(glsl.circlecross);
+    exports.SquareCrossGLGlyph = mk_marker(glsl.squarecross);
+    exports.DiamondCrossGLGlyph = mk_marker(glsl.diamondcross);
+    exports.XGLGlyph = mk_marker(glsl.x);
+    exports.CircleXGLGlyph = mk_marker(glsl.circlex);
+    exports.SquareXGLGlyph = mk_marker(glsl.squarex);
+    exports.AsteriskGLGlyph = mk_marker(glsl.asterisk);
+},
+461: /* models/glyphs/webgl/markers.vert.js */ function _(require, module, exports) {
+    exports.vertex_shader = "\nprecision mediump float;\nconst float SQRT_2 = 1.4142135623730951;\n//\nuniform float u_pixel_ratio;\nuniform vec2 u_canvas_size;\nuniform vec2 u_offset;\nuniform vec2 u_scale;\nuniform float u_antialias;\n//\nattribute float a_x;\nattribute float a_y;\nattribute float a_size;\nattribute float a_angle;  // in radians\nattribute float a_linewidth;\nattribute vec4  a_fg_color;\nattribute vec4  a_bg_color;\n//\nvarying float v_linewidth;\nvarying float v_size;\nvarying vec4  v_fg_color;\nvarying vec4  v_bg_color;\nvarying vec2  v_rotation;\n\nvoid main (void)\n{\n    v_size = a_size * u_pixel_ratio;\n    v_linewidth = a_linewidth * u_pixel_ratio;\n    v_fg_color = a_fg_color;\n    v_bg_color = a_bg_color;\n    v_rotation = vec2(cos(-a_angle), sin(-a_angle));\n    // Calculate position - the -0.5 is to correct for canvas origin\n    vec2 pos = (vec2(a_x, a_y) + u_offset) * u_scale; // in pixels\n    pos += 0.5;  // make up for Bokeh's offset\n    pos /= u_canvas_size / u_pixel_ratio;  // in 0..1\n    gl_Position = vec4(pos*2.0-1.0, 0.0, 1.0);\n    gl_Position.y *= -1.0;\n    gl_PointSize = SQRT_2 * v_size + 2.0 * (v_linewidth + 1.5*u_antialias);\n}\n";
+},
+462: /* models/glyphs/webgl/markers.frag.js */ function _(require, module, exports) {
+    exports.fragment_shader = function (marker_code) { return "\nprecision mediump float;\nconst float SQRT_2 = 1.4142135623730951;\nconst float PI = 3.14159265358979323846264;\n//\nuniform float u_antialias;\n//\nvarying vec4  v_fg_color;\nvarying vec4  v_bg_color;\nvarying float v_linewidth;\nvarying float v_size;\nvarying vec2  v_rotation;\n\n" + marker_code + "\n\nvec4 outline(float distance, float linewidth, float antialias, vec4 fg_color, vec4 bg_color)\n{\n    vec4 frag_color;\n    float t = linewidth/2.0 - antialias;\n    float signed_distance = distance;\n    float border_distance = abs(signed_distance) - t;\n    float alpha = border_distance/antialias;\n    alpha = exp(-alpha*alpha);\n\n    // If fg alpha is zero, it probably means no outline. To avoid a dark outline\n    // shining through due to aa, we set the fg color to the bg color. Avoid if (i.e. branching).\n    float select = float(bool(fg_color.a));\n    fg_color.rgb = select * fg_color.rgb + (1.0  - select) * bg_color.rgb;\n    // Similarly, if we want a transparent bg\n    select = float(bool(bg_color.a));\n    bg_color.rgb = select * bg_color.rgb + (1.0  - select) * fg_color.rgb;\n\n    if( border_distance < 0.0)\n        frag_color = fg_color;\n    else if( signed_distance < 0.0 ) {\n        frag_color = mix(bg_color, fg_color, sqrt(alpha));\n    } else {\n        if( abs(signed_distance) < (linewidth/2.0 + antialias) ) {\n            frag_color = vec4(fg_color.rgb, fg_color.a * alpha);\n        } else {\n            discard;\n        }\n    }\n    return frag_color;\n}\n\nvoid main()\n{\n    vec2 P = gl_PointCoord.xy - vec2(0.5, 0.5);\n    P = vec2(v_rotation.x*P.x - v_rotation.y*P.y,\n             v_rotation.y*P.x + v_rotation.x*P.y);\n    float point_size = SQRT_2*v_size  + 2.0 * (v_linewidth + 1.5*u_antialias);\n    float distance = marker(P*point_size, v_size);\n    gl_FragColor = outline(distance, v_linewidth, u_antialias, v_fg_color, v_bg_color);\n    //gl_FragColor.rgb *= gl_FragColor.a;  // pre-multiply alpha\n}\n"; };
+    exports.circle = "\nfloat marker(vec2 P, float size)\n{\n    return length(P) - size/2.0;\n}\n";
+    exports.square = "\nfloat marker(vec2 P, float size)\n{\n    return max(abs(P.x), abs(P.y)) - size/2.0;\n}\n";
+    exports.diamond = "\nfloat marker(vec2 P, float size)\n{\n    float x = SQRT_2 / 2.0 * (P.x * 1.5 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.5 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / (2.0 * SQRT_2);\n    return r1 / SQRT_2;\n}\n";
+    exports.hex = "\nfloat marker(vec2 P, float size)\n{\n    vec2 q = abs(P);\n    return max(q.y * 0.57735 + q.x - 1.0 * size/2.0, q.y - 0.866 * size/2.0);\n}\n";
+    exports.triangle = "\nfloat marker(vec2 P, float size)\n{\n    P.y -= size * 0.3;\n    float x = SQRT_2 / 2.0 * (P.x * 1.7 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.7 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / 1.6;\n    float r2 = P.y;\n    return max(r1 / SQRT_2, r2);  // Intersect diamond with rectangle\n}\n";
+    exports.invertedtriangle = "\nfloat marker(vec2 P, float size)\n{\n    P.y += size * 0.3;\n    float x = SQRT_2 / 2.0 * (P.x * 1.7 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.7 + P.y);\n    float r1 = max(abs(x), abs(y)) - size / 1.6;\n    float r2 = - P.y;\n    return max(r1 / SQRT_2, r2);  // Intersect diamond with rectangle\n}\n";
+    exports.cross = "\nfloat marker(vec2 P, float size)\n{\n    float square = max(abs(P.x), abs(P.y)) - size / 2.5;   // 2.5 is a tweak\n    float cross = min(abs(P.x), abs(P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return max(square, cross);\n}\n";
+    exports.circlecross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float circle = length(P) - size/2.0;\n    float c1 = max(circle, s1);\n    float c2 = max(circle, s2);\n    float c3 = max(circle, s3);\n    float c4 = max(circle, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
+    exports.squarecross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float square = max(abs(P.x), abs(P.y)) - size/2.0;\n    float c1 = max(square, s1);\n    float c2 = max(square, s2);\n    float c3 = max(square, s3);\n    float c4 = max(square, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
+    exports.diamondcross = "\nfloat marker(vec2 P, float size)\n{\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(P.x - qs), abs(P.y - qs)) - qs;\n    float s2 = max(abs(P.x + qs), abs(P.y - qs)) - qs;\n    float s3 = max(abs(P.x - qs), abs(P.y + qs)) - qs;\n    float s4 = max(abs(P.x + qs), abs(P.y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float x = SQRT_2 / 2.0 * (P.x * 1.5 - P.y);\n    float y = SQRT_2 / 2.0 * (P.x * 1.5 + P.y);\n    float diamond = max(abs(x), abs(y)) - size / (2.0 * SQRT_2);\n    diamond /= SQRT_2;\n    float c1 = max(diamond, s1);\n    float c2 = max(diamond, s2);\n    float c3 = max(diamond, s3);\n    float c4 = max(diamond, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
+    exports.x = "\nfloat marker(vec2 P, float size)\n{\n    float circle = length(P) - size / 1.6;\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return max(circle, X);\n}\n";
+    exports.circlex = "\nfloat marker(vec2 P, float size)\n{\n    float x = P.x - P.y;\n    float y = P.x + P.y;\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(x - qs), abs(y - qs)) - qs;\n    float s2 = max(abs(x + qs), abs(y - qs)) - qs;\n    float s3 = max(abs(x - qs), abs(y + qs)) - qs;\n    float s4 = max(abs(x + qs), abs(y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float circle = length(P) - size/2.0;\n    float c1 = max(circle, s1);\n    float c2 = max(circle, s2);\n    float c3 = max(circle, s3);\n    float c4 = max(circle, s4);\n    // Union\n    float almost = min(min(min(c1, c2), c3), c4);\n    // In this case, the X is also outside of the main shape\n    float Xmask = length(P) - size / 1.6;  // a circle\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    return min(max(X, Xmask), almost);\n}\n";
+    exports.squarex = "\nfloat marker(vec2 P, float size)\n{\n    float x = P.x - P.y;\n    float y = P.x + P.y;\n    // Define quadrants\n    float qs = size / 2.0;  // quadrant size\n    float s1 = max(abs(x - qs), abs(y - qs)) - qs;\n    float s2 = max(abs(x + qs), abs(y - qs)) - qs;\n    float s3 = max(abs(x - qs), abs(y + qs)) - qs;\n    float s4 = max(abs(x + qs), abs(y + qs)) - qs;\n    // Intersect main shape with quadrants (to form cross)\n    float square = max(abs(P.x), abs(P.y)) - size/2.0;\n    float c1 = max(square, s1);\n    float c2 = max(square, s2);\n    float c3 = max(square, s3);\n    float c4 = max(square, s4);\n    // Union\n    return min(min(min(c1, c2), c3), c4);\n}\n";
+    exports.asterisk = "\nfloat marker(vec2 P, float size)\n{\n    // Masks\n    float diamond = max(abs(SQRT_2 / 2.0 * (P.x - P.y)), abs(SQRT_2 / 2.0 * (P.x + P.y))) - size / (2.0 * SQRT_2);\n    float square = max(abs(P.x), abs(P.y)) - size / (2.0 * SQRT_2);\n    // Shapes\n    float X = min(abs(P.x - P.y), abs(P.x + P.y)) - size / 100.0;  // bit of \"width\" for aa\n    float cross = min(abs(P.x), abs(P.y)) - size / 100.0;  // bit of \"width\" for aa\n    // Result is union of masked shapes\n    return min(max(X, diamond), max(cross, square));\n}\n";
+},
+}, 453, {"models/glyphs/webgl/main":453,"models/glyphs/webgl/index":454,"models/glyphs/webgl/line":455,"models/glyphs/webgl/base":457,"models/glyphs/webgl/line.vert":458,"models/glyphs/webgl/line.frag":459,"models/glyphs/webgl/markers":460,"models/glyphs/webgl/markers.vert":461,"models/glyphs/webgl/markers.frag":462}, {});
 })
 
 //# sourceMappingURL=bokeh-gl.js.map

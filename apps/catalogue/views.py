@@ -135,16 +135,19 @@ def astro_object_detail(request, slug):
     return render(request, "catalogue/astro_object_detail.html",
         {"astro_object": astro_object})
 
+
 def parameter_list(request):
     parameters = Parameter.objects.all()
     date_updated = parameters.order_by("-date_updated").values_list("date_updated", flat=True).first()
     return render(request, "catalogue/parameter_list.html",
         {"parameters": parameters, "date_updated": date_updated})
 
+
 def parameter_detail(request, slug):
     parameter = get_object_or_404(Parameter, slug=slug)
     return render(request, "catalogue/parameter_detail.html",
         {"parameter": parameter})
+
 
 def observation_list(request):
     observations = Observation.objects.all()

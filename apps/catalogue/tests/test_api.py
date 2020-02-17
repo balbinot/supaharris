@@ -147,3 +147,27 @@ class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
             response = self.client.get(uri)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(len(response.data["data"]), page_size)
+
+
+class ObservationTableViewsetTestCase(AnonReadOnlyAPITestCase, APITestCase):
+    # TODO: implement this TestCase
+    @classmethod
+    def setUpTestData(cls):
+        ReferenceFactory.create_batch(2)
+        super().setUpTestData()
+
+    def setUp(self):
+        # Set the admin + user tokens
+        super().setUp()
+
+        # Set the detail for this specific test
+        self.list_uri = "observation_table-list"
+        # TODO: implement the detail view (filtered by Reference)
+        self.detail_uri = "reference-detail"
+        self.detail_pk = Reference.objects.last().pk
+        self.count = Reference.objects.count()
+        self.data_orm = Reference.objects.order_by("id").first()
+        self.data_orm_detail = Reference.objects.get(pk=self.detail_pk)  # last()
+        self.serializer_fields = []   # TODO: Dynamic, depending on which Parameters the Reference has?
+        self.resource_name_list = "Observation Table Viewset List"
+        self.resource_name_detail = "Observation Table Viewset Instance"
