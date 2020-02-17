@@ -21,7 +21,7 @@ router.register(r"catalogue/astro_object", catalogue_api.AstroObjectViewSet)
 router.register(r"catalogue/astro_object_classifcation", catalogue_api.AstroObjectClassificationViewSet)
 router.register(r"catalogue/parameter", catalogue_api.ParameterViewSet)
 router.register(r"catalogue/observation", catalogue_api.ObservationViewSet)
-router.register(r"catalogue/observation_table", catalogue_api.ObservationTableViewset, base_name="observation_table")
+router.register(r"catalogue/observation_table", catalogue_api.ObservationTableViewset, basename="observation_table")
 
 urlpatterns = [
     path('admin/filebrowser/', site.urls),
