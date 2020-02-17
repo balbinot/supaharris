@@ -10,6 +10,14 @@ SEPARATELY LICENSED COMPONENTS AND LIBRARIES
 
 Data
 
+    Name:   Trager+ 1995
+    Paper:  https://ui.adsabs.harvard.edu/abs/1995AJ....109..218T/abstract
+            https://ui.adsabs.harvard.edu/abs/1995AJ....109.1912T/abstract
+              J/AJ/109/218/gc
+              J/AJ/109/218/tables
+    Data:   
+    Folder: data/MW_GCS_Trager1995
+
     Name:   Harris 1996, 2010 edition
     Paper:  https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract
     Data:   http://physwww.mcmaster.ca/~harris/mwgc.dat

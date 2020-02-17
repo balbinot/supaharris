@@ -6,7 +6,6 @@ from matplotlib import pyplot
 from astroquery.vizier import Vizier
 Vizier.ROW_LIMIT = -1
 
-
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Trager1995/"
 
 
@@ -18,9 +17,13 @@ def fix_gc_names(data):
     return data
 
 
-def parse_trager_1995_gc(fname="{0}Vizier_gc.txt".format(BASEDIR)):
-    # if os.path.exists(fname) and os.path.isfile(fname):
-    #     return numpy.loadtxt(fname)
+def parse_trager_1995_gc(logger, fname="{0}Vizier_gc.txt".format(BASEDIR), refetch=False):
+    if os.path.exists(fname) and os.path.isfile(fname) and not refetch:
+        dtype = [
+            ("Name", "<U8"), ("Nsb", "<i2"), ("SName", "<U19"), ("Prof", "<U4"),
+            ("Simbad", "<U6"), ("_RA", "<f8"), ("_DE", "<f8")
+        ]
+        return numpy.loadtxt(fname, dtype=dtype, delimiter=",")
 
     table = Vizier.get_catalogs("J/AJ/109/218/gc")[0]
     table.convert_bytestring_to_unicode()  # to remove b'' from string columns
@@ -30,9 +33,13 @@ def parse_trager_1995_gc(fname="{0}Vizier_gc.txt".format(BASEDIR)):
     return data
 
 
-def parse_trager_1995_tables(fname="{0}Vizier_tables.txt".format(BASEDIR)):
-    # if os.path.exists(fname) and os.path.isfile(fname):
-    #     return numpy.loadtxt(fname)
+def parse_trager_1995_tables(logger, fname="{0}Vizier_tables.txt".format(BASEDIR), refetch=False):
+    if os.path.exists(fname) and os.path.isfile(fname):
+        dtype = [
+            ("Name", "<U8"), ("logr", "<f4"), ("muV", "<f4"), ("muVf", "<f4"),
+            ("Resid", "<f4"), ("Weight", "<f4"), ("DataSet", "<U9")
+        ]
+        return numpy.loadtxt(fname, dtype=dtype, delimiter=",")
 
     table = Vizier.get_catalogs("J/AJ/109/218/tables")[0]
     table.convert_bytestring_to_unicode()  # to remove b'' from string columns
@@ -75,18 +82,30 @@ def plot_trager_1995_surface_brightness_profile(logger, tables, gc_name):
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
-    logger = logging.getLogger(__file__)
+    logger = logging.getLogger(__name__)
     logger.info("Running {0}".format(__file__))
 
-    gc = parse_trager_1995_gc()
+    gc = parse_trager_1995_gc(logger)
+    gc_simbad = parse_trager_1995_gc(logger, refetch=True)
+    assert len(gc) == len(gc_simbad)
+    assert gc.dtype == gc_simbad.dtype
+    for i in range(len(gc)):
+        assert gc[i] == gc_simbad[i]
     logger.debug("\ngc has {0} entries".format(len(gc)))
     logger.debug("dtype: {0}".format(gc.dtype))
 
-    tables = parse_trager_1995_tables()
+    tables = parse_trager_1995_tables(logger)
+    tables_simbad = parse_trager_1995_tables(logger, refetch=True)
+    assert len(tables) == len(tables_simbad)
+    assert tables.dtype == tables_simbad.dtype
+    for i in range(len(tables)):
+        assert tables[i] == tables_simbad[i]
     logger.debug("\ntables has {0} entries".format(len(tables)))
     logger.debug("dtype: {0}".format(tables.dtype))
 
     clusters = gc["Name"]
     for i, gc_name in enumerate(clusters):
-        fig = plot_trager_1995_surface_brightness_profile(tables, gc_name)
+        fig = plot_trager_1995_surface_brightness_profile(logger, tables, gc_name)
+        pyplot.savefig("data/MW_GCS_Trager1995/Trager1995_SurfaceBrightness_{0}.pdf".format(gc_name))
+        pyplot.close(fig)
         break

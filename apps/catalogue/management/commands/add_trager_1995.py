@@ -35,10 +35,10 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             logger.info("Created the Reference: {0}\n".format(reference))
 
-        t95_gc = parse_trager_1995_gc()
+        t95_gc = parse_trager_1995_gc(self.logger)
         logger.debug("\ngc has {0} entries".format(len(gc)))
         logger.debug("keys: {0}".format(gc.keys()))
-        t95_tables = parse_trager_1995_tables()
+        t95_tables = parse_trager_1995_tables(self.logger)
         logger.debug("\ntables has {0} entries".format(len(tables)))
         logger.debug("keys: {0}".format(tables.keys()))
 
@@ -60,5 +60,6 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             # print("Created the Observation: {0}".format(observation))
 
         return
+
         for gc_name in clusters:
             igc, = numpy.where(t95_tables["Name"] == gc_name)
