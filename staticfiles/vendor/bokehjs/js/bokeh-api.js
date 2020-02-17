@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2012 - 2018, Anaconda, Inc., and Bokeh Contributors
+ * Copyright (c) 2012 - 2019, Anaconda, Inc., and Bokeh Contributors
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,32 +27,86 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 (function(root, factory) {
-//  if(typeof exports === 'object' && typeof module === 'object')
-//    factory(require("Bokeh"));
-//  else if(typeof define === 'function' && define.amd)
-//    define(["Bokeh"], factory);
-//  else if(typeof exports === 'object')
-//    factory(require("Bokeh"));
-//  else
-    factory(root["Bokeh"]);
+  factory(root["Bokeh"]);
 })(this, function(Bokeh) {
   var define;
-  return (function(modules, aliases, entry) {
+  return (function(modules, entry, aliases, externals) {
     if (Bokeh != null) {
-      return Bokeh.register_plugin(modules, aliases, entry);
+      return Bokeh.register_plugin(modules, entry, aliases, externals);
     } else {
       throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
     }
   })
 ({
-427: /* api/charts */ function _(require, module, exports) {
-    var palettes = require(433) /* ./palettes */;
-    var array_1 = require(24) /* ../core/util/array */;
-    var types_1 = require(46) /* ../core/util/types */;
-    var templating_1 = require(42) /* ../core/util/templating */;
-    var models_1 = require(432) /* ./models */;
+463: /* api/main.js */ function _(require, module, exports) {
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
+    }
+    __export(require(464) /* ./index */);
+},
+464: /* api/index.js */ function _(require, module, exports) {
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
+    }
+    var LinAlg = require(465) /* ./linalg */;
+    exports.LinAlg = LinAlg;
+    var Charts = require(467) /* ./charts */;
+    exports.Charts = Charts;
+    var Plotting = require(470) /* ./plotting */;
+    exports.Plotting = Plotting;
+    var document_1 = require(106) /* ../document */;
+    exports.Document = document_1.Document;
+    var templating_1 = require(253) /* ../core/util/templating */;
+    exports.sprintf = templating_1.sprintf;
+    __export(require(469) /* ./models */);
+},
+465: /* api/linalg.js */ function _(require, module, exports) {
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
+    }
+    __export(require(125) /* ../core/util/object */);
+    __export(require(110) /* ../core/util/array */);
+    __export(require(127) /* ../core/util/string */);
+    __export(require(466) /* ../core/util/random */);
+    __export(require(109) /* ../core/util/types */);
+    __export(require(118) /* ../core/util/eq */);
+},
+466: /* core/util/random.js */ function _(require, module, exports) {
+    var MAX_INT32 = 2147483647;
+    // Park-Miller LCG
+    var Random = /** @class */ (function () {
+        function Random(seed) {
+            this.seed = seed % MAX_INT32;
+            if (this.seed <= 0)
+                this.seed += MAX_INT32 - 1;
+        }
+        Random.prototype.integer = function () {
+            this.seed = (48271 * this.seed) % MAX_INT32;
+            return this.seed;
+        };
+        Random.prototype.float = function () {
+            return (this.integer() - 1) / (MAX_INT32 - 1);
+        };
+        return Random;
+    }());
+    exports.Random = Random;
+    Random.__name__ = "Random";
+    exports.random = new Random(Date.now());
+},
+467: /* api/charts.js */ function _(require, module, exports) {
+    var palettes = require(468) /* ./palettes */;
+    var array_1 = require(110) /* ../core/util/array */;
+    var types_1 = require(109) /* ../core/util/types */;
+    var templating_1 = require(253) /* ../core/util/templating */;
+    var models_1 = require(469) /* ./models */;
     function num2hexcolor(num) {
         return templating_1.sprintf("#%06x", num);
     }
@@ -222,7 +276,7 @@
             var right = [];
             var _loop_1 = function (i) {
                 var bottom = [];
-                var top_1 = [];
+                var top = [];
                 for (var j = 0; j < labels.length; j++) {
                     var label = labels[j];
                     if (i == 0) {
@@ -234,13 +288,13 @@
                         right[j] += columns[i][j];
                     }
                     bottom.push([label, -0.5]);
-                    top_1.push([label, 0.5]);
+                    top.push([label, 0.5]);
                 }
                 var source = new models_1.ColumnDataSource({
                     data: {
                         left: array_1.copy(left),
                         right: array_1.copy(right),
-                        top: top_1,
+                        top: top,
                         bottom: bottom,
                         labels: labels,
                         values: columns[i],
@@ -265,19 +319,19 @@
                 var left = [];
                 var right = [];
                 var bottom = [];
-                var top_2 = [];
+                var top = [];
                 for (var j = 0; j < labels.length; j++) {
                     var label = labels[j];
                     left.push(0);
                     right.push(columns[i][j]);
                     bottom.push([label, i * dy - 0.5]);
-                    top_2.push([label, (i + 1) * dy - 0.5]);
+                    top.push([label, (i + 1) * dy - 0.5]);
                 }
                 var source = new models_1.ColumnDataSource({
                     data: {
                         left: left,
                         right: right,
-                        top: top_2,
+                        top: top,
                         bottom: bottom,
                         labels: labels,
                         values: columns[i],
@@ -337,105 +391,8 @@
         return plot;
     }
     exports.bar = bar;
-}
-,
-428: /* api/gridplot */ function _(require, module, exports) {
-    var models_1 = require(432) /* ./models */;
-    function or_else(value, default_value) {
-        if (value === undefined)
-            return default_value;
-        else
-            return value;
-    }
-    function gridplot(children, opts) {
-        if (opts === void 0) {
-            opts = {};
-        }
-        var toolbar_location = or_else(opts.toolbar_location, "above");
-        var merge_tools = or_else(opts.merge_tools, true);
-        var sizing_mode = or_else(opts.sizing_mode, null);
-        var tools = [];
-        var items = [];
-        for (var y = 0; y < children.length; y++) {
-            var row = children[y];
-            for (var x = 0; x < row.length; x++) {
-                var item = row[x];
-                if (item == null)
-                    continue;
-                else {
-                    if (item instanceof models_1.Plot) { // XXX: semantics differ
-                        if (merge_tools) {
-                            tools.push.apply(tools, item.toolbar.tools);
-                            item.toolbar_location = null;
-                        }
-                        if (opts.plot_width != null)
-                            item.plot_width = opts.plot_width;
-                        if (opts.plot_height != null)
-                            item.plot_height = opts.plot_height;
-                    }
-                    items.push([item, y, x]);
-                }
-            }
-        }
-        if (!merge_tools || toolbar_location == null)
-            return new models_1.GridBox({ children: items, sizing_mode: sizing_mode });
-        var grid = new models_1.GridBox({ children: items, sizing_mode: sizing_mode });
-        var toolbar = new models_1.ToolbarBox({
-            toolbar: new models_1.ProxyToolbar({ tools: tools }),
-            toolbar_location: toolbar_location,
-        });
-        switch (toolbar_location) {
-            case "above":
-                return new models_1.Column({ children: [toolbar, grid], sizing_mode: sizing_mode });
-            case "below":
-                return new models_1.Column({ children: [grid, toolbar], sizing_mode: sizing_mode });
-            case "left":
-                return new models_1.Row({ children: [toolbar, grid], sizing_mode: sizing_mode });
-            case "right":
-                return new models_1.Row({ children: [grid, toolbar], sizing_mode: sizing_mode });
-            default:
-                throw new Error("unexpected");
-        }
-    }
-    exports.gridplot = gridplot;
-}
-,
-429: /* api/index */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var LinAlg = require(430) /* ./linalg */;
-    exports.LinAlg = LinAlg;
-    var Charts = require(427) /* ./charts */;
-    exports.Charts = Charts;
-    var Plotting = require(434) /* ./plotting */;
-    exports.Plotting = Plotting;
-    var document_1 = require(54) /* ../document */;
-    exports.Document = document_1.Document;
-    var templating_1 = require(42) /* ../core/util/templating */;
-    exports.sprintf = templating_1.sprintf;
-    tslib_1.__exportStar(require(432) /* ./models */, exports);
-}
-,
-430: /* api/linalg */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    tslib_1.__exportStar(require(35) /* ../core/util/object */, exports);
-    tslib_1.__exportStar(require(24) /* ../core/util/array */, exports);
-    tslib_1.__exportStar(require(40) /* ../core/util/string */, exports);
-    tslib_1.__exportStar(require(435) /* ../core/util/random */, exports);
-    tslib_1.__exportStar(require(46) /* ../core/util/types */, exports);
-    tslib_1.__exportStar(require(33) /* ../core/util/eq */, exports);
-}
-,
-431: /* api/main */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    tslib_1.__exportStar(require(429) /* ./index */, exports);
-}
-,
-432: /* api/models */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    tslib_1.__exportStar(require(160) /* ../models/index */, exports);
-}
-,
-433: /* api/palettes */ function _(require, module, exports) {
+},
+468: /* api/palettes.js */ function _(require, module, exports) {
     exports.YlGn3 = [0x31a354, 0xaddd8e, 0xf7fcb9];
     exports.YlGn4 = [0x238443, 0x78c679, 0xc2e699, 0xffffcc];
     exports.YlGn5 = [0x006837, 0x31a354, 0x78c679, 0xc2e699, 0xffffcc];
@@ -991,24 +948,31 @@
     exports.Category20b = { Category20b_3: exports.Category20b_3, Category20b_4: exports.Category20b_4, Category20b_5: exports.Category20b_5, Category20b_6: exports.Category20b_6, Category20b_7: exports.Category20b_7, Category20b_8: exports.Category20b_8, Category20b_9: exports.Category20b_9, Category20b_10: exports.Category20b_10, Category20b_11: exports.Category20b_11, Category20b_12: exports.Category20b_12, Category20b_13: exports.Category20b_13, Category20b_14: exports.Category20b_14, Category20b_15: exports.Category20b_15, Category20b_16: exports.Category20b_16, Category20b_17: exports.Category20b_17, Category20b_18: exports.Category20b_18, Category20b_19: exports.Category20b_19, Category20b_20: exports.Category20b_20 };
     exports.Category20c = { Category20c_3: exports.Category20c_3, Category20c_4: exports.Category20c_4, Category20c_5: exports.Category20c_5, Category20c_6: exports.Category20c_6, Category20c_7: exports.Category20c_7, Category20c_8: exports.Category20c_8, Category20c_9: exports.Category20c_9, Category20c_10: exports.Category20c_10, Category20c_11: exports.Category20c_11, Category20c_12: exports.Category20c_12, Category20c_13: exports.Category20c_13, Category20c_14: exports.Category20c_14, Category20c_15: exports.Category20c_15, Category20c_16: exports.Category20c_16, Category20c_17: exports.Category20c_17, Category20c_18: exports.Category20c_18, Category20c_19: exports.Category20c_19, Category20c_20: exports.Category20c_20 };
     exports.Colorblind = { Colorblind3: exports.Colorblind3, Colorblind4: exports.Colorblind4, Colorblind5: exports.Colorblind5, Colorblind6: exports.Colorblind6, Colorblind7: exports.Colorblind7, Colorblind8: exports.Colorblind8 };
-}
-,
-434: /* api/plotting */ function _(require, module, exports) {
-    var tslib_1 = require(426) /* tslib */;
-    var document_1 = require(54) /* ../document */;
-    var embed = require(56) /* ../embed */;
-    var models = require(432) /* ./models */;
-    var properties_1 = require(18) /* ../core/properties */;
-    var string_1 = require(40) /* ../core/util/string */;
-    var eq_1 = require(33) /* ../core/util/eq */;
-    var array_1 = require(24) /* ../core/util/array */;
-    var object_1 = require(35) /* ../core/util/object */;
-    var types_1 = require(46) /* ../core/util/types */;
-    var models_1 = require(432) /* ./models */;
-    var legend_1 = require(72) /* ../models/annotations/legend */;
-    var gridplot_1 = require(428) /* ./gridplot */;
+},
+469: /* api/models.js */ function _(require, module, exports) {
+    function __export(m) {
+        for (var p in m)
+            if (!exports.hasOwnProperty(p))
+                exports[p] = m[p];
+    }
+    __export(require(129) /* ../models */);
+},
+470: /* api/plotting.js */ function _(require, module, exports) {
+    var tslib_1 = require(113) /* tslib */;
+    var document_1 = require(106) /* ../document */;
+    var embed = require(105) /* ../embed */;
+    var models = require(469) /* ./models */;
+    var properties_1 = require(121) /* ../core/properties */;
+    var string_1 = require(127) /* ../core/util/string */;
+    var eq_1 = require(118) /* ../core/util/eq */;
+    var array_1 = require(110) /* ../core/util/array */;
+    var object_1 = require(125) /* ../core/util/object */;
+    var types_1 = require(109) /* ../core/util/types */;
+    var models_1 = require(469) /* ./models */;
+    var legend_1 = require(230) /* ../models/annotations/legend */;
+    var gridplot_1 = require(471) /* ./gridplot */;
     exports.gridplot = gridplot_1.gridplot;
-    var color_1 = require(30) /* ../core/util/color */;
+    var color_1 = require(123) /* ../core/util/color */;
     exports.color = color_1.rgb2hex;
     var _default_tooltips = [
         ["index", "$index"],
@@ -1061,7 +1025,7 @@
                 attrs = {};
             }
             var _this = this;
-            attrs = tslib_1.__assign({}, attrs);
+            attrs = Object.assign({}, attrs);
             var tools = _with_default(attrs.tools, _default_tools);
             delete attrs.tools;
             var x_axis_type = _with_default(attrs.x_axis_type, "auto");
@@ -1088,7 +1052,7 @@
             var y_scale = attrs.y_scale != null ? attrs.y_scale : Figure._get_scale(y_range, y_axis_type);
             delete attrs.x_scale;
             delete attrs.y_scale;
-            _this = _super.call(this, tslib_1.__assign({}, attrs, { x_range: x_range, y_range: y_range, x_scale: x_scale, y_scale: y_scale })) || this;
+            _this = _super.call(this, Object.assign(Object.assign({}, attrs), { x_range: x_range, y_range: y_range, x_scale: x_scale, y_scale: y_scale })) || this;
             _this._process_axis_and_grid(x_axis_type, x_axis_location, x_minor_ticks, x_axis_label, x_range, 0);
             _this._process_axis_and_grid(y_axis_type, y_axis_location, y_minor_ticks, y_axis_label, y_range, 1);
             _this.add_tools.apply(_this, _this._process_tools(tools));
@@ -1460,31 +1424,31 @@
             }
         };
         Figure.prototype._fixup_values = function (cls, data, attrs) {
-            for (var name_1 in attrs) {
-                var value = attrs[name_1];
-                var prop = cls.prototype.props[name_1];
+            for (var name in attrs) {
+                var value = attrs[name];
+                var prop = cls.prototype.props[name];
                 if (prop != null) {
                     if (prop.type.prototype instanceof properties_1.VectorSpec) {
                         if (value != null) {
                             if (types_1.isArray(value)) {
                                 var field = void 0;
-                                if (data[name_1] != null) {
-                                    if (data[name_1] !== value) {
-                                        field = this._find_uniq_name(data, name_1);
+                                if (data[name] != null) {
+                                    if (data[name] !== value) {
+                                        field = this._find_uniq_name(data, name);
                                         data[field] = value;
                                     }
                                     else {
-                                        field = name_1;
+                                        field = name;
                                     }
                                 }
                                 else {
-                                    field = name_1;
+                                    field = name;
                                     data[field] = value;
                                 }
-                                attrs[name_1] = { field: field };
+                                attrs[name] = { field: field };
                             }
                             else if (types_1.isNumber(value) || types_1.isString(value)) { // or Date?
-                                attrs[name_1] = { value: value };
+                                attrs[name] = { value: value };
                             }
                         }
                     }
@@ -1525,7 +1489,7 @@
             this._fixup_values(cls, data, attrs);
             source.data = data;
             var _make_glyph = function (cls, attrs, extra_attrs) {
-                return new cls(tslib_1.__assign({}, attrs, extra_attrs));
+                return new cls(Object.assign(Object.assign({}, attrs), extra_attrs));
             };
             var glyph = _make_glyph(cls, attrs, glyph_ca);
             var nsglyph = _make_glyph(cls, attrs, nsglyph_ca);
@@ -1560,7 +1524,7 @@
                     return new models.FactorRange({ factors: factors });
                 }
                 if (range.length == 2) {
-                    var _a = range, start = _a[0], end = _a[1];
+                    var start = range[0], end = range[1];
                     return new models.Range1d({ start: start, end: end });
                 }
             }
@@ -1711,10 +1675,10 @@
                 legend.items.push(new_item);
             }
         };
-        Figure.__name__ = "Plot";
         return Figure;
     }(models_1.Plot));
     exports.Figure = Figure;
+    Figure.__name__ = "Plot";
     function figure(attributes) {
         return new Figure(attributes);
     }
@@ -1755,32 +1719,68 @@
         });
     }
     exports.show = show;
-}
-,
-435: /* core/util/random */ function _(require, module, exports) {
-    var MAX_INT32 = 2147483647;
-    // Park-Miller LCG
-    var Random = /** @class */ (function () {
-        function Random(seed) {
-            this.seed = seed % MAX_INT32;
-            if (this.seed <= 0)
-                this.seed += MAX_INT32 - 1;
+},
+471: /* api/gridplot.js */ function _(require, module, exports) {
+    var models_1 = require(469) /* ./models */;
+    function or_else(value, default_value) {
+        if (value === undefined)
+            return default_value;
+        else
+            return value;
+    }
+    function gridplot(children, opts) {
+        if (opts === void 0) {
+            opts = {};
         }
-        Random.prototype.integer = function () {
-            this.seed = (48271 * this.seed) % MAX_INT32;
-            return this.seed;
-        };
-        Random.prototype.float = function () {
-            return (this.integer() - 1) / (MAX_INT32 - 1);
-        };
-        Random.__name__ = "Random";
-        return Random;
-    }());
-    exports.Random = Random;
-    exports.random = new Random(Date.now());
-}
-
-}, {"api/charts":427,"api/gridplot":428,"api/index":429,"api/linalg":430,"api/main":431,"api/models":432,"api/palettes":433,"api/plotting":434,"core/util/random":435}, 431, null);
+        var toolbar_location = or_else(opts.toolbar_location, "above");
+        var merge_tools = or_else(opts.merge_tools, true);
+        var sizing_mode = or_else(opts.sizing_mode, null);
+        var tools = [];
+        var items = [];
+        for (var y = 0; y < children.length; y++) {
+            var row = children[y];
+            for (var x = 0; x < row.length; x++) {
+                var item = row[x];
+                if (item == null)
+                    continue;
+                else {
+                    if (item instanceof models_1.Plot) { // XXX: semantics differ
+                        if (merge_tools) {
+                            tools.push.apply(tools, item.toolbar.tools);
+                            item.toolbar_location = null;
+                        }
+                        if (opts.plot_width != null)
+                            item.plot_width = opts.plot_width;
+                        if (opts.plot_height != null)
+                            item.plot_height = opts.plot_height;
+                    }
+                    items.push([item, y, x]);
+                }
+            }
+        }
+        if (!merge_tools || toolbar_location == null)
+            return new models_1.GridBox({ children: items, sizing_mode: sizing_mode });
+        var grid = new models_1.GridBox({ children: items, sizing_mode: sizing_mode });
+        var toolbar = new models_1.ToolbarBox({
+            toolbar: new models_1.ProxyToolbar({ tools: tools }),
+            toolbar_location: toolbar_location,
+        });
+        switch (toolbar_location) {
+            case "above":
+                return new models_1.Column({ children: [toolbar, grid], sizing_mode: sizing_mode });
+            case "below":
+                return new models_1.Column({ children: [grid, toolbar], sizing_mode: sizing_mode });
+            case "left":
+                return new models_1.Row({ children: [toolbar, grid], sizing_mode: sizing_mode });
+            case "right":
+                return new models_1.Row({ children: [grid, toolbar], sizing_mode: sizing_mode });
+            default:
+                throw new Error("unexpected");
+        }
+    }
+    exports.gridplot = gridplot;
+},
+}, 463, {"api/main":463,"api/index":464,"api/linalg":465,"core/util/random":466,"api/charts":467,"api/palettes":468,"api/models":469,"api/plotting":470,"api/gridplot":471}, {});
 })
 
 //# sourceMappingURL=bokeh-api.js.map
