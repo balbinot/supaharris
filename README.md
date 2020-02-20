@@ -12,6 +12,7 @@
 | [VandenBerg+ 2013](https://ui.adsabs.harvard.edu/abs/2013ApJ...775..134V/abstract) | [`parse_vandenberg_2013.py`](data/parse_vandenberg_2013.py) | Done | [`add_vandenberg_2013.py`](apps/catalogue/management/commands/add_vandenberg_2013.py) | Done
 | [Bica+ 2019](https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract) | [`parse_bica_2019.py`](data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
 | [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`parse_hilker_2019.py`](data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
+| [deBoer+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract) | [`parse_deBoer_2019.py`](data/parse_deBoer_2019.py) | Started | [`add_deBoer_2019.py`](apps/catalogue/management/commands/add_deBoer_2019.py) | Boilerplate
 
 
 

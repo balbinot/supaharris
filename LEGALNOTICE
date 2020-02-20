@@ -58,3 +58,8 @@ Data
             https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/combined_table.txt, retrieved Oct 17, 2019
             https://people.smp.uq.edu.au/HolgerBaumgardt/globular/fits/clusterlist.html, auto-retrieved Oct 17, 2019
     Folder: data/MW_GCS_Hilker2019
+
+    Name:   deBoer+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract 
+    Data:   https://github.com/tdboer/GC_profiles/tree/f31e147c1ac2de11146d421f261cc620340ae9a9
+    Folder: data/MW_GCS_deBoer2019
