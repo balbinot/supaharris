@@ -5,10 +5,6 @@ import requests
 import numpy as np
 from bs4 import BeautifulSoup
 
-from django.conf import settings
-from django.utils import timezone
-from django.http import HttpResponse
-
 
 # Convert ADS/arXiv-style month abbreviation to integers
 MONTH_DICT = {
@@ -51,16 +47,22 @@ def export_to_xls(request, queryset):
             sheet.write(row+1, col, value, style=borders)
 
     # # Return a response that allows to download the xls-file.
+    from django.utils import timezone
     now = timezone.now().strftime("%Y%m%d")
     filename = u'Export_{0}_{1}.xls'.format(model_name, now)
 
+    from django.http import HttpResponse
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
     xls.save(response)
     return response
 
 
-def requests_get(url, timeout=5, debug=settings.DEBUG, headers={}):
+def requests_get(url, timeout=5, debug=None, headers={}):
+    from django.conf import settings
+    if debug is None:
+        debug = settings.debug
+
     try:
         r = requests.get(url, timeout=timeout, headers=headers)
     except requests.exceptions.Timeout:
@@ -77,7 +79,11 @@ def requests_get(url, timeout=5, debug=settings.DEBUG, headers={}):
     return r
 
 
-def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
+def scrape_reference_details_from_arxiv(url, journals, debug=None):
+    from django.conf import settings
+    if debug is None:
+        debug = settings.debug
+
     if debug: print("Retrieving: {0}".format(url))
     r = requests_get(url, timeout=5)  # 5 seconds timeout
     if r is False: return False
@@ -112,7 +118,11 @@ def scrape_reference_details_from_arxiv(url, journals, debug=settings.DEBUG):
     return details
 
 
-def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
+def parse_bibtex_and_create_reference(relevant, journals, debug=None):
+    from django.conf import settings
+    if debug is None:
+        debug = settings.debug
+
     details = { line.split("=")[0].strip(): line.split("=")[1].strip(",").strip()
         for line in relevant }
 
@@ -167,8 +177,12 @@ def parse_bibtex_and_create_reference(relevant, journals, debug=settings.DEBUG):
     return details
 
 
-def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
+def scrape_reference_details_from_old_ads(url, journals, debug=None):
     """ Here we obtain information for a Reference from old-style ADS' Bibtex entry """
+
+    from django.conf import settings
+    if debug is None:
+        debug = settings.debug
 
     if debug: print("Retrieving: {0}".format(url))
     r = requests_get(url, timeout=5)  # 5 seconds timeout
@@ -194,8 +208,12 @@ def scrape_reference_details_from_old_ads(url, journals, debug=settings.DEBUG):
     return parse_bibtex_and_create_reference(relevant, journals, debug=debug)
 
 
-def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=settings.DEBUG):
+def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=None):
     """ Here we obtain information for a Reference from new-style ADS' Bibtex entry """
+
+    from django.conf import settings
+    if debug is None:
+        debug = settings.debug
 
     payload = {"bibcode": [ url.split("abs/")[-1].split("/")[0] ]}
     if debug: print("Retrieving: {0}\n  payload: {1}".format(url, payload))
@@ -224,3 +242,89 @@ def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=settin
 
     relevant = [ split for split in data["export"].split("\n") if "=" in split ]
     return parse_bibtex_and_create_reference(relevant, journals, debug=debug)
+
+
+def convert_gc_names_from_sh_to_any(name, reverse=False):
+    """ Get GC name variations from SupaHarris names to other possibilities """
+
+    # TODO: we might want all keys in this dict to use on save?
+    # For example, if 'ngc1337' is created: save it as 'NGC 1337'
+    sh_to_any = {
+        "NGC ": "NGC",
+        "NGC ": "ngc ",
+        "NGC ": "ngc",
+
+        "Pal ": "Pal",
+        "Pal ": "pal ",
+        "Pal ": "pal",
+        "Pal ": "Palomar ",
+        "Pal ": "palomar ",
+        "Pal ": "Palomar",
+        "Pal ": "Palomar",
+
+        "Terzan ": "Ter ",
+        "Terzan ": "ter ",
+        "Terzan ": "Ter",
+        "Terzan ": "ter",
+        "Terzan ": "Terzan",
+        "Terzan ": "terzan",
+
+        "Arp ": "Arp",
+        "Arp ": "arp ",
+        "Arp ": "arp",
+
+        "AM ": "AM",
+        "AM ": "am ",
+        "AM ": "am",
+
+        "Ton ": "Ton",
+        "Ton ": "ton ",
+        "Ton ": "ton",
+
+        "IC ": "IC",
+        "IC ": "ic ",
+        "IC ": "ic",
+
+        "FSR ": "FSR",
+        "FSR ": "fsr ",
+        "FSR ": "fsr",
+
+        "ESO": "ESO ",
+        "ESO": "eso ",
+        "ESO": "eso",
+
+        "Liller ": "Liller",
+        "Liller ": "liller ",
+        "Liller ": "liller",
+        "Liller ": "Lil ",
+        "Liller ": "Lil",
+        "Liller ": "lil ",
+        "Liller ": "lil",
+
+        "Djorg ": "Djorg",
+        "Djorg ": "djorg ",
+        "Djorg ": "djorg",
+        "Djorg ": "Djor",
+        "Djorg ": "Djor ",
+        "Djorg ": "djor ",
+        "Djorg ": "djor",
+
+        "Eridanus": "eridanus",
+        "Eridanus": "Eri",
+        "Eridanus": "eri",
+
+        "Lynga ": "Lynga",
+        "Lynga ": "lynga",
+        "Lynga ": "Lyn ",
+        "Lynga ": "Lyn",
+        "Lynga ": "lyn ",
+        "Lynga ": "lyn",
+    }
+
+    if reverse:
+        sh_to_any = {v: k for k, v in sh_to_any.items()}  # reverse the dict :)
+
+    for k, v in sh_to_any.items():
+        name = name.replace(k, v)
+
+    return name
