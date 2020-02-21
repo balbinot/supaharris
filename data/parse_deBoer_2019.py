@@ -10,8 +10,8 @@ BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_deBoer2019/"
 
 
 def fix_gc_names(name):
-    return name.replace("ngc", "NGC ").replace("pal", "Pal ").replace(
-        "ic", "IC ").replace("terzan", "Terzan ")
+    from utils import convert_gc_names_from_sh_to_any
+    return convert_gc_names_from_sh_to_any(name, reverse=True)  # from deBoer to SH
 
 
 def parse_deBoer_2019_fits(logger, fname="{0}GC_numdens_fit_pars_all_comb".format(BASEDIR)):
@@ -63,9 +63,31 @@ def parse_deBoer_2019_member_stars(logger, dirname="{0}member_stars/".format(BAS
     data = dict()
     for fname in files:
         name = fix_gc_names(
-            fname.split("member_stars/")[-1].replace("_gaia_members", "")
+            fname.split("member_stars/")[-1].replace(
+                "_gaia_members", "").replace("_", "")
         )
         data[name] = numpy.genfromtxt(fname, names=names, skip_header=1)
+
+    return data
+
+
+def parse_deBoer_2019_stiched_profiles(logger, dirname="{0}stitched_profiles/".format(BASEDIR)):
+    if not os.path.exists(dirname) or not os.path.isdir(dirname):
+        logger.error("ERROR: dir not found: {0}".format(dirname))
+        return
+
+    files = [f for f in glob.glob(dirname+"*") if "pdf" not in f]
+    names = [
+        "rad", "density", "density_err"
+    ]
+
+    data = dict()
+    for fname in files:
+        name = fix_gc_names(
+            fname.split("stitched_profiles/")[-1].replace(
+                "_numdens_profile", "").replace("_", "")
+        )
+        data[name] = numpy.genfromtxt(fname, names=names)
 
     return data
 
