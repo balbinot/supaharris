@@ -1,5 +1,6 @@
 import logging
 
+from utils import convert_gc_names_from_sh_to_any
 from catalogue.models import Parameter
 from catalogue.models import AstroObject
 from catalogue.models import AstroObjectClassification
@@ -80,92 +81,16 @@ def print_astro_object_classifications(logger):
     logger.info("-"*80)
 
 
-def get_name_variations(name):
-    # TODO: we might want all 'keys' in this list to use on save?
-    # For example, if 'ngc1337' is created: save it as 'NGC 1337'
-    return [
-        name.replace("NGC ", "NGC"),
-        name.replace("NGC ", "ngc "),
-        name.replace("NGC ", "ngc"),
-
-        name.replace("Pal ", "Pal"),
-        name.replace("Pal ", "pal "),
-        name.replace("Pal ", "pal"),
-        name.replace("Pal ", "Palomar "),
-        name.replace("Pal ", "palomar "),
-        name.replace("Pal ", "Palomar"),
-        name.replace("Pal ", "Palomar"),
-
-        name.replace("Terzan ", "Ter "),
-        name.replace("Terzan ", "ter "),
-        name.replace("Terzan ", "Ter"),
-        name.replace("Terzan ", "ter"),
-        name.replace("Terzan ", "Terzan"),
-        name.replace("Terzan ", "terzan"),
-
-        name.replace("Arp ", "Arp"),
-        name.replace("Arp ", "arp "),
-        name.replace("Arp ", "arp"),
-
-        name.replace("AM ", "AM"),
-        name.replace("AM ", "am "),
-        name.replace("AM ", "am"),
-
-        name.replace("Ton ", "Ton"),
-        name.replace("Ton ", "ton "),
-        name.replace("Ton ", "ton"),
-
-        name.replace("IC ", "IC"),
-        name.replace("IC ", "ic "),
-        name.replace("IC ", "ic"),
-
-        name.replace("FSR ", "IC"),
-        name.replace("FSR ", "ic "),
-        name.replace("FSR ", "ic"),
-
-        name.replace("ESO", "ESO "),
-        name.replace("ESO", "eso "),
-        name.replace("ESO", "eso"),
-
-        name.replace("Liller ", "Liller"),
-        name.replace("Liller ", "liller "),
-        name.replace("Liller ", "liller"),
-        name.replace("Liller ", "Lil "),
-        name.replace("Liller ", "Lil"),
-        name.replace("Liller ", "lil "),
-        name.replace("Liller ", "lil"),
-
-        name.replace("Djorg ", "Djorg"),
-        name.replace("Djorg ", "djorg "),
-        name.replace("Djorg ", "djorg"),
-        name.replace("Djorg ", "Djor"),
-        name.replace("Djorg ", "Djor "),
-        name.replace("Djorg ", "djor "),
-        name.replace("Djorg ", "djor"),
-
-        name.replace("Eridanus", "eridanus"),
-        name.replace("Eridanus", "Eri"),
-        name.replace("Eridanus", "eri"),
-
-        name.replace("Lynga ", "Lynga"),
-        name.replace("Lynga ", "lynga"),
-        name.replace("Lynga ", "Lyn "),
-        name.replace("Lynga ", "Lyn"),
-        name.replace("Lynga ", "lyn "),
-        name.replace("Lynga ", "lyn"),
-    ]
-
-
 def map_names_to_ids():
     names = dict()
     for ao in AstroObject.objects.iterator():
         names[ao.name] = ao.id
-        for v in get_name_variations(ao.name):
+        for v in convert_gc_names_from_sh_to_any(ao.name):
             names[v] = ao.id
 
         if ao.altname:
             names[ao.altname] = ao.id
-            for v in get_name_variations(ao.altname):
+            for v in convert_gc_names_from_sh_to_any(ao.altname):
                 names[v] = ao.id
 
     return names
