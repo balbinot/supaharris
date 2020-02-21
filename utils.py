@@ -249,82 +249,93 @@ def convert_gc_names_from_sh_to_any(name, reverse=False):
 
     # TODO: we might want all keys in this dict to use on save?
     # For example, if 'ngc1337' is created: save it as 'NGC 1337'
-    sh_to_any = {
-        "NGC ": "NGC",
-        "NGC ": "ngc ",
-        "NGC ": "ngc",
+    any_to_sh = {
+        "NGC" : "NGC ",
+        "ngc ": "NGC ",
+        "ngc" : "NGC ",
 
-        "Pal ": "Pal",
-        "Pal ": "pal ",
-        "Pal ": "pal",
-        "Pal ": "Palomar ",
-        "Pal ": "palomar ",
-        "Pal ": "Palomar",
-        "Pal ": "Palomar",
+        "Pal"     : "Pal ",
+        "pal "    : "Pal ",
+        "pal"     : "Pal ",
+        "Palomar ": "Pal ",
+        "palomar ": "Pal ",
+        "Palomar" : "Pal ",
+        "Palomar" : "Pal ",
 
+        "Ter "   : "Ter ",
+        "ter "   : "Ter ",
+        "Ter"    : "Ter ",
+        "ter"    : "Ter ",
+        "Terzan" : "Ter ",
+        "terzan" : "Ter ",
         "Terzan ": "Ter ",
-        "Terzan ": "ter ",
-        "Terzan ": "Ter",
-        "Terzan ": "ter",
-        "Terzan ": "Terzan",
-        "Terzan ": "terzan",
+        "terzan ": "Ter ",
 
-        "Arp ": "Arp",
-        "Arp ": "arp ",
-        "Arp ": "arp",
+        "Arp" : "Arp ",
+        "arp ": "Arp ",
+        "arp" : "Arp ",
 
-        "AM ": "AM",
-        "AM ": "am ",
-        "AM ": "am",
+        "AM" : "AM ",
+        "am ": "AM ",
+        "am" : "AM ",
 
-        "Ton ": "Ton",
-        "Ton ": "ton ",
-        "Ton ": "ton",
+        "Ton" : "Ton ",
+        "ton ": "Ton ",
+        "ton" : "Ton ",
 
-        "IC ": "IC",
-        "IC ": "ic ",
-        "IC ": "ic",
+        "IC" : "IC ",
+        "ic ": "IC ",
+        "ic" : "IC ",
 
-        "FSR ": "FSR",
-        "FSR ": "fsr ",
-        "FSR ": "fsr",
+        "FSR" : "FSR ",
+        "fsr ": "FSR ",
+        "fsr" : "FSR ",
 
-        "ESO": "ESO ",
-        "ESO": "eso ",
-        "ESO": "eso",
+        "ESO ": "ESO ",
+        "eso ": "ESO ",
+        "eso" : "ESO ",
 
-        "Liller ": "Liller",
-        "Liller ": "liller ",
-        "Liller ": "liller",
-        "Liller ": "Lil ",
-        "Liller ": "Lil",
-        "Liller ": "lil ",
-        "Liller ": "lil",
+        "Liller" : "Liller ",
+        "liller ": "Liller ",
+        "liller" : "Liller ",
+        "Lil "   : "Liller ",
+        "Lil"    : "Liller ",
+        "lil "   : "Liller ",
+        "lil"    : "Liller ",
 
-        "Djorg ": "Djorg",
-        "Djorg ": "djorg ",
-        "Djorg ": "djorg",
-        "Djorg ": "Djor",
-        "Djorg ": "Djor ",
-        "Djorg ": "djor ",
-        "Djorg ": "djor",
+        "Djorg" : "Djorg ",
+        "djorg ": "Djorg ",
+        "djorg" : "Djorg ",
+        "Djor"  : "Djorg ",
+        "Djor " : "Djorg ",
+        "djor " : "Djorg ",
+        "djor"  : "Djorg ",
 
-        "Eridanus": "eridanus",
-        "Eridanus": "Eri",
-        "Eridanus": "eri",
+        "eridanus" : "Eridanus",
+        "eridanus ": "Eridanus",
+        "Eri"      : "Eridanus ",
+        "Eri "     : "Eridanus ",
+        "eri"      : "Eridanus ",
+        "eri "     : "Eridanus ",
 
-        "Lynga ": "Lynga",
-        "Lynga ": "lynga",
-        "Lynga ": "Lyn ",
-        "Lynga ": "Lyn",
-        "Lynga ": "lyn ",
-        "Lynga ": "lyn",
+        "Lynga": "Lynga ",
+        "lynga": "Lynga ",
+        "Lyn " : "Lynga ",
+        "Lyn"  : "Lynga ",
+        "lyn " : "Lynga ",
+        "lyn"  : "Lynga ",
     }
 
-    if reverse:
-        sh_to_any = {v: k for k, v in sh_to_any.items()}  # reverse the dict :)
-
-    for k, v in sh_to_any.items():
-        name = name.replace(k, v)
-
-    return name
+    for k, v in any_to_sh.items():
+        if reverse:
+            if k in name:
+                # print(k, "in name", name)
+                name = name.replace(k, v)
+                break
+        else:
+            if v in name:
+                # print(v, "in name", name)
+                name = name.replace(v, k)
+                break
+    # print(name)
+    return name.replace("  ", " ")
