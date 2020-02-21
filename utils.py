@@ -1,9 +1,5 @@
-import ads
 import json
-import xlwt
 import requests
-import numpy as np
-from bs4 import BeautifulSoup
 
 
 # Convert ADS/arXiv-style month abbreviation to integers
@@ -15,6 +11,8 @@ MONTH_DICT = {
 
 def export_to_xls(request, queryset):
     """ Generic method to export QuerySet of any Model instance to xls """
+
+    import xlwt
 
     model_fields= queryset[0]._meta.fields
     model_name = queryset[0]._meta.verbose_name_plural.title()
@@ -87,6 +85,7 @@ def scrape_reference_details_from_arxiv(url, journals, debug=None):
     if debug: print("Retrieving: {0}".format(url))
     r = requests_get(url, timeout=5)  # 5 seconds timeout
     if r is False: return False
+    from bs4 import BeautifulSoup
     soup = BeautifulSoup(r.content, "lxml")
 
     details = dict()
@@ -187,6 +186,7 @@ def scrape_reference_details_from_old_ads(url, journals, debug=None):
     if debug: print("Retrieving: {0}".format(url))
     r = requests_get(url, timeout=5)  # 5 seconds timeout
     if r is False: return False
+    from bs4 import BeautifulSoup
     soup = BeautifulSoup(r.content, "lxml")
 
     try:
