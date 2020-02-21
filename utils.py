@@ -1,5 +1,6 @@
 import json
 import requests
+from collections import OrderedDict
 
 
 # Convert ADS/arXiv-style month abbreviation to integers
@@ -249,7 +250,7 @@ def convert_gc_names_from_sh_to_any(name, reverse=False):
 
     # TODO: we might want all keys in this dict to use on save?
     # For example, if 'ngc1337' is created: save it as 'NGC 1337'
-    any_to_sh = {
+    any_to_sh = OrderedDict(sorted({
         "NGC" : "NGC ",
         "ngc ": "NGC ",
         "ngc" : "NGC ",
@@ -262,14 +263,14 @@ def convert_gc_names_from_sh_to_any(name, reverse=False):
         "Palomar" : "Pal ",
         "Palomar" : "Pal ",
 
-        "Ter "   : "Ter ",
-        "ter "   : "Ter ",
-        "Ter"    : "Ter ",
-        "ter"    : "Ter ",
-        "Terzan" : "Ter ",
-        "terzan" : "Ter ",
-        "Terzan ": "Ter ",
-        "terzan ": "Ter ",
+        "Ter "   : "Terzan ",
+        "ter "   : "Terzan ",
+        "Ter"    : "Terzan ",
+        "ter"    : "Terzan ",
+        "Terzan" : "Terzan ",
+        "terzan" : "Terzan ",
+        "Terzan ": "Terzan ",
+        "terzan ": "Terzan ",
 
         "Arp" : "Arp ",
         "arp ": "Arp ",
@@ -324,7 +325,7 @@ def convert_gc_names_from_sh_to_any(name, reverse=False):
         "Lyn"  : "Lynga ",
         "lyn " : "Lynga ",
         "lyn"  : "Lynga ",
-    }
+    }.items(), key=lambda t: len(t[0]), reverse=True))  # sorted by length of key
 
     for k, v in any_to_sh.items():
         if reverse:
