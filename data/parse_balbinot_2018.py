@@ -43,8 +43,10 @@ def parse_balbinot_2018(logger, fname="{0}latex_table_semi_cleaned.txt".format(B
                 value = column.strip()
                 error = numpy.nan
             value = numpy.nan if "--" in value else value
-            if j is 0:
-                value = fix_gc_names(value)
+            # Not needed to fix gc names. In fact, the method has bug for
+            # 'Eridanus' --> 'Eridanus danus' TODO
+            # if j is 0:
+            #     value = fix_gc_names(value)
 
             try:
                 value = float(value)
