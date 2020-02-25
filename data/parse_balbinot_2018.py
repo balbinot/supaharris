@@ -94,6 +94,36 @@ def parse_balbinot_2018(logger, fname="{0}latex_table_semi_cleaned.txt".format(B
 
     return data  # or return names, values, errors
 
+def print_balbinot_2018(logger, data):
+    header = "".join(["{0:<18s}".format(name) for name in data.dtype.names if "err" not in name])
+    ncols = sum(1 for name in data.dtype.names if "err" not in name)
+    logger.info("-"*18*ncols)
+    logger.info(header)
+    logger.info("-"*18*ncols)
+    for row in data:
+        info = ""
+        for i, name in enumerate(data.dtype.names):
+            if "err" not in name:
+                value = row[name]
+                error = row[name+"_err"] if name+"_err" in data.dtype.names else numpy.nan
+                if name == "Refs":  # because cosmetics
+                    info += "     {:<5s}".format(" ")
+
+                try:
+                    info += "{: >8.2f}".format(value)
+                except ValueError:
+                    info += "{:<8s}".format(str(value))
+
+                if i is 0: continue  # b/c Name does not have _err
+
+                if numpy.isfinite(error):
+                    info += " +/- {:<5.2f}".format(error)
+                else:
+                    info += "     {:<5s}".format("")
+
+        logger.info(info)
+    logger.info("-"*18*ncols)
+
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
@@ -101,4 +131,4 @@ if __name__ == "__main__":
     logger.info("Running {0}".format(__file__))
 
     data = parse_balbinot_2018(logger)
-    logger.debug("\ndata: {0}".format(data))
+    print_balbinot_2018(logger, data)
