@@ -44,8 +44,10 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         database = parse_balbinot_2018(self.logger)
         for entry in database:
             gc_name = entry[0]
-            self.logger.info("gc_name: {0}".format(gc_name))
-            continue
+            rj = entry[-3]
+            rj_err = entry[-2]
+            self.logger.info("name = {0} rj = {1:.2f} +/- {2:.2f}".format(
+                gc_name, rj, rj_err))
 
             # The Globular Cluster for which you would like to add new data could
             # very well already be known in the database. In that case you should
@@ -53,13 +55,16 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             # to add may
             if gc_name in name_id_map:
                 gc = AstroObject.objects.get(id=name_id_map[gc_name])
-                logger.info("Found: {0}{1} for '{2}'".format(gc.name,
+                self.logger.info("Found: {0}{1} for '{2}'".format(gc.name,
                     " ({0})".format(gc.altname) if gc.altname else "", gc_name))
                 created = False
             else:
                 gc, created = AstroObject.objects.get_or_create(name=gc_name)
                 gc.classifications.add(self.GC)
                 self.logger.info("Created the AstroObject: {0}".format(gc))
+
+            self.logger.info("\n")
+            continue
 
             # self.GC is set in PrepareSupaHarrisDatabaseMixin. If another
             # classification, or multiple classifications apply, use e.g.
