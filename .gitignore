@@ -120,10 +120,12 @@ ENV/
 .bash_aliases
 .bash_functions
 .bashrc
+.coveragerc
 .vimrc
 .config
 .local
 .pki
+.python_history
 
 /settings/*.env
 /storage
