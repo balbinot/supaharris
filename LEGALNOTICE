@@ -77,3 +77,8 @@ Data
     Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract 
     Data:   https://github.com/tdboer/GC_profiles/tree/f31e147c1ac2de11146d421f261cc620340ae9a9
     Folder: data/MW_GCS_deBoer2019
+
+    Name:   Stetson+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.3042S/abstract
+    Data:   https://ui.adsabs.harvard.edu/abs/2019yCat..74853042S/abstract
+    Folder: data/MW_GCS_Stetson2019
