@@ -8,7 +8,7 @@ from matplotlib import pyplot
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/folder/"
 
 
-def parse_author_year(fname="{0}my_database.csv".format(BASEDIR)):
+def parse_author_year(logger, fname="{0}my_database.csv".format(BASEDIR)):
     # with open(fname) as f:
     #     f.readlines()
 
@@ -25,5 +25,5 @@ if __name__ == "__main__":
     logger = logging.getLogger(__file__)
     logger.info("Running {0}".format(__file__))
 
-    data = parse_author_year()
+    data = parse_author_year(logger)
     logger.debug("\ndata: {0}".format(data))

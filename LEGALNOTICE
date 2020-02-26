@@ -23,6 +23,15 @@ Data
     Data:   http://physwww.mcmaster.ca/~harris/mwgc.dat
     Folder: data/MW_GCS_Hilker2019
 
+    Name:   Miocchi+ 2013
+    Paper:  https://ui.adsabs.harvard.edu/abs/2013ApJ...774..151M/abstract
+    Data:   http://www.cosmic-lab.eu/catalog/table2.dat, retrieved Feb 26, 2020
+            http://www.cosmic-lab.eu/catalog/index.php, auto-retrieved Feb 26, 2020
+              http://www.cosmic-lab.eu/catalog/profs/prof_1.dat
+              ...
+              http://www.cosmic-lab.eu/catalog/profs/prof_25.dat
+    Folder: data/MW_GCS_Miocchi2013
+
     Name:   VandenBerg+ 2013
     Paper:  https://ui.adsabs.harvard.edu/abs/2013ApJ...775..134V/abstract
     Data:   https://arxiv.org/e-print/1308.2257 (parsed Table 2 from .tex file)
