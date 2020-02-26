@@ -22,33 +22,32 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add ReplaceMe data to the database"
 
     def handle(self, *args, **options):
-        logger = logging.getLogger("console")
         super().handle(*args, **options)  # to run our Mixin modifications
 
         cmd = __file__.split("/")[-1].replace(".py", "")
-        logger.info("\n\nRunning the management command '{0}'\n".format(cmd))
+        self.logger.info("\n\nRunning the management command '{0}'\n".format(cmd))
 
         ads_url = "https://ui.adsabs.harvard.edu/abs/1995AJ....109..218T"
         reference, created = Reference.objects.get_or_create(ads_url=ads_url)
         if not created:
-            logger.info("Found the Reference: {0}\n".format(reference))
+            self.logger.info("Found the Reference: {0}\n".format(reference))
         else:
-            logger.info("Created the Reference: {0}\n".format(reference))
+            self.logger.info("Created the Reference: {0}\n".format(reference))
 
         t95_gc = parse_trager_1995_gc(self.logger)
-        logger.debug("\ngc has {0} entries".format(len(gc)))
-        logger.debug("keys: {0}".format(gc.keys()))
+        self.logger.debug("\ngc has {0} entries".format(len(gc)))
+        self.logger.debug("keys: {0}".format(gc.keys()))
         t95_tables = parse_trager_1995_tables(self.logger)
-        logger.debug("\ntables has {0} entries".format(len(tables)))
-        logger.debug("keys: {0}".format(tables.keys()))
+        self.logger.debug("\ntables has {0} entries".format(len(tables)))
+        self.logger.debug("keys: {0}".format(tables.keys()))
 
         for gc_name in t95_gc["Name"]:
-            logger.info("{0}".format(gc_name))
+            self.logger.info("{0}".format(gc_name))
             gc = AstroObject.objects.filter(name=gc_name).first()
             if gc:
-                logger.info("Found the AstroObject: {0}".format(gc))
+                self.logger.info("Found the AstroObject: {0}".format(gc))
             else:
-                logger.info("Did not find AstroObject")
+                self.logger.info("Did not find AstroObject")
             continue
 
             # observation = Observation.objects.create(
