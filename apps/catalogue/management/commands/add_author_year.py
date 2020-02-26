@@ -59,7 +59,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # e.g. Palomar 1/Palomar1/Pal 1/Pal1, etc.
         name_id_map = map_names_to_ids()
 
-        database = parse_author_year_data()
+        database = parse_author_year_data(self.logger)
         for entry in database:
             gc_name = entry[0]
             gc_R_Sun = entry[1]
@@ -73,7 +73,7 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             # to add may
             if gc_name in name_id_map:
                 gc = AstroObject.objects.get(id=name_id_map[gc_name])
-                logger.info("Found: {0}{1} for '{2}'".format(gc.name,
+                self.logger.info("Found: {0}{1} for '{2}'".format(gc.name,
                     " ({0})".format(gc.altname) if gc.altname else "", gc_name))
                 created = False
             else:

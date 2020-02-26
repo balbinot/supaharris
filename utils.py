@@ -214,7 +214,7 @@ def scrape_reference_details_from_new_ads(url, journals, timeout=5, debug=None):
 
     from django.conf import settings
     if debug is None:
-        debug = settings.debug
+        debug = settings.DEBUG
 
     payload = {"bibcode": [ url.split("abs/")[-1].split("/")[0] ]}
     if debug: print("Retrieving: {0}\n  payload: {1}".format(url, payload))
