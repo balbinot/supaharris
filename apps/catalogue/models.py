@@ -16,6 +16,11 @@ from utils import (
 )
 
 
+def get_aux_folder(instance, filename):
+    fname = filename.split("/")[-1]
+    return settings.MEDIA_ROOT + "/aux/" + fname
+
+
 
 VALIDATE = 1
 ACCEPTED = 2
@@ -367,7 +372,7 @@ class Auxiliary(models.Model):
     )
 
     description = models.TextField(max_length=256, null=True, blank=True)
-    file = models.FileField(upload_to="aux/", blank=True, null=True)
+    file = models.FileField(upload_to=get_aux_folder, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
 
     # Time stamps, and logging of who changed user info
@@ -382,7 +387,9 @@ class Auxiliary(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return "{} - Ref: {}".format(self.astro_object.name, str(self.reference))
+        return "{} - Ref: {} - {}".format(self.astro_object.name,
+            str(self.reference), self.description
+        )
 
 
 class Observation(models.Model):

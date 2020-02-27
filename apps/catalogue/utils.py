@@ -53,10 +53,10 @@ def print_parameters(logger):
     logger.info("to 'convert' the parameters names in the database that you")
     logger.info("would like to add to 'valid 'SupaHarris' parameter names.")
 
-    logger.info("\n  {0:<10s}{1:<10s}{2:<60s}{3:<12s}{4:<8s}".format(
+    logger.info("\n  {0:<10s}{1:<20s}{2:<60s}{3:<15s}{4:<8s}".format(
         "id", "name", "description", "unit", "scale"))
     for p in Parameter.objects.all():
-        logger.info("  {0:<10d}{1:<10s}{2:<60s}{3:<12s}{4:<8.2f}".format(p.id,
+        logger.info("  {0:<10d}{1:<20s}{2:<60s}{3:<15s}{4:<8.2f}".format(p.id,
             p.name, p.description[:55] + ("" if len(p.description) < 55 else ".."),
             p.unit, p.scale)
         )

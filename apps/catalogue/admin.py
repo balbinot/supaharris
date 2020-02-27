@@ -194,7 +194,8 @@ class AuxiliaryAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        (None, {"fields": ( "astro_object", "path", "url", "reference", )}),
+        (None, {"fields": ( "astro_object", "reference", "description",
+            "file", "url",  )}),
         ("Meta", {
             "classes": ("collapse",),
             "fields": ( "date_created", "date_updated", "last_updated_by" )
