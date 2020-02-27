@@ -14,7 +14,7 @@
 | [Balbinot & Gieles 2018](https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2479B/abstract) | [`parse_balbinot_2018.py`](data/parse_balbinot_2018.py) | Done | [`add_balbinot_2018.py`](apps/catalogue/management/commands/add_balbinot_2018.py) | Done
 | [Bica+ 2019](https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract) | [`parse_bica_2019.py`](data/parse_bica_2019.py) | Started | [`add_bica_2019.py`](apps/catalogue/management/commands/add_bica_2019.py) | Boilerplate
 | [Hilker+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract) | [`parse_hilker_2019.py`](data/parse_hilker_2019.py) | Started | [`add_hilker_2019.py`](apps/catalogue/management/commands/add_hilker_2019.py) | Boilerplate
-| [deBoer+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract) | [`parse_deBoer_2019.py`](data/parse_deBoer_2019.py) | Started | [`add_deBoer_2019.py`](apps/catalogue/management/commands/add_deBoer_2019.py) | Boilerplate
+| [deBoer+ 2019](https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract) | [`parse_deBoer_2019.py`](data/parse_deBoer_2019.py) | Done | [`add_deBoer_2019.py`](apps/catalogue/management/commands/add_deBoer_2019.py) | Done
 
 
 

@@ -10,6 +10,8 @@ BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_deBoer2019/"
 
 
 def fix_gc_names(name):
+    if "/supaharris" not in sys.path:  # to allow import of utils
+        sys.path.append("/supaharris")
     from utils import convert_gc_names_from_sh_to_any
     return convert_gc_names_from_sh_to_any(name, reverse=True)  # from deBoer to SH
 
@@ -71,7 +73,7 @@ def parse_deBoer_2019_member_stars(logger, dirname="{0}member_stars/".format(BAS
     return data
 
 
-def parse_deBoer_2019_stiched_profiles(logger, dirname="{0}stitched_profiles/".format(BASEDIR)):
+def parse_deBoer_2019_stitched_profiles(logger, dirname="{0}stitched_profiles/".format(BASEDIR)):
     if not os.path.exists(dirname) or not os.path.isdir(dirname):
         logger.error("ERROR: dir not found: {0}".format(dirname))
         return
@@ -97,5 +99,23 @@ if __name__ == "__main__":
     logger = logging.getLogger(__file__)
     logger.info("Running {0}".format(__file__))
 
-    data = parse_author_year()
-    logger.debug("\ndata: {0}".format(data))
+    deBoer_fits = parse_deBoer_2019_fits(logger)
+    print("\nde Boer (2019) fits")
+    print(deBoer_fits.shape)
+    print(deBoer_fits.dtype)
+    print(deBoer_fits["id"])
+
+    # TODO: do we want to do something /w member star catalogue?
+    # deBoer_member_stars = parse_deBoer_2019_member_stars(logger)
+    # print("\nde Boer (2019) member stars")
+    # print(len(deBoer_member_stars))
+    # print(deBoer_member_stars["NGC 1261"].shape)
+    # print(deBoer_member_stars["NGC 1261"].dtype)
+    # print(deBoer_member_stars.keys())
+
+    deBoer_stitched_profiles = parse_deBoer_2019_stitched_profiles(logger)
+    print("\nde Boer (2019) stitched profiles")
+    print(len(deBoer_stitched_profiles))
+    print(deBoer_stitched_profiles["NGC 1261"].shape)
+    print(deBoer_stitched_profiles["NGC 1261"].dtype)
+    print(deBoer_stitched_profiles.keys())

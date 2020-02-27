@@ -50,3 +50,4 @@ echo -e "5. Ingestion of databases"
 docker exec supaharris_django_1 python manage.py add_harris_1996ed2010
 docker exec supaharris_django_1 python manage.py add_vandenberg_2013
 docker exec supaharris_django_1 python manage.py add_balbinot_2018
+docker exec supaharris_django_1 python manage.py add_deBoer_2019
