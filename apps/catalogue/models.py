@@ -73,6 +73,7 @@ class Reference(models.Model):
     # List from: http://adswww.harvard.edu/abs_doc/aas_macros.html
     JOURNALS = (
         ("aj",       "Astronomical Journal"),
+        ("aat",      "Astronomical and Astrophysical Transactions"),
         ("actaa",    "Acta Astronomica"),
         ("ara",      "Arkiv for Astronomi"),
         ("araa",     "Annual Review of Astron and Astrophys"),

@@ -17,8 +17,6 @@ def parse_balbinot_2018(logger, fname="{0}latex_table_semi_cleaned.txt".format(B
     with open(fname) as f:
         raw_data = f.readlines()
 
-    logger.debug("parse_balbinot_2018\n  --> found {0} entries\n".format(len(raw_data)))
-
     # Clean up LaTeX table
     names = []
     values = []
@@ -131,4 +129,7 @@ if __name__ == "__main__":
     logger.info("Running {0}".format(__file__))
 
     data = parse_balbinot_2018(logger)
-    print_balbinot_2018(logger, data)
+    logger.info("\nFound {0} GCs".format(len(data)))
+    logger.info("\nAvailable fields:\n{0}".format(data.dtype))
+    logger.info("\nAvailable clusters:\n{0}".format(data["Name"]))
+    # print_balbinot_2018(logger, data)
