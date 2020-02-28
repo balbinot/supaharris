@@ -46,8 +46,9 @@ Site.objects.all().delete();
 Site.objects.create(id=1, name="localhost:8000", domain="localhost:8000")
 print("  {0}\n".format(Site.objects.all()))'
 
-echo -e "5. Ingestion of databases"
+echo -e "5. Ingestion of data sets"
 docker exec supaharris_django_1 python manage.py add_harris_1996ed2010
+docker exec supaharris_django_1 python manage.py add_trager_1995
 docker exec supaharris_django_1 python manage.py add_vandenberg_2013
 docker exec supaharris_django_1 python manage.py add_balbinot_2018
 docker exec supaharris_django_1 python manage.py add_deBoer_2019

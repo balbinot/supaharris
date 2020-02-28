@@ -1,12 +1,14 @@
 #-*- coding: utf-8 -*-
 import os
 import sys
+import numpy
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
 from catalogue.models import (
+    Profile,
     Reference,
     Parameter,
     Observation,
@@ -18,8 +20,65 @@ from data.parse_trager_1995 import parse_trager_1995_gc
 from data.parse_trager_1995 import parse_trager_1995_tables
 
 
+def add_trager_1995_table2(logger, table2):
+    # Trager+ 1995 Table 2 does not seem to be available in machine-readable form.
+    trager1995 = Reference.objects.get(bib_code="1995AJ....109..218T")
+    logger.debug("\nInsert Trager (1995) Table 2")
+
+    return
+
+
+def add_trager_1995_profiles(logger, gc, tables):
+    trager1995 = Reference.objects.get(bib_code="1995AJ....109..218T")
+    logger.debug("\nInsert Trager (1995) profiles")
+
+    # We first delete all Profile instances that match deBoer19 Reference
+    deleted = Profile.objects.filter(reference=trager1995).delete()
+    if deleted[0] is not 0:
+        logger.debug("WARNING: deleted {0} Profile instances".format(deleted))
+
+    Nentries = len(gc)
+    for i, gc_name in enumerate(gc["Name"]):
+        logger.debug("\n{0}/{1}: {2}".format(i+1, Nentries, gc_name))
+        ao = AstroObject.objects.filter(name=gc_name).first()
+        if ao:
+            logger.info("  Found the AstroObject: {0}".format(ao))
+        else:
+            logger.info("  Did not find AstroObject")
+            void = input("ERROR. Press any key to continue")
+
+        igc, = numpy.where(tables["Name"] == gc_name)
+        logger.debug("  Profile has {} entries".format(len(tables[igc])))
+
+        ikeep = Ellipsis
+        if gc_name == "NGC 2419":  # the data shows two radial profiles
+            ikeep, = numpy.where(
+                (tables[igc]["DataSet"] != "CGB1")
+                & (tables[igc]["DataSet"] != "CGB2")
+                & (tables[igc]["DataSet"] != "CGR1")
+                & (tables[igc]["DataSet"] != "CGR2")
+                & (tables[igc]["DataSet"] != "CGV2")
+                & (tables[igc]["DataSet"] != "CGV1")
+                & (tables[igc]["DataSet"] != "CGV3")
+            )
+
+        sh_prof = Profile(
+            reference=trager1995,
+            astro_object=ao,
+            x=tables[igc]["logr"][ikeep].tolist(),
+            y=tables[igc]["muV"][ikeep].tolist(),
+            x_description="logr: Log of radius of surface brightness [arcsec]",
+            y_description="mu_V(r): surface brightness at r in V mags [mag/arcsec**2]",
+        )
+        sh_prof.save()
+
+        # TODO: if needed: can also add tables[igc]["muVf"][ikeep], which
+        # shows Trager+1995's Chebyshev fit /w units mag/arcsec^2, and/or
+        # its residuals tables[igc]["Resid"][ikeep] /w units mag/arcsec^2
+
+
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
-    help = "Add ReplaceMe data to the database"
+    help = "Add Trager+ (1995) data to the database"
 
     def handle(self, *args, **options):
         super().handle(*args, **options)  # to run our Mixin modifications
@@ -34,31 +93,8 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             self.logger.info("Created the Reference: {0}\n".format(reference))
 
-        t95_gc = parse_trager_1995_gc(self.logger)
-        self.logger.debug("\ngc has {0} entries".format(len(gc)))
-        self.logger.debug("keys: {0}".format(gc.keys()))
-        t95_tables = parse_trager_1995_tables(self.logger)
-        self.logger.debug("\ntables has {0} entries".format(len(tables)))
-        self.logger.debug("keys: {0}".format(tables.keys()))
+        gc = parse_trager_1995_gc(self.logger)
+        tables = parse_trager_1995_tables(self.logger)
 
-        for gc_name in t95_gc["Name"]:
-            self.logger.info("{0}".format(gc_name))
-            gc = AstroObject.objects.filter(name=gc_name).first()
-            if gc:
-                self.logger.info("Found the AstroObject: {0}".format(gc))
-            else:
-                self.logger.info("Did not find AstroObject")
-            continue
-
-            # observation = Observation.objects.create(
-            #     reference=reference,
-            #     astro_object=gc,
-            #     parameter=R_Sun,
-            #     value=gc_R_Sun,
-            # )
-            # print("Created the Observation: {0}".format(observation))
-
-        return
-
-        for gc_name in clusters:
-            igc, = numpy.where(t95_tables["Name"] == gc_name)
+        # add_trager_1995_table2(self.logger, table2)
+        add_trager_1995_profiles(self.logger, gc, tables)
