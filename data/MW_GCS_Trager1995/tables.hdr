@@ -1,0 +1,1525 @@
+AM1
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.983 +-  0.183
+ a(1)=     2.555 +-  0.280
+ a(2)=     0.501 +-  0.255
+ a(3)=     0.169 +-  0.244
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r=0.92
+ a(0)=    -1.2485
+ a(1)=     1.5930
+ a(2)=    -0.6058
+ a(3)=     0.3005
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Arp2 (1927-30)
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.245 +-  0.403
+ a(1)=     2.350 +-  0.674
+ a(2)=     0.194 +-  0.518
+ a(3)=    -0.142 +-  0.415
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=2.11
+ a(0)=    -0.8997
+ a(1)=     0.1986
+ a(2)=     4.4163
+ a(3)=    -1.6661
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+HP            c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.345 +-  0.099
+ a(1)=     2.538 +-  0.149
+ a(2)=     0.045 +-  0.142
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=    -0.9424
+ a(1)=     2.1064
+ a(2)=     0.0707
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+IC1276 (Pal7)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.742 +-  0.184
+ a(1)=     2.761 +-  0.317
+ a(2)=     0.617 +-  0.227
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.68
+ a(0)=     9.7268
+ a(1)=     0.2242
+ a(2)=     0.7218
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+IC4499
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.753 +-  0.234
+ a(1)=     3.311 +-  0.370
+ a(2)=     0.480 +-  0.328
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.88
+ a(0)=     9.0307
+ a(1)=     1.2323
+ a(2)=     0.7757
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC104 (47 Tuc) 
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.472 +-  0.112
+ a(1)=     6.036 +-  0.177
+ a(2)=     1.130 +-  0.172
+ a(3)=     0.314 +-  0.141
+ a(4)=     0.166 +-  0.138
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c= 1.42
+ a(0)=     4.6828
+ a(1)=     0.7515
+ a(2)=     1.0310
+ a(3)=    -0.3647
+ a(4)=     0.0534
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC1261         
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.291 +-  0.146
+ a(1)=     4.507 +-  0.254
+ a(2)=     0.937 +-  0.179
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c= 1.37
+ a(0)=     7.0745
+ a(1)=     0.5453
+ a(2)=     0.9636
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC1851
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.680 +-  0.149
+ a(1)=     6.422 +-  0.218
+ a(2)=     0.845 +-  0.205
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.76
+ a(0)=     4.2630
+ a(1)=     1.3090
+ a(2)=     0.3129
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC1904 (M79) c?
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.254 +-  0.136
+ a(1)=     4.883 +-  0.231
+ a(2)=     0.805 +-  0.135
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.00
+ a(0)=     6.0486
+ a(1)=     0.8887
+ a(2)=     0.4605
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC2298
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.195 +-  0.178
+ a(1)=     2.653 +-  0.305
+ a(2)=     0.437 +-  0.210
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.33
+ a(0)=     8.3814
+ a(1)=     0.7825
+ a(2)=     0.6571
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC2419
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.510 +-  0.115
+ a(1)=     4.618 +-  0.179
+ a(2)=     0.881 +-  0.143
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, x=1.34
+ a(0)=     8.0160
+ a(1)=     0.7058
+ a(2)=     0.7366
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC2808
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.279 +-  0.104
+ a(1)=     6.187 +-  0.169
+ a(2)=     1.078 +-  0.109
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.29
+ a(0)=     5.0310
+ a(1)=     0.9984
+ a(2)=     0.6136
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC288
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.951 +-  0.153
+ a(1)=     3.965 +-  0.251
+ a(2)=     1.229 +-  0.239
+ a(3)=     0.218 +-  0.204
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.80
+ a(0)=     8.5190
+ a(1)=     0.7590
+ a(2)=    -0.0946
+ a(3)=     0.3631
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC3201
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.499 +-  0.188
+ a(1)=     4.621 +-  0.305
+ a(2)=     0.946 +-  0.284
+ a(3)=    -0.142 +-  0.226
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.81
+ a(0)=     7.7153
+ a(1)=    -0.2703
+ a(2)=     1.3796
+ a(3)=    -0.1349
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC362        c?
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.835 +-  0.132
+ a(1)=     6.016 +-  0.215
+ a(2)=     0.971 +-  0.132
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.08
+ a(0)=     4.8721
+ a(1)=     1.0440
+ a(2)=     0.4675
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC4147
+10 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.494 +-  0.147
+ a(1)=     5.480 +-  0.256
+ a(2)=     0.700 +-  0.191
+ a(3)=     0.328 +-  0.136
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.14
+ a(0)=     6.1370
+ a(1)=     3.4064
+ a(2)=    -0.9269
+ a(3)=     0.2898
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC4372
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.005 +-  0.317
+ a(1)=     0.425 +-  0.449
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.63
+ a(0)=    10.0740
+ a(1)=     0.5597
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC4590
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.430 +-  0.153
+ a(1)=     5.562 +-  0.260
+ a(2)=     0.759 +-  0.198
+ a(3)=    -0.206 +-  0.140
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.64
+ a(0)=     7.1182
+ a(1)=     0.3827
+ a(2)=     1.3127
+ a(3)=    -0.1554
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5024 (M53)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.315 +-  0.103
+ a(1)=     5.945 +-  0.171
+ a(2)=     0.996 +-  0.132
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.42
+ a(0)=     6.2078
+ a(1)=     1.0180
+ a(2)=     0.5364
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5053
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    24.653 +-  0.151
+ a(1)=     3.370 +-  0.249
+ a(2)=     0.890 +-  0.218
+ a(3)=     0.147 +-  0.176
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=2.17
+ a(0)=     9.6986
+ a(1)=     1.2125
+ a(2)=     0.0130
+ a(3)=     0.7169
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5139 (omega Cen)
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.055 +-  0.166
+ a(1)=     5.369 +-  0.265
+ a(2)=     1.256 +-  0.216
+ a(3)=     0.129 +-  0.221
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=2.24
+ a(0)=     6.2789
+ a(1)=     1.0177
+ a(2)=     0.4424
+ a(3)=     0.1621
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5272 (M3)
+11 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.940 +-  0.137
+ a(1)=     6.646 +-  0.242
+ a(2)=     0.883 +-  0.214
+ a(3)=    -0.218 +-  0.198
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.50
+ a(0)=     5.4106
+ a(1)=     0.5151
+ a(2)=     1.0794
+ a(3)=    -0.1054
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5286
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.652 +-  0.153
+ a(1)=     4.280 +-  0.254
+ a(2)=     0.842 +-  0.186
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.20
+ a(0)=     6.3875
+ a(1)=     0.5650
+ a(2)=     0.6510
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5466
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    24.647 +-  0.180
+ a(1)=     4.060 +-  0.301
+ a(2)=     1.028 +-  0.264
+ a(3)=    -0.266 +-  0.213
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.93
+ a(0)=     9.5603
+ a(1)=    -1.9203
+ a(2)=     3.2089
+ a(3)=    -0.5082
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5634
+17 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.906 +-  0.129
+ a(1)=     5.446 +-  0.213
+ a(2)=     0.719 +-  0.146
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.82
+ a(0)=     6.2244
+ a(1)=     1.2042
+ a(2)=     0.3167
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5694
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.670 +-  0.119
+ a(1)=     4.847 +-  0.200
+ a(2)=     0.661 +-  0.160
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.66
+ a(0)=     6.1384
+ a(1)=     1.1451
+ a(2)=     0.3604
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5824
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.723 +-  0.155
+ a(1)=     6.375 +-  0.231
+ a(2)=     0.639 +-  0.222
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.64
+ a(0)=     4.6251
+ a(1)=     1.5955
+ a(2)=     0.2229
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5897
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.633 +-  0.144
+ a(1)=     2.797 +-  0.237
+ a(2)=     0.769 +-  0.202
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.91
+ a(0)=     9.2884
+ a(1)=    -0.2672
+ a(2)=     1.4116
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5904 (M5)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.115 +-  0.113
+ a(1)=     6.045 +-  0.184
+ a(2)=     1.251 +-  0.167
+ a(3)=     0.268 +-  0.163
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.48
+ a(0)=     5.2885
+ a(1)=     1.8529
+ a(2)=    -0.2466
+ a(3)=     0.1528
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5927
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.280 +-  0.240
+ a(1)=     2.015 +-  0.423
+ a(2)=     0.281 +-  0.394
+ a(3)=     0.320 +-  0.348
+ a(4)=    -0.173 +-  0.313
+ a(5)=     0.146 +-  0.251
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.06
+ a(0)=     7.2578
+ a(1)=     7.4510
+ a(2)=   -13.1878
+ a(3)=    10.5466
+ a(4)=    -3.6798
+ a(5)=     0.4791
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5946       c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.141 +-  0.254
+ a(1)=     2.268 +-  0.389
+ a(2)=     0.316 +-  0.356
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.4257
+ a(1)=     0.8474
+ a(2)=     0.8779
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC5986
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.510 +-  0.177
+ a(1)=     4.813 +-  0.270
+ a(2)=     0.865 +-  0.258
+ a(3)=    -0.140 +-  0.215
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.56
+ a(0)=     6.9467
+ a(1)=     0.0644
+ a(2)=     1.7203
+ a(3)=    -0.2006
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6093 (M80)
+18 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.208 +-  0.122
+ a(1)=     5.967 +-  0.197
+ a(2)=     1.136 +-  0.134
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.94
+ a(0)=     5.2704
+ a(1)=     0.6739
+ a(2)=     0.5140
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6101
+ 4 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.624 +-  0.401
+ a(1)=     1.859 +-  0.657
+ a(2)=     0.571 +-  0.413
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.78
+ a(0)=     9.5237
+ a(1)=    -0.5853
+ a(2)=     2.1633
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6121 (M4)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.375 +-  0.146
+ a(1)=     3.969 +-  0.250
+ a(2)=     0.715 +-  0.193
+ a(3)=     0.243 +-  0.135
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.90
+ a(0)=     7.1875
+ a(1)=     2.1253
+ a(2)=    -0.6176
+ a(3)=     0.2605
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6139
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.592 +-  0.148
+ a(1)=     3.911 +-  0.260
+ a(2)=     0.504 +-  0.179
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.99
+ a(0)=     6.8866
+ a(1)=     1.1040
+ a(2)=     0.3425
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6144
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.295 +-  0.165
+ a(1)=     1.353 +-  0.247
+ a(2)=     0.113 +-  0.213
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.70
+ a(0)=     9.4025
+ a(1)=     1.0596
+ a(2)=     0.3125
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6171
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.051 +-  0.203
+ a(1)=     3.648 +-  0.328
+ a(2)=     0.490 +-  0.215
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.60
+ a(0)=     7.8664
+ a(1)=     1.1760
+ a(2)=     0.4769
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6205 (M13)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.463 +-  0.100
+ a(1)=     6.095 +-  0.153
+ a(2)=     1.403 +-  0.169
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.65
+ a(0)=     6.0358
+ a(1)=     0.2500
+ a(2)=     0.9054
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6218 (M12)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.713 +-  0.115
+ a(1)=     4.607 +-  0.188
+ a(2)=     1.114 +-  0.165
+ a(3)=     0.224 +-  0.148
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.68
+ a(0)=     7.1383
+ a(1)=     1.4557
+ a(2)=    -0.2095
+ a(3)=     0.2708
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6229
+13 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.136 +-  0.128
+ a(1)=     5.320 +-  0.212
+ a(2)=     0.960 +-  0.157
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.95
+ a(0)=     6.2074
+ a(1)=     0.8512
+ a(2)=     0.6374
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6235
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.479 +-  0.180
+ a(1)=     2.742 +-  0.288
+ a(2)=     0.464 +-  0.234
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.33
+ a(0)=     8.4516
+ a(1)=     0.7152
+ a(2)=     0.6309
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6254 (M10)
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.512 +-  0.129
+ a(1)=     4.745 +-  0.211
+ a(2)=     0.938 +-  0.167
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.70
+ a(0)=     6.9484
+ a(1)=     0.6235
+ a(2)=     0.7401
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6256       c
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.628 +-  0.190
+ a(1)=     3.133 +-  0.341
+ a(2)=     0.320 +-  0.301
+ a(3)=     0.177 +-  0.233
+ a(4)=     0.313 +-  0.185
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.9216
+ a(1)=     2.3251
+ a(2)=     2.8227
+ a(3)=    -3.6585
+ a(4)=     1.2046
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6266       c?
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.884 +-  0.106
+ a(1)=     4.143 +-  0.171
+ a(2)=     0.610 +-  0.145
+ a(3)=     0.160 +-  0.119
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.22
+ a(0)=     5.7485
+ a(1)=     1.9431
+ a(2)=    -0.2663
+ a(3)=     0.1515
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6273
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.185 +-  0.150
+ a(1)=     4.101 +-  0.242
+ a(2)=     0.714 +-  0.167
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.42
+ a(0)=     6.7045
+ a(1)=     0.7867
+ a(2)=     0.5706
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6284       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.650 +-  0.108
+ a(1)=     3.239 +-  0.206
+ a(2)=     1.071 +-  0.153
+ a(3)=     0.130 +-  0.148
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.1231
+ a(1)=     0.4713
+ a(2)=     0.6638
+ a(3)=     0.2705
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6287
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.532 +-  0.130
+ a(1)=     2.578 +-  0.219
+ a(2)=     0.407 +-  0.198
+ a(3)=     0.134 +-  0.175
+ a(4)=    -0.148 +-  0.147
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.21
+ a(0)=     7.8080
+ a(1)=     3.7931
+ a(2)=    -4.7032
+ a(3)=     3.0799
+ a(4)=    -0.5772
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6293       c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.333 +-  0.092
+ a(1)=     3.422 +-  0.171
+ a(2)=     0.956 +-  0.130
+ a(3)=     0.146 +-  0.123
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     6.8300
+ a(1)=     0.8777
+ a(2)=     0.3858
+ a(3)=     0.2702
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6304
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.683 +-  0.137
+ a(1)=     2.720 +-  0.226
+ a(2)=     0.232 +-  0.181
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.22
+ a(0)=     7.3517
+ a(1)=     1.3688
+ a(2)=     0.2705
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6316
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.052 +-  0.131
+ a(1)=     2.996 +-  0.210
+ a(2)=     0.338 +-  0.170
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.11
+ a(0)=     7.3660
+ a(1)=     1.2204
+ a(2)=     0.3750
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6325       c
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.520 +-  0.190
+ a(1)=     3.833 +-  0.337
+ a(2)=     1.025 +-  0.297
+ a(3)=     0.369 +-  0.213
+ a(4)=     0.236 +-  0.185
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.5521
+ a(1)=     1.5616
+ a(2)=     1.7614
+ a(3)=    -1.9418
+ a(4)=     0.7332
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6333 (M9)
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.836 +-  0.199
+ a(1)=     3.953 +-  0.335
+ a(2)=     0.503 +-  0.292
+ a(3)=    -0.204 +-  0.207
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.54
+ a(0)=     7.1726
+ a(1)=     0.0747
+ a(2)=     1.9548
+ a(3)=    -0.3473
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6341 (M92)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.529 +-  0.141
+ a(1)=     6.016 +-  0.266
+ a(2)=     1.183 +-  0.197
+ a(3)=     0.237 +-  0.200
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.29
+ a(0)=     5.0695
+ a(1)=     1.8583
+ a(2)=    -0.1675
+ a(3)=     0.1478
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6342       c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.537 +-  0.160
+ a(1)=     3.648 +-  0.321
+ a(2)=     1.222 +-  0.259
+ a(3)=     0.160 +-  0.245
+ a(4)=     0.056 +-  0.158
+ a(5)=     0.015 +-  0.156
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.4038
+ a(1)=     0.8303
+ a(2)=     0.8949
+ a(3)=     0.0246
+ a(4)=    -0.0475
+ a(5)=     0.0391
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6352
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.766 +-  0.215
+ a(1)=     1.453 +-  0.316
+ a(2)=    -0.282 +-  0.258
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.76
+ a(0)=     8.1470
+ a(1)=     4.0500
+ a(2)=    -1.3884
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6355       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.647 +-  0.192
+ a(1)=     2.648 +-  0.355
+ a(2)=     0.838 +-  0.305
+ a(3)=     0.158 +-  0.275
+ a(4)=     0.054 +-  0.208
+ a(5)=    -0.115 +-  0.194
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.9331
+ a(1)=     1.1232
+ a(2)=     1.8937
+ a(3)=    -4.2516
+ a(4)=     3.3115
+ a(5)=    -0.7352
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6356
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.466 +-  0.158
+ a(1)=     2.829 +-  0.255
+ a(2)=     0.366 +-  0.183
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.22
+ a(0)=     7.2698
+ a(1)=     1.0833
+ a(2)=     0.4629
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6362
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.549 +-  0.239
+ a(1)=     2.859 +-  0.386
+ a(2)=     0.524 +-  0.382
+ a(3)=    -0.189 +-  0.338
+ a(4)=     0.075 +-  0.279
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.83
+ a(0)=     8.7032
+ a(1)=    -1.8970
+ a(2)=     4.9801
+ a(3)=    -2.2108
+ a(4)=     0.3734
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6366
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.010 +-  0.228
+ a(1)=     2.231 +-  0.343
+ a(2)=     0.515 +-  0.321
+ a(3)=     0.162 +-  0.300
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=2.12
+ a(0)=     9.6274
+ a(1)=     1.8672
+ a(2)=    -1.2006
+ a(3)=     0.9791
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6380 (Ton1)c?
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.607 +-  0.156
+ a(1)=     1.993 +-  0.245
+ a(2)=     0.277 +-  0.194
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.29
+ a(0)=     9.0875
+ a(1)=     0.7654
+ a(2)=     0.4169
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6388
+ 4 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.618 +-  0.101
+ a(1)=     4.907 +-  0.163
+ a(2)=     0.875 +-  0.143
+ a(3)=     0.083 +-  0.122
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.95
+ a(0)=     5.1914
+ a(1)=     1.1800
+ a(2)=     0.2280
+ a(3)=     0.0546
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6397       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.361 +-  0.079
+ a(1)=     5.102 +-  0.150
+ a(2)=     1.880 +-  0.112
+ a(3)=     0.492 +-  0.114
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     6.3907
+ a(1)=     0.6987
+ a(2)=    -0.1640
+ a(3)=     0.3181
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6401
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.073 +-  0.143
+ a(1)=     2.622 +-  0.244
+ a(2)=     0.252 +-  0.173
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.28
+ a(0)=     8.1652
+ a(1)=     1.2816
+ a(2)=     0.3182
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6402 (M14)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.213 +-  0.161
+ a(1)=     3.509 +-  0.278
+ a(2)=     0.711 +-  0.216
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.76
+ a(0)=     7.8077
+ a(1)=     0.6000
+ a(2)=     1.1508
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6426
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.752 +-  0.237
+ a(1)=     2.791 +-  0.411
+ a(2)=     0.476 +-  0.321
+ a(3)=     0.348 +-  0.216
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.33
+ a(0)=     8.7108
+ a(1)=     3.3494
+ a(2)=    -2.2362
+ a(3)=     0.8039
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6440
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.287 +-  0.171
+ a(1)=     3.870 +-  0.242
+ a(2)=     0.575 +-  0.232
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.92
+ a(0)=     6.8482
+ a(1)=     0.9913
+ a(2)=     0.4590
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6441
+ 4 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.765 +-  0.175
+ a(1)=     4.545 +-  0.269
+ a(2)=     0.614 +-  0.178
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.92
+ a(0)=     5.4487
+ a(1)=     1.1568
+ a(2)=     0.3778
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6453       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.054 +-  0.093
+ a(1)=     2.583 +-  0.195
+ a(2)=     0.779 +-  0.130
+ a(3)=    -0.214 +-  0.130
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.5505
+ a(1)=     0.2185
+ a(2)=     1.8308
+ a(3)=    -0.3779
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6496
+21 iterations.                                                      
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.892 +-  0.323
+ a(1)=     0.938 +-  0.502
+ a(2)=     0.301 +-  0.420
+ a(3)=     0.139 +-  0.341
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.79
+ a(0)=     9.6693
+ a(1)=     2.0232
+ a(2)=    -4.4886
+ a(3)=     4.7949
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6517
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.604 +-  0.110
+ a(1)=     3.204 +-  0.182
+ a(2)=     0.342 +-  0.156
+ a(3)=     0.181 +-  0.147
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.80
+ a(0)=     7.2538
+ a(1)=     2.3161
+ a(2)=    -0.6645
+ a(3)=     0.2151
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6522       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    17.858 +-  0.082
+ a(1)=     2.773 +-  0.121
+ a(2)=     0.842 +-  0.115
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.0221
+ a(1)=     0.5653
+ a(2)=     1.0443
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6528
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.079 +-  0.127
+ a(1)=     3.460 +-  0.209
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.97
+ a(0)=     6.5704
+ a(1)=     2.2211
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6535
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.185 +-  0.209
+ a(1)=     2.358 +-  0.321
+ a(2)=     0.335 +-  0.298
+ a(3)=    -0.122 +-  0.242
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.35
+ a(0)=     9.6913
+ a(1)=    -0.0735
+ a(2)=     1.7036
+ a(3)=    -0.3481
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6539       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.822 +-  0.165
+ a(1)=     3.963 +-  0.307
+ a(2)=     1.565 +-  0.217
+ a(3)=     0.464 +-  0.196
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     8.4300
+ a(1)=     0.5890
+ a(2)=    -0.3320
+ a(3)=     0.4577
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6541       c
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.676 +-  0.126
+ a(1)=     4.965 +-  0.215
+ a(2)=     2.007 +-  0.167
+ a(3)=     0.300 +-  0.145
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     6.0413
+ a(1)=     0.1359
+ a(2)=     0.5683
+ a(3)=     0.2775
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6544       c?
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.515 +-  0.167
+ a(1)=     2.581 +-  0.310
+ a(2)=     0.191 +-  0.274
+ a(3)=     0.358 +-  0.226
+ a(4)=    -0.184 +-  0.175
+ a(5)=     0.185 +-  0.136
+ a(6)=    -0.086 +-  0.109
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.09
+ a(0)=     6.5280
+ a(1)=    11.0323
+ a(2)=   -23.3078
+ a(3)=    24.2438
+ a(4)=   -12.5236
+ a(5)=     3.1672
+ a(6)=    -0.3106
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6553
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.768 +-  0.134
+ a(1)=     1.903 +-  0.212
+ a(2)=     0.277 +-  0.167
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.56
+ a(0)=     8.2577
+ a(1)=     0.9076
+ a(2)=     0.7207
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6558       c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.521 +-  0.146
+ a(1)=     2.568 +-  0.263
+ a(2)=     0.381 +-  0.210
+ a(3)=    -0.152 +-  0.194
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     7.4873
+ a(1)=     1.2416
+ a(2)=     1.2717
+ a(3)=    -0.3505
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6569
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.805 +-  0.119
+ a(1)=     3.220 +-  0.196
+ a(2)=     0.592 +-  0.147
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.35
+ a(0)=     7.7745
+ a(1)=     0.6660
+ a(2)=     0.7298
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6584
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.171 +-  0.250
+ a(1)=     2.831 +-  0.379
+ a(2)=     0.539 +-  0.354
+ a(3)=     0.326 +-  0.309
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.21
+ a(0)=     7.4645
+ a(1)=     2.8636
+ a(2)=    -1.7806
+ a(3)=     0.6476
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6624       c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    17.915 +-  0.099
+ a(1)=     3.600 +-  0.140
+ a(2)=     1.046 +-  0.127
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     6.4020
+ a(1)=     0.4468
+ a(2)=     1.2614
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6626 (M28)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.432 +-  0.071
+ a(1)=     2.699 +-  0.113
+ a(2)=     0.259 +-  0.093
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.28
+ a(0)=     6.7750
+ a(1)=     1.3296
+ a(2)=     0.3315
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6637 (M69)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.866 +-  0.214
+ a(1)=     3.540 +-  0.361
+ a(2)=     0.507 +-  0.261
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.41
+ a(0)=     6.8998
+ a(1)=     1.1614
+ a(2)=     0.5989
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6638
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.698 +-  0.446
+ a(1)=     4.087 +-  0.813
+ a(2)=     0.500 +-  0.633
+ a(3)=    -0.173 +-  0.460
+ a(4)=     0.026 +-  0.300
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.21
+ a(0)=     6.9612
+ a(1)=     0.0749
+ a(2)=     1.9585
+ a(3)=    -0.5004
+ a(4)=     0.0472
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6642       c?
+ 8 iterations.                                                      
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.459 +-  0.146
+ a(1)=     2.644 +-  0.197
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.02
+ a(0)=     7.0792
+ a(1)=     2.1358
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6652
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.487 +-  0.127
+ a(1)=     3.774 +-  0.205
+ a(2)=     0.488 +-  0.173
+ a(3)=     0.166 +-  0.167
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.84
+ a(0)=     6.2835
+ a(1)=     2.0740
+ a(2)=    -0.3987
+ a(3)=     0.1615
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight
+NGC6656 (M22)
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.207 +-  0.165
+ a(1)=     3.349 +-  0.263
+ a(2)=     0.545 +-  0.177
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.98
+ a(0)=     7.2998
+ a(1)=     0.9048
+ a(2)=     0.6535
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6681 (M70) c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.375 +-  0.130
+ a(1)=     4.540 +-  0.245
+ a(2)=     1.206 +-  0.171
+ a(3)=     0.217 +-  0.162
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     6.1319
+ a(1)=     1.2670
+ a(2)=     0.2914
+ a(3)=     0.3125
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6712
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.789 +-  0.218
+ a(1)=     2.583 +-  0.341
+ a(2)=     0.621 +-  0.254
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.62
+ a(0)=     8.4331
+ a(1)=     0.0897
+ a(2)=     1.0660
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6715 (M54)
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.631 +-  0.116
+ a(1)=     5.648 +-  0.196
+ a(2)=     0.598 +-  0.159
+ a(3)=    -0.168 +-  0.122
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.85
+ a(0)=     4.9317
+ a(1)=     0.8174
+ a(2)=     0.7186
+ a(3)=    -0.0710
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight
+NGC6717 (Pal9)c?
+ 9 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.006 +-  0.099
+ a(1)=     3.237 +-  0.133
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.92
+ a(0)=     6.7561
+ a(1)=     2.0263
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6723
+12 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.009 +-  0.175
+ a(1)=     3.655 +-  0.281
+ a(2)=     0.752 +-  0.165
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.76
+ a(0)=     7.6019
+ a(1)=     0.5408
+ a(2)=     1.0576
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6752       c
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.773 +-  0.072
+ a(1)=     5.403 +-  0.128
+ a(2)=     2.220 +-  0.102
+ a(3)=     0.351 +-  0.104
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     5.8113
+ a(1)=     0.0676
+ a(2)=     0.4215
+ a(3)=     0.2373
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6760
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.551 +-  0.132
+ a(1)=     2.159 +-  0.207
+ a(2)=     0.266 +-  0.176
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.35
+ a(0)=     8.3822
+ a(1)=     0.9993
+ a(2)=     0.4431
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6779 (M56)
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.867 +-  0.104
+ a(1)=     2.216 +-  0.162
+ a(2)=     0.342 +-  0.150
+ a(3)=     0.078 +-  0.134
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.43
+ a(0)=     7.9808
+ a(1)=     1.4630
+ a(2)=    -0.2222
+ a(3)=     0.2617
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6809 (M55)
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.192 +-  0.116
+ a(1)=     3.886 +-  0.190
+ a(2)=     1.098 +-  0.168
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=2.05
+ a(0)=     8.3084
+ a(1)=    -0.4346
+ a(2)=     1.5897
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6864
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.434 +-  0.156
+ a(1)=     5.927 +-  0.285
+ a(2)=     1.166 +-  0.228
+ a(3)=     0.317 +-  0.169
+ a(4)=     0.174 +-  0.125
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=0.83
+ a(0)=     5.3101
+ a(1)=     0.6508
+ a(2)=     1.3579
+ a(3)=    -0.5272
+ a(4)=     0.0845
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6934
+ 7 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.858 +-  0.149
+ a(1)=     5.431 +-  0.247
+ a(2)=     0.906 +-  0.184
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.26
+ a(0)=     6.4033
+ a(1)=     1.0675
+ a(2)=     0.6320
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC6981 (M72)
+12 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.281 +-  0.146
+ a(1)=     4.373 +-  0.236
+ a(2)=     1.090 +-  0.176
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.38
+ a(0)=     7.8573
+ a(1)=     0.0085
+ a(2)=     1.0099
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC7006
+ 4 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.082 +-  0.148
+ a(1)=     4.338 +-  0.243
+ a(2)=     0.644 +-  0.204
+ a(3)=    -0.281 +-  0.169
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.06
+ a(0)=     7.6292
+ a(1)=    -0.5063
+ a(2)=     1.9577
+ a(3)=    -0.3056
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC7078 (M15) c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    18.652 +-  0.098
+ a(1)=     6.269 +-  0.171
+ a(2)=     2.071 +-  0.155
+ a(3)=     0.291 +-  0.109
+ a(4)=     0.053 +-  0.103
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     4.9613
+ a(1)=     0.5399
+ a(2)=     0.9260
+ a(3)=    -0.0369
+ a(4)=     0.0564
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC7089 (M2)
+ 8 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    20.869 +-  0.108
+ a(1)=     6.258 +-  0.175
+ a(2)=     1.164 +-  0.122
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.34
+ a(0)=     5.3409
+ a(1)=     0.8092
+ a(2)=     0.5972
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC7099 (M30) c
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    19.258 +-  0.127
+ a(1)=     5.557 +-  0.225
+ a(2)=     2.000 +-  0.188
+ a(3)=     0.368 +-  0.133
+ a(4)=     0.176 +-  0.113
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=     5.7926
+ a(1)=     0.6525
+ a(2)=     1.3518
+ a(3)=    -0.5603
+ a(4)=     0.1953
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+NGC7492
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.756 +-  0.134
+ a(1)=     2.974 +-  0.222
+ a(2)=     0.911 +-  0.197
+ a(3)=     0.527 +-  0.172
+ a(4)=    -0.347 +-  0.161
+ a(5)=     0.144 +-  0.159
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.35
+ a(0)=     8.7907
+ a(1)=     9.9886
+ a(2)=   -18.6400
+ a(3)=    14.2903
+ a(4)=    -4.6110
+ a(5)=     0.5598
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 1
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.208 +-  0.344
+ a(1)=     2.833 +-  0.561
+ a(2)=     0.268 +-  0.505
+ a(3)=     0.371 +-  0.479
+ a(4)=     0.184 +-  0.424
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.48
+ a(0)=    21.5236
+ a(1)=   -47.7385
+ a(2)=    33.2076
+ a(3)=    -9.4396
+ a(4)=     0.9707
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 10
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.952 +-  0.371
+ a(1)=     2.308 +-  0.571
+ a(2)=     0.356 +-  0.467
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.45
+ a(0)=    -1.1766
+ a(1)=     0.3824
+ a(2)=     0.5050
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 11
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.124 +-  0.218
+ a(1)=     1.923 +-  0.333
+ a(2)=     0.646 +-  0.313
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c), r_c=1.87
+ a(0)=     9.2859
+ a(1)=    -0.8416
+ a(2)=     2.0779
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 12
+ 4 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    24.394 +-  0.181
+ a(1)=     3.938 +-  0.301
+ a(2)=     0.638 +-  0.253
+ a(3)=     0.696 +-  0.232
+ a(4)=    -0.480 +-  0.229
+ a(5)=     0.306 +-  0.217
+ a(6)=    -0.176 +-  0.201
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.97
+ a(0)=     7.1742
+ a(1)=    16.1583
+ a(2)=   -27.9881
+ a(3)=    22.5872
+ a(4)=    -9.1348
+ a(5)=     1.8358
+ a(6)=    -0.1449
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 13
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    25.719 +-  0.339
+ a(1)=     1.967 +-  0.517
+ a(2)=     0.600 +-  0.436
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.20
+ a(0)=    11.7005
+ a(1)=    -1.4600
+ a(2)=     2.1575
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 14  (1609+15)
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.077 +-  0.350
+ a(1)=     1.676 +-  0.539
+ a(2)=     0.445 +-  0.493
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.61
+ a(0)=    -0.6849
+ a(1)=    -0.2194
+ a(2)=     1.2150
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 2
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.048 +-  0.558
+ a(1)=     3.942 +-  0.844
+ a(2)=     0.385 +-  0.615
+ a(3)=     0.084 +-  0.543
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=0.70
+ a(0)=     5.6144
+ a(1)=     3.0397
+ a(2)=    -0.5473
+ a(3)=     0.1584
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 3
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    25.036 +-  0.389
+ a(1)=     2.379 +-  0.601
+ a(2)=     0.402 +-  0.531
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.44
+ a(0)=    10.4467
+ a(1)=     0.6121
+ a(2)=     1.0376
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 4
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.199 +-  0.487
+ a(1)=     2.888 +-  0.755
+ a(2)=     0.577 +-  0.614
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.51
+ a(0)=    -1.2637
+ a(1)=     0.3820
+ a(2)=     1.6849
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 5
+21 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.545 +-  0.232
+ a(1)=     1.989 +-  0.357
+ a(2)=     0.397 +-  0.345
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=2.24
+ a(0)=    -0.8261
+ a(1)=     0.5210
+ a(2)=     1.5782
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 6
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    22.752 +-  0.374
+ a(1)=     1.342 +-  0.525
+ a(2)=     0.095 +-  0.429
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.45
+ a(0)=    10.1131
+ a(1)=     1.2048
+ a(2)=     0.3031
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Palomar 8
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    21.462 +-  0.163
+ a(1)=     1.770 +-  0.262
+ a(2)=     0.310 +-  0.198
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.44
+ a(0)=     9.2706
+ a(1)=     0.4900
+ a(2)=     0.5305
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 1      c
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.510 +-  0.131
+ a(1)=     2.756 +-  0.195
+ a(2)=     0.277 +-  0.184
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=    -0.9679
+ a(1)=     1.4846
+ a(2)=     0.3731
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 11
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     0.653 +-  0.380
+ a(1)=     0.896 +-  0.519
+ a(2)=     0.298 +-  0.494
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.47
+ a(0)=    -0.2554
+ a(1)=    -0.6428
+ a(2)=     1.9530
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 2     c
+ 2 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.167 +-  0.134
+ a(1)=     2.665 +-  0.205
+ a(2)=     0.260 +-  0.189
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=    -1.0383
+ a(1)=     1.6504
+ a(2)=     0.4387
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 5
+ 6 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=    23.930 +-  0.172
+ a(1)=     3.315 +-  0.290
+ a(2)=     0.469 +-  0.225
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.05
+ a(0)=     9.1152
+ a(1)=     0.9201
+ a(2)=     0.3865
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 6      c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     1.626 +-  0.133
+ a(1)=     2.277 +-  0.204
+ a(2)=     0.521 +-  0.186
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=    -0.8647
+ a(1)=     0.6602
+ a(2)=     1.2452
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 7
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     0.935 +-  0.166
+ a(1)=     1.496 +-  0.246
+ a(2)=     0.395 +-  0.225
+ a(3)=    -0.283 +-  0.206
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.35
+ a(0)=    -0.3454
+ a(1)=    -3.0631
+ a(2)=     5.6114
+ a(3)=    -1.7529
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Terzan 9      c
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     2.210 +-  0.142
+ a(1)=     2.386 +-  0.238
+ a(2)=     0.307 +-  0.202
+ a(3)=     0.135 +-  0.187
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=r
+ a(0)=    -0.7127
+ a(1)=     2.0477
+ a(2)=    -0.7023
+ a(3)=     0.5277
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set
+Ton2
+ 3 iterations.
+Chebyshev coeffients a(0)T_0(u)+a(1)T_1(u)+..., where u is log (r/arcsec) mapped to [-1,1]
+ a(0)=     0.947 +-  0.229
+ a(1)=     0.961 +-  0.266
+Power-of-x coeffients a(0)+a(1)x+a(2)x^2+..., where x=1+(r/r_c)^2, r_c=1.68
+ a(0)=    -0.4881
+ a(1)=     2.0039
+log r(arcsec)   mu_V    mu_V(fitted)  residual   weight  data set

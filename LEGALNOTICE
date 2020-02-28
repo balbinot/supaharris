@@ -15,7 +15,8 @@ Data
             https://ui.adsabs.harvard.edu/abs/1995AJ....109.1912T/abstract
               J/AJ/109/218/gc
               J/AJ/109/218/tables
-    Data:   
+    Data:   https://cdsarc.unistra.fr/ftp/J/AJ/109/218, retrieved Feb 28, 2020
+            However, parser uses the Astroquery /w identifiers as listed above
     Folder: data/MW_GCS_Trager1995
 
     Name:   Harris 1996, 2010 edition

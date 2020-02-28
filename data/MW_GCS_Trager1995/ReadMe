@@ -1,0 +1,85 @@
+J/AJ/109/218         Catalogue of globular cluster profiles      (Trager+ 1995)
+================================================================================
+Catalogue of Galactic globular-cluster surface-brightness profiles
+     Trager S.C., King I.R., Djorgovski S.
+    <Astron. J. 109, 218 (1995)>
+    =1995AJ....109..218T
+================================================================================
+ADC_Keywords: Clusters, globular ; Photometry, surface
+
+Abstract:
+    We present a catalogue of surface-brightness profiles (SBPs) of 125
+    Galactic globular clusters, the largest such collection ever gathered.
+    The SBPs are constructed from generally inhomogeneous data, but are
+    based heavily on the Berkeley Globular Cluster Survey of Djorgovski &
+    King. All but four of the SBPs have photometric zero points. We derive
+    central surface brightnesses, King-model concentrations, core radii,
+    half-light, and other fraction-of-light radii where data permit, and
+    we briefly discuss their use.
+
+Description:
+    The data for individual objects are in tables file. The header
+    information, which provides the Chebyshev and power-of-x coefficients,
+    for each cluster are in tables.hdr file
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName   Lrecl   Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe         80         .   This file
+gc.dat         28       125   Globular cluster sample (table added by CDS)
+tables.dat     55     17148   Data points for surface-brightness profiles (SBP)
+tables.hdr     90      1525   Chebyshev and power-of-x coefficients
+--------------------------------------------------------------------------------
+
+See also:
+  II/117  : Catalog of UBVRI Photometry of Globular Clusters (Peterson 1986)
+  VII/151 : Structure Parameters of Galactic Globular Clusters (Webbink 1985)
+
+Byte-by-byte Description of file: gc.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units      Label    Explanations
+--------------------------------------------------------------------------------
+   1-  8  A8    ---        Name     Cluster name
+  10- 28  A19   ---       SName     Cluster name understandable by SIMBAD
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tables.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units      Label    Explanations
+--------------------------------------------------------------------------------
+   1-  8  A8    ---        Name    *Cluster name
+  10- 15  F6.3 [arcsec]    logr     Log of radius of surface brightness meas.
+  18- 22  F5.2 mag/arcsec2 muV      Meas. surface brightness at r, in V mags.
+  25- 29  F5.2 mag/arcsec2 muVf     Fitted surface brightness at r, from
+                                     Chebyshev fit
+  31- 36  F6.2 mag/arcsec2 Resid    Residual of Chebyshev fit at r, muV-muVf
+  40- 44  F5.3 ---         Weight   [0/1] Weight of data point in Chebyshev fit
+  47- 55  A9   ---         DataSet *Data set name
+--------------------------------------------------------------------------------
+Note on Name: hp stands for HP 1, <Cl Haute-Provence 1> in Simbad
+Note on DataSet:
+  The CCD data follow a naming convention: "C" stands for data taken
+  at CTIO; e.g. "CRB1" stands for the first "B" image from the CTIO
+  1.5m reflector with the RCA chip. "L" stands for the Lick 1m Nickel
+  reflector: these datasets are labeled as, e.g. "LTR-B", the second
+  frame from the Lick Nickel reflector, taken with the T1 chip through
+  the Spinrad "R" filter. See Sec. 2.1 of printed paper for details
+  of chips and filters. "DJB2" stands for the second "B" image taken
+  by Djorgovski. For Terzan 5, "I" refers to an I-band image from
+  CTIO kindly provided by Dr. T. Armandroff. "UPGA.4" means the first
+  ("A") ultraviolet ("U") plate used for photographic photometry
+  ("PG") of the cluster in question. "SCAN" data are scanning
+  photoelectric photometry. "ANN" data are centered-aperture
+  photoelectric photometry. Photographic star counts are referenced
+  by plate number; see caption to Figure 2 in printed paper for
+  references.
+--------------------------------------------------------------------------------
+
+Origin: AAS CD-ROM series, Volume 4, 1995         Lee Brotzman [ADS] 26-Apr-1995
+
+History:
+  * 10-Jul-1995: from AAS CD-ROM series, Volume 4, 1995 (Lee Brotzman)
+  * 28-Nov-2014: addition of the "gc.dat" file
+================================================================================
+(End)                                                         [CDS]  10-Jul-1995
