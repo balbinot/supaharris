@@ -13,7 +13,10 @@ def fix_gc_names(data):
     for i, n in enumerate(data["Name"]):
         data["Name"][i] = n.replace("ngc", "NGC ").replace("arp", "Arp "
         ).replace("hp", "HP").replace("ic", "IC ").replace("terzan", "Terzan "
-        ).replace("ton", "Ton ").replace("am", "AM ").replace("pal_", "Pal ")
+        ).replace("ton", "Ton ").replace("pal_", "Pal ").replace("am1", "AM 1")
+        # ReadMe: "Note on Name: hp stands for HP 1, <Cl Haute-Provence 1> in Simbad"
+        if n.strip().lower() == "hp":
+            data["Name"][i] = "HP 1"
     return data
 
 
@@ -23,29 +26,48 @@ def parse_trager_1995_gc(logger, fname="{0}Vizier_gc.txt".format(BASEDIR), refet
             ("Name", "<U8"), ("Nsb", "<i2"), ("SName", "<U19"), ("Prof", "<U4"),
             ("Simbad", "<U6"), ("_RA", "<f8"), ("_DE", "<f8")
         ]
-        return numpy.loadtxt(fname, dtype=dtype, delimiter=",")
+        return fix_gc_names(
+            numpy.loadtxt(fname, dtype=dtype, delimiter=",")
+        )
 
     table = Vizier.get_catalogs("J/AJ/109/218/gc")[0]
     table.convert_bytestring_to_unicode()  # to remove b'' from string columns
-    data = numpy.array(table)  # Numpy structured array
-    data = fix_gc_names(data)
-    numpy.savetxt(fname, data, header=", ".join(data.dtype.names), fmt=",".join(["%s"]*len(data.dtype)))
+    data = fix_gc_names(numpy.array(table))  # Numpy structured array
+    print("bla", data["Name"])
+    numpy.savetxt(fname, data, header=", ".join(data.dtype.names),
+        fmt=",".join(["%s"]*len(data.dtype)))
     return data
 
 
 def parse_trager_1995_tables(logger, fname="{0}Vizier_tables.txt".format(BASEDIR), refetch=False):
-    if os.path.exists(fname) and os.path.isfile(fname):
+    if os.path.exists(fname) and os.path.isfile(fname) and not refetch:
         dtype = [
             ("Name", "<U8"), ("logr", "<f4"), ("muV", "<f4"), ("muVf", "<f4"),
             ("Resid", "<f4"), ("Weight", "<f4"), ("DataSet", "<U9")
         ]
-        return numpy.loadtxt(fname, dtype=dtype, delimiter=",")
+        return fix_gc_names(
+            numpy.loadtxt(fname, dtype=dtype, delimiter=",")
+        )
+
+    # Byte-by-byte Description of file: tables.dat
+    # --------------------------------------------------------------------------------
+    #    Bytes Format Units      Label    Explanations
+    # --------------------------------------------------------------------------------
+    #    1-  8  A8    ---        Name    *Cluster name
+    #   10- 15  F6.3 [arcsec]    logr     Log of radius of surface brightness meas.
+    #   18- 22  F5.2 mag/arcsec2 muV      Meas. surface brightness at r, in V mags.
+    #   25- 29  F5.2 mag/arcsec2 muVf     Fitted surface brightness at r, from
+    #                                      Chebyshev fit
+    #   31- 36  F6.2 mag/arcsec2 Resid    Residual of Chebyshev fit at r, muV-muVf
+    #   40- 44  F5.3 ---         Weight   [0/1] Weight of data point in Chebyshev fit
+    #   47- 55  A9   ---         DataSet *Data set name
 
     table = Vizier.get_catalogs("J/AJ/109/218/tables")[0]
     table.convert_bytestring_to_unicode()  # to remove b'' from string columns
     data = numpy.array(table)  # Numpy structured array
     data = fix_gc_names(data)
-    numpy.savetxt(fname, data, header=", ".join(data.dtype.names), fmt=",".join(["%s"]*len(data.dtype)))
+    numpy.savetxt(fname, data, header=", ".join(data.dtype.names),
+        fmt=",".join(["%s"]*len(data.dtype)))
     return data
 
 
@@ -62,7 +84,8 @@ def plot_trager_1995_surface_brightness_profile(logger, tables, gc_name):
     ax1.errorbar(tables[igc]["logr"], tables[igc]["muV"],
         marker="o", c="k", ls="", ms=4, elinewidth=2, markeredgewidth=2, capsize=5,
         label="data")
-    ax1.plot(tables[igc]["logr"], tables[igc]["muVf"], c="r", lw=2, label="Chebyshev fit")
+    ax1.plot(tables[igc]["logr"], tables[igc]["muVf"], "ro", ms=5,
+        label="Chebyshev fit")
     ax1.set_ylabel("$\mu_V$ [mag/arcsec$^2$]")
     ax1.set_xticks([], [])
     ax1.invert_yaxis()
@@ -90,7 +113,7 @@ if __name__ == "__main__":
     assert len(gc) == len(gc_simbad)
     assert gc.dtype == gc_simbad.dtype
     for i in range(len(gc)):
-        assert gc[i] == gc_simbad[i]
+        assert gc[i] == gc_simbad[i], "Mismatch\n{0}\n{1}".format(gc[i], gc_simbad[i])
     logger.debug("\ngc has {0} entries".format(len(gc)))
     logger.debug("dtype: {0}".format(gc.dtype))
 

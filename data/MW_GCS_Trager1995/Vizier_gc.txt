@@ -1,7 +1,7 @@
 # Name, Nsb, SName, Prof, Simbad, _RA, _DE
 AM 1,44,am1,Prof,Simbad,58.76125,-49.61444
 Arp 2,16,arp2,Prof,Simbad,292.18379,-30.35564
-HP,171,Cl Haute-Provence 1,Prof,Simbad,262.77167,-29.98167
+HP 1,171,Cl Haute-Provence 1,Prof,Simbad,262.77167,-29.98167
 IC 1276,78,ic1276,Prof,Simbad,272.68442,-7.20758
 IC 4499,28,ic4499,Prof,Simbad,225.07737,-82.21378
 NGC 104,206,ngc104,Prof,Simbad,6.02233,-72.08144
