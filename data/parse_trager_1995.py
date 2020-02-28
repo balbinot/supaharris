@@ -21,6 +21,8 @@ def fix_gc_names(data):
 
 
 def parse_trager_1995_gc(logger, fname="{0}Vizier_gc.txt".format(BASEDIR), refetch=False):
+    # This table was added by CDS, but does not actually contain relevant information
+
     if os.path.exists(fname) and os.path.isfile(fname) and not refetch:
         dtype = [
             ("Name", "<U8"), ("Nsb", "<i2"), ("SName", "<U19"), ("Prof", "<U4"),
@@ -71,9 +73,31 @@ def parse_trager_1995_tables(logger, fname="{0}Vizier_tables.txt".format(BASEDIR
     return data
 
 
+def parse_trager_1995_chebyshev_fits(logger, fname="{0}tables.hdr".format(BASEDIR)):
+    with open(fname) as f:
+        raw_data = f.readlines()
+
+    logger.debug("\n\n{0} contains {1} rows\n\n".format(fname, len(raw_data)))
+
+
 def plot_trager_1995_surface_brightness_profile(logger, tables, gc_name):
     igc, = numpy.where(tables["Name"] == gc_name)
+
     logger.info("{0} has {1} entries".format(gc_name, len(tables[igc])))
+    ikeep = Ellipsis
+    if gc_name == "NGC 2419":  # the data shows two radial profiles
+        ikeep, = numpy.where(
+            (tables[igc]["DataSet"] != "CGB1")
+            & (tables[igc]["DataSet"] != "CGB2")
+            & (tables[igc]["DataSet"] != "CGR1")
+            & (tables[igc]["DataSet"] != "CGR2")
+            & (tables[igc]["DataSet"] != "CGV2")
+            & (tables[igc]["DataSet"] != "CGV1")
+            & (tables[igc]["DataSet"] != "CGV3")
+        )
+        # logger.debug(ikeep)
+        logger.info("ikeep has {0} entries".format(len(ikeep)))
+        # logger.debug(tables[igc]["DataSet"][ikeep])
 
     fig = pyplot.figure(figsize=(12, 10))
     ax1 = pyplot.axes([(0-1)/2, 0.40, 1.00/2, 0.60 ])  # left, bottom, width, height
@@ -81,17 +105,17 @@ def plot_trager_1995_surface_brightness_profile(logger, tables, gc_name):
 
     ax1.text(0.98, 0.98, "{0} (T95)".format(gc_name),
         ha="right", va="top", transform=ax1.transAxes, fontsize=16)
-    ax1.errorbar(tables[igc]["logr"], tables[igc]["muV"],
+    ax1.errorbar(tables[igc]["logr"][ikeep], tables[igc]["muV"][ikeep],
         marker="o", c="k", ls="", ms=4, elinewidth=2, markeredgewidth=2, capsize=5,
         label="data")
-    ax1.plot(tables[igc]["logr"], tables[igc]["muVf"], "ro", ms=5,
+    ax1.plot(tables[igc]["logr"][ikeep], tables[igc]["muVf"][ikeep], "ro", ms=5,
         label="Chebyshev fit")
     ax1.set_ylabel("$\mu_V$ [mag/arcsec$^2$]")
     ax1.set_xticks([], [])
     ax1.invert_yaxis()
     ax1.legend(loc="lower left", frameon=False, fontsize=16)
 
-    ax2.plot(tables[igc]["logr"], tables[igc]["Resid"], "ko", ms=4)
+    ax2.plot(tables[igc]["logr"][ikeep], tables[igc]["Resid"][ikeep], "ko", ms=4)
     ax2.axhline(0, c="k", lw=2, ls=":")
     ax2.set_xlabel("$\log(r)$ [arcsec]")
     ax2.set_ylabel("Residuals")
@@ -125,6 +149,8 @@ if __name__ == "__main__":
         assert tables[i] == tables_simbad[i]
     logger.debug("\ntables has {0} entries".format(len(tables)))
     logger.debug("dtype: {0}".format(tables.dtype))
+
+    parse_trager_1995_chebyshev_fits(logger)
 
     clusters = gc["Name"]
     for i, gc_name in enumerate(clusters):
