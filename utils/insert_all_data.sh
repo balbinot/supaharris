@@ -52,3 +52,4 @@ docker exec supaharris_django_1 python manage.py add_trager_1995
 docker exec supaharris_django_1 python manage.py add_vandenberg_2013
 docker exec supaharris_django_1 python manage.py add_balbinot_2018
 docker exec supaharris_django_1 python manage.py add_deBoer_2019
+docker exec supaharris_django_1 python manage.py add_miocchi_2013

@@ -64,7 +64,7 @@ def scrape_profiles_from_cosmiclab_website(logger, force=False):
             with open(fname, "wb") as f:
                 f.write(data.encode("utf-8"))
         else:
-            logger.info("Already have: {0}\n".format(fname))
+            logger.debug("Already have: {0}\n".format(fname))
 
         logger.info("Downloading: {0}".format(plot_url))
         fname = "{0}{1}.jpg".format(BASEDIR, cluster_name)

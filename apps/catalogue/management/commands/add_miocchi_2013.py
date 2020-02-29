@@ -18,6 +18,64 @@ from data.parse_miocchi_2013 import parse_miocchi_2013_table2
 from data.parse_miocchi_2013 import parse_miocchi_2013_profiles
 
 
+def add_miocchi_2013_table2(logger):
+    miocchi13 = Reference.objects.get(bib_code="2013ApJ...774..151M")
+    logger.debug("\nInsert Miocchi+ (2013) Table 2")
+
+    # We first delete all Observation instances that match miocchi13 Reference
+    deleted = Observation.objects.filter(reference=miocchi13).delete()
+    if deleted[0] is not 0:
+        logger.debug("WARNING: deleted {0} Profile instances".format(deleted))
+
+    name_id_map = map_names_to_ids()
+
+    database = parse_miocchi_2013_table2(logger)
+    Nentries = len(database)
+    for i, entry in enumerate(database):
+        gc_name = entry[0]
+        logger.info("{0}/{1}: {2}".format(i+1, Nentries, gc_name))
+        gc = AstroObject.objects.get(id=name_id_map[gc_name])
+
+        self.logger.info("\n")
+        continue
+
+        observation = Observation.objects.create(
+            reference=reference,
+            astro_object=gc,
+            parameter=R_Sun,
+            value=gc_R_Sun,
+        )
+        self.logger.info("Created the Observation: {0}".format(observation))
+
+
+def add_miocchi_2013_profiles(logger):
+    miocchi13 = Reference.objects.get(bib_code="2013ApJ...774..151M")
+    logger.debug("\nInsert Miocchi+ (2013) star count profiles")
+
+    # We first delete all Profile instances that match miocchi13 Reference
+    deleted = Profile.objects.filter(reference=miocchi13).delete()
+    if deleted[0] is not 0:
+        logger.debug("WARNING: deleted {0} Profile instances".format(deleted))
+
+    m13_profs = parse_miocchi_2013_profiles(logger)
+    Nprofiles = len(m13_profs)
+    for i, (gc_name, profile) in enumerate(m13_profs.items()):
+        gc = AstroObject.objects.get(name=gc_name)
+        logger.debug("\n{0}/{1}: {2}".format(i+1, Nprofiles, gc))
+        sh_prof = Profile(
+            reference=miocchi13,
+            astro_object=gc,
+            x=list(profile["radius"]),
+            y=list(profile["log_surface_density"]),
+            y_sigma_up=list(profile["err_log_surface_density"]),
+            y_sigma_down=list(profile["err_log_surface_density"]),
+            x_description="logr: Log of radius [arcsec]",
+            y_description="log Sigma_*(r): Log of decontaminated projected"+\
+                " star count [1/arcsec**2]",
+        )
+        sh_prof.save()
+
+
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add Miocchi+ (2013) data to the database"
 
@@ -36,46 +94,5 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             self.logger.info("Created the Reference: {0}\n".format(reference))
 
-        # We would like to match against the name of an object for many
-        # possible variations. The name_id_map contains variations in hopes
-        # of catching the existing AstroObject even if the name differs slightly,
-        # e.g. Palomar 1/Palomar1/Pal 1/Pal1, etc.
-        name_id_map = map_names_to_ids()
-
-        database = parse_miocchi_2013_table2(self.logger)
-        for entry in database:
-            gc_name = entry[0]
-
-            self.logger.info("gc_name: {0}".format(gc_name))
-
-            # The Globular Cluster for which you would like to add new data could
-            # very well already be known in the database. In that case you should
-            # retrieve the AstroObject, and add an Observation
-            # to add may
-            if gc_name in name_id_map:
-                gc = AstroObject.objects.get(id=name_id_map[gc_name])
-                self.logger.info("Found: {0}{1} for '{2}'".format(gc.name,
-                    " ({0})".format(gc.altname) if gc.altname else "", gc_name))
-                created = False
-            else:
-                gc, created = AstroObject.objects.get_or_create(name=gc_name)
-                gc.classifications.add(self.GC)
-                self.logger.info("Created the AstroObject: {0}".format(gc))
-
-            logger.info("\n")
-            continue
-
-            # self.GC is set in PrepareSupaHarrisDatabaseMixin. If another
-            # classification, or multiple classifications apply, use e.g.
-            # YMC = AstroObjectClassification.objects.get(name="Young Massive Cluster")
-            # gc.classifications.add(YMC)
-            gc.classifications.add(self.GC)
-            gc.save()
-
-            observation = Observation.objects.create(
-                reference=reference,
-                astro_object=gc,
-                parameter=R_Sun,
-                value=gc_R_Sun,
-            )
-            self.logger.info("Created the Observation: {0}".format(observation))
+        add_miocchi_2013_table2(self.logger)
+        add_miocchi_2013_profiles(self.logger)
