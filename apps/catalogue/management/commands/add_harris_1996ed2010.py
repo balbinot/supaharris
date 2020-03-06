@@ -30,16 +30,16 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         ads_url = "https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H"
         harris1996ed2010, created = Reference.objects.get_or_create(ads_url=ads_url)
         if not created:
-            print("Found the Reference: {0}".format(harris1996ed2010))
+            self.logger.info("Found the Reference: {0}".format(harris1996ed2010))
         else:
-            print("Created the Reference: {0}".format(harris1996ed2010))
+            self.logger.info("Created the Reference: {0}".format(harris1996ed2010))
 
 
         # Add classification(s)
         GC = AstroObjectClassification.objects.get(name="Globular Cluster")
 
         # Get the data. Note that save_as_xlsx requires openpyxl
-        cluster_list = parse_harris1996ed2010(save_as_xlsx=False)
+        cluster_list = parse_harris1996ed2010(self.logger, save_as_xlsx=False)
 
         # Keys: Values --> SupaHarris: Harris parameter names
         parameter_map = OrderedDict({
@@ -114,25 +114,25 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             #   --> not available in Harris 1996, 2010 ed.
         })
 
-        print("\nInserting into database :")
+        self.logger.info("\nInserting into database :")
         nClusters = len(cluster_list)
         for i, harris in enumerate(cluster_list.values()):
-            print("Inserting AstroObject {0} / {1}".format(i+1, nClusters))
+            self.logger.info("Inserting AstroObject {0} / {1}".format(i+1, nClusters))
 
             cluster, created = AstroObject.objects.get_or_create(
                 name=harris.gid, altname=harris.name,
             )
             cluster.classifications.add(GC)
             cluster.save()
-            print("  {0}, created = {1}".format(cluster, created))
+            self.logger.info("  {0}, created = {1}".format(cluster, created))
 
             for k, v in parameter_map.items():
                 parameter = Parameter.objects.filter(name=k).first()
                 if not parameter:
-                    print("ERROR: Parameter instance unknown, please add or correct {0}".format(k))
+                    self.logger.info("ERROR: Parameter instance unknown, please add or correct {0}".format(k))
                     import sys; sys.exit(0)
 
-                print("  {0} (Harris) --> {1} (SupaHarris)".format(v, parameter.name))
+                self.logger.info("  {0} (Harris) --> {1} (SupaHarris)".format(v, parameter.name))
                 value = getattr(harris, v)
                 if v in ["v_r", "sig_v"]:
                     sigma_up = getattr(harris, v + "_err")
@@ -140,14 +140,14 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
                 else:
                     sigma_up = None
                     sigma_down = None
-                print("  value = {0}".format(value))
-                print("  sigma_up = {0}".format(sigma_up))
-                print("  sigma_down = {0}".format(sigma_down))
+                self.logger.info("  value = {0}".format(value))
+                self.logger.info("  sigma_up = {0}".format(sigma_up))
+                self.logger.info("  sigma_down = {0}".format(sigma_down))
 
                 observation, created = Observation.objects.get_or_create(
                     astro_object=cluster, reference=harris1996ed2010, parameter=parameter,
                     value=value, sigma_up=sigma_up, sigma_down=sigma_down
                 )
-                print("  {0}, created = {1}\n".format(observation, created))
+                self.logger.info("  {0}, created = {1}\n".format(observation, created))
                 # do_continue = input()
-            print("")
+            self.logger.info("")

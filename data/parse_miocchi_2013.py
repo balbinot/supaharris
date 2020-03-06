@@ -238,13 +238,13 @@ if __name__ == "__main__":
     scrape_profiles_from_cosmiclab_website(logger)
 
     m13_t2 = parse_miocchi_2013_table2(logger)
-    print("shape: {0}; length: {1}\n".format(m13_t2.shape, len(m13_t2)))
-    print("dtype: {0}\n".format(m13_t2.dtype))
-    print("first row: {0}\n".format(m13_t2[0]))
-    print("clusters:\n{0}\n".format(m13_t2["NGCno."]))
+    logger.info("shape: {0}; length: {1}\n".format(m13_t2.shape, len(m13_t2)))
+    logger.info("dtype: {0}\n".format(m13_t2.dtype))
+    logger.info("first row: {0}\n".format(m13_t2[0]))
+    logger.info("clusters:\n{0}\n".format(m13_t2["NGCno."]))
 
     m13_profs = parse_miocchi_2013_profiles(logger)
-    print("clusters:\n{0}".format(list(m13_profs.keys())))
+    logger.info("clusters:\n{0}".format(list(m13_profs.keys())))
 
     for cluster_name in m13_profs.keys():
         plot_miocchi_2013(m13_t2, m13_profs, cluster_name)

@@ -7,8 +7,6 @@ from matplotlib import pyplot
 from astropy import units as u
 from astropy import coordinates as coord
 
-logger = logging.getLogger("console")
-logger.logLevel = logging.DEBUG
 
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_StarClusters_Bica2019/"
 
@@ -381,28 +379,33 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), verbose=False)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
+    logger = logging.getLogger(__file__)
+    logger.info("Running {0}".format(__file__))
+
+
     refs = parse_bica_2019_refs(verbose=True)
 
-    print("\nTable 2")
+    logger.info("\nTable 2")
     t2 = parse_bica_2019_table2(verbose=True)
     for i, (k, v) in enumerate(t2.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 3")
+    logger.info("\nTable 3")
     t3 = parse_bica_2019_table3(verbose=True, debug=True)
     for i, (k, v) in enumerate(t3.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 4")
+    logger.info("\nTable 4")
     t4 = parse_bica_2019_table4(verbose=True)
     for i, (k, v) in enumerate(t4.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 5")
+    logger.info("\nTable 5")
     t5 = parse_bica_2019_table5(verbose=True)
     for i, (k, v) in enumerate(t5.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
