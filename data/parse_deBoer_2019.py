@@ -98,6 +98,8 @@ def parse_deBoer_2019_stitched_profiles(logger, dirname="{0}stitched_profiles/".
 def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         show_King=True, show_Wilson=True, show_limepy=True, show_spes=True,
         show_BGlev=True, show_rtie=True, show_rJ=True, has_tex=True, verbose=False):
+    if not has_tex:
+        matplotlib.rcParams.update({"text.usetex": False})
 
     try:
         import limepy
