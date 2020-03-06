@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
 from catalogue.models import (
+    Profile,
     Reference,
     Parameter,
     Observation,
@@ -24,10 +25,39 @@ def add_miocchi_2013_table2(logger):
 
     # We first delete all Observation instances that match miocchi13 Reference
     deleted = Observation.objects.filter(reference=miocchi13).delete()
-    if deleted[0] is not 0:
+    if deleted[0] != 0:
         logger.debug("WARNING: deleted {0} Profile instances".format(deleted))
 
     name_id_map = map_names_to_ids()
+
+    logger.debug("\nChecking/creating required parameters")
+    parameter_map = {
+        "NGCno.": "bla",
+        "mod": "bla",
+        "W0": "bla",
+        "+dW0": "bla",
+        "-dW0": "bla",
+        "rc": "bla",
+        "+drc": "bla",
+        "-drc": "bla",
+        "r0": "bla",
+        "+dr0": "bla",
+        "-dr0": "bla",
+        "c0": "bla",
+        "+dc0": "bla",
+        "-dc0": "bla",
+        "rl": "bla",
+        "+drl": "bla",
+        "-drl": "bla",
+        "rhm": "bla",
+        "+drhm": "bla",
+        "-drhm": "bla",
+        "re": "bla",
+        "+dre": "bla",
+        "-dre": "bla",
+        "N_BG": "bla",
+        "chi2_nu": "bla",
+    }
 
     database = parse_miocchi_2013_table2(logger)
     Nentries = len(database)
@@ -36,7 +66,15 @@ def add_miocchi_2013_table2(logger):
         logger.info("{0}/{1}: {2}".format(i+1, Nentries, gc_name))
         gc = AstroObject.objects.get(id=name_id_map[gc_name])
 
-        self.logger.info("\n")
+        if entry["mod"] == "W":
+            model = "Wilson"
+        elif entry["mod"] == "K":
+            model = "King"
+        else:
+            logger.error("ERROR: model is {} but expected W/K".format(entry["mod"]))
+            break
+
+        logger.info("Model: {0}\n".format(model))
         continue
 
         observation = Observation.objects.create(
@@ -45,7 +83,7 @@ def add_miocchi_2013_table2(logger):
             parameter=R_Sun,
             value=gc_R_Sun,
         )
-        self.logger.info("Created the Observation: {0}".format(observation))
+        logger.info("Created the Observation: {0}".format(observation))
 
 
 def add_miocchi_2013_profiles(logger):
@@ -54,7 +92,7 @@ def add_miocchi_2013_profiles(logger):
 
     # We first delete all Profile instances that match miocchi13 Reference
     deleted = Profile.objects.filter(reference=miocchi13).delete()
-    if deleted[0] is not 0:
+    if deleted[0] != 0:
         logger.debug("WARNING: deleted {0} Profile instances".format(deleted))
 
     m13_profs = parse_miocchi_2013_profiles(logger)
