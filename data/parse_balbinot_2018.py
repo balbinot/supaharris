@@ -30,7 +30,7 @@ def parse_balbinot_2018(logger, fname="{0}latex_table_semi_cleaned.txt".format(B
             ).replace("{", "").replace("}", "").replace("*", "")
         columns = row.split("&")
         for j, column in enumerate(columns):
-            if i is 0:  # header
+            if i == 0:  # header
                 names.append(column.strip())
                 continue
 
@@ -58,7 +58,7 @@ def parse_balbinot_2018(logger, fname="{0}latex_table_semi_cleaned.txt".format(B
             row_values.append(value)
             row_errors.append(error)
 
-        if i is 0: continue  # header
+        if i == 0: continue  # header
         values.append(row_values)
         errors.append(row_errors)
         for name, value, error in zip(names, row_values, row_errors):
@@ -112,7 +112,7 @@ def print_balbinot_2018(logger, data):
                 except ValueError:
                     info += "{:<8s}".format(str(value))
 
-                if i is 0: continue  # b/c Name does not have _err
+                if i == 0: continue  # b/c Name does not have _err
 
                 if numpy.isfinite(error):
                     info += " +/- {:<5.2f}".format(error)
