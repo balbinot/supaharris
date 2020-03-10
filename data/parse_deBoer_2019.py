@@ -160,7 +160,7 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         # W must be phi0: central dimensionless potential
         # g: Order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
         rt_king = parsec2arcmin(deBoer_fit["rt_king"], distance_kpc)
-        k = limepy.limepy(deBoer_fit["W_king"], g=1, nrt=25*rJ/rt_king,
+        k = limepy.limepy(deBoer_fit["W_king"], g=1, nrt=25*rJ,
             M=deBoer_fit["M_king"], rt=rt_king, project=True, verbose=verbose)
         if verbose:
             logger.debug("{0:<20s}{1:> 15.3f}".format("King", k.r0))
@@ -192,7 +192,7 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         # g: Order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
         rt_wilson = parsec2arcmin(deBoer_fit["rt_wil"], distance_kpc)
         w = limepy.limepy(deBoer_fit["W_wil"], g=2, M=deBoer_fit["M_wil"],
-            rt=rt_wilson, nrt=25*rJ/rt_wilson, project=True, verbose=verbose)
+            rt=rt_wilson, nrt=25*rJ, project=True, verbose=verbose)
         if verbose:
             logger.debug("{0:<20s}{1:> 15.3f}".format("King", w.r0))
             logger.debug("{0:<20s}{1:> 15.3f}".format("Half-mass", w.rh))
@@ -218,7 +218,7 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         # g: order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
         rt_lime = parsec2arcmin(deBoer_fit["rt_lime"], distance_kpc)
         l = limepy.limepy(deBoer_fit["W_lime"], g=deBoer_fit["g_lime"],
-            M=deBoer_fit["M_lime"], rt=rt_lime, nrt=25*rJ/rt_lime,
+            M=deBoer_fit["M_lime"], rt=rt_lime, nrt=25*rJ,
             project=True, verbose=verbose)
         logger.debug("{0:<20s}{1:> 15.3f}".format("King", l.r0))
         logger.debug("{0:<20s}{1:> 15.3f}".format("Half-mass", l.rh))
@@ -254,7 +254,7 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         # B: reduction of the DF at trunction [0-1]
         rt_spes = parsec2arcmin(deBoer_fit["rt_pe"], distance_kpc)
         s = limepy.spes(deBoer_fit["W_pe"], B=B, eta=deBoer_fit["eta_pe"],
-            M=deBoer_fit["M_pe"], fpe=fpe, rt=rt_spes, nrt=25*rJ/rt_spes,
+            M=deBoer_fit["M_pe"], fpe=fpe, rt=rt_spes, nrt=25*rJ,
             project=True, verbose=verbose)
 
         if verbose:
