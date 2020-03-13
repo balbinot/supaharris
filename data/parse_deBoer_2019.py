@@ -139,9 +139,10 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
     from data.parse_balbinot_2018 import parse_balbinot_2018
     b18 = parse_balbinot_2018(logger)
     imatch, = numpy.where(b18["Name"] == gc_name)[0]
-    rJ = parsec2arcmin(b18[imatch]["r_J"], distance_kpc)
-    logger.info("{0} has Jacobi radius {1:.2f}' (Balbinot & Gieles 2018)\n".format(
-        gc_name, rJ))
+    rJ_pc = b18[imatch]["r_J"]
+    rJ = parsec2arcmin(rJ_pc, distance_kpc)
+    logger.info("{0} has Jacobi radius {1:.2f} pc (Balbinot & Gieles 2018) --> {2:.2f}'\n".format(
+        gc_name, rJ_pc, rJ, ))
 
     # Overplot the best-fit King (1966) model
     if show_King:
