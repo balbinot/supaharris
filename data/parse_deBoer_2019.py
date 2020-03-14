@@ -6,6 +6,9 @@ import logging
 import matplotlib
 from matplotlib import pyplot
 
+from utils import parsec2arcmin
+from utils import arcmin2parsec
+
 
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_deBoer2019/"
 
@@ -297,10 +300,6 @@ if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger = logging.getLogger(__file__)
     logger.info("Running {0}".format(__file__))
-
-    sys.path.insert(0, "/supaharris")
-    from utils import parsec2arcmin
-    from utils import arcmin2parsec
 
     deBoer_fits = parse_deBoer_2019_fits(logger)
     logger.info("\nde Boer (2019) fits")
