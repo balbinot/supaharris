@@ -102,7 +102,6 @@ class Cluster(object):
             do.sig_v = self.sig_v
             do.esig_v = self.sig_v_err
 
-        self.logger.info(self.sp_c, self.sp_r_c)
         if self.sp_c:
             do.c = self.sp_c
         if self.sp_r_c:
@@ -113,7 +112,7 @@ class Cluster(object):
             do.muV = self.sp_mu_V
 
 
-def parse_harris1996ed2010(logger, debug=True, save_as_xlsx=False):
+def parse_harris1996ed2010(logger, debug=False, save_as_xlsx=False):
     if debug:
         logger.debug("\nParsing Harris 1996, 2010 ed.\n")
     cluster_list = {}

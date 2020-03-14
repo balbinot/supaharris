@@ -95,7 +95,8 @@ def parse_deBoer_2019_stitched_profiles(logger, dirname="{0}stitched_profiles/".
     return data
 
 
-def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile, fig=None,
+def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
+        distance_kpc, rJ_pc, rJ, fig=None,
         show_King=True, show_Wilson=True, show_limepy=True, show_spes=True,
         show_BGlev=True, show_rtie=True, show_rJ=True, has_tex=True, verbose=False):
     if not has_tex:
@@ -116,33 +117,24 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile, fig=None,
     gc_name = deBoer_fit["id"]
     ax.text(0.5, 1.01, gc_name, ha="center", va="bottom", transform=ax.transAxes)
 
+    if verbose:
+        s = "{0}\n".format(gc_name)
+        s += "  distance from Sun: {0:.2f} kpc (Harris 1996, 2010 ed.)\n".format(
+            distance_kpc)
+        s += "  rJ {0:.2f} pc (Balbinot & Gieles 2018) --> {1:.2f}'\n".format(
+            rJ_pc, rJ)
+        logger.info(s)
+
     n0 = deBoer_stitched_profile["density"][0]  # central number density
     Ntotal = deBoer_stitched_profile["density"].sum()
-    logger.info("\n{0} has {1} stars".format(gc_name, Ntotal))
+    if verbose:
+        logger.debug("\n{0} has {1} stars".format(gc_name, Ntotal))
     ax.errorbar(
         deBoer_stitched_profile["rad"],
         deBoer_stitched_profile["density"],
         yerr=deBoer_stitched_profile["density_err"],
         marker="o", c="g", ls="", ms=4, elinewidth=2, markeredgewidth=2, capsize=5
     )
-
-    # Get the distance
-    from data.parse_harris_1996ed2010 import parse_harris1996ed2010
-    h96_gc = parse_harris1996ed2010(logger)
-    distance_kpc = h96_gc[gc_name].dist_from_sun
-    logger.info("{0}'s distance from Sun is {1:.2f} kpc (Harris 1996, 2010 ed.)".format(
-        gc_name, distance_kpc))
-
-    # Get the Jacobi radius from Balbinot & Gieles (2018)
-    from utils import parsec2arcmin
-    from utils import arcmin2parsec
-    from data.parse_balbinot_2018 import parse_balbinot_2018
-    b18 = parse_balbinot_2018(logger)
-    imatch, = numpy.where(b18["Name"] == gc_name)[0]
-    rJ_pc = b18[imatch]["r_J"]
-    rJ = parsec2arcmin(rJ_pc, distance_kpc)
-    logger.info("{0} has Jacobi radius {1:.2f} pc (Balbinot & Gieles 2018) --> {2:.2f}'\n".format(
-        gc_name, rJ_pc, rJ, ))
 
     # Overplot the best-fit King (1966) model
     if show_King:
@@ -301,6 +293,7 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile, fig=None,
 
 
 if __name__ == "__main__":
+    logging.getLogger("matplotlib").setLevel(logging.CRITICAL)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
     logger = logging.getLogger(__file__)
     logger.info("Running {0}".format(__file__))
@@ -330,6 +323,11 @@ if __name__ == "__main__":
     logger.info(deBoer_stitched_profiles["NGC 1261"].dtype)
     logger.info(deBoer_stitched_profiles.keys())
 
+    from data.parse_harris_1996ed2010 import parse_harris1996ed2010
+    h96_gc = parse_harris1996ed2010(logger)
+    from data.parse_balbinot_2018 import parse_balbinot_2018
+    b18 = parse_balbinot_2018(logger)
+
     from plotsettings import *
     from matplotlib import pyplot
     pyplot.switch_backend("agg")
@@ -337,7 +335,13 @@ if __name__ == "__main__":
         gc_name = fit["id"]
         if gc_name != "NGC 1261": continue
 
+        distance_kpc = h96_gc[gc_name].dist_from_sun
+        imatch, = numpy.where(b18["Name"] == gc_name)[0]
+        rJ_pc = b18[imatch]["r_J"]
+        rJ = parsec2arcmin(rJ_pc, distance_kpc)
+
         fig, ax = pyplot.subplots(1, 1, figsize=(10, 10))
-        fig = plot_deBoer_2019(logger, fit, deBoer_stitched_profiles[gc_name], fig=fig, has_tex=False)
+        fig = plot_deBoer_2019(logger, fit, deBoer_stitched_profiles[gc_name],
+            distance_kpc, rJ_pc, rJ, fig=fig, has_tex=False)
         fig.savefig("{0}/{1}.pdf".format(BASEDIR, fit["id"]))
         pyplot.close(fig)
