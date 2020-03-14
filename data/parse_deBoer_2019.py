@@ -95,7 +95,7 @@ def parse_deBoer_2019_stitched_profiles(logger, dirname="{0}stitched_profiles/".
     return data
 
 
-def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
+def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile, fig=None,
         show_King=True, show_Wilson=True, show_limepy=True, show_spes=True,
         show_BGlev=True, show_rtie=True, show_rJ=True, has_tex=True, verbose=False):
     if not has_tex:
@@ -116,13 +116,13 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
     gc_name = deBoer_fit["id"]
     ax.text(0.5, 1.01, gc_name, ha="center", va="bottom", transform=ax.transAxes)
 
-    n0 = deBoer_stitched_profiles[gc_name]["density"][0]  # central number density
-    Ntotal = deBoer_stitched_profiles[gc_name]["density"].sum()
+    n0 = deBoer_stitched_profile["density"][0]  # central number density
+    Ntotal = deBoer_stitched_profile["density"].sum()
     logger.info("\n{0} has {1} stars".format(gc_name, Ntotal))
     ax.errorbar(
-        deBoer_stitched_profiles[gc_name]["rad"],
-        deBoer_stitched_profiles[gc_name]["density"],
-        yerr=deBoer_stitched_profiles[gc_name]["density_err"],
+        deBoer_stitched_profile["rad"],
+        deBoer_stitched_profile["density"],
+        yerr=deBoer_stitched_profile["density_err"],
         marker="o", c="g", ls="", ms=4, elinewidth=2, markeredgewidth=2, capsize=5
     )
 
@@ -288,8 +288,8 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profiles, fig=None,
         ax.text(rJ, 1.0, "$r_J$ = {:.1f}'".format(rJ), fontsize=16,
             ha="center", va="bottom", transform=trans)
 
-    ax.set_xlim(0.5*deBoer_stitched_profiles[gc_name]["rad"][0], 5*rJ)
-    ax.set_ylim(0.1*deBoer_fit["BGlev"], 2*deBoer_stitched_profiles[gc_name]["density"].max())
+    ax.set_xlim(0.5*deBoer_stitched_profile["rad"][0], 5*rJ)
+    ax.set_ylim(0.1*deBoer_fit["BGlev"], 2*deBoer_stitched_profile["density"].max())
     # ax.set_ylim(1e-3, 1e5)
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -334,8 +334,10 @@ if __name__ == "__main__":
     from matplotlib import pyplot
     pyplot.switch_backend("agg")
     for i, fit in enumerate(deBoer_fits):
-        if fit["id"] != "NGC 1261": continue
+        gc_name = fit["id"]
+        if gc_name != "NGC 1261": continue
+
         fig, ax = pyplot.subplots(1, 1, figsize=(10, 10))
-        fig = plot_deBoer_2019(logger, fit, deBoer_stitched_profiles, fig=fig, has_tex=False)
+        fig = plot_deBoer_2019(logger, fit, deBoer_stitched_profiles[gc_name], fig=fig, has_tex=False)
         fig.savefig("{0}/{1}.pdf".format(BASEDIR, fit["id"]))
         pyplot.close(fig)
