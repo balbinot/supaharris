@@ -99,7 +99,7 @@ def parse_deBoer_2019_stitched_profiles(logger, dirname="{0}stitched_profiles/".
 
 
 def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
-        distance_kpc, rJ_pc, rJ, fig=None,
+        distance_kpc, rJ_pc, rJ, fig=None, convert_to_parsec=False,
         show_King=True, show_Wilson=True, show_limepy=True, show_spes=True,
         show_BGlev=True, show_rtie=True, show_rJ=True, has_tex=True, verbose=False):
     if not has_tex:
@@ -118,7 +118,8 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
 
     # Plot the deBoer2019 stitched profile
     gc_name = deBoer_fit["id"]
-    ax.text(0.5, 1.01, gc_name, ha="center", va="bottom", transform=ax.transAxes)
+    # ax.text(0.5, 1.01, gc_name, ha="center", va="bottom", transform=ax.transAxes)
+    fig.suptitle(gc_name)
 
     if verbose:
         s = "{0}\n".format(gc_name)
@@ -132,10 +133,18 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
     Ntotal = deBoer_stitched_profile["density"].sum()
     if verbose:
         logger.debug("\n{0} has {1} stars".format(gc_name, Ntotal))
-    ax.errorbar(
-        deBoer_stitched_profile["rad"],
-        deBoer_stitched_profile["density"],
-        yerr=deBoer_stitched_profile["density_err"],
+    if convert_to_parsec:
+        deBoer_radii = arcmin2parsec(deBoer_stitched_profile["rad"], distance_kpc)
+        convert = arcmin2parsec(1, distance_kpc)**2
+        deBoer_density = deBoer_stitched_profile["density"] / convert
+        deBoer_density_err = deBoer_stitched_profile["density_err"] / convert
+        deBoer_BGlev = deBoer_fit["BGlev"] / convert
+    else:
+        deBoer_radii = deBoer_stitched_profile["rad"]
+        deBoer_density = deBoer_stitched_profile["density"]
+        deBoer_density_err = deBoer_stitched_profile["density_err"]
+        deBoer_BGlev = deBoer_fit["BGlev"]
+    ax.errorbar(deBoer_radii, deBoer_density, yerr=deBoer_density_err,
         marker="o", c="g", ls="", ms=4, elinewidth=2, markeredgewidth=2, capsize=5
     )
 
@@ -155,9 +164,12 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
             logger.debug("{0:<20s}{1:> 15.3f}\n".format("chi2red_king", deBoer_fit["chi2red_king"]))
         # W must be phi0: central dimensionless potential
         # g: Order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
-        rt_king = parsec2arcmin(deBoer_fit["rt_king"], distance_kpc)
-        k = limepy.limepy(deBoer_fit["W_king"], g=1, nrt=25*rJ,
-            M=deBoer_fit["M_king"], rt=rt_king, project=True, verbose=verbose)
+        if convert_to_parsec:
+            rt_king = deBoer_fit["rt_king"]
+        else:
+            rt_king = parsec2arcmin(deBoer_fit["rt_king"], distance_kpc)
+        k = limepy.limepy(deBoer_fit["W_king"], g=1, M=deBoer_fit["M_king"],
+                rt=rt_king, project=True, verbose=verbose)
         if verbose:
             logger.debug("{0:<20s}{1:> 15.3f}".format("King", k.r0))
             logger.debug("{0:<20s}{1:> 15.3f}".format("Half-mass", k.rh))
@@ -166,8 +178,8 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
 
         # The profile is sampled up to 3*rt by default, but deBoer+ 2019 Figure 6
         # and Figure A1-A14 show the sampled profiles down to BGlev
-        BGlev = numpy.argwhere(k.Sigma <= deBoer_fit["BGlev"])
-        k.Sigma[BGlev] = deBoer_fit["BGlev"]
+        BGlev = numpy.argwhere(k.Sigma <= deBoer_BGlev)
+        k.Sigma[BGlev] = deBoer_BGlev
         ax.plot(k.R, k.Sigma, c="b", ls=":", lw=2, label="King")
 
 
@@ -186,17 +198,20 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
             logger.debug("{0:<20s}{1:> 15.3f}\n".format("chi2red_wil", deBoer_fit["chi2red_wil"]))
         # W must be phi0: central dimensionless potential
         # g: Order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
-        rt_wilson = parsec2arcmin(deBoer_fit["rt_wil"], distance_kpc)
+        if convert_to_parsec:
+            rt_wilson = deBoer_fit["rt_wil"]
+        else:
+            rt_wilson = parsec2arcmin(deBoer_fit["rt_wil"], distance_kpc)
         w = limepy.limepy(deBoer_fit["W_wil"], g=2, M=deBoer_fit["M_wil"],
-            rt=rt_wilson, nrt=25*rJ, project=True, verbose=verbose)
+            rt=rt_wilson, project=True, verbose=verbose)
         if verbose:
             logger.debug("{0:<20s}{1:> 15.3f}".format("King", w.r0))
             logger.debug("{0:<20s}{1:> 15.3f}".format("Half-mass", w.rh))
             logger.debug("{0:<20s}{1:> 15.3f}".format("virial", w.rv))
             logger.debug("{0:<20s}{1:> 15.3f}\n".format("truncation", w.rt))
 
-        BGlev = numpy.argwhere(w.Sigma <= deBoer_fit["BGlev"])
-        w.Sigma[BGlev] = deBoer_fit["BGlev"]
+        BGlev = numpy.argwhere(w.Sigma <= deBoer_BGlev)
+        w.Sigma[BGlev] = deBoer_BGlev
         ax.plot(w.R, w.Sigma, c="g", ls="-.", lw=2, label="Wilson")
 
 
@@ -214,15 +229,14 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
         # g: order of truncation (0<= g < 3.5; 0=Woolley, 1=King, 2=Wilson)
         rt_lime = parsec2arcmin(deBoer_fit["rt_lime"], distance_kpc)
         l = limepy.limepy(deBoer_fit["W_lime"], g=deBoer_fit["g_lime"],
-            M=deBoer_fit["M_lime"], rt=rt_lime, nrt=25*rJ,
-            project=True, verbose=verbose)
+            M=deBoer_fit["M_lime"], rt=rt_lime, project=True, verbose=verbose)
         logger.debug("{0:<20s}{1:> 15.3f}".format("King", l.r0))
         logger.debug("{0:<20s}{1:> 15.3f}".format("Half-mass", l.rh))
         logger.debug("{0:<20s}{1:> 15.3f}".format("virial", l.rv))
         logger.debug("{0:<20s}{1:> 15.3f}\n".format("truncation", l.rt))
 
-        BGlev = numpy.argwhere(l.Sigma <= deBoer_fit["BGlev"])
-        l.Sigma[BGlev] = deBoer_fit["BGlev"]
+        BGlev = numpy.argwhere(l.Sigma <= deBoer_BGlev)
+        l.Sigma[BGlev] = deBoer_BGlev
         ax.plot(l.R, l.Sigma, c="k", ls="--", lw=2,
             label="$\\textsc{limepy}$" if has_tex else "limepy")
 
@@ -248,9 +262,14 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
         # W must be phi0: central dimensionless potential
         # eta: velocity dispersion of PEs in model units [0-1]
         # B: reduction of the DF at trunction [0-1]
-        rt_spes = parsec2arcmin(deBoer_fit["rt_pe"], distance_kpc)
+        if convert_to_parsec:
+            rt_spes = deBoer_fit["rt_pe"]
+        else:
+            rt_spes = parsec2arcmin(deBoer_fit["rt_pe"], distance_kpc)
+        # TODO: get the change in slope that is present in deBoer+ 2019 :o
         s = limepy.spes(deBoer_fit["W_pe"], B=B, eta=deBoer_fit["eta_pe"],
-            M=deBoer_fit["M_pe"], fpe=fpe, rt=rt_spes, nrt=25*rJ,
+            M=deBoer_fit["M_pe"], fpe=fpe, rt=rt_spes,
+            nrt=25*rJ_pc if convert_to_parsec else 25*rJ,
             project=True, verbose=verbose)
 
         if verbose:
@@ -259,37 +278,46 @@ def plot_deBoer_2019(logger, deBoer_fit, deBoer_stitched_profile,
             logger.debug("{0:<20s}{1:> 15.3f}".format("virial", s.rv))
             logger.debug("{0:<20s}{1:> 15.3f}\n".format("truncation", s.rt))
 
-        BGlev = numpy.argwhere(s.Sigma <= deBoer_fit["BGlev"])
-        s.Sigma[BGlev] = deBoer_fit["BGlev"]
+        BGlev = numpy.argwhere(s.Sigma <= deBoer_BGlev)
+        s.Sigma[BGlev] = deBoer_BGlev
         ax.plot(s.R, s.Sigma, c="r", ls="-", lw=2,
             label="$\\textsc{spes}$" if has_tex else "spes")
 
     # Indicate the background level
     if show_BGlev:
-        ax.axhline(deBoer_fit["BGlev"], c="k", ls="--", lw=2)
+        ax.axhline(deBoer_BGlev, c="k", ls="--", lw=2)
 
     trans = matplotlib.transforms.blended_transform_factory(ax.transData, ax.transAxes)
     if show_rtie:
+        if convert_to_parsec:
+            rtie = arcmin2parsec(deBoer_fit["r_tie"], distance_kpc)
+        else:
+            rtie = deBoer_fit["r_tie"]
         # Indicate the Gaia completeness radius at which the data was stitched
-        ax.vlines(deBoer_fit["r_tie"], ymin=deBoer_fit["BGlev"]/25,
-            ymax=deBoer_fit["BGlev"], lw=3)
-        ax.text(deBoer_fit["r_tie"], 0.01, r"$\textit{Gaia}$ complete"
+        ax.vlines(rtie, ymin=deBoer_BGlev/25,
+            ymax=deBoer_BGlev, lw=3)
+        ax.text(rtie, 0.01, r"$\textit{Gaia}$ complete"
             if has_tex else "Gaia Complete",
             fontsize=16, ha="left", va="bottom", transform=trans)
 
     if show_rJ:
         # Jacobi radius
-        ax.axvline(rJ, c="k", ls="--", lw=2)
-        ax.text(rJ, 1.0, "$r_J$ = {:.1f}'".format(rJ), fontsize=16,
-            ha="center", va="bottom", transform=trans)
+        ax.axvline(rJ_pc if convert_to_parsec else rJ, c="k", ls="--", lw=2)
+        ax.text(rJ_pc if convert_to_parsec else rJ, 1.0, "$r_J$ = {:.1f}{}".format(
+            rJ_pc if convert_to_parsec else rJ, "'" if convert_to_parsec else " pc"),
+            fontsize=16, ha="center", va="bottom", transform=trans)
 
-    ax.set_xlim(0.5*deBoer_stitched_profile["rad"][0], 5*rJ)
-    ax.set_ylim(0.1*deBoer_fit["BGlev"], 2*deBoer_stitched_profile["density"].max())
+    if convert_to_parsec:
+        r0 = arcmin2parsec(deBoer_stitched_profile["rad"][0], distance_kpc)
+        ax.set_xlim(0.5*r0, 5*rJ_pc)
+    else:
+        ax.set_xlim(0.5*deBoer_stitched_profile["rad"][0], 5*rJ)
+    ax.set_ylim(0.1*deBoer_BGlev, 2*deBoer_density.max())
     # ax.set_ylim(1e-3, 1e5)
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlabel("$R$ [arcmin]")
-    ax.set_ylabel("$n_{Gaia}$ [arcmin$^{-2}$]")
+    ax.set_xlabel("$R$ [{}]".format("parsec" if convert_to_parsec else "arcmin"))
+    ax.set_ylabel("$n_{{Gaia}}$ [{}$^{{-2}}$]".format("parsec" if convert_to_parsec else "arcmin"))
     ax.legend(fontsize=16, loc="upper right", frameon=True)
 
     return fig
