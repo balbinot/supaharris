@@ -75,13 +75,13 @@ gulp.task('vendor', function(cb) {
 
   // Bokeh JS
   gulp.src([
-      './node_modules/bokehjs/build/js/*',
+      './node_modules/@bokeh/bokehjs/build/js/*',
     ])
     .pipe(gulp.dest('./vendor/bokehjs/js'))
 
   // Bokeh CSS
   gulp.src([
-      './node_modules/bokehjs/build/css/*',
+      './node_modules/@bokeh/bokehjs/build/css/*',
     ])
     .pipe(gulp.dest('./vendor/bokehjs/css'))
 
