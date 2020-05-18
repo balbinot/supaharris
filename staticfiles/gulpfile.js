@@ -79,12 +79,6 @@ gulp.task('vendor', function(cb) {
     ])
     .pipe(gulp.dest('./vendor/bokehjs/js'))
 
-  // Bokeh CSS
-  gulp.src([
-      './node_modules/@bokeh/bokehjs/build/css/*',
-    ])
-    .pipe(gulp.dest('./vendor/bokehjs/css'))
-
   // Cookieconsent
   gulp.src([
       './node_modules/cookieconsent/build/**',
