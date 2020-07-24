@@ -17,13 +17,12 @@
     "fetchSpec": "5.11.2"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.11.2.tgz",
   "_shasum": "8644bc25b19475779a7b7c1fc104bc0a794f4465",
   "_spec": "@fortawesome/fontawesome-free@5.11.2",
-  "_where": "/scratch/PhD/repos/supaharris/staticfiles",
+  "_where": "/Users/timohalbesma/Code/supaharris/staticfiles",
   "author": {
     "name": "Dave Gandy",
     "email": "dave@fontawesome.com",
