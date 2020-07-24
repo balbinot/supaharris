@@ -1,6 +1,6 @@
-FROM nginx:1.17-alpine
+FROM nginx:1.19-alpine
 
-LABEL maintainer="Timo Halbesma <Halbesma@MPA-Garching.MPG.DE>"
+LABEL maintainer="Timo Halbesma <timo@halbesma.com>"
 
 # Remove the default configuration files
 RUN set -ex \

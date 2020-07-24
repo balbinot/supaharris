@@ -1,7 +1,7 @@
 FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 
-LABEL maintainer="Timo Halbesma <halbesma@MPA-Garching.MPG.DE>"
+LABEL maintainer="Timo Halbesma <timo@halbesma.com>"
 
 # Install system packages
 WORKDIR /supaharris
