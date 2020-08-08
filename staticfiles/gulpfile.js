@@ -24,7 +24,7 @@ gulp.task('vendor', function(cb) {
 
   // popper.js
   gulp.src([
-      'node_modules/popper.js/dist/umd/popper.min.js',
+      'node_modules/popper.js/dist/umd/*',
     ])
     .pipe(gulp.dest('./vendor/popper/js'))
 
