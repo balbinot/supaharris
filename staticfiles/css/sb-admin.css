@@ -1,5 +1,5 @@
 /*!
- * SupaHarris - SupaHarris v1.0 (https://supaharris.com)
+ * SupaHarris - SupaHarris v1.0.0 (https://supaharris.com)
  * Copyright 2019-2020 Timo Halbesma
  * Licensed under AGPL-3.0-only (https://github.com/tlrh314/supaharris/blob/master/LICENSE)
  */

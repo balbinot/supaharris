@@ -28,7 +28,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   mariadb:
-    image: mariadb:10.4
+    image: mariadb:10.5
     environment:
       - MYSQL_ROOT_PASSWORD=${SUPAHARRIS_MYSQL_ROOT_PASSWORD-secret}
       - MYSQL_USER=${SUPAHARRIS_MYSQL_USER-dbuser}

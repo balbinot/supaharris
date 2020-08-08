@@ -22,6 +22,12 @@ const banner = ['/*!\n',
 // Copy third party libraries from /node_modules into /vendor
 gulp.task('vendor', function(cb) {
 
+  // popper.js
+  gulp.src([
+      'node_modules/popper.js/dist/umd/popper.min.js',
+    ])
+    .pipe(gulp.dest('./vendor/popper/js'))
+
   // Bootstrap JS
   gulp.src([
       './node_modules/bootstrap/dist/js/*',

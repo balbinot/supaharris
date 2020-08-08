@@ -1,7 +1,7 @@
 {
     "title": "SupaHarris",
     "name": "supaharris",
-    "version": "1.0",
+    "version": "1.0.0",
     "description": "Database and web app for astronomical objects ",
     "keywords": [
         "astronomy",
@@ -26,24 +26,25 @@
     },
     "dependencies": {
         "@bokeh/bokehjs": "^2.0.2",
-        "@fortawesome/fontawesome-free": "5.11.2",
+        "@fortawesome/fontawesome-free": "^5.14.0",
         "bootstrap": "^4.5.0",
-        "chart.js": "2.8.0",
+        "chart.js": "^2.9.3",
         "cookieconsent": "^3.1.1",
-        "datatables.net-bs4": "1.10.19",
+        "datatables.net-bs4": "^1.10.21",
         "jquery": "^3.5.1",
         "jquery-typeahead": "^2.11.0",
-        "jquery.easing": "^1.4.1"
+        "jquery.easing": "^1.4.1",
+        "popper.js": "^1.16.1"
     },
     "devDependencies": {
         "browser-sync": "^2.26.10",
         "gulp": "^4.0.2",
         "gulp-autoprefixer": "^7.0.1",
-        "gulp-clean-css": "4.2.0",
+        "gulp-clean-css": "^4.3.0",
         "gulp-header": "2.0.9",
         "gulp-plumber": "^1.2.1",
-        "gulp-rename": "1.4.0",
-        "gulp-sass": "4.0.2",
+        "gulp-rename": "^2.0.0",
+        "gulp-sass": "^4.1.0",
         "gulp-uglify": "3.0.2"
     }
 }
