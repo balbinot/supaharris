@@ -1,31 +1,28 @@
 {
-    "title": "SB Admin",
-    "name": "startbootstrap-sb-admin",
-    "version": "5.0.3",
-    "description": "A one page app landing page HTML theme for Bootstrap.",
+    "title": "SupaHarris",
+    "name": "supaharris",
+    "version": "1.0",
+    "description": "Database and web app for astronomical objects ",
     "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template",
-        "admin",
-        "app"
+        "astronomy",
+        "astrophysics",
+        "python",
+        "physics",
+        "database"
     ],
-    "homepage": "https://startbootstrap.com/template-overviews/sb-admin",
+    "homepage": "https://supaharris.com",
     "bugs": {
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin/issues",
-        "email": "feedback@startbootstrap.com"
+        "url": "https://github.com/tlrh314/supaharris/issues",
+        "email": "timo@halbesma.com"
     },
-    "license": "MIT",
-    "author": "Start Bootstrap",
+    "license": "AGPL-3.0-only",
+    "author": "Timo Halbesma",
     "contributors": [
-        "David Miller (http://davidmiller.io/)"
+        "Eduardo Balbinot (https://balbinot.github.io)"
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin.git"
+        "url": "https://github.com/tlrh314/supaharris"
     },
     "dependencies": {
         "@bokeh/bokehjs": "^2.0.2",
