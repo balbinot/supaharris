@@ -56,6 +56,7 @@
 - Install required packages: `pip install -r requirements.txt`
   - If you experience difficulties installting mysqlclient,
     remove it from requirements.txt (and run with an sqlite3 database)
+- Install `pre-commit` hooks: `pre-commit install`
 - Setup local settings: `cp settings/.env.example settings/.env`
 - Edit `settings/.env` to tailor to your machine.
   - The example [env](https://django-environ.readthedocs.io/en/latest/) uses the
