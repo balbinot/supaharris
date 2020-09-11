@@ -1,8 +1,5 @@
-from django.urls import path
-from django.urls import re_path
-
 from catalogue import views
-
+from django.urls import path, re_path
 
 app_name = "catalogue"  # namespace the urls
 urlpatterns = [

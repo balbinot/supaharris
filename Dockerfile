@@ -50,6 +50,6 @@ COPY . /supaharris
 COPY tlrh/ /supaharris
 RUN chown -R supaharris:supaharris /supaharris
 
-USER supaharris 
+USER supaharris
 
 ENTRYPOINT ["/supaharris/entrypoint.sh"]

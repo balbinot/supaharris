@@ -3,7 +3,7 @@ $(document).ready(function () {
     astroObjectNames = JSON.parse(sessionStorage.getItem('astroObjectNames'));
     if (astroObjectNames == null) {
         var astroObjectNames = getAstroObjectNames();
-    } else { 
+    } else {
         var expected;
         $.ajax({
             type: 'GET',
@@ -159,4 +159,4 @@ function autocomplete(inp, astroObjectNames) {
     document.addEventListener('click', function (e) {
         closeAllLists(e.target);
     });
-} 
+}

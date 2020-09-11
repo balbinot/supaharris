@@ -1,6 +1,5 @@
-from django.contrib.staticfiles.templatetags.staticfiles import static
-
 from about.models import ContactInfo
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 class ContactInfoDefault(object):
@@ -16,14 +15,16 @@ def set_contactinfo(request):
         contactinfo = ContactInfoDefault()
     webmaster_email_address = contactinfo.webmaster_email_address
 
-    return { "webmaster_email_address": webmaster_email_address }
+    return {"webmaster_email_address": webmaster_email_address}
 
 
 def set_meta_tags(request):
     page_title = "SupaHarris Catalogue"
     page_image = static("img/social_share.png")
     page_description = "SupaHarris Catalogue of Globular Clusters in the Milky Way"
-    page_keywords = "Globular Clusters, Star Clusters, Milky Way, Observations, Database, Harris"
+    page_keywords = (
+        "Globular Clusters, Star Clusters, Milky Way, Observations, Database, Harris"
+    )
     og_image = page_image
     og_title = page_title
     twitter_card = ""

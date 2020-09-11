@@ -1,22 +1,22 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sys
-from django.conf import settings
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
 
 from catalogue.models import (
-    Profile,
-    Reference,
-    Parameter,
-    Observation,
     AstroObject,
     AstroObjectClassification,
+    Observation,
+    Parameter,
+    Profile,
+    Reference,
 )
-from catalogue.utils import map_names_to_ids
-from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_miocchi_2013 import parse_miocchi_2013_table2
-from data.parse_miocchi_2013 import parse_miocchi_2013_profiles
+from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
+from data.parse_miocchi_2013 import (
+    parse_miocchi_2013_profiles,
+    parse_miocchi_2013_table2,
+)
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 
 def add_miocchi_2013_table2(logger):
@@ -63,7 +63,7 @@ def add_miocchi_2013_table2(logger):
     Nentries = len(database)
     for i, entry in enumerate(database):
         gc_name = entry[0]
-        logger.info("{0}/{1}: {2}".format(i+1, Nentries, gc_name))
+        logger.info("{0}/{1}: {2}".format(i + 1, Nentries, gc_name))
         gc = AstroObject.objects.get(id=name_id_map[gc_name])
 
         if entry["mod"] == "W":
@@ -78,10 +78,7 @@ def add_miocchi_2013_table2(logger):
         continue
 
         observation = Observation.objects.create(
-            reference=reference,
-            astro_object=gc,
-            parameter=R_Sun,
-            value=gc_R_Sun,
+            reference=reference, astro_object=gc, parameter=R_Sun, value=gc_R_Sun,
         )
         logger.info("Created the Observation: {0}".format(observation))
 
@@ -99,7 +96,7 @@ def add_miocchi_2013_profiles(logger):
     Nprofiles = len(m13_profs)
     for i, (gc_name, profile) in enumerate(m13_profs.items()):
         gc = AstroObject.objects.get(name=gc_name)
-        logger.debug("\n{0}/{1}: {2}".format(i+1, Nprofiles, gc))
+        logger.debug("\n{0}/{1}: {2}".format(i + 1, Nprofiles, gc))
         sh_prof = Profile(
             reference=miocchi13,
             astro_object=gc,
@@ -108,8 +105,8 @@ def add_miocchi_2013_profiles(logger):
             y_sigma_up=list(profile["err_log_surface_density"]),
             y_sigma_down=list(profile["err_log_surface_density"]),
             x_description="logr: Log of radius [arcsec]",
-            y_description="log Sigma_*(r): Log of decontaminated projected"+\
-                " star count [1/arcsec**2]",
+            y_description="log Sigma_*(r): Log of decontaminated projected"
+            + " star count [1/arcsec**2]",
         )
         sh_prof.save()
 
@@ -118,7 +115,9 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add Miocchi+ (2013) data to the database"
 
     def handle(self, *args, **options):
-        super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
+        super().handle(
+            print_info=True, *args, **options
+        )  # to run our Mixin modifications
 
         cmd = __file__.split("/")[-1].replace(".py", "")
         self.logger.info("\n\nRunning the management command '{0}'\n".format(cmd))

@@ -1,8 +1,8 @@
 function retrieve_observation_table_columns() {
     var columns = [];
-    $.ajax({ 
-        type: 'GET', 
-        url: '/api/v1/catalogue/observation_table/?format=json', 
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/catalogue/observation_table/?format=json',
         dataType: 'json',
         async: false,
         success: function(data) {
@@ -19,8 +19,8 @@ function set_observation_table_header(columns) {
         r[++n] = '<th>' + key + '</th>';
     });
     r[++n] = '</tr>';
-    $('#observationsTableHead').html(r.join('')); 
-    $('#observationsTableFoot').html(r.join('')); 
+    $('#observationsTableHead').html(r.join(''));
+    $('#observationsTableFoot').html(r.join(''));
 }
 
 

@@ -1,8 +1,7 @@
 import factory
-from faker import Factory
-from django.conf import settings
-
 from accounts.models import UserModel
+from django.conf import settings
+from faker import Factory
 
 faker = Factory.create("en_UK")
 

@@ -15,7 +15,7 @@
     <div class="card card-login mx-auto mt-5 mb-3">
       <div class="card-header">Register</div>
       <div class="card-body">
-          
+
         {% if form.email.errors %}
         <div class="alert alert-danger" role="alert">
           {{ form.email.errors|striptags }}
@@ -69,4 +69,3 @@
     </div>
   </div>
 {% endblock %}
-

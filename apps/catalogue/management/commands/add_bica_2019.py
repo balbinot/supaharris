@@ -1,17 +1,13 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sys
 
-from django.conf import settings
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-
 from catalogue.models import (
-    Reference,
-    Parameter,
-    Observation,
     AstroObject,
     AstroObjectClassification,
+    Observation,
+    Parameter,
+    Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
 from data.parse_bica_2019 import (
@@ -21,6 +17,8 @@ from data.parse_bica_2019 import (
     parse_bica_2019_table4,
     parse_bica_2019_table5,
 )
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 
 def create_Reference_instances_for_bica_refs(verbose=False):
@@ -29,7 +27,7 @@ def create_Reference_instances_for_bica_refs(verbose=False):
     nrefs = len(bica_references)
     for i, (ref_code, [ref, bib_code, cat]) in enumerate(bica_references.items()):
         if verbose:
-            print("Entry {0}/{1}".format(i+1, nrefs))
+            print("Entry {0}/{1}".format(i + 1, nrefs))
             print("  ref_code: {0}".format(ref_code))
             print("  ref: {0}".format(ref))
             print("  bib_code: {0}".format(bib_code))
@@ -38,23 +36,28 @@ def create_Reference_instances_for_bica_refs(verbose=False):
         ads_url = "https://ui.adsabs.harvard.edu/abs/{0}".format(bib_code)
         if bib_code == "-------------------":
             reference, created = Reference.objects.get_or_create(
-                ads_url="https://example.com/{0}".format(ref_code),
-                bib_code=ref_code,
+                ads_url="https://example.com/{0}".format(ref_code), bib_code=ref_code,
             )
-            reference.title = ref; reference.save()
+            reference.title = ref
+            reference.save()
         else:
             reference, created = Reference.objects.get_or_create(ads_url=ads_url)
         setattr(Reference, ref_code, reference)
         references[ref_code] = reference
 
-        if verbose: print("{0} the Reference: {1}\n".format("Created" if created else "Found", ref_code))
+        if verbose:
+            print(
+                "{0} the Reference: {1}\n".format(
+                    "Created" if created else "Found", ref_code
+                )
+            )
     return references
 
 
 def combine_tables(t2, t3, t4, t5):
-    keys = list(set(
-        list(t2.keys()) + list(t3.keys()) + list(t4.keys()) + list(t5.keys())
-    ))
+    keys = list(
+        set(list(t2.keys()) + list(t3.keys()) + list(t4.keys()) + list(t5.keys()))
+    )
     print("Total (unique) keys: {0}".format(len(keys)))
 
     combined = dict()
@@ -78,12 +81,18 @@ def get_astro_object(bica_designations, astro_object_names, astro_object_instanc
             break
     else:
         astro_object = None
-        print("  AstroObject not found for bica_designations: {0}".format(bica_designations))
+        print(
+            "  AstroObject not found for bica_designations: {0}".format(
+                bica_designations
+            )
+        )
 
     return astro_object
 
 
-def get_astro_object_classifications(bica_classifications, astro_object_classifications):
+def get_astro_object_classifications(
+    bica_classifications, astro_object_classifications
+):
     classifications = []
     for d in bica_classifications:
         try:
@@ -94,15 +103,30 @@ def get_astro_object_classifications(bica_classifications, astro_object_classifi
     return classifications
 
 
-
 def build_astro_object_instances_for_t3(t3, references, aos, ao_names, aocs):
     astro_objects = list()
 
     for i, (ref, data) in enumerate(t3.items()):
         # if i > 10: break
-        glon, glat, sky_coord, rah, ram, ras, de_sign, ded, dem, des, \
-            sky_coord2, diama, diamb, name, obj_class1, obj_class2, comments \
-            = data
+        (
+            glon,
+            glat,
+            sky_coord,
+            rah,
+            ram,
+            ras,
+            de_sign,
+            ded,
+            dem,
+            des,
+            sky_coord2,
+            diama,
+            diamb,
+            name,
+            obj_class1,
+            obj_class2,
+            comments,
+        ) = data
 
         found_ao = False
         try:
@@ -142,9 +166,9 @@ def build_observation_instances_for_t3(t3, references, ps):
     (Glon, Glat, RA, Dec, CatItem, Diam_a, Diam_b, U, V, W) = ps
 
     for i, (ref, data) in enumerate(t3.items()):
-        if i > 10: break
+        if i > 10:
+            break
         print(ref, data)
-
 
     return observations
 
@@ -166,12 +190,10 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         else:
             print("Created the Reference: {0}\n".format(bica2019))
 
-
         # 1) Parse and get or create Reference instances for refs.dat
         print("Creating Reference instances for refs.dat")
         references = create_Reference_instances_for_bica_refs()
         print("Found {0} references\n".format(len(references)))
-
 
         # Create Parameter instances that we have not encountered before
         #
@@ -180,17 +202,21 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # astro_object=ao).
         print("Creating Parameter instances for new Parameters")
         for bica_parameter, bica_description, bica_unit in zip(
-                ["CatItem", "Diam_a", "Diam_b", "U", "V", "W"],
-                ["Catalogue item: AstroObject is included in a Reference",
-                 "Major axis diameter", "Minor axis diameter",
-                 "Heliocentric velocity component, positive towards the Galactic anticenter",
-                 "Heliocentric velocity component, positive towards direction of Galactic rotation",
-                 "Heliocentric velocity component, positive towards the North Galactic Pole"],
-                ["", "arcmin", "arcmin", "km/h", "km/h", "km/h"]):
+            ["CatItem", "Diam_a", "Diam_b", "U", "V", "W"],
+            [
+                "Catalogue item: AstroObject is included in a Reference",
+                "Major axis diameter",
+                "Minor axis diameter",
+                "Heliocentric velocity component, positive towards the Galactic anticenter",
+                "Heliocentric velocity component, positive towards direction of Galactic rotation",
+                "Heliocentric velocity component, positive towards the North Galactic Pole",
+            ],
+            ["", "arcmin", "arcmin", "km/h", "km/h", "km/h"],
+        ):
             p, created = Parameter.objects.get_or_create(
                 name=bica_parameter,
                 # 'defaults' are not used for filtering, but it is used if the instance is created
-                defaults={"scale": 1.0}
+                defaults={"scale": 1.0},
             )
             if created:
                 p.description = bica_description
@@ -202,7 +228,9 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             # example, the variables U, V, and W will be available and we can
             # use those later on to initialise Observation instances!
             globals()[bica_parameter] = p
-            print("  {0} the Parameter: {1}".format("Created" if created else "Found", p))
+            print(
+                "  {0} the Parameter: {1}".format("Created" if created else "Found", p)
+            )
 
         # Parse the Bica data
         verbose = True if self.verbosity >= 1 else False
@@ -260,7 +288,8 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         aos = dict()
         ao_names = dict()
         for ao in AstroObject.objects.iterator():
-            if ao.name: ao_names[ao.name] = ao.pk
+            if ao.name:
+                ao_names[ao.name] = ao.pk
             if "Pal " in ao.name:
                 ao_names[ao.name.replace("Pal ", "Palomar ")] = ao.pk
             if "Palomar " in ao.name:
@@ -294,7 +323,11 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # kinda does not like this, so we save Observation instances to a list. This way
         # we can pack the database communication in a bulk query, see the Django docs
         # for details: https://docs.djangoproject.com/en/dev/ref/models/querysets/#bulk-create
-        astro_objects_t3 = build_astro_object_instances_for_t3(t3, references, aos, ao_names, aocs)
+        astro_objects_t3 = build_astro_object_instances_for_t3(
+            t3, references, aos, ao_names, aocs
+        )
         # AstroObject.objects.bulk_create(astro_objects_t3)
-        observations_t3 = build_observation_instances_for_t3(t3, references, ps, aos, ao_names, aocs)
+        observations_t3 = build_observation_instances_for_t3(
+            t3, references, ps, aos, ao_names, aocs
+        )
         # Observation.objects.bulk_create(observations_t3)

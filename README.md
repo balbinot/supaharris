@@ -30,19 +30,19 @@
 - Add a parser in the `data` folder, e.g. `data/parse_harris_1996ed2010.py`
 - You could stop here and add, commit and push the data + parsers, and we'll handle
   inserting it into the database.
-  - If you do stop here, it would be very helpful if you could provide a mapping 
+  - If you do stop here, it would be very helpful if you could provide a mapping
     (dictionary) that converts the name/identifier (e.g. NGC, Messier) in the dataset
     you want to add to the [name that we use in the SupaHarris database](https://www.supaharris.com/catalogue/astro_object/list/)
-  - See above, but mapping the parameter names in your database to the 
+  - See above, but mapping the parameter names in your database to the
   [parameters we use in the SupaHarris database](https://www.supaharris.com/catalogue/parameter/list/)
 
 ### Add Django script to insert the parsed data into the database
 - For this step it would be useful to have the development server running locally.
   Below you'll find three options to achieve this (in order of complexity).
-- Parsed data can be inserted into the SupaHarris database by creating 
-  a new management command (= a new python file) in the folder 
+- Parsed data can be inserted into the SupaHarris database by creating
+  a new management command (= a new python file) in the folder
   `apps/catalogue/management/commands`. We provide boilerplate to get going! :-)
-- `cp apps/catalogue/management/commands/add_author_year.py 
+- `cp apps/catalogue/management/commands/add_author_year.py
    apps/catalogue/management/commands/add_changemeauthor_changemeyear.py`,
    e.g. naming the file `add_harris_1996ed2010.py`
 - Implement `apps/catalogue/management/commands/add_changemeauthor_changemeyear.py`
@@ -54,46 +54,46 @@
 - Activate virtualenv: `source venv/bin/activate`
 
 - Install required packages: `pip install -r requirements.txt`
-  - If you experience difficulties installting mysqlclient, 
+  - If you experience difficulties installting mysqlclient,
     remove it from requirements.txt (and run with an sqlite3 database)
 - Setup local settings: `cp settings/.env.example settings/.env`
 - Edit `settings/.env` to tailor to your machine.
-  - The example [env](https://django-environ.readthedocs.io/en/latest/) uses the 
+  - The example [env](https://django-environ.readthedocs.io/en/latest/) uses the
     sqlite3 [database backend](https://docs.djangoproject.com/en/dev/ref/databases/),
     [console EmailBackend](https://docs.djangoproject.com/en/dev/topics/email/#console-backend),
-    [DummyCache](https://docs.djangoproject.com/en/dev/topics/cache/#dummy-caching-for-development), 
-    and without support to auto-retrieve reference data through the 
+    [DummyCache](https://docs.djangoproject.com/en/dev/topics/cache/#dummy-caching-for-development),
+    and without support to auto-retrieve reference data through the
     [ADS API](https://github.com/tlrh314/supaharris#generate-ads-api-token)
 
 - `python manage.py check`
 - `python manage.py migrate`
 - `python manage.py createsuperuser`
-- When using `SITE_ID = 1` in the settings module one must make sure that the 
+- When using `SITE_ID = 1` in the settings module one must make sure that the
   Site with id=1 exists. So first we delete all existing sites, then create
   one for localhost.
-- `python manage.py shell -c 'from django.contrib.sites.models import Site; 
+- `python manage.py shell -c 'from django.contrib.sites.models import Site;
    Site.objects.all().delete(); Site.objects.create(id=1, name="localhost:8000",
    domain="localhost:8000")'`
 
 ### Add the initial data to the database
-- `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
-- `python manage.py loaddata fixtures/catalogue_Parameter.json` 
-- `python manage.py add_harris_1996ed2010` 
-- `python manage.py add_vandenberg_2013` 
+- `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json`
+- `python manage.py loaddata fixtures/catalogue_Parameter.json`
+- `python manage.py add_harris_1996ed2010`
+- `python manage.py add_vandenberg_2013`
 
 ### Run the development server at http://localhost:8000
 - `python manage.py runserver` (and leave running)
 
 
 ## **Alternatively, run with Docker (Option 2)**
-- Make sure Docker Engine and docker-compose are installed 
+- Make sure Docker Engine and docker-compose are installed
   (see [Docker docs[(https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
 - Build the image: `docker build -t supaharris .`
 - Setup local settings: `cp settings/.env.example settings/.env`
 - Edit `settings/.env` to tailor to your machine.
-- Run the server: `docker run --rm -it -v "$(pwd)/settings/.env:/supaharris/settings/.env" -v "$(pwd)":/supaharris -p 1337:1337 
+- Run the server: `docker run --rm -it -v "$(pwd)/settings/.env:/supaharris/settings/.env" -v "$(pwd)":/supaharris -p 1337:1337
   --name runserver supaharris bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
 - In a new terminal, one can execute commands in the running container. Load the fixtures:
@@ -110,12 +110,12 @@
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it supaharris_django_1 bash`
 - Now add the initial data (run this command in the container!)
-  - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json` 
-  - `python manage.py loaddata fixtures/catalogue_Parameter.json` 
-  - `python manage.py add_harris_1996ed2010` 
+  - `python manage.py loaddata fixtures/catalogue_AstroObjectClassification.json`
+  - `python manage.py loaddata fixtures/catalogue_Parameter.json`
+  - `python manage.py add_harris_1996ed2010`
 - Create a superuser (run this command in the container)
   - `python manage.py createsuperuser`
-- Visit the website at https://localhost (and accept the self-signed 
+- Visit the website at https://localhost (and accept the self-signed
   certificate warning of the browser)
 
 
@@ -126,7 +126,7 @@ retrieved on save. For the arXiv urls the bibtex is scraped, but for new-style A
 rely on an API connection.
 
 - Create an account for new-style ADS, if you haven't alreay
-- [Go to you ADS user profile](https://ui.adsabs.harvard.edu/user/settings/token) 
+- [Go to you ADS user profile](https://ui.adsabs.harvard.edu/user/settings/token)
   and generate an API key
 - Add the key to `ADS_API_TOKEN` in `settings/.env`
 

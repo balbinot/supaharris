@@ -1,11 +1,9 @@
-from django.db import models
-from django.conf import settings
-from django.core.mail import EmailMessage
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
-from django.utils.encoding import python_2_unicode_compatible
-
 from accounts.managers import AccountManager
+from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.mail import EmailMessage
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 
 @python_2_unicode_compatible
@@ -17,17 +15,26 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField("Last Name", max_length=42)
 
     # Permissions
-    is_active = models.BooleanField("Active", default=False,
+    is_active = models.BooleanField(
+        "Active",
+        default=False,
         help_text="Designates whether this user should be treated as "
-        "active. Unselect this instead of deleting accounts.")
-    is_staff = models.BooleanField("Staff", default=False,
-        help_text="Designates whether the user can log into this admin site.")
+        "active. Unselect this instead of deleting accounts.",
+    )
+    is_staff = models.BooleanField(
+        "Staff",
+        default=False,
+        help_text="Designates whether the user can log into this admin site.",
+    )
     is_superuser = models.BooleanField("Superuser", default=False)
 
     # Time stamps, and logging of who changed user info
-    last_updated_by = models.ForeignKey("self",
-        on_delete=models.SET_NULL, blank=True, null=True,
-        related_name="has_changed_accounts"
+    last_updated_by = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="has_changed_accounts",
     )
     date_created = models.DateTimeField("Date Created", auto_now_add=True)
     date_updated = models.DateTimeField("Date Last Changed", auto_now=True)
@@ -55,7 +62,9 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.first_name
 
-    def email_user(self, subject, message, from_email=settings.DEFAULT_FROM_EMAIL, **kwargs):
+    def email_user(
+        self, subject, message, from_email=settings.DEFAULT_FROM_EMAIL, **kwargs
+    ):
         """ Sends an email to this User. Caution, from_email must contain domain
             name in production! """
 

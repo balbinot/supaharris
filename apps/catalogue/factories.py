@@ -1,20 +1,19 @@
-import numpy
 import logging
-import factory
-from faker import Factory
-from django.conf import settings
 
+import factory
+import numpy
 from catalogue.models import (
-    Parameter,
-    Reference,
-    AstroObjectClassification,
     AstroObject,
-    Profile,
+    AstroObjectClassification,
     Auxiliary,
     Observation,
+    Parameter,
+    Profile,
     Rank,
+    Reference,
 )
-
+from django.conf import settings
+from faker import Factory
 
 faker = Factory.create("en_UK")
 logger = logging.getLogger(__name__)
@@ -26,9 +25,9 @@ class ParameterFactory(factory.DjangoModelFactory):
         django_get_or_create = ("name",)
 
     name = factory.Sequence(lambda n: "TestParameter {0}".format(n))
-    description = factory.LazyAttribute(lambda _: faker.text(
-        max_nb_chars=faker.random_int(min=42, max=255)
-    ))
+    description = factory.LazyAttribute(
+        lambda _: faker.text(max_nb_chars=faker.random_int(min=42, max=255))
+    )
     unit = "unit"
     scale = 1.0
 
@@ -39,18 +38,14 @@ def generate_bib_code(author=None, year=None, journal=None, volume=None, pages=N
     if not year:
         year = faker.year()
     if not journal:
-        journals = [k.upper()[0:8] for k,v in Reference.JOURNALS]
+        journals = [k.upper()[0:8] for k, v in Reference.JOURNALS]
         journal = journals[faker.random_int(min=0, max=len(journals))]
     if not volume:
         volume = faker.random_int(min=1, max=450)
     if not pages:
         pages = faker.random_int(min=1, max=5000)
     bib_code = "{0}{1:.<6}{2:.>3}{3:.>4}{4}".format(
-        year,
-        journal,
-        volume,
-        pages,
-        author.upper()[0]
+        year, journal, volume, pages, author.upper()[0]
     )
     return bib_code
 
@@ -61,15 +56,15 @@ class ReferenceFactory(factory.DjangoModelFactory):
 
     title = factory.LazyAttribute(lambda _: faker.sentence())
     first_author = factory.Sequence(lambda n: "TestReference {0}".format(n))
-    journal = factory.LazyAttribute(lambda _:
-        faker.random_int(min=0, max=len(Reference.JOURNALS)-1)
+    journal = factory.LazyAttribute(
+        lambda _: faker.random_int(min=0, max=len(Reference.JOURNALS) - 1)
     )
     year = factory.LazyAttribute(lambda _: faker.year())
     month = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=12))
     volume = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
     pages = factory.LazyAttribute(lambda _: faker.random_int(min=1, max=450))
-    bib_code = factory.LazyAttribute(lambda _:
-        generate_bib_code(
+    bib_code = factory.LazyAttribute(
+        lambda _: generate_bib_code(
             _.first_author,
             _.year,
             Reference.JOURNALS[_.journal][0].upper()[0:8],
@@ -77,8 +72,8 @@ class ReferenceFactory(factory.DjangoModelFactory):
             _.pages,
         )
     )
-    ads_url = factory.LazyAttribute(lambda _:
-        "https://example.com/fake/{0}".format(_.bib_code)
+    ads_url = factory.LazyAttribute(
+        lambda _: "https://example.com/fake/{0}".format(_.bib_code)
     )
 
     @factory.post_generation
@@ -137,7 +132,7 @@ class ProfileFactory(factory.DjangoModelFactory):
     astro_object = factory.SubFactory(AstroObjectFactory)
 
     x = list(range(0, 10, 1))
-    y = factory.LazyAttribute(lambda _: [i**2 for i in _.x])
+    y = factory.LazyAttribute(lambda _: [i ** 2 for i in _.x])
     x_description = factory.Sequence(lambda n: "x{0}".format(n))
     y_description = factory.Sequence(lambda n: "y{0}".format(n))
 
@@ -160,8 +155,8 @@ class ObservationFactory(factory.DjangoModelFactory):
     astro_object = factory.SubFactory(AstroObjectFactory)
     parameter = factory.SubFactory(ParameterFactory)
 
-    value = factory.LazyAttribute(lambda _:
-        faker.random_int(min=-999999, max=999999) / 1000
+    value = factory.LazyAttribute(
+        lambda _: faker.random_int(min=-999999, max=999999) / 1000
     )
     # sigma_up
     # sigma_down

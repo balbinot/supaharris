@@ -1,28 +1,26 @@
-from django.test import TestCase
-from django.contrib.sites.models import Site
-
-from catalogue.models import (
-    Parameter,
-    Reference,
-    AstroObjectClassification,
-    AstroObject,
-    Profile,
-    Auxiliary,
-    Observation,
-    Rank,
-)
 from catalogue.factories import (
-    ParameterFactory,
-    ReferenceFactory,
     AstroObjectClassificationFactory,
     AstroObjectFactory,
-    ProfileFactory,
     AuxiliaryFactory,
     ObservationFactory,
+    ParameterFactory,
+    ProfileFactory,
     RankFactory,
+    ReferenceFactory,
 )
+from catalogue.models import (
+    AstroObject,
+    AstroObjectClassification,
+    Auxiliary,
+    Observation,
+    Parameter,
+    Profile,
+    Rank,
+    Reference,
+)
+from django.contrib.sites.models import Site
+from django.test import TestCase
 from tests.test_admin import AdminTestCase
-
 
 
 class ParameterAdminTestCase(AdminTestCase, TestCase):

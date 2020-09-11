@@ -1,11 +1,12 @@
 import os
 import sys
+
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
-env.read_env(
-    str((environ.Path(__file__) - 1).path(".env"))
-)
+env.read_env(str((environ.Path(__file__) - 1).path(".env")))
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,9 +27,7 @@ DATABASES = {
     "default": env.db("DATABASE_URL"),
 }
 
-CACHES = {
-    "default": env.cache()
-}
+CACHES = {"default": env.cache()}
 
 ALLOWED_HOSTS = ["*"]
 
@@ -44,13 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     "tinymce",
     "django_filters",
     "rest_framework",
     "rest_framework_datatables",
     "silk",
-
     "about",
     "accounts",
     "catalogue",
@@ -100,15 +97,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 
@@ -140,7 +131,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"),
 ]
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000
 
 # Use a custom model for account management, which makes it much easier to
 # extend the model later on.
@@ -160,37 +151,37 @@ SERVER_EMAIL = "info@supaharris.com"
 FILEBROWSER_DEFAULT_PERMISSIONS = 0o644
 FILEBROWSER_OVERWRITE_EXISTING = True
 FILEBROWSER_EXTENSIONS = {
-    "Image": [".jpg",".jpeg",".gif",".png",".tif",".tiff"],
-    "Document": [], # [".pdf",".doc",".rtf",".txt",".xls",".csv"],
-    "Video": [], # [".mov",".wmv",".mpeg",".mpg",".avi",".rm"],
-    "Audio": [], # [".mp3",".mp4",".wav",".aiff",".midi",".m4p"]
+    "Image": [".jpg", ".jpeg", ".gif", ".png", ".tif", ".tiff"],
+    "Document": [],  # [".pdf",".doc",".rtf",".txt",".xls",".csv"],
+    "Video": [],  # [".mov",".wmv",".mpeg",".mpg",".avi",".rm"],
+    "Audio": [],  # [".mp3",".mp4",".wav",".aiff",".midi",".m4p"]
 }
 FILEBROWSER_ADMIN_VERSIONS = ["big"]  # "thumbnail", "small", "medium", "large"
 
 
 # https://www.tinymce.com/docs/demo/full-featured/
 TINYMCE_DEFAULT_CONFIG = {
-  "selector": "textarea",
-  "height": 500,
-  "theme": "modern",
-  "plugins": [
-    "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-    "searchreplace wordcount visualblocks visualchars code fullscreen",
-    "insertdatetime media nonbreaking save table contextmenu directionality",
-    "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc"
-  ],
-  "toolbar1": "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-  "toolbar2": "print preview image | forecolor backcolor emoticons | codesample",
-  "image_advtab": True,
-  "templates": [
-    { "title": "Test template 1", "content": "Test 1" },
-    { "title": "Test template 2", "content": "Test 2" }
-  ],
-  "content_css": [
-    "//fonts.googleapis.com/css?family=Lato:300,300i,400,400i",
-    "//www.tinymce.com/css/codepen.min.css",
-    "/static/css/main.css",
-  ],
+    "selector": "textarea",
+    "height": 500,
+    "theme": "modern",
+    "plugins": [
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "searchreplace wordcount visualblocks visualchars code fullscreen",
+        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc",
+    ],
+    "toolbar1": "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    "toolbar2": "print preview image | forecolor backcolor emoticons | codesample",
+    "image_advtab": True,
+    "templates": [
+        {"title": "Test template 1", "content": "Test 1"},
+        {"title": "Test template 2", "content": "Test 2"},
+    ],
+    "content_css": [
+        "//fonts.googleapis.com/css?family=Lato:300,300i,400,400i",
+        "//www.tinymce.com/css/codepen.min.css",
+        "/static/css/main.css",
+    ],
 }
 # TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
@@ -202,11 +193,9 @@ TINYMCE_MINIMAL_CONFIG = {
     "menubar": False,
     "statusbar": False,
     "elementpath": False,
-    "plugins": [
-        "link paste autolink code",
-    ],
+    "plugins": ["link paste autolink code",],
     "toolbar1": "undo redo | bold italic | bullist numlist outdent indent | link code",
-    "toolbar2": ""
+    "toolbar2": "",
 }
 
 
@@ -221,15 +210,15 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": [
         "rest_framework_datatables.filters.DatatablesFilterBackend",
-        ],
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework_datatables.pagination.DatatablesPageNumberPagination",
-    "PAGE_SIZE": 50
+    "PAGE_SIZE": 50,
 }
 
 
 # Silky for profiling / monitoring the api response times
 SILKY_AUTHENTICATION = True
-SILKY_AUTHORISATION = True   # default is_staff=True; overwrite below
+SILKY_AUTHORISATION = True  # default is_staff=True; overwrite below
 SILKY_PERMISSIONS = lambda user: user.is_superuser
 SILKY_PYTHON_PROFILER = False
 SILKY_PYTHON_PROFILER_BINARY = False
@@ -244,11 +233,9 @@ SILKY_META = True  # to check the effect Silk itself has on response time
 
 # Sentry for error reporting
 SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+
 sentry_sdk.init(
-    dsn=SENTRY_DSN_API,
-    integrations=[DjangoIntegration()],
+    dsn=SENTRY_DSN_API, integrations=[DjangoIntegration()],
 )
 
 
@@ -264,39 +251,29 @@ LOGGING = {
             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
             "style": "{",
         },
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
+        "simple": {"format": "{levelname} {message}", "style": "{",},
     },
-    "filters": {
-        "require_debug_true": {
-            "()": "django.utils.log.RequireDebugTrue",
-        },
-    },
+    "filters": {"require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},},
     "handlers": {
         "console": {
             "level": "DEBUG",
             "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
-            "formatter": "simple"
+            "formatter": "simple",
         },
         "mail_admins": {
             "level": "ERROR",
             "class": "django.utils.log.AdminEmailHandler",
-        }
+        },
     },
     "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "propagate": True,
-        },
+        "django": {"handlers": ["console"], "propagate": True,},
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
             "propagate": False,
         },
-    }
+    },
 }
 
 
@@ -308,7 +285,9 @@ if DEBUG:
         "django_extensions",
     ]
 
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware", ]
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
 
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 

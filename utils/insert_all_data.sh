@@ -41,8 +41,8 @@ docker exec supaharris_django_1 python manage.py \
 
 echo -e "\n4. Correcting Site instance [for localhost]"
 docker exec supaharris_django_1 python manage.py shell -c '
-from django.contrib.sites.models import Site; 
-Site.objects.all().delete(); 
+from django.contrib.sites.models import Site;
+Site.objects.all().delete();
 Site.objects.create(id=1, name="localhost:8000", domain="localhost:8000")
 print("  {0}\n".format(Site.objects.all()))'
 

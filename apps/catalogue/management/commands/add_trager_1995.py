@@ -1,23 +1,20 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sys
+
 import numpy
-
-from django.conf import settings
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-
 from catalogue.models import (
-    Profile,
-    Reference,
-    Parameter,
-    Observation,
     AstroObject,
     AstroObjectClassification,
+    Observation,
+    Parameter,
+    Profile,
+    Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_trager_1995 import parse_trager_1995_gc
-from data.parse_trager_1995 import parse_trager_1995_tables
+from data.parse_trager_1995 import parse_trager_1995_gc, parse_trager_1995_tables
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 
 def add_trager_1995_table2(logger, table2):
@@ -39,7 +36,7 @@ def add_trager_1995_profiles(logger, gc, tables):
 
     Nentries = len(gc)
     for i, gc_name in enumerate(gc["Name"]):
-        logger.debug("\n{0}/{1}: {2}".format(i+1, Nentries, gc_name))
+        logger.debug("\n{0}/{1}: {2}".format(i + 1, Nentries, gc_name))
         ao = AstroObject.objects.filter(name=gc_name).first()
         if ao:
             logger.info("  Found the AstroObject: {0}".format(ao))
@@ -47,12 +44,12 @@ def add_trager_1995_profiles(logger, gc, tables):
             logger.info("  Did not find AstroObject")
             void = input("ERROR. Press any key to continue")
 
-        igc, = numpy.where(tables["Name"] == gc_name)
+        (igc,) = numpy.where(tables["Name"] == gc_name)
         logger.debug("  Profile has {} entries".format(len(tables[igc])))
 
         ikeep = Ellipsis
         if gc_name == "NGC 2419":  # the data shows two radial profiles
-            ikeep, = numpy.where(
+            (ikeep,) = numpy.where(
                 (tables[igc]["DataSet"] != "CGB1")
                 & (tables[igc]["DataSet"] != "CGB2")
                 & (tables[igc]["DataSet"] != "CGR1")

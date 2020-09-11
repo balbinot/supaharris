@@ -27,7 +27,7 @@ $(document).ready(function() {
                     } else {
                         return '---';
                     }
-                    
+
                     if(type === 'display'){
                         data = '<a target="_blank" href="' + data + '">' + ads_or_arxiv + '</a>';
                     }
@@ -37,4 +37,3 @@ $(document).ready(function() {
         ]
     });
 });
-

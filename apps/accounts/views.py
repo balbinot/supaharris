@@ -1,13 +1,11 @@
-from django.views import generic
-from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.contrib.auth import login
-from django.contrib.auth import authenticate
+from accounts.forms import UserModelCreationForm
+from accounts.models import UserModel
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-
-from accounts.models import UserModel
-from accounts.forms import UserModelCreationForm
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
 
 
 class RegisterView(generic.CreateView):
@@ -17,7 +15,10 @@ class RegisterView(generic.CreateView):
 
     def form_valid(self, form):
         valid = super(RegisterView, self).form_valid(form)
-        email, password = form.cleaned_data.get("email"), form.cleaned_data.get("password1")
+        email, password = (
+            form.cleaned_data.get("email"),
+            form.cleaned_data.get("password1"),
+        )
         user = authenticate(email=email, password=password)
         if user is not None:
             login(self.request, user)

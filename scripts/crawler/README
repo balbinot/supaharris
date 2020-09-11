@@ -1,4 +1,4 @@
-This is the data crawler. It goes through VIzier or PDF files to extract tables. 
+This is the data crawler. It goes through VIzier or PDF files to extract tables.
 
 The goal is to build a pandas dataframe for each reference where the parameter
 name is standard. Here is a list of the parameters and a brief description

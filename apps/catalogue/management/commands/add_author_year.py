@@ -1,27 +1,27 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sys
-from django.conf import settings
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
 
 from catalogue.models import (
-    Reference,
-    Parameter,
-    Observation,
     AstroObject,
     AstroObjectClassification,
+    Observation,
+    Parameter,
+    Reference,
 )
-from catalogue.utils import map_names_to_ids
-from catalogue.utils import PrepareSupaHarrisDatabaseMixin
+from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
 from data.parse_author_year import parse_author_year_data
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
     help = "Add ReplaceMe data to the database"
 
     def handle(self, *args, **options):
-        super().handle(print_info=True, *args, **options)  # to run our Mixin modifications
+        super().handle(
+            print_info=True, *args, **options
+        )  # to run our Mixin modifications
         return
 
         cmd = __file__.split("/")[-1].replace(".py", "")
@@ -41,17 +41,20 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
         # for an explanation of how to retrieve/create items from/in the database.
         R_Sun = Parameter.objects.filter(name="R_Sun").first()
         if R_Sun:
-            self.logger.info("\nThe parameter is available: R_Sun.name = {0}".format(R_Sun.name))
+            self.logger.info(
+                "\nThe parameter is available: R_Sun.name = {0}".format(R_Sun.name)
+            )
         else:
-            self.logger.info("\nThe parameter is not available. It may be needed to create it")
+            self.logger.info(
+                "\nThe parameter is not available. It may be needed to create it"
+            )
             # See apps/catalogue/models.py for the definition and requirements of Parameter
             R_Sun = Parameter.objects.create(
                 name="R_Sun",  # must be a string, max 64 characters
                 description="Distance to the Sun",  # must be a string, max. 256 characters
                 unit="kpc",  # must be a string, max 63 characters. Note that the unit must comply with astropy.unit.
-                scale=1.0  # must be a float. This is the scale by which parameters must be multiplied by.
+                scale=1.0,  # must be a float. This is the scale by which parameters must be multiplied by.
             )
-
 
         # We would like to match against the name of an object for many
         # possible variations. The name_id_map contains variations in hopes
@@ -73,8 +76,13 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             # to add may
             if gc_name in name_id_map:
                 gc = AstroObject.objects.get(id=name_id_map[gc_name])
-                self.logger.info("Found: {0}{1} for '{2}'".format(gc.name,
-                    " ({0})".format(gc.altname) if gc.altname else "", gc_name))
+                self.logger.info(
+                    "Found: {0}{1} for '{2}'".format(
+                        gc.name,
+                        " ({0})".format(gc.altname) if gc.altname else "",
+                        gc_name,
+                    )
+                )
                 created = False
             else:
                 gc, created = AstroObject.objects.get_or_create(name=gc_name)
@@ -89,9 +97,6 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             gc.save()
 
             observation = Observation.objects.create(
-                reference=reference,
-                astro_object=gc,
-                parameter=R_Sun,
-                value=gc_R_Sun,
+                reference=reference, astro_object=gc, parameter=R_Sun, value=gc_R_Sun,
             )
             self.logger.info("Created the Observation: {0}".format(observation))

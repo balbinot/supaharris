@@ -1,7 +1,7 @@
 function retrieve_reference(pk) {
-    $.ajax({ 
-        type: 'GET', 
-        url: '/api/v1/catalogue/reference/' + pk + '?format=datatables', 
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/catalogue/reference/' + pk + '?format=datatables',
         dataType: 'json',
         async: true,
         success: function(reference) {
@@ -33,7 +33,7 @@ function retrieve_reference(pk) {
                 r[++n] = '<tr><th>External URL</th><td>---</td></tr>';
             }
             r[++n] = '</tbody>';
-            $('#reference').html(r.join('')); 
+            $('#reference').html(r.join(''));
         }
     });
 }
