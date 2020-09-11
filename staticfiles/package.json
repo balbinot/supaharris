@@ -25,7 +25,7 @@
         "url": "https://github.com/tlrh314/supaharris"
     },
     "dependencies": {
-        "@bokeh/bokehjs": "^2.0.2",
+        "@bokeh/bokehjs": "^2.2.0",
         "@fortawesome/fontawesome-free": "^5.14.0",
         "bootstrap": "^4.5.0",
         "chart.js": "^2.9.3",

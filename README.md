@@ -20,7 +20,7 @@
 
 ## **Dependencies**
 - Python 3.8.5
-- Django 2.2.15
+- Django 2.2.16
 - See and install `requirements.txt` for full dependencies
 
 ## How to add additional databases?
