@@ -1,7 +1,6 @@
 import logging
 
 import factory
-import numpy
 from catalogue.models import (
     AstroObject,
     AstroObjectClassification,
@@ -12,14 +11,13 @@ from catalogue.models import (
     Rank,
     Reference,
 )
-from django.conf import settings
 from faker import Factory
 
 faker = Factory.create("en_UK")
 logger = logging.getLogger(__name__)
 
 
-class ParameterFactory(factory.DjangoModelFactory):
+class ParameterFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Parameter
         django_get_or_create = ("name",)
@@ -50,7 +48,7 @@ def generate_bib_code(author=None, year=None, journal=None, volume=None, pages=N
     return bib_code
 
 
-class ReferenceFactory(factory.DjangoModelFactory):
+class ReferenceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Reference
 
@@ -92,7 +90,7 @@ class ReferenceFactory(factory.DjangoModelFactory):
             break
 
 
-class AstroObjectClassificationFactory(factory.DjangoModelFactory):
+class AstroObjectClassificationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = AstroObjectClassification
         django_get_or_create = ("name",)
@@ -101,7 +99,7 @@ class AstroObjectClassificationFactory(factory.DjangoModelFactory):
     abbreviation = factory.LazyAttribute(lambda _: faker.name())
 
 
-class AstroObjectFactory(factory.DjangoModelFactory):
+class AstroObjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = AstroObject
         django_get_or_create = ("name",)
@@ -124,7 +122,7 @@ class AstroObjectFactory(factory.DjangoModelFactory):
             break
 
 
-class ProfileFactory(factory.DjangoModelFactory):
+class ProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Profile
 
@@ -137,7 +135,7 @@ class ProfileFactory(factory.DjangoModelFactory):
     y_description = factory.Sequence(lambda n: "y{0}".format(n))
 
 
-class AuxiliaryFactory(factory.DjangoModelFactory):
+class AuxiliaryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Auxiliary
 
@@ -147,7 +145,7 @@ class AuxiliaryFactory(factory.DjangoModelFactory):
     # url
 
 
-class ObservationFactory(factory.DjangoModelFactory):
+class ObservationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Observation
 
@@ -162,7 +160,7 @@ class ObservationFactory(factory.DjangoModelFactory):
     # sigma_down
 
 
-class RankFactory(factory.DjangoModelFactory):
+class RankFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Rank
 

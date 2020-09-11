@@ -1,12 +1,11 @@
 import factory
 from accounts.models import UserModel
-from django.conf import settings
 from faker import Factory
 
 faker = Factory.create("en_UK")
 
 
-class UserModelFactory(factory.DjangoModelFactory):
+class UserModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserModel
         django_get_or_create = ("email",)

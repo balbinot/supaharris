@@ -120,6 +120,41 @@
   certificate warning of the browser)
 
 
+### Testing the code base
+To run all the tests
+
+- `python manage.py test apps`
+
+Or to run tests in one specific file
+
+- `python manage.py test apps.accounts.tests.test_admin`
+
+Or to run one specific `TestCase`
+
+- `python manage.py test apps.accounts.tests.test_admin.ParameterAdminTestCase`
+
+Or to run one specific test in one specific `TestCase`
+
+- `python manage.py test apps.accounts.tests.test_admin.ParameterAdminTestCase.test_login_of_admin_200`
+
+To speed up running the test suite one can keep the database afterwards so the
+next iteration does not need to create it:
+
+- `python manage.py test apps --keepdb`
+
+To run the tests /w `coverage`
+
+- `coverage run --source='.' manage.py test apps --keepdb`
+
+  - Inspect the Coverage report or html
+    - `coverage report`
+    - `coverage html`
+
+Open the Coverage report, e.g. in a browser on the Docker host (not in the container)
+
+- `open htmlcov/index.html`
+
+
 ## Generate ADS API Token
 
 Creation of a References requires the ADS or arXiv url, and all data are automatically
