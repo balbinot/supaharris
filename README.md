@@ -19,7 +19,7 @@
 
 
 ## **Dependencies**
-- Python 3.8.5
+- Python 3.8.6
 - Django 2.2.16
 - See and install `requirements.txt` for full dependencies
 
@@ -91,7 +91,7 @@
   (see [Docker docs[(https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
-- Build the image: `docker build -t supaharris .`
+- Build the image /w [BuildKit](https://stackoverflow.com/a/58021389): `DOCKER_BUILDKIT=1 docker build -t supaharris .`
 - Setup local settings: `cp settings/.env.example settings/.env`
 - Edit `settings/.env` to tailor to your machine.
 - Run the server: `docker run --rm -it -v "$(pwd)/settings/.env:/supaharris/settings/.env" -v "$(pwd)":/supaharris -p 1337:1337
