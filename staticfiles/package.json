@@ -25,10 +25,10 @@
         "url": "https://github.com/tlrh314/supaharris"
     },
     "dependencies": {
-        "@bokeh/bokehjs": "^2.2.0",
+        "@bokeh/bokehjs": "^2.2.2",
         "@fortawesome/fontawesome-free": "^5.15.1",
-        "bootstrap": "^4.5.0",
-        "chart.js": "^2.9.3",
+        "bootstrap": "^4.5.3",
+        "chart.js": "^2.9.4",
         "cookieconsent": "^3.1.1",
         "datatables.net-bs4": "^1.10.22",
         "jquery": "^3.5.1",
@@ -37,7 +37,7 @@
         "popper.js": "^1.16.1"
     },
     "devDependencies": {
-        "browser-sync": "^2.26.10",
+        "browser-sync": "^2.26.13",
         "gulp": "^4.0.2",
         "gulp-autoprefixer": "^7.0.1",
         "gulp-clean-css": "^4.3.0",
