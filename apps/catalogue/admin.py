@@ -31,7 +31,17 @@ class ParameterAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        (None, {"fields": ("name", "description", "unit", "scale",)}),
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "description",
+                    "unit",
+                    "scale",
+                )
+            },
+        ),
         (
             "Meta",
             {
@@ -163,7 +173,16 @@ class AstroObjectAdmin(admin.ModelAdmin):
     filter_horizontal = ("classifications",)
 
     fieldsets = (
-        (None, {"fields": ("name", "altname", "classifications",)}),
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "altname",
+                    "classifications",
+                )
+            },
+        ),
         (
             "Meta",
             {
@@ -228,7 +247,11 @@ class ObservationAdmin(admin.ModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .select_related("reference", "astro_object", "parameter",)
+            .select_related(
+                "reference",
+                "astro_object",
+                "parameter",
+            )
         )
 
     def save_model(self, request, obj, form, change):
@@ -258,7 +281,13 @@ class RankAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("observation",)
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "observation",
+            )
+        )
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user
@@ -284,7 +313,15 @@ class AuxiliaryAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {"fields": ("astro_object", "reference", "description", "file", "url",)},
+            {
+                "fields": (
+                    "astro_object",
+                    "reference",
+                    "description",
+                    "file",
+                    "url",
+                )
+            },
         ),
         (
             "Meta",
@@ -348,7 +385,12 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return (
-            super().get_queryset(request).select_related("reference", "astro_object",)
+            super()
+            .get_queryset(request)
+            .select_related(
+                "reference",
+                "astro_object",
+            )
         )
 
     def save_model(self, request, obj, form, change):

@@ -13,15 +13,16 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
+from django.conf import settings
+from django.core.files import File
+from django.core.management.base import BaseCommand, CommandError
+
 from data.parse_deBoer_2019 import (
     fix_gc_names,
     parse_deBoer_2019_fits,
     parse_deBoer_2019_member_stars,
     parse_deBoer_2019_stitched_profiles,
 )
-from django.conf import settings
-from django.core.files import File
-from django.core.management.base import BaseCommand, CommandError
 
 BASEDIR = "/" + __file__.split("/")[1] + "/data/MW_GCS_deBoer2019/"
 

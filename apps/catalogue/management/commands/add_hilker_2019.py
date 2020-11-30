@@ -15,6 +15,9 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
+from django.conf import settings
+from django.core.management.base import BaseCommand
+
 from data.parse_hilker_2019 import (
     parse_baumgardt_2019_mnras_482_5138_table1,
     parse_baumgardt_2019_mnras_482_5138_table4,
@@ -24,8 +27,6 @@ from data.parse_hilker_2019 import (
     parse_individual_rvs_of_stars_in_field_of_clusters,
     scrape_individual_fits_from_baumgardt_website,
 )
-from django.conf import settings
-from django.core.management.base import BaseCommand
 
 
 def create_references(logger):
@@ -131,7 +132,8 @@ def create_new_gcs(logger, GC):
     # Create GC that has not been encoutered, and get the altname right
     # Laevens+ 2014: https://ui.adsabs.harvard.edu/abs/2014ApJ...786L...3L
     laevens1, created = AstroObject.objects.get_or_create(
-        name="Laevens 1", altname="Crater",
+        name="Laevens 1",
+        altname="Crater",
     )
     laevens1.classifications.add(GC)
     if created:
@@ -140,7 +142,9 @@ def create_new_gcs(logger, GC):
         logger.info("  Found: {0}".format(laevens1))
 
     # Minniti+ 2017: https://ui.adsabs.harvard.edu/abs/2017ApJ...838L..14M
-    fsr1716, created = AstroObject.objects.get_or_create(name="FSR 1716",)
+    fsr1716, created = AstroObject.objects.get_or_create(
+        name="FSR 1716",
+    )
     fsr1716.classifications.add(GC)
     if created:
         logger.info("  Created: {0}".format(fsr1716))
@@ -149,7 +153,9 @@ def create_new_gcs(logger, GC):
 
     # Mercer+ 2005: https://ui.adsabs.harvard.edu/abs/2005AJ....129..239K
     # Longmore+ 2011: https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..465L
-    mercer5, created = AstroObject.objects.get_or_create(name="Mercer 5",)
+    mercer5, created = AstroObject.objects.get_or_create(
+        name="Mercer 5",
+    )
     mercer5.classifications.add(GC)
     if created:
         logger.info("  Created: {0}".format(mercer5))

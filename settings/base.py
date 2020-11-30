@@ -97,9 +97,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 
@@ -193,7 +199,9 @@ TINYMCE_MINIMAL_CONFIG = {
     "menubar": False,
     "statusbar": False,
     "elementpath": False,
-    "plugins": ["link paste autolink code",],
+    "plugins": [
+        "link paste autolink code",
+    ],
     "toolbar1": "undo redo | bold italic | bullist numlist outdent indent | link code",
     "toolbar2": "",
 }
@@ -235,7 +243,8 @@ SILKY_META = True  # to check the effect Silk itself has on response time
 SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
 
 sentry_sdk.init(
-    dsn=SENTRY_DSN_API, integrations=[DjangoIntegration()],
+    dsn=SENTRY_DSN_API,
+    integrations=[DjangoIntegration()],
 )
 
 
@@ -251,9 +260,16 @@ LOGGING = {
             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
             "style": "{",
         },
-        "simple": {"format": "{levelname} {message}", "style": "{",},
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
     },
-    "filters": {"require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},},
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
     "handlers": {
         "console": {
             "level": "DEBUG",
@@ -267,7 +283,10 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django": {"handlers": ["console"], "propagate": True,},
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
+        },
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",

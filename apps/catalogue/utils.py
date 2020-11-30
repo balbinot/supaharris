@@ -1,6 +1,7 @@
 import logging
 
 from catalogue.models import AstroObject, AstroObjectClassification, Parameter
+
 from utils import convert_gc_names_from_sh_to_any
 
 
@@ -38,9 +39,10 @@ class PrepareSupaHarrisDatabaseMixin(object):
 
         try:
             ra = Parameter.objects.get(name="RA")
-            assert ra.id == 1, (
-                "Incorrect id for Parameter"
-                + " 'RA', expected 1 but found {0}".format(ra.id)
+            assert (
+                ra.id == 1
+            ), "Incorrect id for Parameter" + " 'RA', expected 1 but found {0}".format(
+                ra.id
             )
         except Parameter.DoesNotExist:
             self.logger.warning(

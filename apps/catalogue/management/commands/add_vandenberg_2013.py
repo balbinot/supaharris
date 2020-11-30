@@ -11,9 +11,10 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_vandenberg_2013 import read_vandenberg2013_data
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
+from data.parse_vandenberg_2013 import read_vandenberg2013_data
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):

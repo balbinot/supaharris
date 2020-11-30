@@ -7,6 +7,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from jsonfield import JSONField
+
 from utils import (
     scrape_reference_details_from_arxiv,
     scrape_reference_details_from_new_ads,
@@ -76,8 +77,8 @@ class Parameter(models.Model):
 
 
 class Reference(models.Model):
-    """ References to the literature have one required model field: ads_url.
-        All other entries will automatically be retrieved on-save! """
+    """References to the literature have one required model field: ads_url.
+    All other entries will automatically be retrieved on-save!"""
 
     # List from: http://adswww.harvard.edu/abs_doc/aas_macros.html
     JOURNALS = (
@@ -436,11 +437,15 @@ class Auxiliary(models.Model):
 
 class Observation(models.Model):
     reference = models.ForeignKey(
-        Reference, related_name="observations", on_delete=models.CASCADE,
+        Reference,
+        related_name="observations",
+        on_delete=models.CASCADE,
     )
 
     astro_object = models.ForeignKey(
-        AstroObject, related_name="observations", on_delete=models.CASCADE,
+        AstroObject,
+        related_name="observations",
+        on_delete=models.CASCADE,
     )
 
     parameter = models.ForeignKey(

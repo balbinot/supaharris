@@ -2,6 +2,7 @@ from accounts.factories import UserModelFactory
 from accounts.models import UserModel
 from django.contrib.sites.models import Site
 from django.test import TestCase
+
 from tests.test_admin import AdminTestCase
 
 

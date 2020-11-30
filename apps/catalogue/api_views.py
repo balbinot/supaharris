@@ -117,8 +117,14 @@ class ParameterViewSet(ReadOnlyModelViewSet):
 
 class ObservationViewSet(ReadOnlyModelViewSet):
     queryset = (
-        Observation.objects.select_related("parameter", "reference", "astro_object",)
-        .prefetch_related("astro_object__classifications",)
+        Observation.objects.select_related(
+            "parameter",
+            "reference",
+            "astro_object",
+        )
+        .prefetch_related(
+            "astro_object__classifications",
+        )
         .order_by("id")
     )
     serializer_class = ObservationSerializer
@@ -163,9 +169,17 @@ class ObservationTableViewset(ViewSet):
 
         h96 = Reference.objects.get(bib_code="1996AJ....112.1487H")
         relevant_observations = (
-            Observation.objects.filter(reference=h96,)
-            .select_related("parameter", "reference", "astro_object",)
-            .prefetch_related("astro_object__classifications",)
+            Observation.objects.filter(
+                reference=h96,
+            )
+            .select_related(
+                "parameter",
+                "reference",
+                "astro_object",
+            )
+            .prefetch_related(
+                "astro_object__classifications",
+            )
             .order_by("id")
         )
 

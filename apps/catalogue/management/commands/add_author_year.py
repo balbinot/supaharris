@@ -10,9 +10,10 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
-from data.parse_author_year import parse_author_year_data
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
+from data.parse_author_year import parse_author_year_data
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -97,6 +98,9 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             gc.save()
 
             observation = Observation.objects.create(
-                reference=reference, astro_object=gc, parameter=R_Sun, value=gc_R_Sun,
+                reference=reference,
+                astro_object=gc,
+                parameter=R_Sun,
+                value=gc_R_Sun,
             )
             self.logger.info("Created the Observation: {0}".format(observation))

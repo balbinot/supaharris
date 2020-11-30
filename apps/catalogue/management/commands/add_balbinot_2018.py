@@ -11,9 +11,10 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
-from data.parse_balbinot_2018 import parse_balbinot_2018
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
+from data.parse_balbinot_2018 import parse_balbinot_2018
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):

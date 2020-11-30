@@ -35,7 +35,11 @@ def index(request):
             reference=harris1996ed2010,
         )
         .values_list(
-            "astro_object__name", "parameter__name", "value", "sigma_up", "sigma_down",
+            "astro_object__name",
+            "parameter__name",
+            "value",
+            "sigma_up",
+            "sigma_down",
         )
         .order_by("id"),
         dtype=[
@@ -84,10 +88,14 @@ def index(request):
 
     # Plot the values we retrieved
     from bokeh.embed import components
-    from bokeh.plotting import figure, ColumnDataSource
+    from bokeh.plotting import ColumnDataSource, figure
 
     source = ColumnDataSource(
-        data=dict(x=l_lon, y=b_lat, names=[n.decode("utf-8") for n in names],)
+        data=dict(
+            x=l_lon,
+            y=b_lat,
+            names=[n.decode("utf-8") for n in names],
+        )
     )
 
     TOOLTIPS = [

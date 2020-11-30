@@ -11,12 +11,13 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin, map_names_to_ids
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
 from data.parse_miocchi_2013 import (
     parse_miocchi_2013_profiles,
     parse_miocchi_2013_table2,
 )
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
 
 
 def add_miocchi_2013_table2(logger):
@@ -78,7 +79,10 @@ def add_miocchi_2013_table2(logger):
         continue
 
         observation = Observation.objects.create(
-            reference=reference, astro_object=gc, parameter=R_Sun, value=gc_R_Sun,
+            reference=reference,
+            astro_object=gc,
+            parameter=R_Sun,
+            value=gc_R_Sun,
         )
         logger.info("Created the Observation: {0}".format(observation))
 

@@ -10,6 +10,9 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
 from data.parse_bica_2019 import (
     parse_bica_2019_refs,
     parse_bica_2019_table2,
@@ -17,8 +20,6 @@ from data.parse_bica_2019 import (
     parse_bica_2019_table4,
     parse_bica_2019_table5,
 )
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
 
 
 def create_Reference_instances_for_bica_refs(verbose=False):
@@ -36,7 +37,8 @@ def create_Reference_instances_for_bica_refs(verbose=False):
         ads_url = "https://ui.adsabs.harvard.edu/abs/{0}".format(bib_code)
         if bib_code == "-------------------":
             reference, created = Reference.objects.get_or_create(
-                ads_url="https://example.com/{0}".format(ref_code), bib_code=ref_code,
+                ads_url="https://example.com/{0}".format(ref_code),
+                bib_code=ref_code,
             )
             reference.title = ref
             reference.save()

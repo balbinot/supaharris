@@ -12,9 +12,10 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_harris_1996ed2010 import parse_harris1996ed2010
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
+from data.parse_harris_1996ed2010 import parse_harris1996ed2010
 
 
 class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
@@ -113,7 +114,8 @@ class Command(PrepareSupaHarrisDatabaseMixin, BaseCommand):
             self.logger.info("Inserting AstroObject {0} / {1}".format(i + 1, nClusters))
 
             cluster, created = AstroObject.objects.get_or_create(
-                name=harris.gid, altname=harris.name,
+                name=harris.gid,
+                altname=harris.name,
             )
             cluster.classifications.add(GC)
             cluster.save()

@@ -20,6 +20,7 @@ from catalogue.models import (
 )
 from django.contrib.sites.models import Site
 from django.test import TestCase
+
 from tests.test_admin import AdminTestCase
 
 

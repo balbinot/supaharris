@@ -61,16 +61,24 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_head_user_is_authenticated_200(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.head(reverse(self.list_uri),)
+        response = self.client.head(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.client.head(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.head(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_head_user_is_superuser_200(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.head(reverse(self.list_uri),)
+        response = self.client.head(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.client.head(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.head(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     ### OPTIONS requests --> allowed for anon, user and admin
@@ -104,16 +112,24 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_options_user_is_authenticated_200(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.options(reverse(self.list_uri),)
+        response = self.client.options(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.client.options(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.options(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_options_user_is_superuser_200(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.options(reverse(self.list_uri),)
+        response = self.client.options(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.client.options(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.options(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     ### GET requests --> allowed for anon, user and admin
@@ -159,21 +175,29 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_get_user_is_authenticated_200(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.get(reverse(self.list_uri),)
+        response = self.client.get(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.verify_get_list_response_data(response)
 
-        response = self.client.get(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.get(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.verify_get_detail_response_data(response)
 
     def test_get_user_is_superuser_200(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.get(reverse(self.list_uri),)
+        response = self.client.get(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.verify_get_list_response_data(response)
 
-        response = self.client.get(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.get(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.verify_get_detail_response_data(response)
 
@@ -187,16 +211,24 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_post_user_is_authenticated_403(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.post(reverse(self.list_uri),)
+        response = self.client.post(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        response = self.client.post(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.post(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_user_is_superuser(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.post(reverse(self.list_uri),)
+        response = self.client.post(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        response = self.client.post(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.post(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     ### PUT requests --> disabled for anon, user and admin
@@ -209,18 +241,26 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_put_user_is_authenticated_403(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.put(reverse(self.list_uri),)
+        response = self.client.put(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        response = self.client.put(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.put(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_put_user_is_superuser_405(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.put(reverse(self.list_uri),)
+        response = self.client.put(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-        response = self.client.put(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.put(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     ### PATCH requests --> disabled for anon, user and admin
@@ -233,17 +273,25 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_patch_user_is_authenticated_403(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.patch(reverse(self.list_uri),)
+        response = self.client.patch(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        response = self.client.post(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.post(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_user_is_superuser_405(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.patch(reverse(self.list_uri),)
+        response = self.client.patch(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        response = self.client.post(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.post(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     ### DELETE requests --> disabled for anon, user and admin
@@ -256,14 +304,22 @@ class AnonReadOnlyAPITestCase(object):
 
     def test_delete_user_is_authenticated_403(self):
         self.client.login(email=self.user.email, password=self.user_password)
-        response = self.client.delete(reverse(self.list_uri),)
+        response = self.client.delete(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        response = self.client.delete(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.delete(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_user_is_superuser_405(self):
         self.client.login(email=self.admin.email, password=self.admin_password)
-        response = self.client.delete(reverse(self.list_uri),)
+        response = self.client.delete(
+            reverse(self.list_uri),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        response = self.client.delete(reverse(self.detail_uri, args=[self.detail_pk]),)
+        response = self.client.delete(
+            reverse(self.detail_uri, args=[self.detail_pk]),
+        )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

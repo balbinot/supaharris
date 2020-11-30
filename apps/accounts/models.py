@@ -65,8 +65,8 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def email_user(
         self, subject, message, from_email=settings.DEFAULT_FROM_EMAIL, **kwargs
     ):
-        """ Sends an email to this User. Caution, from_email must contain domain
-            name in production! """
+        """Sends an email to this User. Caution, from_email must contain domain
+        name in production!"""
 
         EmailMessage(
             subject=subject,

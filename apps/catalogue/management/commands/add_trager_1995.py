@@ -12,9 +12,10 @@ from catalogue.models import (
     Reference,
 )
 from catalogue.utils import PrepareSupaHarrisDatabaseMixin
-from data.parse_trager_1995 import parse_trager_1995_gc, parse_trager_1995_tables
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
+from data.parse_trager_1995 import parse_trager_1995_gc, parse_trager_1995_tables
 
 
 def add_trager_1995_table2(logger, table2):
