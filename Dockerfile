@@ -39,11 +39,7 @@ COPY requirements.txt /supaharris/requirements.txt
 RUN --mount=type=cache,mode=0755,target=/root/.cache/pip set -ex && \
     pip install --upgrade pip \
     && pip install --upgrade pip \
-    && pip install -r /supaharris/requirements.txt \
-\
-    # Because pygraphviz has to be installed with additional flags
-    && pip install --install-option="--include-path=/usr/local/include/" \
-        --install-option="--library-path=/usr/local/lib/" pygraphviz
+    && pip install -r /supaharris/requirements.txt
 
 # NB, we link the repo at runtime (which 'overwrites' files copied in on build)
 # But production (when we run from image without linking the repo in) does use

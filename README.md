@@ -19,8 +19,8 @@
 
 
 ## **Dependencies**
-- Python 3.8.7
-- Django 2.2.17 (end of extended support for 2.2 LTS: April 2022)
+- Python 3.7|3.8|3.9
+- Django 3.1+
 - See and install `requirements.txt` for full dependencies
 
 ## How to add additional databases?
