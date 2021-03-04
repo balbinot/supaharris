@@ -3,7 +3,7 @@ astro-limepy==0.1.1
 astropy==4.2
 astroquery==0.4.1
 beautifulsoup4==4.9.3
-black==19.10b0
+black==20.8b1
 bokeh==2.3.0
 coverage==5.5
 Django==3.1.7
