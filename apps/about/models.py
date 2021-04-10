@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-
 from tinymce.models import HTMLField
 
 
@@ -21,5 +20,6 @@ class PrivacyPolicy(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{0} of {1}".format(self.title,
-            timezone.datetime.strftime(self.date, "%Y-%m-%d"))
+        return "{0} of {1}".format(
+            self.title, timezone.datetime.strftime(self.date, "%Y-%m-%d")
+        )

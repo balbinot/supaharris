@@ -1,5 +1,5 @@
 {% load static %}
-{% load staticfiles %}
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <meta name="Referrer" content="origin">
-    <meta name="robots" content="index, follow"/> 
+    <meta name="robots" content="index, follow"/>
 
     <meta name="author" content="Timo Halbesma, Eduardo Balbinot, David Hendriks"/>
     <meta name="copyright" content="Timo Halbesma, Eduardo Balbinot, David Hendriks" />
@@ -35,9 +35,6 @@
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vendor/cookieconsent/cookieconsent.min.css' %}" rel="styelsheet" type="text/css">
-    <link href="{% static 'vendor/bokehjs/css/bokeh.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'vendor/bokehjs/css/bokeh-widgets.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'vendor/bokehjs/css/bokeh-tables.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
 {% endblock stylesheets %}
 
@@ -46,8 +43,8 @@
     <script type="text/javascript">
         window.cookieconsent_options = {
             "message": "We use temporary cookies to improve functionality of "+
-                "the website. By using this website you accept our Privacy Policy.", 
-            "dismiss":"Accept!", "learnMore": "Learn More", 
+                "the website. By using this website you accept our Privacy Policy.",
+            "dismiss":"Accept!", "learnMore": "Learn More",
             "link": "{% url 'about:privacy_policy' %}", "theme": "dark-bottom"
         };
     </script>
@@ -84,7 +81,9 @@
   {% include 'footer.html' %}
 
   {% block bottomscripts %}
+  <!-- JS, Popper.js, and jQuery -->
   <script type="text/javascript" src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'vendor/popper/js/popper.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'vendor/jquery-typeahead/jquery.typeahead.min.js' %}"></script>

@@ -2,7 +2,6 @@ import copy
 
 from django import forms
 from django.conf import settings
-
 from tinymce.widgets import TinyMCE
 
 

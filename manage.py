@@ -15,19 +15,21 @@ if __name__ == "__main__":
 
     if "test" in sys.argv:
         import logging
+
         from django.conf import settings
+
         logging.disable(logging.CRITICAL)
         settings.DEBUG = False
-        settings.TEMPLATE_DEBUG = False
+        settings.TEMPLATES[0]["OPTIONS"]["debug"] = True  # for Coverage
         settings.PASSWORD_HASHERS = [
             "django.contrib.auth.hashers.MD5PasswordHasher",
         ]
-        # settings.DATABASES = {
-        #     "default": {
-        #         "ENGINE": "django.db.backends.sqlite3",
-        #         "NAME": "test_database",
-        #     }
-        # }
+        settings.DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": "test_database",
+            }
+        }
         settings.MIDDLEWARE = [
             "django.contrib.sessions.middleware.SessionMiddleware",
             "django.middleware.locale.LocaleMiddleware",
@@ -36,21 +38,5 @@ if __name__ == "__main__":
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "django.contrib.messages.middleware.MessageMiddleware",
         ]
-    if "test" in sys.argv and "--time" in sys.argv:
-        sys.argv.remove("--time")
-        from django import test
-        import time
-
-        def setUp(self):
-            self.startTime = time.time()
-
-        def tearDown(self):
-            total = time.time() - self.startTime
-            if total > 0.5 or True:
-                print("\n\t\033[91m[{0}] took {1:.3f}s\033[0m".format(
-                    self.id(), total))
-
-        test.TestCase.setUp = setUp
-        test.TestCase.tearDown = tearDown
 
     execute_from_command_line(sys.argv)

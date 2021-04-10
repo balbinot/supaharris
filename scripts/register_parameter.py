@@ -1,37 +1,40 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.base")
 
 from catalogue.models import Parameter
 
-pars = { 'RA     ' : ['Right Ascension J2000        ', 'degree'      ],
-         'Dec    ' : ['Declination J2000            ', 'degree'      ],
-         'L      ' : ['Galactic Longitude           ', 'degree'      ],
-         'B      ' : ['Galactic Latitude            ', 'degree'      ],
-         'R_Sun  ' : ['Distance to the Sun          ', 'kpc'         ],
-         '[Fe/H] ' : ['Metallicity                  ', 'dex'         ],
-         '[Mg/Fe]' : ['Magnesium abundance          ', 'dex'         ],
-         '[a/Fe] ' : ['Alpha-element abundance      ', 'dex'         ],
-         'E(B-V) ' : ['Redenning                    ', 'mag'         ],
-         'ellip  ' : ['Ellipticity                  ', ''            ],
-         'V_r    ' : ['Radial velocity              ', 'km/s'        ],
-         'pmRA   ' : ['RA proper motion             ', 'mas/yr'      ],
-         'pmDec  ' : ['Dec proper motion            ', 'mas/yr'      ],
-         'sig_v  ' : ['Radial velocity dispersion   ', 'km/s'        ],
-         'c      ' : ['King concentration parameter ', ''            ],
-         'r_c    ' : ['King core radius             ', 'arcmin'      ],
-         'r_h    ' : ['Half-light radius            ', 'arcmin'      ],
-         'mu_V   ' : ['Central surface brightness   ', 'mag/arcsec2' ],
-         'ecc    ' : ['Orbital eccentricity         ', ''            ],
-         'phase  ' : ['Orbital phase (1=apo; 0=peri)', ''            ],
-         'R_apo  ' : ['Apocentre radius             ', 'kpc'         ],
-         'R_peri ' : ['Pericentre radius            ', 'kpc'         ],
-         'R_J    ' : ['Jacobii radius               ', 'pc'          ],
-         'Mass   ' : ['Present day mass             ', 'Msun'        ],
-         'Mass_i'  : ['Intial mass                  ', 'Msun'        ],
-         'Age    ' : ['Age                          ', 'Gyr'         ]
-        }
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.base")
+
+
+pars = {
+    "RA     ": ["Right Ascension J2000        ", "degree"],
+    "Dec    ": ["Declination J2000            ", "degree"],
+    "L      ": ["Galactic Longitude           ", "degree"],
+    "B      ": ["Galactic Latitude            ", "degree"],
+    "R_Sun  ": ["Distance to the Sun          ", "kpc"],
+    "[Fe/H] ": ["Metallicity                  ", "dex"],
+    "[Mg/Fe]": ["Magnesium abundance          ", "dex"],
+    "[a/Fe] ": ["Alpha-element abundance      ", "dex"],
+    "E(B-V) ": ["Redenning                    ", "mag"],
+    "ellip  ": ["Ellipticity                  ", ""],
+    "V_r    ": ["Radial velocity              ", "km/s"],
+    "pmRA   ": ["RA proper motion             ", "mas/yr"],
+    "pmDec  ": ["Dec proper motion            ", "mas/yr"],
+    "sig_v  ": ["Radial velocity dispersion   ", "km/s"],
+    "c      ": ["King concentration parameter ", ""],
+    "r_c    ": ["King core radius             ", "arcmin"],
+    "r_h    ": ["Half-light radius            ", "arcmin"],
+    "mu_V   ": ["Central surface brightness   ", "mag/arcsec2"],
+    "ecc    ": ["Orbital eccentricity         ", ""],
+    "phase  ": ["Orbital phase (1=apo; 0=peri)", ""],
+    "R_apo  ": ["Apocentre radius             ", "kpc"],
+    "R_peri ": ["Pericentre radius            ", "kpc"],
+    "R_J    ": ["Jacobii radius               ", "pc"],
+    "Mass   ": ["Present day mass             ", "Msun"],
+    "Mass_i": ["Intial mass                  ", "Msun"],
+    "Age    ": ["Age                          ", "Gyr"],
+}
 
 
 for p, v in pars.items():
@@ -40,15 +43,11 @@ for p, v in pars.items():
     par.save()
 
 
-
-
-
-
-#dbnames = [o.cluster_id for o in GlobularCluster.objects.all()]
-#r = Reference(name='Trager et al.', doi='10.1086/118116', ads='add later')
-#r.save()
+# dbnames = [o.cluster_id for o in GlobularCluster.objects.all()]
+# r = Reference(name='Trager et al.', doi='10.1086/118116', ads='add later')
+# r.save()
 #
-#def insert_into_django():
+# def insert_into_django():
 #    # Emptying the tables
 #    for c in Profile.objects.all():
 #        c.delete()

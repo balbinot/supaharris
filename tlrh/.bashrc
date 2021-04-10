@@ -21,7 +21,7 @@ HISTFILESIZE=20000
 # Do not override when using '>', '>&' and '>>' redirection operators
 set -o noclobber
 
-# Get them lovely VI bindings bro. 
+# Get them lovely VI bindings bro.
 set -o vi
 
 export EDITOR=vim

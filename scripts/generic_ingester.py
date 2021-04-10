@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 
@@ -13,24 +13,23 @@ Units ... leave to user
 
 """
 
-import pandas as pd
-from fuzzywuzzy import process
 import numpy as np
-
-# Django imports
+import pandas as pd
 from catalogue.models import *
+from fuzzywuzzy import process
 
 cnames = np.array([o.cname.strip() for o in GlobularCluster.objects.all()])
 rnames = np.array([o.rname.strip() for o in Reference.objects.all()])
 pnames = np.array([o.pname.strip() for o in Parameter.objects.all()])
-epnames = np.array(['e' + o.pname.strip() for o in Parameter.objects.all()])
+epnames = np.array(["e" + o.pname.strip() for o in Parameter.objects.all()])
 
-#try:
+# try:
 #    r = Reference(rname='Trager et al.', doi='10.1086/118116', ads='add later')
 #    r.save()
-#except ValueError:
+# except ValueError:
 #    print('Reference already exists, using it')
 #    r = Reference.objects.filter(rname='Trager et al.')[0]
+
 
 def check_ref(rname):
     """
@@ -42,12 +41,13 @@ def check_ref(rname):
     if b[-1] >= 90:
         # TODO: this should be a multiple choice input with the highest
         # ranking fuzzy matches where DOI would be displayed as well.
-        input('{} matched to {}; Continue? [Enter]'.format(b[0], rname))
-        return(b[0])
+        input("{} matched to {}; Continue? [Enter]".format(b[0], rname))
+        return b[0]
     else:
-        r = Reference(rname=rname, doi='', ads='')
+        r = Reference(rname=rname, doi="", ads="")
         r.save()
-        return(rname)
+        return rname
+
 
 def get_pars(f):
 
@@ -59,23 +59,25 @@ def get_pars(f):
     pdict = {}
     pdict = dict.fromkeys(pnames, [])
     for colname in f.columns:
-        j = (pnames == colname)
-        ej = (epnames == colname)
+        j = pnames == colname
+        ej = epnames == colname
         if any(j):
-            print('Found {} in file header'.format(pnames[j]))
+            print("Found {} in file header".format(pnames[j]))
             pdict[pnames[j][0]] = pdict[pnames[j][0]] + [colname]
         elif any(ej):
-            print('Found {} in file header as error column'.format(epnames[ej]))
+            print("Found {} in file header as error column".format(epnames[ej]))
             tmp = epnames[ej][0][1:]
             pdict[tmp] = pdict[tmp] + [colname]
 
         else:
             b = process.extractOne(colname, pnames)
-            print('{} not found but matched to {} with rank {}'.format(colname,
-                                                                       b[0],
-                                                                       b[-1]))
+            print(
+                "{} not found but matched to {} with rank {}".format(
+                    colname, b[0], b[-1]
+                )
+            )
 
-    return(pdict)
+    return pdict
 
 
 # args is passed from manager.py runscripts --script-args ...
@@ -96,19 +98,19 @@ def run(*args):
     print(f.index)
     for catname in catnames:
         b = process.extractOne(catname, cnames)
-        if b[-1] > 90: ## sucess theshold for fuzzy matching
+        if b[-1] > 90:  ## sucess theshold for fuzzy matching
             c = GlobularCluster(cname=b[0])
             for k in pdict.keys():
                 p = Parameter.objects.filter(pname=k)[0]
-                if len(pdict[k])==3:
+                if len(pdict[k]) == 3:
                     val = f.ix[catname][pdict[k][0]]
                     sigup = f.ix[catname][pdict[k][1]]
                     sigdown = f.ix[catname][pdict[k][2]]
-                elif len(pdict[k])==2:
+                elif len(pdict[k]) == 2:
                     val = f.ix[catname][pdict[k][0]]
                     sigup = f.ix[catname][pdict[k][1]]
                     sigdown = sigup
-                elif len(pdict[k])==1:
+                elif len(pdict[k]) == 1:
                     val = f.ix[catname][pdict[k][0]]
                     if val == np.nan:
                         val = None
@@ -118,8 +120,9 @@ def run(*args):
                     val = None
 
                 if val != None and pd.notna(val):
-                    o = Observation(pname=p, rname=r, cname=c, val=val,
-                                    sigup=sigup, sigdown=sigdown)
+                    o = Observation(
+                        pname=p, rname=r, cname=c, val=val, sigup=sigup, sigdown=sigdown
+                    )
                     print(o)
                     o.save()
 

@@ -1,14 +1,11 @@
 import copy
 
-from django import forms
-from django.contrib import admin
-from django.conf import settings
-
-from tinymce.widgets import TinyMCE
-
-from about.models import ContactInfo
-from about.models import PrivacyPolicy
 from about.forms import FixTinyMCEHasTooWideUIForm
+from about.models import ContactInfo, PrivacyPolicy
+from django import forms
+from django.conf import settings
+from django.contrib import admin
+from tinymce.widgets import TinyMCE
 
 
 @admin.register(ContactInfo)

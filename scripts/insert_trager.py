@@ -1,21 +1,21 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+import json
 import os
+import os.path
 import sys
+
+import matplotlib.pyplot as p
+import numpy as np
+from astropy.table import Table
+from astroquery.vizier import Vizier
+from catalogue.models import *
+from fuzzywuzzy import process
+
+from .parse_trager import RP
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.base")
 
-import numpy as np
-import matplotlib.pyplot as p
-from astroquery.vizier import Vizier
-from astropy.table import Table
-
-import os.path
-from fuzzywuzzy import process
-import json
-
-from .parse_trager import RP
-from catalogue.models import *
 
 f = RP()
 tragernames = f.list()
@@ -24,11 +24,12 @@ f.list_cols()
 dbnames = [o.cname for o in GlobularCluster.objects.all()]
 try:
     ## Create reference if does not exists
-    r = Reference(rname='Trager et al. 1995', doi='10.1086/118116', ads='add later')
+    r = Reference(rname="Trager et al. 1995", doi="10.1086/118116", ads="add later")
     r.save()
 except:
     ## reference already exists
-    r = Reference.objects.filter(rname='Trager et al.i 1995')[0]
+    r = Reference.objects.filter(rname="Trager et al.i 1995")[0]
+
 
 def insert_into_django():
     # Emptying the tables
@@ -37,24 +38,24 @@ def insert_into_django():
 
     for query in dbnames:
         b = process.extractOne(query, tragernames)
-        if b[-1] > 90: ## sucess theshold for fuzzy matching
-            print('{} matched to {}; producing json'.format(b[0], query))
+        if b[-1] > 90:  ## sucess theshold for fuzzy matching
+            print("{} matched to {}; producing json".format(b[0], query))
             tbl = f.get_rp(name=b[0])
-            logr = tbl['logr']
-            muV = tbl['muV']
-            w = tbl['Weight']
-            dset = tbl['DataSet']
+            logr = tbl["logr"]
+            muV = tbl["muV"]
+            w = tbl["Weight"]
+            dset = tbl["DataSet"]
 
-            odict = {'log(r/arcmin)': logr.tolist(),
-                     'mu_V': muV.tolist(),
-                     'W': w.tolist(),
-                     'label': dset.tolist(),}
-
-
+            odict = {
+                "log(r/arcmin)": logr.tolist(),
+                "mu_V": muV.tolist(),
+                "W": w.tolist(),
+                "label": dset.tolist(),
+            }
 
             # Inserting a reference for the Harris Catalogue
 
-            print('Inserting into database :')
+            print("Inserting into database :")
             # Now add json to every matched cluster Profile model
             do = Profile()
             do.cname = GlobularCluster.objects.filter(cname=query)[0]
@@ -65,12 +66,11 @@ def insert_into_django():
             do.profile = json.dumps(odict)
             do.save()
 
-
-        #cluster_id = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)
-        #ptype      = models.CharField('Type of profile', max_length=256, null=True, blank=True)
-        #profile    = JSONField('Profile')
-        #modpars    = JSONField('Model parameters')
-        #mtype      = models.CharField('Model flavour', max_length=256, null=True, blank=True)
+        # cluster_id = models.ForeignKey(GlobularCluster, on_delete=models.CASCADE)
+        # ptype      = models.CharField('Type of profile', max_length=256, null=True, blank=True)
+        # profile    = JSONField('Profile')
+        # modpars    = JSONField('Model parameters')
+        # mtype      = models.CharField('Model flavour', max_length=256, null=True, blank=True)
 
 
 insert_into_django()

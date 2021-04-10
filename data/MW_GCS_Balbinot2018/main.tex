@@ -1,0 +1,961 @@
+\documentclass[useAMS,usenatbib,fleqn]{mnras}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{lipsum}
+\usepackage{pdflscape}
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+
+% Definitions
+\newcommand{\mg}[1]{{\it{\textcolor{red}{MG:#1}}}}
+\newcommand{\Mi}{M_{\rm i}}
+\newcommand{\rh}{r_{\rm h}}
+\newcommand{\rj}{r_{\rm J}}
+\newcommand{\kpc}{{\rm kpc}}
+\newcommand{\gyr}{{\rm Gyr}}
+\newcommand{\rg}{R_{\rm G}}
+\newcommand{\vcirc}{V_{\rm c}}
+\newcommand{\feh}{\[Fe/H\]}
+\newcommand{\rapo}{R_{\rm apo}}
+\newcommand{\rperi}{R_{\rm peri}}
+\newcommand{\mud}{\mu_{\rm dyn}}
+\newcommand{\msun}{{\rm M}_\odot}
+\newcommand{\kms}{{\rm km}\,{\rm s}^{-1}}
+
+%\def\kms{{\rm km\,s^{-1}}}
+\def\deg{^{\circ}}
+\newcommand{\comm}[1]{#1}
+\newcommand{\red}[1]{#1}
+\newcommand{\remove}[1]{#1}
+
+%%% MF
+\def\ns{N^{\rm s}}
+\def\nsdot{\dot{N}^{\rm s}}
+\def\nrdot{\dot{N}^{\rm r}}
+\def\fifm{f^{\rm ifm}}
+\def\feh{{\rm [Fe/H]}}
+\def\md{m_{\rm d}}
+\def\sigmat{\sigma_t}
+\def\tmsright{\tau_{\rm ms,r}}
+\def\tmsleft{\tau_{\rm ms,l}}
+\newcommand{\mi}{m_{\rm i}}
+\newcommand{\mj}{m_j}
+\newcommand{\mr}{m_{\rm r}}
+
+\newcommand{\dr}{{\rm d}}
+\newcommand{\emacss}{{\sc emacss}}
+\newcommand{\nbin}{n_{\rm bin}}
+\newcommand{\nj}{N_j}
+\newcommand{\njs}{N_j^{\rm s}}
+\newcommand{\njr}{N_j^{\rm r}}
+\newcommand{\njdot}{\dot{N}_j}
+\newcommand{\njrdot}{\dot{N}_j^{\rm r}}
+\newcommand{\njsdot}{\dot{N}_j^{\rm s}}
+\newcommand{\njescdot}{\dot{N}_j^{\rm  esc}}
+\newcommand{\njsescdot}{\dot{N}_j^{\rm s, esc}}
+\newcommand{\njrescdot}{\dot{N}_j^{\rm r, esc}}
+\newcommand{\njssevdot}{\dot{N}_j^{\rm sev}}
+\newcommand{\nkrdot}{\dot{N}_k^{\rm r}}
+\newcommand{\nmdot}{\dot{N}}
+\newcommand{\tms}{\tau_{\rm ms}}
+\newcommand{\mto}{m_{\rm TO}}
+
+
+\title[The devil is in the tails]{The devil is in the tails: the role of
+globular cluster mass evolution on stream properties}
+\author[Balbinot \& Gieles]{Eduardo Balbinot\thanks{e.balbinot@surrey.ac.uk} 
+                            and Mark Gieles \\
+                            Department of Physics, University of Surrey, Guildford GU2 7XH, UK
+\\}
+
+\begin{document}
+\maketitle
+\label{firstpage}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+
+\begin{abstract}
+    We present a study of the effects of collisional dynamics on the formation
+    and detectability of cold tidal streams. A semi-analytical model for the
+    evolution of the stellar mass function was implemented and coupled to a fast
+    stellar stream simulation code, as well as the synthetic cluster evolution
+    code {\sc emacss} for the mass evolution as a function of a globular cluster
+    orbit. We find that the increase in the average mass of the escaping stars
+    for clusters close to dissolution has a major effect on the observable
+    stream surface density. As an example, we show that Palomar 5 would have
+    undetectable  streams (in an SDSS-like survey) if it was currently three
+    times more massive, despite the fact that a more massive cluster loses stars
+    at a higher rate. This bias due to the preferential escape of low-mass stars
+    is \comm{an alternative} explanation for the absence of tails near massive
+    clusters, than a dark matter halo associated with the cluster.  We explore
+    the orbits of a large sample of Milky Way globular clusters and derive their
+    initial masses and remaining mass fraction. Using properties of known tidal
+    tails we explore regions of parameter space that favour the detectability of
+    a stream. A list of high probability candidates is discussed.
+\end{abstract}
+
+\begin{keywords}
+   globular clusters: general, Galaxy: structure
+\end{keywords}
+
+\section{Introduction}
+
+Stellar streams are the long promised probes of the gravitational potential in
+galaxies. In the Milky Way (MW) these streams are visible as resolved stellar
+populations and upon the advent of large photometric surveys such as the Sloan
+Digital Sky Survey \citep[SDSS;][]{sdss} and the Dark Energy Survey
+\citep[DES;][]{des} began to be discovered in large numbers. These surveys
+revealed two types of streams: hot streams from disrupted high velocity
+dispersion, dark matter dominated dwarf galaxies, and cold streams from existing
+or completely dissolved globular clusters (GCs). The most remarkable examples of
+each type are the Sagittarius stream, a hot stream covering most of the sky
+\citep{Newberg02} and the  tidal tails of Palomar 5, a 22$\deg$ long cold
+stellar stream \citep{Odenkirchen01, Grillmair06, Bernard16}.
+
+While both kinds of streams are promising proxies of the gravitational potential
+of the MW \citep[e.g.][]{Koposov10, 2014MNRAS.445.3788G}, cold streams are
+appealing because of their simplicity and long phase mixing time
+\citep{Helmi99}. The progenitors of cold streams are GCs which have internal
+velocity dispersion ($\lesssim 10\,\kms$), much lower than their orbital
+velocity (a few $100\,\kms$). Stars that become unbound follow approximately the
+same orbit \comm{(with some offset, as shown by \citealt{Eyre09})}. Each unbound
+star can be seen as a test particle for the MW gravitational potential while the
+collection of escaper stars should approximately trace a single orbit in the
+underlying potential \citep{Koposov10}. 
+
+Several studies fail to find convincing signs of tails around MW GCs
+\citep{Leon00, Kuzma16}. The absence of tails may point at the presence of a
+dark matter halo surrounding the GC, preventing the stars from escaping
+\citep{1996ApJ...461L..13M}.  The lack of tails associated with a GC could also
+be because the GC is in a weak tidal field. This may explain the absence of
+tails from GCs at large Galactic centre, but not why there are no cold streams
+associated with massive GCs. From theory and numerical results we know that
+\comm{the mass-loss rate as the result of evaporation depends on the cluster mass
+$M$ and the Galactocentric distance $\rg$ as}: $\dot{M} \propto -M^{1/4}/R_{\rm
+G}$, for clusters evolving in an isothermal halo \citep*{Baumgardt01, Gieles11}.
+However, the most prominent cold streams observed are either progenitor-less or
+from low-mass GCs. One possible observational bias, proposed by \citet{Leon00},
+is the preferential loss of low-mass stars, which makes streams fainter. Indeed,
+observations show many GCs have mass functions that are depleted in low-mass
+stars \citep[see e.g.][]{Paust10}.
+
+In this paper we further investigate the interplay between the internal dynamics
+of GCs and its effect on the formation and structure of tidal tails. We focus on
+the preferential loss of low-mass stars due to mass segregation in the cluster
+and the evolution of the velocity dispersion of potential escaper stars,
+\comm{i.e. stars that are energetically unbound, but still association with the
+cluster \citep[see][]{2000MNRAS.318..753F}.}
+
+This paper is organized as follows: in section 2 we describe a method to evolve
+a GC mass function as it loses mass while orbiting the Galaxy. In section 3 we
+present a simple model for the mass evolution of a cluster in the Galaxy as well
+as up-to-date orbital parameters and mass estimates for a large sample of MW
+GCs. In section 4 we explore the conditions for the observability of cold
+streams and highlight noteworthy candidates for the search of streams. In
+section 5 we use a spray-particle tidal tail simulation of Palomar 5 to
+illustrate the impact of the preferential loss of low-mass stars in the
+visibility of tidal tails. In section 6 we give our conclusions in the light of
+upcoming surveys. 
+
+\section{Method}
+\label{sec:evolve_mf}
+Ideally, we would like to map progenitor properties (i.e. initial mass and
+orbit) to stream properties such as length, width, particle mass, and velocity
+dispersion. In the case of GCs this comes at the cost of $N$-body models which
+are computationally expensive. To avoid the complications of such models, we
+choose to use the fast cluster evolution code Evolve Me A Cluster of
+StarS\footnote{Available from
+\href{https://github.com/emacss/emacss}{https://github.com/emacss/emacss}}
+\citep[\textsc{emacss},][]{emacsscode, 2014MNRAS.437..916G, Alexander14}
+\comm{\emacss\ evolves several global cluster properties, such as the total
+bound mass $M$ and number of stars $N$, half-mass radius $\rh$, and parameters
+describing the degree of mass segregation and the profile of the cluster via
+coupled ordinary differential equations (ODEs). These ODEs include the effect of
+escape of stars over the tidal boundary (evaporation), mass-loss as the result
+of stellar evolution and the diffusion of energy as the result of two-body
+relaxation on $M$, $N$ and $\rh$. After a number of relaxation times have
+elapsed, the cluster is assumed to reach a stage of balanced evolution, in which
+the rate of change of the total cluster energy $E$ is set by the flow of energy
+through $\rh$, following \citet{H61}. For full details on the implementation we
+refer to \citet{Alexander14}.} The code needs only a fraction of a second to
+evolve a cluster until dissolution and the computational effort is
+$N$-independent. The code considers the effects of mass loss and expansion of
+the cluster as the result of stellar evolution, two-body relaxation and escape
+of stars due to a (static) tidal field.  On top of the existing \textsc{emacss}
+implementation, we build a semi-analytical prescription of the evolution of the
+mass function which is described in detail in the following section.
+
+\subsection{Mass function evolution}
+In this section we present an algorithm to numerically evolve the stellar mass
+function (MF). Various prescriptions for the time-dependent MF exist
+\citep[e.g.][]{2009A&A...507.1409K,Lamers13}. We aim to develop a
+prescription that can be coupled to the fast cluster code \emacss. Because
+\emacss\ solves a set of coupled ODEs, we develop a prescription for the rate of
+change of the number of stars and stellar remnants  as a function of stellar
+mass $m$. We aim to correctly describe the preferential ejection of low-mass
+stars as the result of two-body relaxation, and the formation of stellar
+remnants as the result of stellar evolution. Below we describe the algorithm.
+
+To evolve the MF of  stars and remnants, we define $\nbin\simeq100$
+logarithmically spaced mass bins between $0.1\,\msun$ and $100\,\msun$. At $t=0$
+the number of stars in each bin, $\nj$, is found from the stellar initial mass
+function (IMF, $\dr N/\dr\mi$, \comm{where $\mi$ is the initial mass of a star}),
+the total number of stars in the cluster $N$ and the width of the individual
+bins $\Delta \mj$ as
+
+\begin{equation}
+\nj= N \left.\frac{\dr N}{\dr\mi}\right|_{m_j} \Delta \mj
+\end{equation}
+such that $\sum_{j=1}^{\nbin} \nj = N$ and $\sum_{j=1}^{\nbin} \nj\mj = M_{\rm
+i}$, where $M_{\rm i}$ is the initial mass of the cluster. We then consider that
+$\nj = \njs  + \njr$, with $\njs$ the number of stars and $\njr$ the number of
+stellar remnants as a function of mass. At $t=0$ there are no remnants. 
+
+We then solve for $\njs$ and $\njr$ by integrating expressions for the rate
+of change of $\njdot = \njsdot + \njrdot$. Both stellar evolution and escape of
+stars contribute to these rates, which we discuss in the next sections. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stellar evolution}
+\label{ssec:sev}
+To  evolve stars by stellar evolution, we move stars that reach the end their
+main sequence life from $\njs$ to $\njr$.  We approximate  the main-sequence
+lifetimes by
+
+\begin{equation}
+\tms(\mi) = 0.21\exp\left(10.4\mi^{-0.322}\right),
+\label{eq:tms}
+\end{equation}
+which describes the main sequence life times of stars $0.5<\mi/\msun<30\,\msun$
+and $\feh=-0.5$ to within 10\% compared to the SSE (Single-Star Evolution)
+models of \citet{2000MNRAS.315..543H}, \comm{which provides a set of analytic
+    relations that approximate the evolution of stars of different masses and
+chemical composition}. \comm{In our MF evolution method,} stars are assumed to
+have a constant mass $\mi$ until $\tms(\mi)$ is reached and then their mass is
+reduced by a factor
+
+\begin{align}
+\fifm=
+\begin{cases}
+0 & \mi>10\,\msun,\\
+0.56(\mi/\msun)^{-0.56} & \mi\le10\,\msun.
+\end{cases}
+\end{align}
+
+Removing all stars with $\mi>10\,\msun$ corresponds to 0\% retention of black
+holes. A single relation for the masses of neutron stars and white dwarfs
+reproduces the results from SSE to within 10\%. The most massive neutron stars
+is $1.54\,\msun$ and a solar mass star results in a $0.56\,\msun$ white dwarf.
+
+\comm{We introduce stellar evolution by removing stars are at a rate}
+\begin{align}
+\njssevdot  = 
+\begin{cases}
+    -\njs\left(\dfrac{t-\tmsright}{\sigmat}\right), &t>\tmsright,\\
+0,& t<\tmsright,
+\end{cases}
+\end{align}
+where $\tmsright$ is the main sequence life time of a star with $m_j + 0.5\Delta
+m_j$ (i.e. corresponding to the right side of  bin $j$) and $\sigmat$ sets the
+speed with which the bin is emptied. From experiments we find smooth evolution
+of the mass function when using $\sigmat = 0.7(\tmsright-\tmsleft)$, where
+$\tmsleft = \tms(m_j-0.5\Delta m_j)$ i.e. the life time of a star with mass
+corresponding to the left side of bin  $j$.
+
+While stars are being removed, remnants are being created, hence we fill bins of
+the remnants mass function at a rate
+
+\begin{align}
+\nkrdot(\mto(t)\fifm)&=- \njssevdot,
+\end{align}
+where $\mto(t)$ is the turn-off mass at time $t$, which is found form the
+inverse of the main sequence time relation (equation~\ref{eq:tms}). The minus
+sign ensures that $\nkrdot\ge0$ (note that $\njssevdot<0$). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Escape}
+\label{ssec:escape}
+In the pre-collapse phase we assume that the escape rate is independent of
+stellar mass, i.e. $\njsdot = \njs \dot{N}/N$ (similarly for $\njrdot$), where
+$\dot{N}$ is the total escape rate of the cluster which comes from {\sc emacss}.
+After core collapse (also given by {\sc emacss}) we apply an escape rate to each
+bin
+
+\begin{align}
+\njescdot  = \dot{N} \frac{\njs + \njr}{N} \frac{g(m_j)}{\sum_j g(m_j)}
+\end{align}
+where
+
+\begin{align}
+g(m_j)  = 
+\begin{cases}
+1  - \left(m_j/\md\right)^{1/2} , &m_j<\md,\\
+0,                              &m_j\ge \md.
+\end{cases}
+\end{align}
+This simple functional form for $\njescdot$ was found by matching the time
+derivatives of the functional forms for the MF as a function of time given by
+\cite{Lamers13}. With a value of $\md\simeq1.1\,\msun$ we find a good
+agreement with results from $N$-body models (see example in Fig.~\ref{fig1}).
+The 100\% retention of stars and remnants more massive than $\md$ is 
+becoming problematic when less than a few \% of the initial mass is remaining,
+and hence this approximation is good enough for our purpose. The escape rate is
+divided over the stars and remnants as $\njsescdot = \njescdot \njs/\nj$
+(similarly for $\njrescdot$), such that $\njescdot = \njsescdot + \njrescdot$.
+
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{figs/fig1.pdf}
+    \caption{Comparison of the synthetic MF (solid lines) with the \texttt{uf14}
+    model from \citet{Lamers13}. The top two panels show the visible stars at
+    $\mu=0.28$ (left) and $\mu=0.16$ (right), \comm{where $\mu$ is the remaining
+    mass fraction in the cluster.} The dot-dashed line in both top panels is the
+    IMF. The two bottom panels show the MF of the stellar remnants, compared at
+    the same $\mu$ as before.}
+\label{fig1}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{figs/figmf.pdf}
+    \caption{Number of escapers (colour coded in log-scale) as a function of
+    time and mass for a simulated cluster with an initial mass of $2\times10^5$
+    M$_{\odot}$ on a circular orbit at a Galactocentric distance of 18 kpc
+    (similar to Palomar 5). The solid line shows the main-sequence turn-off mass
+    evolution, the dark dotted line is the median stellar mass remaining in the
+    cluster and the dark dashed line is the median mass of the escaper stars
+    while the grey dashed lines are mark the position of the first and third
+    quartiles (i.e. 50\% of the stars are between the grey lines).}
+\label{fig_heat}
+\end{figure}
+
+\subsection{Validation}
+
+To validate our implementation of the MF evolution we compare the predicted MF
+with one of the $N$-body simulations of \citet{Lamers13}. These simulations are
+setup with a Kroupa IMF \citep{Kroupa01} and include stellar evolution. We find
+that our model provides an accurate description of the MF evolution in these
+simulations.  In Fig.~\ref{fig1} we show a comparison of an $N$-body model with
+$N=131\,072$ particles on a circular orbit at a radius of 8.5 kpc in a
+logarithmic potential.  For illustrative purposes we compare our prediction with
+the $N$-body model at two different stages of dissolution $\mu = [0.16, 0.28]$,
+where $\mu$ is the remaining mass fraction of the cluster. We also show the
+predicted number of \comm{stellar remnants (mainly white dwarfs)} compared to
+the $N$-body results (bottom panels). We observe that the visible stars are very
+well represented by our synthetic model with only minor deviations at the
+turn-off mass due to our approximation of the main-sequence lifetime. The
+remnant MF is in good general agreement considering the simplicity of our
+method.
+
+Fig.~\ref{fig_heat} shows a summary of the escaper MF (EMF) evolution for a
+cluster that is near complete dissolution. We chose the initial conditions to
+reproduce the orbit of Palomar 5 \citep{Kuepper15} and the initial mass such
+that full dissolution is at $\sim$ 13 Gyr. Note that at $\sim$500 Myr there is
+an abrupt change in the EMF, this happens at core-collapse where the
+preferential loss of low-mass stars starts to take place. Also, as the cluster
+approaches 13 Gyr, the median mass of escapers rises significantly, accounting
+to more than 50\% of the stars above 0.45 $\msun$ and 25\% above 0.6 $\msun$.
+This has important consequences for the visibility of streams, which we
+discuss in section~\ref{sec:visibility}.
+
+\section{Mass evolution in the Galaxy}
+
+The framework developed here allows us to predict the mass spectrum of escaped
+stars of a cluster given $\mu$. Despite being a simple parametrisation,
+describing a cluster in terms of $\mu$ requires prior knowledge of its current
+mass ($M$), initial mass ($\Mi$), and mass loss rate $\dot{M}$.  Its current
+mass can be estimated from its integrated luminosity and/or kinematics, while
+$\Mi$ and $\dot{M}$ require understanding of its orbital properties.
+
+Here we adopt \textsc{emacss} in an iterative way to obtain $\Mi$ that correctly
+reproduces $M$ given its orbital properties. However, we need two missing
+ingredients, the cluster mass-loss history on eccentric orbits and its current
+mass-to-light ratio ($\Upsilon$).
+
+\comm{The version of \textsc{emacss} we use} is unable to evolve a cluster on an
+eccentric orbit. To overcome this, we evolve the cluster on a circular orbit at
+a Galactocentric radius $R_{\rm G,eqv}$, where the cluster has the same
+total lifetime.  \comm{This is justified by the results of
+\citet{2016MNRAS.455..596C} who  showed that the evolution of $M$ and $\rh$ are
+similar for clusters on orbits with different eccentricities, but with the same
+dissolution time.} This radius is given by \citep{Baumgardt03}
+
+\begin{equation}
+    \label{eq:eqvrad}
+    R_{\rm G,eqv} = \rapo(1-\epsilon),
+\end{equation}
+where $\rapo$ is the apocentre radius and $\epsilon$ is the orbital
+eccentricity.  These parameters are obtained by the orbit integration procedure
+outlined in the section \ref{sec:orbit}.
+
+With an approximation for the mass loss in eccentric orbits at hand, we now need
+a prescription for $\Upsilon$. Due to preferential loss of low-mass stars and
+stellar evolution, $\Upsilon$ evolves with time. Based on the work of
+\citet{Anders09} we model $\Upsilon_V$, i.e. the mass-to-light ratio using the
+luminosity in the $V$-band, as a linear function of \comm{the remaining mass in
+the cluster}
+
+\begin{equation}
+    \label{eq:mtl}
+    \Upsilon_{V} = 0.8 + 1.2\mud .
+\end{equation}
+
+Equation (\ref{eq:mtl}) gives $\Upsilon_V = 2$ if $\mud=1$, which is consistent
+with a \citet{Kroupa01} IMF evolved to an age of 12\,\gyr\ and
+$-2\lesssim\feh\lesssim-1$
+\citep[e.g.][]{2003MNRAS.344.1000B,2010ApJ...712..833C}, while
+$\Upsilon_V\simeq0.8$ if the remaining mass fraction approaches $\mud\simeq0$.
+Note that in the $N$-body models of \citet{Anders09} $\Upsilon_V$ increases
+again  near dissolution, because then the GC consists of predominantly dark
+remnants, but this phase is short lasting hence we ignore it \citep[but we note
+that NGC\,6535 may be in this phase,][]{2015ApJ...815...86H}. \comm{Since
+\citet{Anders09} evolves an aged IMF, their results isolate dynamical effects
+only.} \textsc{emacss}, \comm{however, accounts for stellar evolution during the
+evolution of the cluster. In order to consistently use the \citet{Anders09}
+relation, we assume the following relation $\mu = 2\,\mud$, which considers a
+50\% mass-loss due to stellar evolution. The assumption is reasonable for
+cluster older than $\sim$10 Gyr, which is the case for most GCs in the MW}
+
+We proceed to use \textsc{emacss} to obtain the cluster initial mass. This is
+done by minimizing the absolute value of the difference between \textsc{emacss}
+predicted present-day mass and the cluster observed mass, where the observed
+luminosity is converted to mass using Eq. \ref{eq:mtl}. The minimization
+procedure uses the Nelder-Mead simplex method with a tolerance of 1 $\msun$. 
+
+{\sc emacss} assumes a logarithmic Galactic potential, hence the mass evolution
+is most accurate where the rotation curve of the Galaxy is flat. In the
+innermost regions of the Galaxy ($<$ 3 kpc) {\sc emacss} will overestimate the
+mass loss, providing only a lower limit on the cluster remaining mass fraction.
+Clusters in the inner Galaxy will probe only a small fraction of the Galaxy
+volume, as well as having tidal tails that are more easily disrupted due to
+chaotic orbits and time-dependent potential from the bar \citep{APW16}, hence
+our approximation holds for most GCs of interest.
+
+\subsection{Orbit integration}
+\label{sec:orbit}
+
+The literature is rich regarding the measurement of GC proper motions (PMs), and
+for about 2/3 of the known cluster there is a measurement available. For almost
+all clusters a radial velocity measurement is available. However, both
+these measurements are very heterogeneous.
+
+We compiled a set of GCs from literature that have measured PMs.
+The sample was further expanded by using UCAC-4 absolute PMs by
+\citet{Dambis06}, however, the uncertainties in this catalogue can be
+significant. The complete sample analysed here is shown in Table 1 where
+appropriate references are given for each individual object.
+
+We carry out orbit integration using the popular galactic dynamics code
+\textsc{galpy} \citep{Bovy15}. The Galaxy potential used is the
+\textsc{MWPotential2014} which is composed of three components: a power-law with
+an exponential cut-off for the bulge, a \citet{MNdisk} disk, and a \citet*{NFW}
+halo. We set the Sun's distance to the Galaxy centre to R$_{\odot}=8.3$ kpc, its
+vertical offset to z$_{\odot}$ = 24.2 pc, and its circular velocity to $V_{\rm
+c}$ = 233 km/s. The Solar reflex motion components adopted are the ones derived
+by \citet{reflex}. We use the Dormand-Prince integration method \citep{DOPR}.
+For the purpose of inferring orbital parameters, we integrate for 6 Gyr.
+
+To propagate the uncertainties in position and velocity of each cluster we
+perform 1500 orbit realisations for each cluster. In each realisation we sample
+the values of PM from a normal distribution with a centre and dispersion given
+by the literature value and uncertainty respectively. We also assume a 5\%
+uncertainty on the heliocentric distance to the cluster, we find that this
+assumption better encompasses the heterogeneous methodology for determining
+cluster distances \comm{(the uncertainty in distance is propagated to the total
+luminosity, as it depends on the distance modulus)}. We take the distance values
+and integrated V-band magnitude from the  2010 version of the Harris catalog
+\citep{Harris96, 2010arXiv1012.3224H}. At each realisation, the cluster initial
+mass, current mass and remaining mass-fraction is computed according to the
+recipe presented in this section. \comm{In addition to sampling the velocity and
+position uncertainties, we also sample from the cluster age and associated
+uncertainty. We take the ages from \citet{vdb13}, and for cluster where no age
+is available we assume the mean age (11.9 Gyr) and dispersion (0.8 Gyr) of the
+full sample. Although there are age determination for a larger sample spread
+across the literature, we choose to use the largest one available in order to
+avoid any methodology biases.}
+
+With 1500 orbit samples we assume that the most representative value of $\rapo$,
+$\rperi$, $\epsilon$, $\mu$, and $M_{{\rm i},5}$ is given by the median of the
+distribution, while its uncertainty is given by the median absolute deviation
+(MAD). Our choice of median and MAD is motivated by the fact that the median is
+more sensitive to the asymmetries in the distribution while the MAD is less
+sensitive to outliers. By comparison with the more traditional mean and standard
+deviation we find that this approach gives more consistent results that are more
+representative of all clusters in our sample, \comm{in the sense that objects
+with very broad and asymmetric distributions have a median value that is more
+representative of the full sample. While clusters with double peaked
+distributions do not have a single peak favoured. This produces somewhat large
+MAD values for some clusters, however these will certainly encompass the most
+probable regions of parameter space.}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{figs/ecc_comp.pdf}
+    \caption{Comparison of the eccentricity obtained in this work ($x$-axis)
+    with the ones obtained by \citep{mpv14} using an axisymmetric potential
+    ($y$-axis).  Error-bars show the uncertainty in our measurements.
+    \comm{Cluster in red have their current position within 3 kpc from the
+    Galaxy centre, we indicate the names of those which deviate significantly
+    from the identity.}}
+\label{fig:ecc_comp}
+\end{figure}
+
+
+To check the consistency of our orbit integration, we compare our eccentricity
+values with those in the axisymmetric case in \citet{mpv14}. The comparison is
+restricted to clusters in common with their sample that use the same PM values,
+since we adopt more recent PM measurements for some of the clusters.  In
+Fig.~\ref{fig:ecc_comp} we show the comparison with \citet{mpv14} ($y$-axis) and
+our eccentricity determination ($x$-axis). We flag outliers by selecting objects
+that lie more than 2 times the typical eccentricity uncertainty. The bulk of the
+cluster lie along the identity line within the uncertainties. The outliers are
+clusters for which the orbit is strongly influenced by the bulge potential. Our
+central potential is slightly different than the one used by \citet{mpv14} which
+could be the source of the discrepancy.
+
+In Fig.~\ref{fig:p5samples} we show one example of the orbital parameter
+exploration for Palomar 5. The diagonal plots show the 1D kernel density
+estimator (KDE) for each of the parameters sampled. The panels below the
+diagonal show the 2D KDE for each pair of parameters and the panels above show
+each individual sample. We also include the orbital phase $\phi$ which is
+computed using $\phi = (\rg - \rperi)/(\rapo- \rperi)$.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.85\textwidth]{figs/pal5samples.pdf}
+    \caption{\comm{Summary plot} showing the relation among all parameters explored in
+    the orbit integration of Palomar 5 as an example. Panels below the diagonal
+    show the 2D kernel density estimator for the samples, panels above the
+    diagonal show the individual samples, and the diagonal shows the 1D kernel
+    estimator with median (solid line) and MAD (dashed line) indicated.} 
+\label{fig:p5samples}
+\end{figure*}
+
+In order to get a complete picture of the Galactic GC system, we assume that GCs
+without PM measurements have an  isotropic velocity distribution (hereby
+referred as the noPM sample). \citet{vandenBosch99} show that in a logarithmic
+halo, a tracer population with density $\rho\propto r^{-\alpha}$ has a velocity
+dispersion $\sigma_{\rm GC}= V_{\rm c}/\sqrt{\alpha}$, and for the GCs
+$\alpha\simeq3.5$ \citep{Harris76}. These clusters form about 1/3 of the sample
+and their orbits were sampled in the same fashion as before. However, we sample
+the velocities isotropically from a normal distribution with dispersion
+$\sigma_{\rm GC}$. Cluster that fall in this category are indicated in Table 1.
+\comm{In addition to the clusters without PM, we moved two objects to the noPM
+sample, these are Terzan 8 and IC 4499. Their literature PM yielded unbound
+orbits, however, given that these come from the less accurate \citet{Dambis06}
+sample, we assume that this is due to measurement errors.  Hence, had their PM
+removed from Table 1, and their orbits where sampled from the isotropic velocity
+distribution. We note that the clusters Pal 3, Rup 106, NGC 5634, IC 1257, and
+NGC 6426 have extremely high $\rapo$, which is likely due to inaccuracies in
+their PM measurement. However, since we were able to recover bound orbits, we
+choose to keep these objects in our sample.  We also include a derivation of the
+Jacobi radius ($\rj$) for each cluster at their current position. We use the
+\citet{King62} formula and use our derived present-day mass to propage the
+uncertainty to $\rj$.}
+
+In Fig.~\ref{fig:mu} we show the resulting distributions of $\rapo$ and $\mu$.
+We note that GCs closer to dissolution (low $\mu$) tend to have smaller $\rapo$,
+{\i.e. clusters closer to the Galactic centre where the tidal field of the bulge
+is strong}, while clusters with higher $\mu$ span a wider range of $\rapo$.
+{Cluster also have a maximum $\mu \sim 0.55$ which is due to the fast mass loss
+from stellar evolution that remove about half of $\Mi$ at an age of \comm{$\sim$
+12 Gyr.}}  We mark regions of  parameter space that are more extreme than what
+is observed for Palomar 5 (i.e. closer to disruption and/or with a larger
+$\rapo$). \comm{This selection is motivated by the usefulness of streams as
+tracers of the potential beyond 20 kpc.} Based solely on these parameters and
+$\mu$, we expect clusters in the \emph{green} region of the parameters space to
+be good candidates for tidal tail search. These cluster are AM4, Palomar 1,
+Palomar 7 (IC 1276), and Whiting 1.  Of these clusters, only Palomar 1 has
+reported tidal tails \citep{pal1}.  These clusters are also at large
+heliocentric distances which makes obtaining PMs more difficult and only Palomar
+7 has measured PMs. The noPM sample cluster mentioned above, despite having low
+uncertainties in $\mu$ and $\rapo$, may suffer from additional biases and their
+location in this plane is not as reliable as for the PM sample, hence our
+estimates may not hold once PM becomes available for these objects.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{figs/fig4.pdf}
+    \caption{Distribution of $\mu$ and $\rapo$. Errorbars were computed using
+    the MAD estimator. Red circles are cluster  from the noPM sample. The
+    green shaded region show cluster that have both orbital parameters more
+    extreme than Palomar 5, while the yellow shaded region show clusters that
+    have a $\rapo$ larger than Palomar 5. The clusters in the green region are
+    AM 4, Palomar 1, Palomar 7 (IC 1276), and Whiting 1. Note that the maximum
+    $\mu\simeq0.55$ is because all GCs have lost about 45\% of their initial
+    mass as the result of stellar evolution.}
+\label{fig:mu}
+\end{figure}
+
+
+We note that our cluster mass estimates are based on the assumption of a static
+MW potential, in the sense that all cluster orbit the same potential -- and on a
+given orbit -- during their whole lifespan. In comparison to the real orbital
+history of a cluster, our estimates may yield discrepant results. If we would
+account for the secular growth of the Milky Way, we would find $\mu$ values that
+are slightly higher because the average tidal field experienced in the past is
+weaker \citep{Renaud15}. Accreted clusters from minor or major merger events
+could have been in radically different environments for a significant fraction
+of time \citep*{Renaud17}. This would ultimately leave an imprint on the cluster
+evolution such as a present day mass function (PDFM) that is not consistent with
+is current orbit.
+
+With the  properties of the orbits and $\mu$ for all GCs, we now discuss the
+visibility of streams in the next section. 
+
+
+\section{The visibility of a stream}
+\label{sec:visibility}
+
+We have established that the cluster dissolution stage is a major factor in the
+typical mass of the stars in the stream. Nonetheless, it is known that streams
+are in their most densely packed stage near $\rapo$. So we expect that the most
+easily detectable streams are those from clusters with low $\mu$ (i.e. near
+dissolution) and high $\phi$ (i.e. near $\rapo$).
+
+In Fig.~\ref{fig:best} we show the distribution of $\mu$ and $\phi$ for all
+clusters, except those in the noPM sample, since these have unreliable values of
+$\phi$. We split the sample into clusters that have $\rapo>10$ and $<10$ kpc. We
+highlight Palomar 5 \citep{Odenkirchen01}, NGC 5897 (Adrian Price-Whelan private
+communication), and NGC 5466 \citep{Belokurov06, Grillmair06b} since these
+clusters have tidal tails detected in SDSS or Pan-STARRS. \comm{Recently, tidal
+tails have been found around the clusters NGC 7492, Eridanus, and Pal
+15 \citep{2017ApJ...841L..23N, 2017ApJ...840L..25M}, however, these can not be
+used in our comparison as no PM measurements are available.} For those with
+$\rapo> 10$ kpc we show the two lowest $\mu$ values (green) and the two highest
+$\phi$ values (red). These objects are high-probability clusters for detection
+of streams considering SDSS-like photometric performance. 
+
+The cluster NGC 5466 seems to be an exception, in the sense that it should not
+have easily detectable tails based on its relatively high $\mu$ and being near
+$\rperi$, but \citet{Belokurov06} detected a 4$^{\circ}$ tail around this
+cluster using SDSS data, followed by \citet{Grillmair06b} who detected it up to
+45$\deg$. We point out that NGC 5466 is a cluster that has an PDMF that is
+depleted in low-mass stars \citep{Sollima17} and \comm{it has been suggested by
+\citet{Webb17} that this cluster is not mass segregated. According to our
+prediction, NGC 5466 should have a pristine PDMF since $\mu\simeq0.5$.
+Interestingly, the cluster is also on a retrograde, high eccentricity orbit
+\citep{Forbes10}}, which is a strong indication for it being an accreted cluster.
+Here we strengthen the suspicion about its accreted origin, since it has an PDMF
+inconsistent with its orbital history which could be the effect of a stronger
+tidal field in the past, perhaps from its original host galaxy.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{figs/best.pdf}
+\caption{Remaining mass $\mu$ against orbital phase $\phi$ (1 at apocentre),
+    excluding the noPM sample. In grey we show cluster with $\rapo<10$ kpc, and
+    in black cluster with $\rapo > 10$ kpc. Error-bars are derived from the MAD
+    estimator. Cluster with detected tidal tails are marked in blue. From the
+cluster with $\rapo > 10$ kpc we highlight the two closest to disruption (green
+symbols) and the two closest to apocentre (red symbols).}
+\label{fig:best}
+\end{figure}
+
+As shown in Fig.~\ref{fig:best}, the two clusters that are closest to the
+optimal detectability conditions (low $\mu$ and high $\phi$) and have
+$\rapo>10\,\kpc$ are NGC 288 and NGC 6341 (M92). The former has weak signs of
+tidal tails \citep{Grillmair04} in shallow IR data, while the latter has signs
+of extra-tidal structure \citep{Lee03}.  We also highlight two clusters that are
+close to disruption and have $\rapo > 10$ kpc, which are IC 1276, also known as
+Palomar 7, and NGC 6779 (M56).  However, both clusters are quite close to the
+bulge in projection ($|b| < 6^{\circ}$), which will likely introduce
+differential reddening effects and a high surface density of field stars which
+can make stream detection challenging.
+
+The criteria for being an optimal target for finding tidal tails appears to
+yield consistent predictions, at least based on the present literature. We
+stress, however, that each cluster is a particular case in the sense that its
+distance, field contamination, and orbit projection should be considered since
+these factors may produce non-trivial observing conditions. For instance, the
+cluster M92 is an optimal candidate, however its proximity to the Sun will lower
+the projected surface density. With such complications in mind, our predictions
+should be taken as general constraints that can be used as guidelines for future
+observations and follow-ups.
+
+Finally, this framework can be used to predict not only the spectral properties
+of stream stars (colours and magnitudes), but also their distribution in PM
+space of stream stars. With the velocity information, disentangling field stars
+from stream stars will be much more efficient than current photometry-based
+methods. This may allow the study of streams in the inner Galaxy, provided
+extinction is not an issue.
+
+\section{The case of Palomar 5}
+
+Using the information about the remaining mass in a given cluster and its
+orbital history we are able to track the masses of the particles that leave the
+cluster. However, we still need a realistic way of simulating the ejection
+mechanism and produce a tidal tail.
+
+In a cold stream self-gravity is not important.  This  greatly simplifies the
+stream simulation in the sense that one only needs to integrate individual
+orbits of particles being \emph{sprayed} off a progenitor in a static potential
+to produce a realistic stream. This class of codes became known as 
+spray-particle methods and has been explored in many successful applications
+\citep{Kuepper12, Fardal15, Sesar15, Erkal16, Amorisco15, Bonaca14}. Despite the
+simplicity, this method still requires prescriptions for how particles are
+ejected from the progenitor. We refer to \citet{Fardal15} for a comprehensive
+comparison of methods.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.95\textwidth]{figs/pal5_onsky.pdf}
+    \caption{Two simulations of Palomar 5 tidal tails. The top panel show a
+    Palomar 5 that is close to its estimated present-day mass
+    \citep{Odenkirchen01} while the bottom panel it is presently $\sim 3$ times
+    more massive. The red star symbol marks the position of the cluster.} 
+\label{fig:p5onsky}
+\end{figure*}
+
+In this work, we adopt the spray-particle implementation by \citet{Kuepper12}.
+The escape velocity of stars was modelled based on an extensive study of
+$N$-body simulations in tidal fields presented by \citet*{Claydon16}.  These
+authors studied so-called `potential escapers' in their simulations, which are
+stars that are energetically unbound, but still associated with the cluster.
+From this, and theoretical arguments, they find that the velocity dispersion of
+these stars near the Jacobi radius ($\rj$) can be approximated by 
+
+\begin{align}
+\sigma_{\rm J} \simeq 0.9\,\kms\left(\frac{M}{10^5\,\msun}\right)^{1/4}\left(\frac{\rg}{5\,\kpc}\right)^{-1/3}.
+\end{align}
+
+The approximation above is valid for circular orbits. In order to use it for
+eccentric orbits we find the circular orbit that has the same life-time given by
+equation~(\ref{eq:eqvrad}).
+
+The release mechanism adopted here assumes a Maxwellian velocity distribution
+for the escapers with the characteristic velocity scale  equal to $\sigma_{\rm
+J}$. Particles are ejected from the Lagrange points plus a random offset given
+by a $0.3\rj$ dispersion normal distribution. The extra offset in position is
+required to match $N$-body simulations \citep{Kuepper12, Lane12, Bonaca14,
+Fardal15, Pearson15}.
+
+Each particle from the simulated tidal stream represents an ensemble of stars
+with a known MF (i.e. given by the moment the particle escaped the cluster and
+the algorithm of section~\ref{sec:evolve_mf}). Combining this information with a
+mass-luminosity relation we can produce an expected luminosity function (LF) for
+each particle in the simulation.  For Palomar 5 we choose an 11 Gyr isochrone
+\citep{Bressan12} \footnote{\url{http://stev.oapd.inaf.it/cgi-bin/cmd_2.8}} with
+a metallicity of $\feh= -1.4$ \citep{Koch04}.  To simulate SDSS-like photometry
+we use a faint magnitude limit in the $g$-band of 22.5. Each tail particle has
+its associated EMF integrated from the turn-off mass to the mass that
+corresponds to the chosen magnitude limit, taking into account the heliocentric
+distance to each individual particle. The result is a list of particles with
+on-sky positions and a weight that is proportional to the number of observable
+stars it represents.  We produce density maps by counting stars in bins on the
+sky and dividing by the solid angle of each bin.
+
+To illustrate the effects of the MF evolution on the detectability of Palomar
+5's stream we perform two simulations. Both in the same orbit, but with one that
+is consistent with the lower limit of its present-day mass of 4500 $\msun$
+\citep{Odenkirchen02} and another which has a current mass that is roughly 3
+times higher (12000 $\msun$). To artificially increase its current mass, we
+increase its observed luminosity and run through our $\mu$ estimate method
+described in Section \ref{sec:orbit}.
+
+Tidal tails are sparse structures and to estimate the detectability of a given
+stream one must consider the effect of overlapping field stars. To estimate the
+contribution of field stars we analyse a 4 deg$^2$ patch of the sky observed by
+SDSS. We filter stars in colour and magnitude according  to the best-fit
+isochrone in literature \citep{Koch04}. We select stars with colours $(g-r)$
+$\pm 1.5 \sigma_{g-r} (g)$ away from the isochrone, where $\sigma_{g-r}(g)$ is the
+typical colour uncertainty at a given magnitude $g$. We apply the same $g$-band
+cut-off at $g=22.5$ as before. In the patch of the sky analysed this yields a mean
+density of 0.058 stars/arcmin$^2$ which was used to generate a homogeneous
+distribution in the region around the Palomar 5. This approach does not account
+for variations in the number of field stars with e.g. galactic latitude, however
+it is representative of the field stars density in the vicinity of the cluster.
+It is also a first order approximation of the traditional matched-filter
+approach used to detect streams \citep{Odenkirchen01,Balbinot11}, in the sense
+that it selects only stars with colours consistent with the cluster population.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.95\textwidth]{figs/pal5_vs_SDSS.pdf}
+    \caption{The same simulation of Palomar 5 as shown in the top panel of
+    Fig.~\ref{fig:p5onsky} where the background has been lowered to a level
+    consistent with the decontamination efficiency of the matched-filter
+    technique. Contours are the 1,2,3,4, and 5 $\sigma$ confidence levels of the
+    SDSS detection, based on the work of \citet{Balbinot11, Kuepper15}. The
+    shaded region delimits a portion of the sky where contamination by the bulge
+    becomes important and the SDSS contours are unreliable.  The contour blob at
+    $(\alpha, \delta) \simeq (230, 2)$ is the foreground cluster M5.} 
+\label{fig:p5SDSS}
+\end{figure*}
+
+In Fig.~\ref{fig:p5onsky} we show the predicted density of stars for the two
+simulated Palomar 5 tails. The present-day mass is indicated in each panel.
+Field stars were added as described above and both maps are smoothed using a
+Gaussian kernel with 0.075 deg dispersion. We notice that the model with the
+mass in agreement with observations shows more prominent tails that are clearly
+visible in the range $-5^{\circ} < l < 5^{\circ}$. Also the trailing tail (positive $l$) appears
+slightly more extended, which is also confirmed by Pan-STARRS observations
+\citep{Bernard16}.  The average density of the stream plus background is of
+0.069 stars/arcmin$^2$, which is in agreement with SDSS data
+\citep{Odenkirchen01}. We note, however, that some of the fainter stream
+features are somewhat dependent on the random background realisation. The more
+massive simulation has a mean density $\sim$ 20\% lower than the normal mass
+one, even though its mass loss rate is $\sim$ 30\% higher. The density decrease
+makes most of the stream fall below the background level. The different density
+can be explained by the median mass of stream stars: the stars in the realistic
+Pal 5 stream simulation have a median mass of 0.3 $\msun$, while only 0.22
+$\msun$ in the massive one.
+
+Finally, we compare our stream prediction to SDSS data. We use the
+matched-filter density map from \citet{Balbinot11,Kuepper15} which follows
+closely the methodology outlined by \citet{Odenkirchen01}, the discovery paper.
+For a fair comparison between SDSS matched-filtered data and our simulated
+stream plus background we must take into account that the matched-filter has a
+higher efficiency in classifying stream stars. We assume that field stars that
+fall within the isochrone defined colour-magnitude mask -- discussed above --
+are discarded with a 50\% efficiency. Effectively, this is the equivalent of
+lowering the background level by 50\%.
+
+In Fig.~\ref{fig:p5SDSS} we show our matched-filter equivalent density map for
+the 4500 $\msun$ simulation. The overlaid contours are from \citet{Balbinot11}
+and \citet{Kuepper15}, where we show the detection confidence levels from 1 to 5
+$\sigma$. The shaded region marks regions where the SDSS footprint becomes
+patchy and/or too close to the bulge causing spurious detections. Notice that
+the modelled stream is in very good agreement with the observational data.
+Most notably it reproduces the length on the stream main body and some of the
+over/under dense regions. We note that the length is reproduced even if we
+assume a matched-filter decontamination efficiency up to 80\%. Despite the very
+good agreement, we stress that some of the features observed are dependent on
+the background realization, indicating that these are close to the noise level.
+As pointed out by \citet{Thomas16} some of the features observed in SDSS do not
+stand the trial of deeper photometric data.
+
+Even though the comparison with SDSS show great potential, we leave a more
+detailed analysis of Palomar 5 for future works where we explore in more detail
+its stream properties. For instance, we do not explore different methods of
+stream generation, $N$-body simulations or a more detailed projection onto
+observational space (e.g.completeness, source miss-classification, etc). The goal
+of this work is to illustrate the nuances generated by collisional dynamics and
+their overall impact on stream properties.
+
+\section{Conclusion}
+
+We present a method for taking into consideration the internal evolution of a
+cluster due to collisional dynamics on the formation of cold streams. This
+method uses the code \textsc{emacss} \citep{Alexander14} to simulate the cluster
+main properties such as total bound mass, number of stars, and mass-loss rate.
+We couple this information to a algorithm that evolves the MF based on
+simplified version of the method presented in \citet{Lamers13}.
+
+The median mass of the escaping stars is always below the median mass of the
+bound stars, and the mass of escapers gradually increases as the evolution
+proceeds. Our predictions \comm{for the evolution of the mass function of stars
+and stellar remnants} are in good agreement with \comm{results of an} $N$-body
+model.
+
+Using position and velocity information for MW GCs we derive orbital parameters
+and their uncertainties. These were coupled to a simple mass-loss prescription
+to infer the cluster remaining and initial masses, effectively allowing us to
+assess the current stage of dissolution of each cluster. We validate our orbit
+integration by comparing it to the sample of \citet{mpv14}, which we find to be
+in good agreement.
+
+As a test case, we show a detailed simulation of the cluster Palomar 5. We use
+the same spray particle code used in \citet{Kuepper15} with the additional
+prescription presented in \citet{Claydon16} for the velocity dispersion of
+escaper stars. We generate two streams, a `normal' one which is consistent with
+the cluster present-day mass, and an `overweight' one which yields a cluster
+that is 3 times more massive today. We find that the `normal' mass simulation
+successfully predicts the surface density of stream stars as observed by SDSS,
+as well as some of the features in the stream (asymmetry and some
+over-densities). On the other hand, the `overweight' simulation yields a stream
+that is below the SDSS detection limit throughout most of its extension.
+\comm{The simulations presented here by no means intend to be an exhaustive
+exploration of Palomar 5 stream structure. We suggest the works by
+\citet{Pearson15}, \citet{Kuepper15}, and \citet{APW16} for a detailed treatment
+of stream formation and structure in a variety of scenarios.}
+
+We use Palomar 5, and other clusters with detected streams in SDSS or
+Pan-STARRS, as a guideline to probe properties that enhance the probability of
+stream detection. As demonstrated, most cluster with stream are close to
+dissolution \comm{and/or have atypical PDMFs \citep{Webb17}}. We also find that these clusters
+are more likely to be close to apocentre as well, a phase where stream stars are
+in their most densely packed configuration. From the sample with PM we single
+out the clusters NGC 288 and NGC 6341 (M92) as the next best candidates after
+Palomar 5, to have detectable tidal tails. Indeed there is evidence in
+literature for this \citep{Lee03, Grillmair04}. From the noPM sample, we
+highlight the clusters AM4, Palomar 1, Palomar 7, and Whiting 1. These clusters
+have $\rapo$ larger than 18 kpc and are closer to dissolution than Palomar 5.
+Among these clusters, only Palomar 1 has evidence for tidal tails \citep{pal1},
+although wide-field data is lacking for the other three. 
+
+\citet{1984ApJ...277..470P} suggest that GCs form in small dark
+matter halos, and if these are still surrounding the cluster, they prevent stars
+from escaping.  \citet{1996ApJ...461L..13M} argues that the presence of tidal
+tails near some GCs and dwarf galaxies implies that these objects can not have a
+massive  dark matter halo. This argument could be turned around to use the
+absence of tails near massive GCs \citep[e.g.][]{Kuzma16} as evidence for the
+presence of a dark matter halo. Our results provide a more natural explanation
+for the absence of tidal streams near massive GCs, despite their higher mass
+loss rate (at a given orbit).
+
+The overall distribution of cluster orbital properties shows how rare objects
+like Palomar 5 are, and certainly provide a dire perspective for the use of cold
+streams to probe the halo beyond 18 kpc. However, progenitor-less streams
+outnumber those associated with GCs \citep[for recent
+discoveries see][]{Bernard16}, offering hope for probing the halo at
+larger distances. Although, the number of cluster close to disruption in the
+outer halo is expected to be low. \citet{Contenta17} recently showed that
+the number of cluster close to disruption at Galactocentric radius between
+20 and 150 kpc is $3.3^{+7.7}_{-1.6}$. However, there may be a larger
+population of progenitor-less streams, if the orbital phase mixing time is
+long. Also, some of the  low-mass cluster in the outer halo show signs of
+streams, such as Willman 1 \citep{Willman06}, Balbinot 1 \citep{Bernard16}, 
+Segue 1 \citep{segue1tail}, \comm{and Hercules \citep{Kuepper17}}.
+
+Upcoming surveys such as the Large Synoptic Survey Telescope
+\citep[LSST][]{LSST} will greatly increase sky coverage and photometric depth,
+potentially revealing many new streams. However, greater photometric depth comes
+at the cost of an increase density of field stars {and background galaxies}.
+Next generation detection methods must account for this and devise ways of
+better modelling the stream as well as background. The addition of velocity
+information will certainly help disentangling stream stars from field stars, and
+the next data release of Gaia will provide a unique test case for new methods.
+
+\section*{Acknowledgments}
+
+We thank Holger Baumgardt for kindly providing NBODY model used in this work and
+Andreas K{\"u}pper for providing the streakline code. MG thanks the Royal
+Society for financial support (University Research Fellowship) and both authors
+acknowledge financial support from the European Research Council
+(ERC-StG-335936, CLUSTERS). Both authors thank Justin Read and Jeremy Webb for
+interesting discussions and suggestions.
+
+SDSS-III is managed by the Astrophysical Research Consortium for the
+Participating Institutions of the SDSS-III Collaboration including the
+University of Arizona, the Brazilian Participation Group, Brookhaven National
+Laboratory, Carnegie Mellon University, University of Florida, the French
+Participation Group, the German Participation Group, Harvard University, the
+Instituto de Astrofisica de Canarias, the Michigan State/Notre Dame/JINA
+Participation Group, Johns Hopkins University, Lawrence Berkeley National
+Laboratory, Max Planck Institute for Astrophysics, Max Planck Institute for
+Extraterrestrial Physics, New Mexico State University, New York University, Ohio
+State University, Pennsylvania State University, University of Portsmouth,
+Princeton University, the Spanish Participation Group, University of Tokyo,
+University of Utah, Vanderbilt University, University of Virginia, University of
+Washington, and Yale University.
+
+%% This is the huge table.
+\newpage
+\input{summary}
+
+
+\bibliographystyle{mnras}
+
+\bibliography{refs}
+
+\label{lastpage}
+\end{document}

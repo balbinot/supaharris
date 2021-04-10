@@ -1,11 +1,13 @@
-FROM python:3.7-slim-buster
+# syntax = docker/dockerfile:experimental
+FROM python:3.9-slim-buster
 ENV PYTHONUNBUFFERED 1
 
-LABEL maintainer="Timo Halbesma <halbesma@MPA-Garching.MPG.DE>"
+LABEL maintainer="Timo Halbesma <timo@halbesma.com>"
 
 # Install system packages
 WORKDIR /supaharris
-RUN set -ex \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,mode=0755,target=/var/cache/apt --mount=type=cache,mode=0755,target=/var/lib/apt set -ex \
     && apt-get update \
 \
     # Install Build/Runtime dependencies ...
@@ -34,14 +36,10 @@ RUN set -ex \
 
 # Install python packages for Django
 COPY requirements.txt /supaharris/requirements.txt
-RUN set -ex && \
+RUN --mount=type=cache,mode=0755,target=/root/.cache/pip set -ex && \
     pip install --upgrade pip \
-    && pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r /supaharris/requirements.txt \
-\
-    # Because pygraphviz has to be installed with additional flags
-    && pip install --install-option="--include-path=/usr/local/include/" \
-        --install-option="--library-path=/usr/local/lib/" pygraphviz
+    && pip install --upgrade pip \
+    && pip install -r /supaharris/requirements.txt
 
 # NB, we link the repo at runtime (which 'overwrites' files copied in on build)
 # But production (when we run from image without linking the repo in) does use
@@ -50,6 +48,6 @@ COPY . /supaharris
 COPY tlrh/ /supaharris
 RUN chown -R supaharris:supaharris /supaharris
 
-USER supaharris 
+USER supaharris
 
 ENTRYPOINT ["/supaharris/entrypoint.sh"]

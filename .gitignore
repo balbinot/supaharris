@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.sqlite3
 *.swp
+*.swo
 *.pdf
 
 # C extensions
@@ -119,12 +120,13 @@ ENV/
 .bash_aliases
 .bash_functions
 .bashrc
+.coveragerc
 .vimrc
 .config
 .local
 .pki
+.python_history
 
-# Project-specific folders
 /settings/*.env
 /storage
 /media

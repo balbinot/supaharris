@@ -1,11 +1,12 @@
 import os
 import sys
+
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
-env.read_env(
-    str((environ.Path(__file__) - 1).path(".env"))
-)
+env.read_env(str((environ.Path(__file__) - 1).path(".env")))
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,12 +24,10 @@ SECRET_KEY = env("SECRET_KEY", default="secret")
 DEBUG = env("DEBUG", default=False)
 
 DATABASES = {
-    "default": env.db('DATABASE_URL'),
+    "default": env.db("DATABASE_URL"),
 }
 
-CACHES = {
-    "default": env.cache()
-}
+CACHES = {"default": env.cache()}
 
 ALLOWED_HOSTS = ["*"]
 
@@ -44,13 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     "tinymce",
     "django_filters",
     "rest_framework",
     "rest_framework_datatables",
     "silk",
-
     "about",
     "accounts",
     "catalogue",
@@ -140,16 +137,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"),
 ]
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS=1000000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000
 
 # Use a custom model for account management, which makes it much easier to
 # extend the model later on.
-AUTH_USER_MODEL = 'accounts.UserModel'
-LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'accounts:profile'
+AUTH_USER_MODEL = "accounts.UserModel"
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "accounts:profile"
 ADMIN_BCC = []
 
-EMAIL_CONFIG = env.email_url('EMAIL_URL')
+EMAIL_CONFIG = env.email_url("EMAIL_URL")
 vars().update(EMAIL_CONFIG)
 DEFAULT_FROM_EMAIL = "info@supaharris.com"
 SERVER_EMAIL = "info@supaharris.com"
@@ -160,32 +157,76 @@ SERVER_EMAIL = "info@supaharris.com"
 FILEBROWSER_DEFAULT_PERMISSIONS = 0o644
 FILEBROWSER_OVERWRITE_EXISTING = True
 FILEBROWSER_EXTENSIONS = {
-    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
-    'Document': [], # ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
-    'Video': [], # ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
-    'Audio': [], # ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+    "Image": [".jpg", ".jpeg", ".gif", ".png", ".tif", ".tiff"],
+    "Document": [],  # [".pdf",".doc",".rtf",".txt",".xls",".csv"],
+    "Video": [],  # [".mov",".wmv",".mpeg",".mpg",".avi",".rm"],
+    "Audio": [],  # [".mp3",".mp4",".wav",".aiff",".midi",".m4p"]
 }
-FILEBROWSER_ADMIN_VERSIONS = ['big']  # 'thumbnail', 'small', 'medium', 'large'
+FILEBROWSER_ADMIN_VERSIONS = ["big"]  # "thumbnail", "small", "medium", "large"
 
 
-# Sentry for error reporting
-SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-sentry_sdk.init(
-    dsn=SENTRY_DSN_API,
-    integrations=[DjangoIntegration()],
-)
+# https://www.tinymce.com/docs/demo/full-featured/
+TINYMCE_DEFAULT_CONFIG = {
+    "selector": "textarea",
+    "height": 500,
+    "theme": "modern",
+    "plugins": [
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "searchreplace wordcount visualblocks visualchars code fullscreen",
+        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "emoticons template paste textcolor colorpicker textpattern imagetools codesample toc",
+    ],
+    "toolbar1": "undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    "toolbar2": "print preview image | forecolor backcolor emoticons | codesample",
+    "image_advtab": True,
+    "templates": [
+        {"title": "Test template 1", "content": "Test 1"},
+        {"title": "Test template 2", "content": "Test 2"},
+    ],
+    "content_css": [
+        "//fonts.googleapis.com/css?family=Lato:300,300i,400,400i",
+        "//www.tinymce.com/css/codepen.min.css",
+        "/static/css/main.css",
+    ],
+}
+# TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
+TINYMCE_FILEBROWSER = True
+TINYMCE_MINIMAL_CONFIG = {
+    "selector": "textarea",
+    "height": 80,
+    "width": 500,
+    "menubar": False,
+    "statusbar": False,
+    "elementpath": False,
+    "plugins": [
+        "link paste autolink code",
+    ],
+    "toolbar1": "undo redo | bold italic | bullist numlist outdent indent | link code",
+    "toolbar2": "",
+}
 
-# To retrieve data from ADS api
-ADS_API_TOKEN = env("ADS_API_TOKEN", default="")
 
-from settings.tinymce import *
-from settings.djangorestframework import *
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    ],
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "rest_framework_datatables.filters.DatatablesFilterBackend",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework_datatables.pagination.DatatablesPageNumberPagination",
+    "PAGE_SIZE": 50,
+}
+
 
 # Silky for profiling / monitoring the api response times
 SILKY_AUTHENTICATION = True
-SILKY_AUTHORISATION = True   # default is_staff=True; overwrite below
+SILKY_AUTHORISATION = True  # default is_staff=True; overwrite below
 SILKY_PERMISSIONS = lambda user: user.is_superuser
 SILKY_PYTHON_PROFILER = False
 SILKY_PYTHON_PROFILER_BINARY = False
@@ -197,18 +238,82 @@ SILKY_PYTHON_PROFILER_RESULT_PATH = os.path.join(BASE_DIR, "profiles")
 # SILKY_MAX_RECORDED_REQUESTS_CHECK_PERCENT = 10
 SILKY_META = True  # to check the effect Silk itself has on response time
 
+
+# Sentry for error reporting
+SENTRY_DSN_API = env("SENTRY_DSN_API", default="")
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN_API,
+    integrations=[DjangoIntegration()],
+)
+
+
+# To retrieve data from ADS api
+ADS_API_TOKEN = env("ADS_API_TOKEN", default="")
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
+
+
 if DEBUG:
     PREPEND_WWW = False
 
     INSTALLED_APPS += [
-        'debug_toolbar',
-        'django_extensions',
+        "debug_toolbar",
+        "django_extensions",
     ]
 
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
 
-    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
     DEBUG_TOOLBAR_CONFIG = {
-        'JQUERY_URL': '',
+        "JQUERY_URL": "",
     }
+
+    # mariadb:10.4 seems to have wait_timeout = 600 in /etc/mysql/my.cnf
+    # so we set our CONN_MAX_AGE to something smaller than that
+    DATABASES["default"]["CONN_MAX_AGE"] = 60

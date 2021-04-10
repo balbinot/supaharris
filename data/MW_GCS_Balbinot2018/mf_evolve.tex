@@ -1,0 +1,119 @@
+
+
+In this section we present an algorithm to numerically evolve the stellar mass
+function (MF). Various prescriptions for the time-dependent MF exist
+\citep[e.g.][]{2009A&A...507.1409K,2013MNRAS.433.1378L}. We aim to develop a
+prescription that can be coupled to the fast cluster code \emacss. Because
+\emacss\ solves a set of coupled ODEs, we develop a prescription for the rate of
+change of the number of stars and stellar remnants  as a function of stellar
+mass $m$. We aim to correctly describe the preferential ejection of low-mass
+stars as the result of two-body relaxation, and the formation of stellar
+remnants as the result of stellar evolution. Below we describe the algorithm.
+
+To evolve the MF of  stars and remnants, we define $\nbin\simeq100$
+logarithmically spaced mass bins between $0.1\,\msun$ and $100\,\msun$. At $t=0$
+the number of stars in each bin, $\nj$, is found from the stellar initial mass
+function (IMF, $\dr N/\dr\mi$), the total number of stars in the cluster $N$ and
+the width of the individual bins $\Delta \mj$ as
+
+\begin{equation}
+\nj= N \left.\frac{\dr N}{\dr\mi}\right|_{m_j} \Delta \mj
+\end{equation}
+such that $\sum_{j=1}^{\nbin} \nj = N$ and $\sum_{j=1}^{\nbin} \nj\mj = M_{\rm
+i}$, where $M_{\rm i}$ is the initial mass of the cluster. We then consider that
+$\nj = \njs  + \njr$, with $\njs$ the number of stars and $\njr$ the number of
+remnants as a function of mass. At $t=0$ there are no remnants. 
+
+We then evolve $\njs$ and $\njr$ with an ODE solver and expressions for the rate
+of change of $\njdot = \njsdot + \njrdot$. Both stellar evolution and escape of
+stars contribute to these rates, which we discuss in the next sections. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stellar evolution}
+\label{ssec:sev}
+To  evolve stars by stellar evolution, we move stars that reach the end their
+main sequence life from $\njs$ to $\njr$.  We approximate  the main-sequence
+lifetimes by
+
+\begin{equation}
+\tms(\mi) = 0.21\exp\left(10.4\mi^{-0.322}\right),
+\label{eq:tms}
+\end{equation}
+which describes the main sequence life times of stars $0.5<\mi/\msun<30\,\msun$
+and $\feh=-0.5$ to within 10\% compared to the SSE (Single-Star Evolution)
+models of \citet{2000MNRAS.315..543H}, \comm{which provides a set of analytic
+    relations that approximate the evolution of stars of different masses and
+chemical composition}. \comm{In our MF evolution method} stars are assumed to
+have a constant mass $\mi$ until $\tms(\mi)$ is reached and then their mass is
+reduced by a factor
+
+\begin{align}
+\fifm=
+\begin{cases}
+0 & \mi>10\,\msun,\\
+0.56(\mi/\msun)^{-0.56} & \mi\le10\,\msun.
+\end{cases}
+\end{align}
+
+Removing all stars with $\mi>10\,\msun$ corresponds to 0\% retention of black
+holes. A single relation for the masses of neutron stars and white dwarfs
+reproduces the results from SSE to within 10\%. The most massive neutron stars
+is $1.54\,\msun$ and a solar mass star results in a $0.56\,\msun$ white dwarf.
+
+\comm{We introduce stellar evolution by removing stars are at a rate}
+\begin{align}
+\njssevdot  = 
+\begin{cases}
+    \njs\left(\dfrac{t-\tmsright}{\sigmat}\right), &t>\tmsright,\\
+0,& t<\tmsright,
+\end{cases}
+\end{align}
+where $\tmsright$ is the main sequence life time of a star with $m_j + 0.5\Delta
+m_j$ (i.e. corresponding to the right side of  bin $j$) and $\sigmat$ sets the
+speed with which the bin is emptied. From experiments we find smooth evolution
+of the mass function when using $\sigmat = 0.7(\tmsright-\tmsleft)$, where
+$\tmsleft = \tms(m_j-0.5\Delta m_j)$ i.e. the life time of a star with mass
+corresponding to the left side of bin  $j$.
+
+While stars are being removed, remnants are being create, hence we fill bins of
+the remnants mass function at a rate
+
+\begin{align}
+\nkrdot(\mto(t)\fifm)&=- \njssevdot,
+\end{align}
+where $\mto(t)$ is the turn-off mass at time $t$, which is found form the
+inverse of the main sequence time relation (equation~\ref{eq:tms}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Escape}
+In the pre-collapse phase we assume that the escape rate is independent of
+stellar mass, i.e. $\njsdot = \njs \dot{N}/N$ (similarly for $\njrdot$), where
+$\dot{N}$ is the total escape rate of the cluster which comes from {\sc emacss}.
+After core collapse (also given by {\sc emacss}) we apply an escape rate to each
+bin
+
+\begin{align}
+\njescdot  = \dot{N} \frac{\njs + \njr}{N} \frac{g(m_j)}{\sum_j g(m_j)}
+\end{align}
+where
+
+\begin{align}
+g(m_j)  = 
+\begin{cases}
+\left(m_j/\md\right)^{1/2} - 1, &m_j<\md,\\
+1,                              &m_j\ge \md.
+\end{cases}
+\end{align}
+
+This simple functional form for $\njescdot$ was found by matching the time
+derivatives of the functional forms for the MF as a function of time given by
+\cite{2013MNRAS.433.1378L}. With a value of $\md\simeq1.1\,\msun$ we find a good
+agreement with results from $N$-body models (see example in Fig.~\ref{fig1}).
+The 100\% retention of stars and remnants more massive than $\md$ is only
+becoming problematic when less than a few \% of the initial mass is remaining,
+and hence this approximation is good enough for our purpose. The escape rate is
+divided over the stars and remnants as $\njsescdot = \njescdot \njs/\nj$
+(similarly for $\njrescdot$), such that $\njescdot = \njsescdot + \njrescdot$.
+
+

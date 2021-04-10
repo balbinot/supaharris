@@ -1,25 +1,29 @@
-from rest_framework.test import APITestCase
+import json
 
-from catalogue.models import (
-    Parameter,
-    Reference,
-    AstroObjectClassification,
-    AstroObject,
-    Profile,
-    Auxiliary,
-    Observation,
-    Rank,
-)
 from catalogue.factories import (
-    ParameterFactory,
-    ReferenceFactory,
     AstroObjectClassificationFactory,
     AstroObjectFactory,
-    ProfileFactory,
     AuxiliaryFactory,
     ObservationFactory,
+    ParameterFactory,
+    ProfileFactory,
     RankFactory,
+    ReferenceFactory,
 )
+from catalogue.models import (
+    AstroObject,
+    AstroObjectClassification,
+    Auxiliary,
+    Observation,
+    Parameter,
+    Profile,
+    Rank,
+    Reference,
+)
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from tests.test_api import AnonReadOnlyAPITestCase
 
 
@@ -60,7 +64,9 @@ class AstroObjectClassificationViewSetTestCase(AnonReadOnlyAPITestCase, APITestC
         self.detail_pk = AstroObjectClassification.objects.last().pk
         self.count = AstroObjectClassification.objects.count()
         self.data_orm = AstroObjectClassification.objects.order_by("id").first()
-        self.data_orm_detail = AstroObjectClassification.objects.get(pk=self.detail_pk)  # last()
+        self.data_orm_detail = AstroObjectClassification.objects.get(
+            pk=self.detail_pk
+        )  # last()
         self.serializer_fields = []
         self.resource_name_list = "Astro Object Classification List"
         self.resource_name_detail = "Astro Object Classification Instance"
@@ -112,7 +118,7 @@ class ParameterViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
 class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
     @classmethod
     def setUpTestData(cls):
-        ObservationFactory.create_batch(2)
+        ObservationFactory.create_batch(151)
         super().setUpTestData()
 
     def setUp(self):
@@ -129,3 +135,46 @@ class ObservationViewSetTestCase(AnonReadOnlyAPITestCase, APITestCase):
         self.serializer_fields = []
         self.resource_name_list = "Observation List"
         self.resource_name_detail = "Observation Instance"
+
+    def test_json_paginator(self):
+        for page_size in [1, 10, 50, 100, 150]:
+            uri = reverse(self.list_uri) + "?format=json&length={0}".format(page_size)
+            response = self.client.get(uri)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = json.loads(response.content)
+            self.assertEqual(len(data["results"]), page_size)
+
+    def test_datatables_paginator(self):
+        for page_size in [1, 10, 50, 100, 150]:
+            uri = reverse(self.list_uri) + "?format=datatables&length={0}".format(
+                page_size
+            )
+            response = self.client.get(uri)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data["data"]), page_size)
+
+
+class ObservationTableViewsetTestCase(AnonReadOnlyAPITestCase, APITestCase):
+    # TODO: implement this TestCase
+    @classmethod
+    def setUpTestData(cls):
+        ReferenceFactory.create_batch(2)
+        super().setUpTestData()
+
+    def setUp(self):
+        # Set the admin + user tokens
+        super().setUp()
+
+        # Set the detail for this specific test
+        self.list_uri = "observation_table-list"
+        # TODO: implement the detail view (filtered by Reference)
+        self.detail_uri = "reference-detail"
+        self.detail_pk = Reference.objects.last().pk
+        self.count = Reference.objects.count()
+        self.data_orm = Reference.objects.order_by("id").first()
+        self.data_orm_detail = Reference.objects.get(pk=self.detail_pk)  # last()
+        self.serializer_fields = (
+            []
+        )  # TODO: Dynamic, depending on which Parameters the Reference has?
+        self.resource_name_list = "Observation Table Viewset List"
+        self.resource_name_detail = "Observation Table Viewset Instance"

@@ -1,3 +1,4 @@
+import sys
 import logging
 import numpy as np
 import pandas as pd
@@ -11,7 +12,9 @@ BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_GCS_Harris1996e2010/"
 
 
 class Cluster(object):
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
+
         # General
         self.gid  = ""                         # Cluster identification
         self.name = None                       # Other commonly used cluster name
@@ -99,7 +102,6 @@ class Cluster(object):
             do.sig_v = self.sig_v
             do.esig_v = self.sig_v_err
 
-        print(self.sp_c, self.sp_r_c)
         if self.sp_c:
             do.c = self.sp_c
         if self.sp_r_c:
@@ -110,9 +112,9 @@ class Cluster(object):
             do.muV = self.sp_mu_V
 
 
-def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
+def parse_harris1996ed2010(logger, debug=False, save_as_xlsx=False):
     if debug:
-        print("\nParsing Harris 1996, 2010 ed.\n")
+        logger.debug("\nParsing Harris 1996, 2010 ed.\n")
     cluster_list = {}
 
     def read_float(s):
@@ -143,7 +145,7 @@ def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
     df1 = pd.DataFrame(columns=["cname", "altname", "RA", "Dec", "L", "B", "R_Sun"])
 
     for line in f1:
-        c = Cluster()
+        c = Cluster(logger)
         c.gid               = line[:12].strip()
         c.name              = read_str(line[12:25])
         ra_str              = read_str(line[25:38])
@@ -152,7 +154,7 @@ def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
         c.latitude          = read_float(line[58:66])
         c.dist_from_sun     = read_float(line[66:73])
         c.dist_from_gal_cen = read_float(line[73:79])
-        c.Y                 = read_float(line[79:85])
+        c.X                 = read_float(line[79:85])
         c.Y                 = read_float(line[85:91])
         c.Z                 = read_float(line[91:])
 
@@ -251,13 +253,17 @@ def parse_harris1996ed2010(debug=True, save_as_xlsx=False):
             df.to_excel(writer, "Harris")
             writer.save()
         except ImportError:
-            print("ERROR: Use 'pip install openpyxl' to save Harris data to xlsx")
+            logger.error("ERROR: Use 'pip install openpyxl' to save Harris data to xlsx")
             do_continue = input("Press any key to continue...")
     if debug:
-        print(df)
+        logger.debug(df)
 
     return cluster_list
 
 
 if __name__ == "__main__":
-    cluster_list = parse_harris1996ed2010(debug=True, save_as_xlsx=False)
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
+    logger = logging.getLogger(__file__)
+    logger.info("Running {0}".format(__file__))
+
+    cluster_list = parse_harris1996ed2010(logger, debug=True, save_as_xlsx=False)

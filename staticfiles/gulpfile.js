@@ -12,15 +12,21 @@ const pkg = require('./package.json');
 
 // Set the banner content
 const banner = ['/*!\n',
-  ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
-  ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-  ' * Licensed under <%= pkg.license %> (https://github.com/BlackrockDigital/<%= pkg.name %>/blob/master/LICENSE)\n',
+  ' * SupaHarris - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
+  ' * Copyright 2019-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
+  ' * Licensed under <%= pkg.license %> (https://github.com/tlrh314/<%= pkg.name %>/blob/master/LICENSE)\n',
   ' */\n',
   '\n'
 ].join('');
 
 // Copy third party libraries from /node_modules into /vendor
 gulp.task('vendor', function(cb) {
+
+  // popper.js
+  gulp.src([
+      'node_modules/popper.js/dist/umd/*',
+    ])
+    .pipe(gulp.dest('./vendor/popper/js'))
 
   // Bootstrap JS
   gulp.src([
@@ -75,15 +81,9 @@ gulp.task('vendor', function(cb) {
 
   // Bokeh JS
   gulp.src([
-      './node_modules/bokehjs/build/js/*',
+      './node_modules/@bokeh/bokehjs/build/js/*',
     ])
     .pipe(gulp.dest('./vendor/bokehjs/js'))
-
-  // Bokeh CSS
-  gulp.src([
-      './node_modules/bokehjs/build/css/*',
-    ])
-    .pipe(gulp.dest('./vendor/bokehjs/css'))
 
   // Cookieconsent
   gulp.src([
@@ -105,7 +105,6 @@ function css() {
     }))
     .on("error", sass.logError)
     .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
       cascade: false
     }))
     .pipe(header(banner, {

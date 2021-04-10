@@ -22,7 +22,7 @@ wait_for_mariadb() {
     echo ".. the database is now ready to accept connections (waited for $counter seconds) :-)\n"
 }
 
-# TODO: databases should also be up-and-running when using 'run --rm' cmd 
+# TODO: databases should also be up-and-running when using 'run --rm' cmd
 if [ "$1" = 'uwsgi' ]; then
     echo "\nI'm waiting for the database to accept connections.."
     wait_for_mariadb

@@ -7,13 +7,11 @@ from matplotlib import pyplot
 from astropy import units as u
 from astropy import coordinates as coord
 
-logger = logging.getLogger("console")
-logger.logLevel = logging.DEBUG
 
 BASEDIR = "/".join(__file__.split("/")[:-1]) + "/MW_StarClusters_Bica2019/"
 
 
-def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), debug=False,):
+def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), verbose=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.debug("ERROR: file not found: {0}".format(fname))
         return
@@ -42,7 +40,7 @@ def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), debug=False,):
             bib_code = line[366:385].strip()
             cat = line[386:396].strip()
 
-            if debug:
+            if verbose:
                 logger.debug("Entry {0}/{1}".format(i+1, nentries))
                 logger.debug("  ref_code: {0}".format(ref_code))
                 logger.debug("  ref: {0}".format(ref))
@@ -53,7 +51,7 @@ def parse_bica_2019_refs(fname="{0}refs.dat".format(BASEDIR), debug=False,):
     return entries
 
 
-def parse_bica_2019_table2(fname="{0}table2.dat".format(BASEDIR), debug=False):
+def parse_bica_2019_table2(fname="{0}table2.dat".format(BASEDIR), verbose=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -83,7 +81,7 @@ def parse_bica_2019_table2(fname="{0}table2.dat".format(BASEDIR), debug=False):
             name = line[19:38].strip()
             codes = line[39:46].strip()
 
-            if debug:
+            if verbose:
                 logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
                 logger.debug("  obj_class: {0}".format(obj_class))
                 logger.debug("  nobj: {0}".format(nobj))
@@ -95,7 +93,8 @@ def parse_bica_2019_table2(fname="{0}table2.dat".format(BASEDIR), debug=False):
     return entries
 
 
-def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False):
+def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR),
+        verbose=False, debug=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -128,9 +127,10 @@ def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False
         for line in f.readlines(): nentries += 1
     with gzip.open(fname, "r") as f:
         for i, line in enumerate(f.readlines()):
+            if debug and i > 9: break
             glon = line[0:6].strip().decode("ascii")
             glat = line[7:13].strip().decode("ascii")
-            sky_coord = coord.SkyCoord(
+            sky_coord = coord.SkyCoord(  # This convertion is somewhat slow
                 glon, glat, frame="galactic", equinox="J2000", unit=(u.deg, u.deg)
             )
             rah = line[14:16].strip().decode("ascii")
@@ -154,7 +154,7 @@ def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False
             comments = line[174:206].strip().decode("ascii")
             codes = line[207:254].strip().decode("ascii")
 
-            if debug:
+            if verbose:
                 logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
                 logger.debug("  glon: {0}".format(glon))
                 logger.debug("  glat: {0}".format(glat))
@@ -185,7 +185,7 @@ def parse_bica_2019_table3(fname="{0}table3.dat.gz".format(BASEDIR), debug=False
     return entries
 
 
-def parse_bica_2019_table4(fname="{0}table4.dat".format(BASEDIR), debug=False):
+def parse_bica_2019_table4(fname="{0}table4.dat".format(BASEDIR), verbose=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -242,7 +242,7 @@ def parse_bica_2019_table4(fname="{0}table4.dat".format(BASEDIR), debug=False):
             codes = line[150:195].strip()
             comments = line[196:264].strip()
 
-            if debug:
+            if verbose:
                 logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
                 logger.debug("  u: {0}".format(u))
                 logger.debug("  v: {0}".format(v))
@@ -267,7 +267,7 @@ def parse_bica_2019_table4(fname="{0}table4.dat".format(BASEDIR), debug=False):
     return entries
 
 
-def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
+def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), verbose=False):
     if not os.path.isfile(fname) or not os.path.exists(fname):
         logger.error("ERROR: file not found: {0}".format(fname))
         return
@@ -343,7 +343,7 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
             codes = line[140:185].strip()
             comments = line[186:261].strip()
 
-            if debug:
+            if verbose:
                 logger.debug("\nEntry {0}/{1}".format(i+1, nentries))
                 logger.debug("  glon: {0}".format(glon))
                 logger.debug("  glat: {0}".format(glat))
@@ -379,28 +379,33 @@ def parse_bica_2019_table5(fname="{0}table5.dat".format(BASEDIR), debug=False):
 
 
 if __name__ == "__main__":
-    refs = parse_bica_2019_refs(debug=True)
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format="%(message)s")
+    logger = logging.getLogger(__file__)
+    logger.info("Running {0}".format(__file__))
 
-    print("\nTable 2")
-    t2 = parse_bica_2019_table2(debug=True)
+
+    refs = parse_bica_2019_refs(verbose=True)
+
+    logger.info("\nTable 2")
+    t2 = parse_bica_2019_table2(verbose=True)
     for i, (k, v) in enumerate(t2.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 3")
-    t3 = parse_bica_2019_table3(debug=True)
+    logger.info("\nTable 3")
+    t3 = parse_bica_2019_table3(verbose=True, debug=True)
     for i, (k, v) in enumerate(t3.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 4")
-    t4 = parse_bica_2019_table4(debug=True)
+    logger.info("\nTable 4")
+    t4 = parse_bica_2019_table4(verbose=True)
     for i, (k, v) in enumerate(t4.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break
 
-    print("\nTable 5")
-    t5 = parse_bica_2019_table5(debug=True)
+    logger.info("\nTable 5")
+    t5 = parse_bica_2019_table5(verbose=True)
     for i, (k, v) in enumerate(t5.items()):
-        print("{0:<15s}{1}".format(k, v))
+        logger.info("{0:<15s}{1}".format(k, v))
         if i > 10: break

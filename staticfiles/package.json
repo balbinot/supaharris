@@ -1,52 +1,50 @@
 {
-    "title": "SB Admin",
-    "name": "startbootstrap-sb-admin",
-    "version": "5.0.3",
-    "description": "A one page app landing page HTML theme for Bootstrap.",
+    "title": "SupaHarris",
+    "name": "supaharris",
+    "version": "1.0.0",
+    "description": "Database and web app for astronomical objects ",
     "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template",
-        "admin",
-        "app"
+        "astronomy",
+        "astrophysics",
+        "python",
+        "physics",
+        "database"
     ],
-    "homepage": "https://startbootstrap.com/template-overviews/sb-admin",
+    "homepage": "https://supaharris.com",
     "bugs": {
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin/issues",
-        "email": "feedback@startbootstrap.com"
+        "url": "https://github.com/tlrh314/supaharris/issues",
+        "email": "timo@halbesma.com"
     },
-    "license": "MIT",
-    "author": "Start Bootstrap",
+    "license": "AGPL-3.0-only",
+    "author": "Timo Halbesma",
     "contributors": [
-        "David Miller (http://davidmiller.io/)"
+        "Eduardo Balbinot (https://balbinot.github.io)"
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/BlackrockDigital/startbootstrap-sb-admin.git"
+        "url": "https://github.com/tlrh314/supaharris"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "5.7.0",
-        "bokehjs": "^1.3.4",
-        "bootstrap": "^4.3.1",
-        "chart.js": "2.7.3",
+        "@bokeh/bokehjs": "^2.3.1",
+        "@fortawesome/fontawesome-free": "^5.15.3",
+        "bootstrap": "^4.6.0",
+        "chart.js": "^3.0.2",
         "cookieconsent": "^3.1.1",
-        "datatables.net-bs4": "1.10.19",
-        "jquery": "^3.4.1",
-        "jquery-typeahead": "^2.10.6",
-        "jquery.easing": "^1.4.1"
+        "datatables.net-bs4": "^1.10.24",
+        "jquery": "^3.6.0",
+        "jquery-typeahead": "^2.11.1",
+        "jquery.easing": "^1.4.1",
+        "popper.js": "^1.16.1"
     },
     "devDependencies": {
-        "browser-sync": "^2.26.7",
+        "browser-sync": "^2.26.14",
         "gulp": "^4.0.2",
-        "gulp-autoprefixer": "^6.1.0",
-        "gulp-clean-css": "4.0.0",
-        "gulp-header": "2.0.7",
+        "gulp-autoprefixer": "^7.0.1",
+        "gulp-clean-css": "^4.3.0",
+        "gulp-header": "2.0.9",
         "gulp-plumber": "^1.2.1",
-        "gulp-rename": "1.4.0",
-        "gulp-sass": "4.0.2",
-        "gulp-uglify": "3.0.1"
+        "gulp-rename": "^2.0.0",
+        "gulp-sass": "^4.1.0",
+        "gulp-uglify": "3.0.2"
     }
 }

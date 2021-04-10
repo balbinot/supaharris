@@ -1,28 +1,27 @@
-from django.test import TestCase
-from django.contrib.sites.models import Site
-
-from catalogue.models import (
-    Parameter,
-    Reference,
-    AstroObjectClassification,
-    AstroObject,
-    Profile,
-    Auxiliary,
-    Observation,
-    Rank,
-)
 from catalogue.factories import (
-    ParameterFactory,
-    ReferenceFactory,
     AstroObjectClassificationFactory,
     AstroObjectFactory,
-    ProfileFactory,
     AuxiliaryFactory,
     ObservationFactory,
+    ParameterFactory,
+    ProfileFactory,
     RankFactory,
+    ReferenceFactory,
 )
-from tests.test_admin import AdminTestCase
+from catalogue.models import (
+    AstroObject,
+    AstroObjectClassification,
+    Auxiliary,
+    Observation,
+    Parameter,
+    Profile,
+    Rank,
+    Reference,
+)
+from django.contrib.sites.models import Site
+from django.test import TestCase
 
+from tests.test_admin import AdminTestCase
 
 
 class ParameterAdminTestCase(AdminTestCase, TestCase):
@@ -128,7 +127,7 @@ class RankAdminTestCase(AdminTestCase, TestCase):
         super().setUpTestData()
 
     def setUp(self):
-        self.admin_url_name = "catalogue_parameter"
+        self.admin_url_name = "catalogue_rank"
         self.admin_instance_pk = Rank.objects.last().pk
         self.count = Rank.objects.count()
 

@@ -10,15 +10,38 @@ SEPARATELY LICENSED COMPONENTS AND LIBRARIES
 
 Data
 
+    Name:   Trager+ 1995
+    Paper:  https://ui.adsabs.harvard.edu/abs/1995AJ....109..218T/abstract
+            https://ui.adsabs.harvard.edu/abs/1995AJ....109.1912T/abstract
+              J/AJ/109/218/gc
+              J/AJ/109/218/tables
+    Data:   https://cdsarc.unistra.fr/ftp/J/AJ/109/218, retrieved Feb 28, 2020
+            However, parser uses the Astroquery /w identifiers as listed above
+    Folder: data/MW_GCS_Trager1995
+
     Name:   Harris 1996, 2010 edition
     Paper:  https://ui.adsabs.harvard.edu/abs/1996AJ....112.1487H/abstract
     Data:   http://physwww.mcmaster.ca/~harris/mwgc.dat
     Folder: data/MW_GCS_Hilker2019
 
+    Name:   Miocchi+ 2013
+    Paper:  https://ui.adsabs.harvard.edu/abs/2013ApJ...774..151M/abstract
+    Data:   http://www.cosmic-lab.eu/catalog/table2.dat, retrieved Feb 26, 2020
+            http://www.cosmic-lab.eu/catalog/index.php, auto-retrieved Feb 26, 2020
+              http://www.cosmic-lab.eu/catalog/profs/prof_1.dat
+              ...
+              http://www.cosmic-lab.eu/catalog/profs/prof_25.dat
+    Folder: data/MW_GCS_Miocchi2013
+
     Name:   VandenBerg+ 2013
     Paper:  https://ui.adsabs.harvard.edu/abs/2013ApJ...775..134V/abstract
     Data:   https://arxiv.org/e-print/1308.2257 (parsed Table 2 from .tex file)
     Folder: data/MW_GCS_VandenBerg2013
+
+    Name:   Balbinot & Gieles 2018
+    Paper:  https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2479B/abstract
+    Data:   https://arxiv.org/e-print/1702.02543
+    Folder: data/MW_GCS_Balbinot2018
 
     Name:   Bica+ 2019
     Paper:  https://ui.adsabs.harvard.edu/abs/2019AJ....157...12B/abstract
@@ -34,11 +57,29 @@ Data
 
     Name:   Hilker+ 2019
     Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.482.5138B/abstract
+              https://arxiv.org/pdf/1811.01507.pdf
+              J/MNRAS/482/5138/table1
+              J/MNRAS/482/5138/table4
             https://ui.adsabs.harvard.edu/abs/2018MNRAS.478.1520B/abstract
+              https://arxiv.org/pdf/1804.08359.pdf
             https://ui.adsabs.harvard.edu/abs/2017MNRAS.464.2174B/abstract
+              https://arxiv.org/pdf/1609.08794.pdf
             https://ui.adsabs.harvard.edu/abs/2017MNRAS.471.3668S/abstract
+              https://arxiv.org/pdf/1708.09529.pdf
     Data:   https://people.smp.uq.edu.au/HolgerBaumgardt/globular/
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt
-            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/orbits_table.txt, retrieved Aug 12, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/combined_table.txt, retrieved Aug 12, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/rv.dat, retrieved Aug 12, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/appendix/combined_table.txt, retrieved Oct 17, 2019
+            https://people.smp.uq.edu.au/HolgerBaumgardt/globular/fits/clusterlist.html, auto-retrieved Oct 17, 2019
     Folder: data/MW_GCS_Hilker2019
+
+    Name:   deBoer+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.4906D/abstract
+    Data:   https://github.com/tdboer/GC_profiles/tree/f31e147c1ac2de11146d421f261cc620340ae9a9
+    Folder: data/MW_GCS_deBoer2019
+
+    Name:   Stetson+ 2019
+    Paper:  https://ui.adsabs.harvard.edu/abs/2019MNRAS.485.3042S/abstract
+    Data:   https://ui.adsabs.harvard.edu/abs/2019yCat..74853042S/abstract
+    Folder: data/MW_GCS_Stetson2019
